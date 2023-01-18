@@ -1,6 +1,7 @@
 // import CardItem from "./CardItem";
 import * as React from "react";
 import CardItem from "./CardItem";
+import "./Card.css";
 
 const CardList = ({ CardList }) => {
   return (

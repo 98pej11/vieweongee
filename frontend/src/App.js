@@ -1,34 +1,23 @@
-import "./App.css";
-import Header from "./Components/Header";
 // import Login from "./Components/Login";
-import MainCenter from "./Components/MainCenter";
-import MainBottom from "./Components/MainBottom";
-import SearchBar from "./Components/SearchBar";
+// import LoginPage from "./pages/LoginPage";
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import MainPage from "./pages/MainPage";
+// import MyPage from "./pages/MyPage";
+// import MainPage from "./pages/MainPage";
+// import HeaderMain from "./Components/common/HeaderMain";
+import "./App.css";
+// import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <Header />
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        {/* <Box
-          sx={{
-            width: 300,
-            height: 300,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-          }}
-        />
-        {/* <Login /> */}
-        <MainCenter></MainCenter>
-        <SearchBar></SearchBar>
-        <MainBottom></MainBottom>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <MainPage></MainPage>
+        {/* <LoginPage></LoginPage> */}
+        {/* <MyPage></MyPage> */}
+      </div>
+    </BrowserRouter>
   );
 }
 

@@ -1,0 +1,72 @@
+.HeaderMain {
+  padding: 20px;
+  width: 100%;
+  height: 100px;
+  background-color: white;
+}
+
+.header-icon {
+  float: right;
+}
+
+.Header-logo {
+  /* 여기수정 */
+  margin-top: 20px;
+  margin-left: 200px;
+  height: 80px;
+}
+
+.logo-mascot {
+  width: 8%;
+}
+
+.logo-text {
+  width: 18%;
+}
+
+span {
+  align-items: right;
+}
+
+a {
+  margin-right: 2rem;
+  color: rgb(49, 49, 49);
+}
+
+.search-field {
+  text-align: center;
+  width: 50%;
+}
+
+.Header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  display: inline-block;
+}
+
+.Header-logo {
+  /* 여기수정 */
+  margin-top: 20px;
+  margin-left: 200px;
+  height: 80px;
+}
+
+img {
+  display: inline-block;
+}
+nav {
+  margin-top: 40px;
+  margin-right: 200px;
+  display: inline-block;
+  float: right;
+}
+
+a {
+  align-items: right;
+  margin-right: 2rem;
+  color: rgb(49, 49, 49);
+}

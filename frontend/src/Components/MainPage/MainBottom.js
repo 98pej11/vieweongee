@@ -1,7 +1,5 @@
 import * as React from "react";
-
-import CardList from "./CardList";
-import "./Main.css";
+import CardList from "../StudyBoard/CardList";
 
 const defaultList = [
   {
@@ -32,7 +30,7 @@ const defaultList = [
 
 export default function MainBottom() {
   return (
-    <div class="main-bottom">
+    <div class="MainBottom">
       <CardList CardList={defaultList}></CardList>
     </div>
   );
