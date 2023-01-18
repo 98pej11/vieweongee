@@ -1,6 +1,6 @@
-import logo_mascot from "./logo_mascot.png";
-import logo_text from "./logo_vieweongee.png";
-import "./Main.css";
+import logo_mascot from "../../assets/icons/logo_mascot.png";
+import logo_text from "../../assets/icons/logo_vieweongee.png";
+
 import React from "react";
 
 const MainCenter = () => {

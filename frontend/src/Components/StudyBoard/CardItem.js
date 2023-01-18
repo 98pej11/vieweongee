@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import Typography from "@mui/joy/Typography";
+import "./Card.css";
 
 const CardItem = ({ title, person, ent, dept, date, id }) => {
   return (
@@ -21,7 +22,10 @@ const CardItem = ({ title, person, ent, dept, date, id }) => {
       >
         {title}
       </Typography>
-      <Box className="card-contents" sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        className="card-contents"
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
         <Typography className="content-type" fontSize="lg">
           기업
         </Typography>
