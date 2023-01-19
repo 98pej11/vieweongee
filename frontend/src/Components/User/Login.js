@@ -1,18 +1,15 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import "./Login.css";
+import { Link } from "react-router-dom";
+import "./User.css";
 
 export default function Login() {
   const handleSubmit = (event) => {
@@ -34,16 +31,18 @@ export default function Login() {
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 25,
+          margin: "0 auto",
+          marginTop: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main", marginTop: 5 }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{ paddingTop: 5, paddingBottom: 5 }}
+        >
           로그인
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -91,8 +90,8 @@ export default function Login() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="./Components/SignUp.js" variant="body2">
-                {"계정이 없으신가요?"}
+              <Link to={"/signup"} variant="body2" style={{ color: "blue" }}>
+                "계정이 없으신가요?"
               </Link>
             </Grid>
           </Grid>

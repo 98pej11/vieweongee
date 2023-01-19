@@ -10,3 +10,14 @@
 .MuiTextField-root {
   box-shadow: 1px 3px 8px 1px rgb(231, 231, 231);
 }
+
+.MainPage > * {
+  text-align: center;
+}
+
+.mypage-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+}

@@ -1,3 +1,15 @@
+.login {
+  background: #eeecf8;
+  font-family: "nexonlv1";
+  height: "650px";
+  border-radius: 5%;
+}
+
+h4 {
+  padding-left: 18px;
+  margin-bottom: 0;
+}
+
 .signup {
   background: #eeecf8;
   font-family: "nexonlv1";

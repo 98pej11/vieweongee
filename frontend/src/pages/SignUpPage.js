@@ -1,5 +1,5 @@
-import Header from "../Components/Header";
-import SignUp from "../Components/SignUp";
+import Header from "../Components/common/Header";
+import SignUp from "../Components/User/SignUp";
 import * as React from "react";
 
 const SignupPage = () => {

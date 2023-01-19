@@ -7,19 +7,20 @@ import React from "react";
 const HeaderMain = () => {
   return (
     <div className="HeaderMain">
-      <div className="header-icon">
+      <nav>
         <a>
           <NotificationsActiveIcon fontSize="large"></NotificationsActiveIcon>
         </a>
+
+        <Link to="/login">
+          <PersonPinIcon fontSize="large"></PersonPinIcon>
+        </Link>
         <a>
-          <Link to={"/mypage"}>
-            <PersonPinIcon fontSize="large"></PersonPinIcon>
+          <Link to="/rstudy">
+            <MenuIcon fontSize="large"></MenuIcon>
           </Link>
         </a>
-        <a>
-          <MenuIcon fontSize="large"></MenuIcon>
-        </a>
-      </div>
+      </nav>
     </div>
   );
 };
