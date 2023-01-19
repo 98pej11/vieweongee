@@ -1,7 +1,7 @@
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "@mui/material";
+import { Link, Route, userNavigate } from "react-router-dom";
 import React from "react";
 
 const HeaderMain = () => {
@@ -12,7 +12,7 @@ const HeaderMain = () => {
           <NotificationsActiveIcon fontSize="large"></NotificationsActiveIcon>
         </a>
         <a>
-          <Link to="./Components/Login.js">
+          <Link to={"/mypage"}>
             <PersonPinIcon fontSize="large"></PersonPinIcon>
           </Link>
         </a>

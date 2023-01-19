@@ -1,8 +1,6 @@
-.SideBar {
-  width: 250px;
-  min-height: 80vh;
-}
-.SideBar > * {
-  padding: 10px 30px 30px 0;
-  text-align: center;
+.mypage-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
 }

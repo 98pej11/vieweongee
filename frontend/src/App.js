@@ -1,22 +1,21 @@
-// import Login from "./Components/Login";
-// import LoginPage from "./pages/LoginPage";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-// import MyPage from "./pages/MyPage";
-// import MainPage from "./pages/MainPage";
-// import HeaderMain from "./Components/common/HeaderMain";
+import MyPage from "./pages/MyPage";
+import LoginPage from "./pages/LoginPage";
+import StudyBoard from "./pages/StudyBoard";
 import "./App.css";
-// import LoginPage from "./pages/LoginPage";
+import "./default.css";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <MainPage></MainPage>
-        {/* <LoginPage></LoginPage> */}
-        {/* <MyPage></MyPage> */}
-      </div>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/study" element={<StudyBoard />} />
+      </Routes>
     </BrowserRouter>
   );
 }
