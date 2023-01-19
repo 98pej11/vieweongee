@@ -7,9 +7,9 @@ import "./Card.css";
 const CardItem = ({ title, person, ent, dept, date, id }) => {
   return (
     <div className="card-div" variant="outlined" sx={{ width: 320 }}>
-      <Box sx={{ display: "flex" }}>
+      <Box className="type">
         <PermIdentityIcon />
-        <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
+        <Typography level="h2" fontSize="md">
           {person}
         </Typography>
       </Box>

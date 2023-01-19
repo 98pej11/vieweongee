@@ -1,6 +1,8 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import profile from "../../assets/images/mypage-profile.png";
-import icon from "../../assets/icons/mypage_button.png";
+// import icon from "../../assets/icons/mypage_button.png";
+import TopicOutlinedIcon from "@mui/icons-material/TopicOutlined";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -49,7 +51,6 @@ const SideBar = () => {
         </Typography>
         <img src={profile} alt="profile" className="mypage-profile" />
         <Typography
-          fontFamily="nexonbold"
           fontSize="lg"
           fontWeight="lg"
           textAlign="center"
@@ -59,13 +60,12 @@ const SideBar = () => {
         </Typography>
       </div>
       <Box sx={{ flexDirection: "column", marginTop: 0 }}>
-        <Item>
-          {/* <img src={icon} alt="icon" className="icon" /> */}
-          Main
-        </Item>
+        <Item>Main</Item>
         <Item>Data</Item>
         <Item>Modify Info</Item>
-        <Item>Delete User</Item>
+        {/* <Button startIcon={<TopicOutlinedIcon />}>
+          <Link to={"/userdelete"}>Delete User</Link>
+        </Button> */}
       </Box>
     </div>
   );
