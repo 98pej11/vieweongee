@@ -7,7 +7,6 @@ import UserModify from "../Components/MyPage/UserModify";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import "./MyPage.css";
 
 const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",

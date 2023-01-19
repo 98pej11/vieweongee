@@ -5,14 +5,14 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import "./SignUp.css";
+import { Link } from "react-router-dom";
+import "./User.css";
 
 const theme = createTheme();
 
@@ -36,16 +36,18 @@ export default function SignUp() {
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 25,
+          margin: "0 auto",
+          marginTop: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main", marginTop: 5 }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{ paddingTop: 5, paddingBottom: 5 }}
+        >
           회원가입
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -146,9 +148,7 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                이미 회원이십니까 ?
-              </Link>
+              <Link to={"/login"}>이미 회원이십니까 ?</Link>
             </Grid>
           </Grid>
         </Box>
