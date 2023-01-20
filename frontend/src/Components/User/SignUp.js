@@ -3,9 +3,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -137,15 +137,29 @@ export default function SignUp() {
                 label="회원가입에 동의합니다."
               />
             </Grid>
+            <Grid item xs={12}>
+              <div
+                className="type"
+              >
+
+            <Button
+              type="submit"
+              variant="contained"
+              alignItems="center"
+              sx={{
+                mt: 3,
+                mb: 3,
+                backgroundColor: "#9DADD8",
+                width: 120,
+                height: 50,
+              }}
+              >
+              완료
+            </Button>
+              </div>
+            </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 3, backgroundColor: "#9DADD8", height: 50 }}
-          >
-            완료
-          </Button>
+
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link to={"/login"}>이미 회원이십니까 ?</Link>

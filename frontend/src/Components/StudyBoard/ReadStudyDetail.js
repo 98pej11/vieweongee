@@ -2,11 +2,11 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import Typography from "@mui/joy/Typography";
-import "./ReadStudy.css";
+import "./StudyBoard.css";
 
-const ReadStudy = () => {
+const ReadStudyDetail = () => {
   return (
-    <div className="readstudy" variant="outlined" sx={{ width: 500 }}>
+    <div className="readstudydetail" variant="outlined" sx={{ width: 500 }}>
       <h4>싸피 비전공자 면접스터디 구해요!</h4>
       <Typography
         fontFamily="nexonbold"
@@ -57,4 +57,4 @@ const ReadStudy = () => {
   );
 };
 
-export default ReadStudy;
+export default ReadStudyDetail;

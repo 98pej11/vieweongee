@@ -2,13 +2,13 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import Typography from "@mui/joy/Typography";
-import "./ReadStudy.css";
+import "./StudyBoard.css";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 const Reply = () => {
   return (
-    <div className="readstudy" variant="outlined" sx={{ width: 500 }}>
+    <div className="readstudydetail" variant="outlined" sx={{ width: 500 }}>
       <Typography
         fontFamily="nexonbold"
         fontSize="lg"

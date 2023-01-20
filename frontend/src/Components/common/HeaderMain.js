@@ -16,7 +16,7 @@ const HeaderMain = () => {
           <PersonPinIcon fontSize="large"></PersonPinIcon>
         </Link>
         <a>
-          <Link to="/rstudy">
+          <Link to="/rstudydetail">
             <MenuIcon fontSize="large"></MenuIcon>
           </Link>
         </a>
