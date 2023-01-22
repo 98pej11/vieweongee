@@ -1,13 +1,14 @@
 import Header from "../Components/common/Header";
-import Login from "../Components/User/Login";
+import SignUp from "../Components/User/SignUp";
 import * as React from "react";
-const LoginPage = () => {
+
+const SignupPage = () => {
   return (
     <div>
       <Header />
-      <Login />
+      <SignUp />
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;
