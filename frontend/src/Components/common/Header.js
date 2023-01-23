@@ -100,7 +100,7 @@ const Header = () => {
         </MenuItem>
         </Link>
 
-        <Link to={"/mypage"}>
+        <Link to={"/mypagemodify"}>
         <MenuItem>
           <LibraryBooks /> 마이페이지
         </MenuItem>
