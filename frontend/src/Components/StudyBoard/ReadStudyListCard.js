@@ -54,7 +54,13 @@ const defaultList = [
 
 export default function ReadStudyListCard() {
   return (
-    <div>
+    <div
+    style={{
+      display: "grid",
+      gridTemplateRows: "1fr ",
+      gridTemplateColumns: "1fr 1fr 1fr"
+    }}
+    >
       <CardList CardList={defaultList}></CardList>
     </div>
   );

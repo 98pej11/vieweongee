@@ -1,5 +1,5 @@
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
+import NotificationsNone from "@mui/icons-material/NotificationsNone";
+import PersonOutline from "@mui/icons-material/PersonOutline";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, Route, userNavigate } from "react-router-dom";
 import React from "react";
@@ -9,11 +9,11 @@ const HeaderMain = () => {
     <div className="HeaderMain">
       <nav>
         <a>
-          <NotificationsActiveIcon fontSize="large"></NotificationsActiveIcon>
+          <NotificationsNone fontSize="large"></NotificationsNone>
         </a>
 
         <Link to="/login">
-          <PersonPinIcon fontSize="large"></PersonPinIcon>
+          <PersonOutline fontSize="large"></PersonOutline>
         </Link>
         <a>
           <Link to="/rstudydetail">
