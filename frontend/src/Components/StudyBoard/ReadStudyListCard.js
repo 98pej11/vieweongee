@@ -1,6 +1,6 @@
 import * as React from "react";
-import CardList from "./CardList";
-
+import StudyCardList from "./StudyCardList";
+import "./StudyBoard.css";
 const defaultList = [
   {
     id: 1,
@@ -54,14 +54,10 @@ const defaultList = [
 
 export default function ReadStudyListCard() {
   return (
-    <div
-    style={{
-      display: "grid",
-      gridTemplateRows: "1fr ",
-      gridTemplateColumns: "1fr 1fr 1fr"
-    }}
-    >
-      <CardList CardList={defaultList}></CardList>
+    <div>
+      <StudyCardList 
+       CardList={defaultList}
+        ></StudyCardList>
     </div>
   );
 }

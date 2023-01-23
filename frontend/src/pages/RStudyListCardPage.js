@@ -5,12 +5,10 @@ import React from "react";
 
 const RStudyListCardPage = () => {
   return (
-    <div>
+    <div style={{margin: "30px"}}>
       <Header></Header>
-      <div>
         <SearchBar></SearchBar>
         <ReadStudyListCard></ReadStudyListCard>
-      </div>
     </div>
   );
 };
