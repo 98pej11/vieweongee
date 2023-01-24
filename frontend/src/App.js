@@ -8,6 +8,7 @@ import CStudyPage from "./pages/CStudyPage";
 import RStudyDetailPage from "./pages/RStudyDetailPage";
 import RStudyListCardPage from "./pages/RStudyListCardPage";
 import SignUpPage from "./pages/SignUpPage";
+import FindPasswordPage from "./pages/FindPasswordPage";
 import "./App.css";
 import "./default.css";
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/findpassword" element={<FindPasswordPage />} />
         <Route path="/mypagemodify" element={<MyPageModifyPage />} />
         <Route path="/mypagedelete" element={<MyPageDeletePage />} />
         <Route path="/cstudy" element={<CStudyPage />} />
