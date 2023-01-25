@@ -5,16 +5,11 @@
 /* font */
 
 @font-face {
-  font-family: "nexonlv1";
-  src: url("./assets/fonts/NEXONLv1GothicRegular.ttf");
+  font-family: "nexon";
+  src: url("./NEXONLv1GothicRegular.ttf");
 }
 
 @font-face {
   font-family: "nexonbold";
-  src: url("./assets/fonts/NEXONLv1GothicBold.ttf");
-}
-
-@font-face {
-  font-family: "tenada";
-  src: url("./assets/fonts/Tenada.ttf");
+  src: url("./NEXONLv1GothicBold.ttf");
 }

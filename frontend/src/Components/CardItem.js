@@ -1,0 +1,48 @@
+import * as React from "react";
+import Box from "@mui/joy/Box";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import Typography from "@mui/joy/Typography";
+
+const CardItem = ({ title, person, ent, dept, date, id }) => {
+  return (
+    <div className="card-div" variant="outlined" sx={{ width: 320 }}>
+      <Box sx={{ display: "flex" }}>
+        <PermIdentityIcon />
+        <Typography level="h2" fontSize="md" sx={{ mb: 0.5 }}>
+          {person}
+        </Typography>
+      </Box>
+      <Typography
+        fontFamily="nexonbold"
+        fontSize="lg"
+        fontWeight="lg"
+        textAlign="center"
+        sx={{ mt: 1, mb: 3 }}
+      >
+        {title}
+      </Typography>
+      <Box className="card-contents" sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography className="content-type" fontSize="lg">
+          기업
+        </Typography>
+        <Typography fontSize="lg" sx={{ display: "justify" }}>
+          {ent}
+        </Typography>
+      </Box>
+      <Box className="card-contents">
+        <Typography className="content-type" fontSize="lg">
+          직무
+        </Typography>
+        <Typography fontSize="lg">{dept}</Typography>
+      </Box>
+      <Box className="card-contents">
+        <Typography className="content-type" fontSize="lg">
+          날짜
+        </Typography>
+        <Typography fontSize="lg">{date}</Typography>
+      </Box>
+    </div>
+  );
+};
+
+export default CardItem;
