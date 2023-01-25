@@ -31,6 +31,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'mysql:mysql-connector-java:5.1.34'
     implementation 'org.hibernate:hibernate-validator:7.0.5.Final'
+
+    //openvidu 의존성
+    // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
+    implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.25.0'
 }
 
 tasks.named('test') {
