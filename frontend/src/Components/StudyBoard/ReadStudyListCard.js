@@ -1,6 +1,6 @@
 import * as React from "react";
-import CardList from "./CardList";
-
+import StudyCardList from "./StudyCardList";
+import "./StudyBoard.css";
 const defaultList = [
   {
     id: 1,
@@ -55,7 +55,9 @@ const defaultList = [
 export default function ReadStudyListCard() {
   return (
     <div>
-      <CardList CardList={defaultList}></CardList>
+      <StudyCardList 
+       CardList={defaultList}
+        ></StudyCardList>
     </div>
   );
 }

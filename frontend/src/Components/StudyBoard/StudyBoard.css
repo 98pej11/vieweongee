@@ -27,14 +27,41 @@
     margin-left: 0;
     margin-left: 0;
   }
-  .card-contents {
+  
+  h2{
+    text-align: center;
+  }
+
+
+  /* 여기서부턴 카드 css */
+  .studycard-list {
+    display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  }
+  .studycard-contents {
+    display: flex;
+    justify-content: space-between;
     padding: 0 30px 10px 30px;
+  }
+  .studycard-div {
+    font-family: "nexonlv1";
+    /* width: 300px; */
+    width: 50%;
+    margin: 30px auto;
+    padding: 20px;
+    border: 4px solid rgba(227, 232, 252, 0.5);
+    border-radius: 10px;
+    box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);
+  }
+
+  .studycard-div:hover {
+    background: rgba(210, 218, 255, 0.6);
+    transition: all 200ms 0s ease-in;
+    transform: scale(1.04);
+    border: 4px solid rgba(227, 232, 252, 0.2);
   }
   
   .content-type {
     color: #555454;
-  }
-
-  h2{
-    text-align: center;
   }

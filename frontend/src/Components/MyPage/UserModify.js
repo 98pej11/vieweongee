@@ -19,12 +19,7 @@ export default function UserModify() {
   };
 
   return (
-    <Container
-      className="signup"
-      component="main"
-      maxWidth="sm"
-      style={{ height: "30%" }}
-    >
+    <Container>
       <CssBaseline />
       <Box
         sx={{

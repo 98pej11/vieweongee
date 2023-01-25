@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import MyPage from "./pages/MyPage";
+import MyPageModifyPage from "./pages/MyPageModifyPage";
+import MyPageDeletePage from "./pages/MyPageDeletePage";
 import LoginPage from "./pages/LoginPage";
 import CStudyPage from "./pages/CStudyPage";
 import RStudyDetailPage from "./pages/RStudyDetailPage";
@@ -17,7 +18,8 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypagemodify" element={<MyPageModifyPage />} />
+        <Route path="/mypagedelete" element={<MyPageDeletePage />} />
         <Route path="/cstudy" element={<CStudyPage />} />
         <Route path="/rstudydetail" element={<RStudyDetailPage />} />
         <Route path="/rstudylistcard" element={<RStudyListCardPage />} />
