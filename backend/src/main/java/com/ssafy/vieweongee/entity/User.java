@@ -1,4 +1,5 @@
 package com.ssafy.vieweongee.entity;
+import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -19,12 +20,12 @@ public class User {
 
     @Column(length = 30)
     private String email;
-    @Column(length = 16)
+
     private String password;
+//    @ColumnDefault("basic")
     @Column(length = 10)
     private String social_login;
 
-    @Column(columnDefinition = "TINYINT(1)")
     private String social_token;
 
     @Column(length = 10)
@@ -78,5 +79,12 @@ public class User {
         this.scorecards = scorecards;
         this.comments = comments;
         this.replies = replies;
+    }
+
+    @Builder
+    public User(UserCreateRequest registInfo){
+        this.email = registInfo.getEmail();
+        this.password = registInfo.getPassword();
+        this.nickname = registInfo.getNickname();
     }
 }
