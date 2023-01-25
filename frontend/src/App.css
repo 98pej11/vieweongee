@@ -1,23 +1,23 @@
-/* .App {
+.App-header {
+  background-color: rgba(255, 255, 255, 0);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
-} */
-
-.MuiTextField-root {
-  box-shadow: 1px 3px 8px 1px rgb(231, 231, 231);
+  font-size: calc(10px + 2vmin);
+  /* color: white; */
 }
 
-.MainPage > * {
-  text-align: center;
+.App-link {
+  color: #61dafb;
 }
 
-.mypage-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 100px;
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
