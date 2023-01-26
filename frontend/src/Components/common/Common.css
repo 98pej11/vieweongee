@@ -48,6 +48,11 @@ a {
   color: rgb(49, 49, 49);
 }
 
+.search-bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .search-field {
   text-align: center;
   width: 50%;

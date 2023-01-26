@@ -2,11 +2,11 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import Typography from "@mui/joy/Typography";
-import "./Card.css";
+import "./StudyBoard.css";
 
-const CardItem = ({ title, person, ent, dept, date, id }) => {
+const StudyCardItem = ({ title, person, ent, dept, date, id }) => {
   return (
-    <div className="card-div" variant="outlined" sx={{ width: 320 }}>
+    <div className="studycard-div" variant="outlined" sx={{ width: 320 }}>
       <Box className="type">
         <PermIdentityIcon />
         <Typography level="h2" fontSize="md">
@@ -23,7 +23,7 @@ const CardItem = ({ title, person, ent, dept, date, id }) => {
         {title}
       </Typography>
       <Box
-        className="card-contents"
+        className="studycard-contents"
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
         <Typography className="content-type" fontSize="lg">
@@ -33,13 +33,13 @@ const CardItem = ({ title, person, ent, dept, date, id }) => {
           {ent}
         </Typography>
       </Box>
-      <Box className="card-contents">
+      <Box className="studycard-contents">
         <Typography className="content-type" fontSize="lg">
           직무
         </Typography>
         <Typography fontSize="lg">{dept}</Typography>
       </Box>
-      <Box className="card-contents">
+      <Box className="studycard-contents">
         <Typography className="content-type" fontSize="lg">
           날짜
         </Typography>
@@ -49,4 +49,4 @@ const CardItem = ({ title, person, ent, dept, date, id }) => {
   );
 };
 
-export default CardItem;
+export default StudyCardItem;

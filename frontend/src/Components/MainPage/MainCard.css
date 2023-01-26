@@ -1,7 +1,7 @@
 .card-list {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 .card-contents {
   display: flex;
@@ -17,7 +17,6 @@
   border-radius: 10px;
   box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);
 }
-
 .card-div:hover {
   background: rgba(210, 218, 255, 0.6);
   transition: all 200ms 0s ease-in;

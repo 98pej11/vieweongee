@@ -12,9 +12,9 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
 }));
 
-const MyPage = () => {
+const MyPageModifyPage = () => {
   return (
-    <div className="MyPage">
+    <div>
       <Header></Header>
       <Grid container className="mypage-content">
         <Grid item xs={2}>
@@ -30,4 +30,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyPageModifyPage;

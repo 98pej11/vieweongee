@@ -62,7 +62,8 @@ const SideBar = () => {
       <Box sx={{ flexDirection: "column", marginTop: 0 }}>
         <Item>Main</Item>
         <Item>Data</Item>
-        <Item>Modify Info</Item>
+        <Link to={"/mypagemodify"}> <Item>Modify Info</Item></Link>
+        <Link to={"/mypagedelete"}> <Item>User Delete</Item></Link>
         {/* <Button startIcon={<TopicOutlinedIcon />}>
           <Link to={"/userdelete"}>Delete User</Link>
         </Button> */}
