@@ -86,5 +86,6 @@ public class User {
         this.email = registInfo.getEmail();
         this.password = registInfo.getPassword();
         this.nickname = registInfo.getNickname();
+        this.social_login = "global";
     }
 }

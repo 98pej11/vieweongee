@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService{
     PasswordEncoder passwordEncoder;
 
     @Override
-    public User login(User user) throws Exception {
+    public User login(User user) {
         User dbUser = userRepository.findByEmail(user.getEmail());
         //비밀번호 일치
         if(dbUser != null && passwordEncoder.matches(user.getPassword(), dbUser.getPassword()))
@@ -26,9 +26,31 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User createUser(UserCreateRequest registInfo) {
-//        System.out.println(registInfo.getEmail() + " " + registInfo.getPassword() + " " + registInfo.getNickname());
         registInfo.setPassword(passwordEncoder.encode(registInfo.getPassword()));
         User user = new User(registInfo);
         return userRepository.save(user);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        User dbUser = userRepository.findByEmail(email);
+        return dbUser;
+    }
+
+    @Override
+    public boolean checkDuplicatedEmail(String email) {
+        System.out.println(email);
+        if(userRepository.existsByEmail(email))
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean checkDuplicatedNickname(String nickname) {
+        if(userRepository.existsByNickname(nickname))
+            return true;
+        return false;
+    }
+
+
 }
