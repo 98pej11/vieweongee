@@ -20,15 +20,15 @@ public class Alarm {
 
     //user id 외래키
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id",referencedColumnName="id")
+    @JoinColumn(name="user_id")
     @NotNull
-    private User user_id;
+    private User user;
 
     //study id 외래키
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="study_id",referencedColumnName="id")
+    @JoinColumn(name="study_id")
     @NotNull
-    private Study study_id;
+    private Study study;
 
     @Column(length = 50)
     @NotNull
@@ -42,10 +42,10 @@ public class Alarm {
     private Date datetime;
 
     @Builder
-    public Alarm(Long id, User user_id, Study study_id, String content, boolean see, Date datetime) {
+    public Alarm(Long id, User user, Study study, String content, boolean see, Date datetime) {
         this.id = id;
-        this.user_id = user_id;
-        this.study_id = study_id;
+        this.user = user;
+        this.study = study;
         this.content = content;
         this.see = see;
         this.datetime = datetime;

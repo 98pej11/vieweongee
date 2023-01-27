@@ -18,9 +18,9 @@ public class Notice {
 
     //관리자 id. 외래키
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName="id")
+    @JoinColumn(name = "user_id")
     @NotNull
-    private User user_id;
+    private User user;
 
     @Column(length = 10)
     @NotNull
@@ -36,9 +36,9 @@ public class Notice {
     private Date datetime;
 
     @Builder
-    public Notice(Long id, User user_id, String type, String title, String content, Date datetime) {
+    public Notice(Long id, User user, String type, String title, String content, Date datetime) {
         this.id = id;
-        this.user_id = user_id;
+        this.user = user;
         this.type = type;
         this.title = title;
         this.content = content;
