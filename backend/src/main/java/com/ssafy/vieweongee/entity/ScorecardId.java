@@ -1,13 +1,10 @@
 package com.ssafy.vieweongee.entity;
 
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import lombok.*;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -26,5 +23,11 @@ public class ScorecardId implements Serializable {
     @ManyToOne(targetEntity = Study.class)
     @JoinColumn(name="study_id")
     private Study study;
+
+    @Builder
+    public ScorecardId(User user, Study study){
+        this.user = user;
+        this.study = study;
+    }
 
 }
