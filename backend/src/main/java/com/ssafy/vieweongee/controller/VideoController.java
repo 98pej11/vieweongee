@@ -12,7 +12,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class MeetController {
+public class VideoController {
 
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
@@ -25,7 +25,7 @@ public class MeetController {
     @PostConstruct
     public void init() {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-        System.out.println(">>>>>>>>>>> init 완료 <<<<<<<<<<<");
+//        System.out.println(">>>>>>>>>>> init 완료 <<<<<<<<<<<");
     }
 
     /**
