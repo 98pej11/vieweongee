@@ -24,7 +24,7 @@ public class User {
     @Column(length = 10)
     private String social_login;
 
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column
     private String social_token;
 
     @Column(length = 10)
@@ -36,28 +36,28 @@ public class User {
     private boolean authority;
     private String jwt_token;
 
-    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notice> notices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Alarm> alarms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Study> studies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "participant_id.user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "participant_id.user", cascade = CascadeType.ALL)
     private List<Participant> participants = new ArrayList<>();
 
-    @OneToMany(mappedBy = "progress_id.user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "progress_id.user", cascade = CascadeType.ALL)
     private List<Progress> progresses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "score_id.user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "score_id.user", cascade = CascadeType.ALL)
     private List<Scorecard> scorecards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reply> replies = new ArrayList<>();
 
     @Builder

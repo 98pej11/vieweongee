@@ -23,13 +23,13 @@ public class Reply {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     @NotNull
-    private Comment comment_id;
+    private Comment comment;
 
     // 작성자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",referencedColumnName="id")
+    @JoinColumn(name = "user_id")
     @NotNull
-    private User user_id;
+    private User user;
 
     // 대댓글 내용
     @Column(length = 200)
@@ -41,10 +41,10 @@ public class Reply {
     private Date datetime;
 
     @Builder
-    public Reply(Long id, Comment comment_id, User user_id, String content, Date datetime) {
+    public Reply(Long id, Comment comment, User user, String content, Date datetime) {
         this.id = id;
-        this.comment_id = comment_id;
-        this.user_id = user_id;
+        this.comment = comment;
+        this.user = user;
         this.content = content;
         this.datetime = datetime;
     }
