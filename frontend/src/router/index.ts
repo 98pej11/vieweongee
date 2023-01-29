@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainView from "../views/MainView.vue";
-import StudyView from "../views/StudyView.vue";
+import StudyListView from "../views/StudyListView.vue";
+import StudyCreateView from "../views/StudyCreateView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import FindpwdView from "../views/FindpwdView.vue";
+import MypageView from "../views/MypageView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,9 +14,14 @@ const routes: Array<RouteRecordRaw> = [
     component: MainView,
   },
   {
-    path: "/study",
-    name: "study",
-    component: StudyView,
+    path: "/studylist",
+    name: "studylist",
+    component: StudyListView,
+  },
+  {
+    path: "/studycreate",
+    name: "studycreate",
+    component: StudyCreateView,
   },
   {
     path: "/login",
@@ -32,13 +39,9 @@ const routes: Array<RouteRecordRaw> = [
     component: FindpwdView,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/mypage",
+    name: "mypage",
+    component: MypageView,
   },
 ];
 

@@ -5,28 +5,48 @@
     </router-link>
     <nav>
       <div>
-      <a
-        ><router-link to="/study"
-          ><el-icon :size="30"><BellFilled /></el-icon></router-link
-      ></a>
-      <a
-        ><router-link to="/login"
-          ><el-icon :size="30"><UserFilled /></el-icon></router-link
-      ></a>
-      <a class="el-dropdown-link" style="display:inline-flex">
-        <el-dropdown>
-          <el-icon :size="30"><Menu /></el-icon>
-          <template #dropdown>
-            <el-dropdown-menu>
-              
-              <el-dropdown-item><router-link to="/study">스터디 게시판</router-link></el-dropdown-item>
+        <a
+          ><router-link to="/studylist"
+            ><el-icon :size="30"><BellFilled /></el-icon></router-link
+        ></a>
+        <a class="el-dropdown-link" style="display: inline-flex">
+          <el-dropdown>
+            <el-icon :size="30"><UserFilled /></el-icon>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  ><router-link to="/login"
+                    >로그인</router-link
+                  ></el-dropdown-item
+                >
 
-              <el-dropdown-item divided>공지사항</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </a>
-    </div>
+                <el-dropdown-item divided
+                  ><router-link to="/mypage"
+                    >마이페이지</router-link
+                  ></el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </a>
+
+        <a class="el-dropdown-link" style="display: inline-flex">
+          <el-dropdown>
+            <el-icon :size="30"><Menu /></el-icon>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  ><router-link to="/studylist"
+                    >스터디 게시판</router-link
+                  ></el-dropdown-item
+                >
+
+                <el-dropdown-item divided>공지사항</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </a>
+      </div>
     </nav>
   </div>
 </template>
@@ -99,7 +119,7 @@ span {
 
 a {
   align-items: right;
-  margin-right: 2rem;
+  margin-right: 1.5rem;
   color: rgb(49, 49, 49);
 }
 
