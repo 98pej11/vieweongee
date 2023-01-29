@@ -5,9 +5,7 @@
       <el-form>
         <el-row :gutter="20">
           <el-col><p>제목</p></el-col>
-          <el-col
-            ><el-input placeholder="제목을 입력하세요."
-          /></el-col>
+          <el-col><el-input placeholder="제목을 입력하세요." /></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -24,15 +22,13 @@
             <el-input placeholder="제목을 입력하세요." />
           </el-col>
           <el-col :span="12">
-            <el-input  placeholder="제목을 입력하세요." />
+            <el-input placeholder="제목을 입력하세요." />
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
           <el-col><p>날짜</p></el-col>
-          <el-col
-            ><el-input placeholder="제목을 입력하세요."
-          /></el-col>
+          <el-col><el-input placeholder="제목을 입력하세요." /></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -49,7 +45,7 @@
             <el-input placeholder="제목을 입력하세요." />
           </el-col>
           <el-col :span="12">
-            <el-input  placeholder="제목을 입력하세요." />
+            <el-input placeholder="제목을 입력하세요." />
           </el-col>
         </el-row>
 
@@ -97,18 +93,16 @@
 </template>
 
 <script lang="ts">
-import { parseHeight } from 'element-plus/es/components/table/src/util';
-import { ref, defineComponent} from 'vue'
+import { parseHeight } from "element-plus/es/components/table/src/util";
+import { ref, defineComponent } from "vue";
 
-
-export default defineComponent({ 
-    name: "UserSignup" ,
-    setup(){
-        const checkList = ref(['1시간']);
-    }
+export default defineComponent({
+  name: "UserSignup",
+  setup() {
+    const checkList = ref(["1시간"]);
+  },
 });
 </script>
-
 
 <style scoped>
 h2 {
