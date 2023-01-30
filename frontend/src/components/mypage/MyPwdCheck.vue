@@ -1,18 +1,9 @@
 <template>
   <el-container>
     <el-main>
-      <el-form style="font-size: medium">
-        <div class="text">
-          <div>
-            <el-icon :size="23"><User /></el-icon>회원 탈퇴 시, 회원님의 모든
-            정보가 삭제됩니다.<br />
-          </div>
-          <div>
-            <p style="color: #ff5151">정말 탈퇴하시겠습니까? ㅠ_ㅠ?</p>
-          </div>
-        </div>
+      <el-form style="font-size: large">
         <el-row class="text"
-          ><el-icon :size="23"><Lock /></el-icon>비밀번호 재확인</el-row
+          ><el-icon :size="25"><Lock /></el-icon>비밀번호 입력</el-row
         >
         <el-row :gutter="20">
           <el-col>
@@ -28,7 +19,7 @@
               size="large"
               style="margin: 10% auto; width: 30%"
             >
-              회원 탈퇴
+              확인
             </el-button>
           </el-col>
         </el-row>
@@ -40,13 +31,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Lock } from "@element-plus/icons-vue";
-import { User } from "@element-plus/icons-vue";
 
 export default defineComponent({
-  name: "MyDelete",
+  name: "MyPwdCheck",
   components: {
     Lock,
-    User,
   },
 });
 </script>
@@ -57,7 +46,7 @@ export default defineComponent({
 .el-container {
   margin: 0 auto;
   margin-top: 10%;
-  width: 80%;
+  width: 50%;
 }
 .el-icon {
   margin-right: 2%;
@@ -69,13 +58,5 @@ export default defineComponent({
 
 .text {
   margin: 30px 0 10px 0;
-}
-
-.text > div {
-  text-align: center;
-  margin: 0 auto;
-  padding-bottom: 10px;
-  font-size: large;
-  font-weight: bold;
 }
 </style>
