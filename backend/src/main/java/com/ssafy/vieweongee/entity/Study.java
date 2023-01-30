@@ -2,11 +2,9 @@ package com.ssafy.vieweongee.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,7 @@ public class Study {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NotNull
-    private User user_id;
+    private User user;
 
     // 스터디 진행 시간
     private int running_time;
@@ -86,25 +84,25 @@ public class Study {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date regist_datetime;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
     private List<Alarm> alarms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "participant_id.study_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "participant_id.study", cascade = CascadeType.ALL)
     private List<Participant> participants = new ArrayList<>();
 
-    @OneToMany(mappedBy = "progress_id.study_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "progress_id.study", cascade = CascadeType.ALL)
     private List<Progress> progresses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "score_id.study_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "score_id.study", cascade = CascadeType.ALL)
     private List<Scorecard> scorecards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Study(Long id, User user_id, int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, Date study_datetime, Date regist_datetime, List<Alarm> alarms, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments) {
+    public Study(Long id, User user, int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, Date study_datetime, Date regist_datetime, List<Alarm> alarms, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments) {
         this.id = id;
-        this.user_id = user_id;
+        this.user = user;
         this.running_time = running_time;
         this.personnel = personnel;
         this.title = title;

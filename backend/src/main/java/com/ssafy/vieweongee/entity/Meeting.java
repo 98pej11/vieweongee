@@ -22,7 +22,7 @@ public class Meeting implements Serializable {
     @OneToOne
     @MapsId
     @JoinColumn(name="study_id")
-    private Study study_id;
+    private Study study;
 //    @Id
 //    @OneToOne
 //    @JoinColumn(name="study_id",referencedColumnName="id")
@@ -35,9 +35,9 @@ public class Meeting implements Serializable {
     private Date start;
 
     @Builder
-    public Meeting(Long id, Study study_id, String link, Date start) {
+    public Meeting(Long id, Study study, String link, Date start) {
         this.id = id;
-        this.study_id = study_id;
+        this.study = study;
         this.link = link;
         this.start = start;
     }

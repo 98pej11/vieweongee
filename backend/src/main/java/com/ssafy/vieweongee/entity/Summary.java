@@ -21,7 +21,7 @@ public class Summary implements Serializable {
     @OneToOne
     @MapsId
     @JoinColumn(name="user_id")
-    private User user_id;
+    private User user;
 //    @Id
 //    @OneToOne
 //    @JoinColumn(name="user_id",referencedColumnName="id")
@@ -59,9 +59,9 @@ public class Summary implements Serializable {
     private float loyalty_average;
 
     @Builder
-    public Summary(Long id, User user_id, int attitude_count, int attitude_total, float attitude_average, int ability_count, int ability_total, float ability_average, int teamwork_count, int teamwork_total, float teamwork_average, int solving_count, int solving_total, float solving_average, int loyalty_count, int loyalty_total, float loyalty_average) {
+    public Summary(Long id, User user, int attitude_count, int attitude_total, float attitude_average, int ability_count, int ability_total, float ability_average, int teamwork_count, int teamwork_total, float teamwork_average, int solving_count, int solving_total, float solving_average, int loyalty_count, int loyalty_total, float loyalty_average) {
         this.id = id;
-        this.user_id = user_id;
+        this.user = user;
         this.attitude_count = attitude_count;
         this.attitude_total = attitude_total;
         this.attitude_average = attitude_average;

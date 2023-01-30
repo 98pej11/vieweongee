@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.service;
 
+import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.repository.UserRepository;
@@ -50,6 +51,20 @@ public class UserServiceImpl implements UserService{
         if(userRepository.existsByNickname(nickname))
             return true;
         return false;
+    }
+
+    @Override
+    public boolean checkPassword(PasswordCheckRequest userInfo) {
+        User dbUser = userRepository.findByEmail(userInfo.getEmail());
+        if(passwordEncoder.matches(userInfo.getPassword(), dbUser.getPassword()))
+            return true;
+        return false;
+    }
+
+    @Override
+    public void deleteUser(PasswordCheckRequest userInfo){
+        User user = userRepository.findByEmail(userInfo.getEmail());
+        userRepository.delete(user);
     }
 
 

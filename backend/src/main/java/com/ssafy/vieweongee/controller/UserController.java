@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.controller;
 
+import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.service.UserService;
@@ -30,7 +31,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody UserCreateRequest registInfo) {
         try {
-            //email 중복 검사, email 인증번호 보내기
+            //email 인증번호 보내기
 
             //비밀번호 확인
             if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
@@ -79,6 +80,28 @@ public class UserController {
 
     //비밀번호 찾기
 
-    //
+    //비밀번호 확인
+    @PostMapping("/password")
+    public ResponseEntity<?> verifyPassword(@RequestBody PasswordCheckRequest userInfo){
+        if(userService.checkPassword(userInfo))
+            return ResponseEntity.status(200).body("비밀번호가 일치합니다.");
+        return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
+    }
 
+    //회원 조회
+
+
+    //회원 정보 수정
+
+
+    //회원 탈퇴
+    @DeleteMapping("/")
+    public ResponseEntity<?> withdrawal(@RequestBody PasswordCheckRequest userInfo){
+        if(userService.checkPassword(userInfo)){
+            userService.deleteUser(userInfo);
+            return ResponseEntity.status(200).body("회원탈퇴 성공");
+        }
+        return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
+
+    }
 }

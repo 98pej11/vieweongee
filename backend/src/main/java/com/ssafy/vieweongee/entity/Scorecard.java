@@ -21,30 +21,34 @@ public class Scorecard implements Serializable{
 
     // 태도 점수
     @ColumnDefault("0")
-    private float attitude;
+    private int attitude;
 
     // 직무역량
     @ColumnDefault("0")
-    private float ability;
+    private int ability;
 
     // 팀워크
     @ColumnDefault("0")
-    private float teamwork;
+    private int teamwork;
 
     // 문제해결능력
     @ColumnDefault("0")
-    private float solving;
+    private int solving;
 
     // 기업관심도
     @ColumnDefault("0")
-    private float loyalty;
+    private int loyalty;
 
     // 피드백
     @Column(length = 1000)
     private String feedback;
 
+    // 면접관 수
+    @ColumnDefault("0")
+    private int interviewer;
+
     @Builder
-    public Scorecard(ScorecardId score_id, float attitude, float ability, float teamwork, float solving, float loyalty, String feedback) {
+    public Scorecard(ScorecardId score_id, int attitude, int ability, int teamwork, int solving, int loyalty, String feedback, int interviewer) {
         this.score_id = score_id;
         this.attitude = attitude;
         this.ability = ability;
@@ -52,5 +56,7 @@ public class Scorecard implements Serializable{
         this.solving = solving;
         this.loyalty = loyalty;
         this.feedback = feedback;
+        this.interviewer = interviewer;
     }
 }
+
