@@ -3,6 +3,7 @@ package com.ssafy.vieweongee.controller;
 import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
 import com.ssafy.vieweongee.service.MeetingScoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +12,18 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/meeting")
-@RequiredArgsConstructor
+@RequestMapping("/meeting")
 public class MeetingController {
 
     private final MeetingScoreService meetingScoreService;
 
+    @Autowired
+    public MeetingController(MeetingScoreService meetingScoreService) {
+        this.meetingScoreService = meetingScoreService;
+    }
+
     // 스터디원 자기소개서 전부 가져오기 >> 서버에서 저장된 경로 찾아서 파일 넘겨주기
     // 스터디원 채점표 생성하기 >> 스터디 생성 24시간이내
-
-    // 스터디원 채점표 전부 가져오기
 
     /**
      * 스터디원의 채점표를 전부 불러옴
