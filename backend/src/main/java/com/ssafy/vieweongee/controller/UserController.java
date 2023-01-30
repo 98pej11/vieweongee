@@ -69,18 +69,19 @@ public class UserController {
         return ResponseEntity.status(409).body("이메일이 중복됩니다. 다른 이메일을 선택해 주세요");
     }
 
-    //email 인증
+    //인증 이메일 발송
 //    @PostMapping("/email-valid")
 //    public ResponseEntity<?> sendEmail(){
 //
 //    }
 
+    //이메일 인증
 //    @PostMapping("/email-valid/certi")
 //    public ResponseEntity<?> emailValid(){
 //
 //    }
 
-    //닉네임 중복 검사
+    //닉네임 중복검사
 //    @GetMapping("/nickname-check")
 //    public ResponseEntity<?> nicknameCheck(@RequestBody String nickname){
 //        if(!userService.checkDuplicatedNickname(nickname))
