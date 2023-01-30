@@ -18,6 +18,29 @@ export default defineComponent({
 </script>
 
 <style>
+@font-face {
+  font-family: "nexon";
+  src: url("@/assets/font/NEXONLv1GothicRegular.ttf") format("truetype");
+  /* font-weight: 400; */
+}
+@font-face {
+  font-family: "nexonbold";
+  src: url("@/assets/font/NEXONLv1GothicBold.ttf") format("truetype");
+  /* font-weight: 400; */
+}
+@font-face {
+  font-family: "nexonlight";
+  src: url("@/assets/font/NEXONLv1GothicLight.ttf") format("truetype");
+  /* font-weight: 400; */
+}
+@font-face {
+  font-family: "tenada";
+  src: url("@/assets/font/Tenada.ttf") format("truetype");
+  /* font-weight: 400; */
+}
+* {
+  font-family: "nexon";
+}
 a {
   text-decoration: none;
   color: #3f67d3;

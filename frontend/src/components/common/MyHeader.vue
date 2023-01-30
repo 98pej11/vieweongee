@@ -4,11 +4,34 @@
       <img alt="logo" src="@/assets/image/logo.png" class="Header-logo" />
     </router-link>
     <nav>
-      <div>
-        <a
-          ><router-link to="/studylist"
-            ><el-icon :size="30"><BellFilled /></el-icon></router-link
-        ></a>
+      <div style="display: inline-flex">
+        <a>
+          <el-badge :value="12" class="item">
+            <el-icon
+              :size="33"
+              @click="dialogVisible = true"
+              style="cursor: pointer"
+              ><BellFilled
+            /></el-icon>
+          </el-badge>
+          <el-dialog
+            class="el-dialog"
+            v-model="dialogVisible"
+            width="600px"
+            style="border-radius: 5%"
+          >
+            <ul
+              v-infinite-scroll="load"
+              class="infinite-list"
+              style="overflow: auto"
+            >
+              <li v-for="i in count" :key="i" class="infinite-list-item">
+                {{ i }}
+              </li>
+            </ul>
+          </el-dialog></a
+        >
+
         <a class="el-dropdown-link" style="display: inline-flex">
           <el-dropdown>
             <el-icon :size="30"><UserFilled /></el-icon>
@@ -51,21 +74,37 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script lang="ts" setup>
+import { defineComponent, ref } from "vue";
 import { BellFilled, UserFilled, Menu } from "@element-plus/icons-vue";
-export default defineComponent({
-  name: "MyHeader",
-  components: {
-    BellFilled,
-    UserFilled,
-    Menu,
-  },
-});
+import { setup } from "vue-class-component";
+
+const dialogVisible = ref(false);
+const count = ref(0);
+const load = () => {
+  count.value += 2;
+};
 </script>
 
 <style scoped>
+.infinite-list {
+  height: 400px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: var(--el-color-primary-light-9);
+  margin: 10px;
+  color: var(--el-color-primary);
+}
+.infinite-list .infinite-list-item + .list-item {
+  margin-top: 10px;
+}
 .el-dropdown-link {
   cursor: pointer;
   color: var(--el-color-primary);
@@ -96,17 +135,9 @@ export default defineComponent({
 
 nav {
   margin-top: 50px;
-  margin-right: 200px;
-  display: inline-block;
+  margin-right: 300px;
+  /* display: inline-flex; */
   float: right;
-}
-
-.logo-mascot {
-  width: 8%;
-}
-
-.logo-text {
-  width: 18%;
 }
 
 img {
@@ -119,17 +150,7 @@ span {
 
 a {
   align-items: right;
-  margin-right: 1.5rem;
+  margin-right: 2.8rem;
   color: rgb(49, 49, 49);
-}
-
-.search-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.search-field {
-  text-align: center;
-  width: 50%;
 }
 </style>
