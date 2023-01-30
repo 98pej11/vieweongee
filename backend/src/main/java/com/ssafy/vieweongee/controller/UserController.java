@@ -2,11 +2,16 @@ package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,9 +26,9 @@ public class UserController {
         if(loginUser != null){
             //String accessToken
             //String refreshToken
-            return ResponseEntity.status(200).body("login success");
+            return ResponseEntity.status(200).body("로그인에 성공했습니다.");
         }
-        return ResponseEntity.status(400).body("login fail");
+        return ResponseEntity.status(400).body("로그인에 실패했습니다.");
 
     }
 
@@ -88,15 +93,36 @@ public class UserController {
         return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
     }
 
-    //회원 조회
-
+    //회원 정보 조회
+    @GetMapping("/")
+    public ResponseEntity<?> getInfo (@RequestBody String email){
+        User user = userService.getUserByEmail(email);
+        if(user == null)
+            return ResponseEntity.status(500).body("회원 정보 찾기 불가");
+        else {
+            Map<String, Object> result = new HashMap<>();
+            result.put("data", user);
+            result.put("message", "회원 정보 조회 성공");
+            return ResponseEntity.status(200).body(result);
+        }
+    }
 
     //회원 정보 수정
-
+    @PutMapping("/")
+    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo){
+        if(!userService.checkDuplicatedNickname(modifyInfo.getNickname())){
+            if(modifyInfo.getPassword().equals(modifyInfo.getPasswordCheck())){
+                userService.modifyUser(modifyInfo);
+                return ResponseEntity.status(200).body("회원 정보 수정에 성공했습니다.");
+            }
+            return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
+        }
+        return ResponseEntity.status(409).body("닉네임이 중복됩니다.");
+    }
 
     //회원 탈퇴
     @DeleteMapping("/")
-    public ResponseEntity<?> withdrawal(@RequestBody PasswordCheckRequest userInfo){
+    public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
         if(userService.checkPassword(userInfo)){
             userService.deleteUser(userInfo);
             return ResponseEntity.status(200).body("회원탈퇴 성공");

@@ -2,11 +2,15 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -65,6 +69,16 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(PasswordCheckRequest userInfo){
         User user = userRepository.findByEmail(userInfo.getEmail());
         userRepository.delete(user);
+    }
+
+    @Transactional
+    @Override
+    public void modifyUser(UserModifyRequest userInfo) {
+        User dbUser = userRepository.findByEmail(userInfo.getEmail());
+        String encryptPassword = passwordEncoder.encode(userInfo.getPassword());
+        dbUser.update(userInfo.getNickname(), encryptPassword);
+        userRepository.save(dbUser);
+
     }
 
 

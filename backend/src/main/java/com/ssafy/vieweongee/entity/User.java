@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.entity;
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -87,5 +88,17 @@ public class User {
         this.password = registInfo.getPassword();
         this.nickname = registInfo.getNickname();
         this.social_login = "global";
+    }
+
+    @Builder
+    public User(UserModifyRequest modifyInfo){
+        this.email = modifyInfo.getEmail();
+        this.password = modifyInfo.getPassword();
+        this.nickname = modifyInfo.getNickname();
+    }
+
+    public void update(String nickname, String password){
+        this.nickname = nickname;
+        this.password = password;
     }
 }
