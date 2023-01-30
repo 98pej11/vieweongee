@@ -9,6 +9,7 @@ import com.ssafy.vieweongee.repository.MeetingScoreRepository;
 import com.ssafy.vieweongee.repository.StudyRepository;
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class MeetingScoreServiceImpl implements MeetingScoreService{
 
     private final MeetingScoreRepository meetingScoreRepository;
     private final UserRepository userRepository;
     private final StudyRepository studyRepository;
+
+    @Autowired
+    public MeetingScoreServiceImpl(MeetingScoreRepository meetingScoreRepository, UserRepository userRepository, StudyRepository studyRepository) {
+        this.meetingScoreRepository = meetingScoreRepository;
+        this.userRepository = userRepository;
+        this.studyRepository = studyRepository;
+    }
 
     /**
      * 스터디 참가자의 채점표 불러오기
