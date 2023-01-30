@@ -19,7 +19,7 @@ public class User {
 
     @Column(length = 30)
     private String email;
-    @Column(length = 16)
+    @Column
     private String password;
     @Column(length = 10)
     private String social_login;
