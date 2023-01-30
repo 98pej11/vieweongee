@@ -101,4 +101,8 @@ public class User {
         this.nickname = nickname;
         this.password = password;
     }
+
+    public void deleteRefreshToken(String token){
+        this.jwt_token = token;
+    }
 }

@@ -14,4 +14,5 @@ public interface UserService {
     boolean checkPassword(PasswordCheckRequest userInfo);
     void deleteUser(PasswordCheckRequest userInfo);
     void modifyUser(UserModifyRequest userInfo);
+    void deleteRefreshtoken(String email);
 }

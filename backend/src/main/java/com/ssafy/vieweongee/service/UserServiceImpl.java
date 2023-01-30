@@ -81,5 +81,11 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public void deleteRefreshtoken(String email) {
+        User logoutUser = userRepository.findByEmail(email);
+        logoutUser.deleteRefreshToken(null);
+    }
+
 
 }

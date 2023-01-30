@@ -29,7 +29,14 @@ public class UserController {
             return ResponseEntity.status(200).body("로그인에 성공했습니다.");
         }
         return ResponseEntity.status(400).body("로그인에 실패했습니다.");
+    }
 
+    //로그아웃
+    @GetMapping("/signout")
+    public ResponseEntity<?> logout(@RequestBody String email){
+        //delete RefreshToken
+        userService.deleteRefreshtoken(email);
+        return ResponseEntity.status(200).body("로그아웃에 성공했습니다.");
     }
 
     //회원 가입
@@ -83,7 +90,8 @@ public class UserController {
 
     //refresh token 재발급
 
-    //비밀번호 찾기
+    //비밀번호 찾기 -> 임시 비밀번호 발급
+
 
     //비밀번호 확인
     @PostMapping("/password")
