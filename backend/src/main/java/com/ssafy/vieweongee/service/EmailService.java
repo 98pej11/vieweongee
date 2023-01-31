@@ -6,6 +6,6 @@ public interface EmailService {
     String createAuthNum();
     MimeMessage createMessage(String to, String code) throws Exception;
     MimeMessage createMessagePw(String to, String password) throws Exception;
-    String sendSimpleMessage(String to, String content) throws Exception;
+    String sendSimpleMessage(String to, String password) throws Exception;
 
 }

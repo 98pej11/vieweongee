@@ -4,6 +4,7 @@ import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.service.EmailService;
 import com.ssafy.vieweongee.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    EmailService emailService;
 
     //로그인
     @PostMapping("/signin")
@@ -43,8 +46,6 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody UserCreateRequest registInfo) {
         try {
-            //email 인증번호 보내기
-
             //비밀번호 확인
             if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
                 return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
@@ -69,11 +70,20 @@ public class UserController {
         return ResponseEntity.status(409).body("이메일이 중복됩니다. 다른 이메일을 선택해 주세요");
     }
 
-    //인증 이메일 발송
-//    @PostMapping("/email-valid")
-//    public ResponseEntity<?> sendEmail(){
-//
-//    }
+//    인증 이메일 발송
+    @PostMapping("/email-valid")
+    public ResponseEntity<?> sendEmail(@RequestBody String email){
+//        String key = emailService.createAuthNum();
+        try {
+            emailService.sendSimpleMessage(email, ""); // sendSimpleMessage
+            return ResponseEntity.status(200).body("이메일 보내기 성공");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("이메일 보내기 실패");
+        }
+
+    }
 
     //이메일 인증
 //    @PostMapping("/email-valid/certi")

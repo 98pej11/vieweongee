@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,6 @@ import java.util.Random;
 public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender emailSender;
-
 
     @Override
     public String createAuthNum(){
@@ -29,8 +29,7 @@ public class EmailServiceImpl implements EmailService{
     public MimeMessage createMessage(String to, String code) throws Exception{ // 회원가입 시 인증 메일 전송
 //        logger.info("대상 : " + to);
 //        logger.info("인증 번호 : " + code);
-        MimeMessage  message = emailSender.createMimeMessage();
-
+        MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
         message.setSubject("확인 코드: " + code); //제목
@@ -43,7 +42,7 @@ public class EmailServiceImpl implements EmailService{
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용
-        message.setFrom(new InternetAddress("ssafy6a201@gmail.com","inview")); //보내는 사람
+        message.setFrom(new InternetAddress("shadberry0319@gmail.com","vieweongee")); //보내는 사람
 
         return message;
     }
@@ -52,7 +51,7 @@ public class EmailServiceImpl implements EmailService{
     public MimeMessage createMessagePw(String to, String password) throws Exception{ // 비밀번호찾기 시 임시 비밀번호 발급
 //        logger.info("대상 : "+ to);
 //        logger.info("임시 비밀번호 : " + password);
-        MimeMessage  message = emailSender.createMimeMessage();
+        MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
         message.setSubject("임시 비밀번호: " + password); //제목
@@ -66,7 +65,6 @@ public class EmailServiceImpl implements EmailService{
 
         message.setText(msg, "utf-8", "html"); //내용
         message.setFrom(new InternetAddress("ssafy6a201@gmail.com","inview")); //보내는 사람
-
         return message;
     }
 
@@ -76,12 +74,15 @@ public class EmailServiceImpl implements EmailService{
 
         String code = createAuthNum();
 
-        if(password == "")
+        if(password.equals("")){
+            System.out.println("MailServiceImpl : sendSimpleMessage");
             message = createMessage(to, code);
+        }
         else
             message = createMessagePw(to, password);
 
         try { //예외처리
+            System.out.println(message);
             emailSender.send(message);
         }
         catch(Exception e){
