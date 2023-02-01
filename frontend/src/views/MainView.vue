@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 import MainCenter from "@/components/mainpage/MainCenter.vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
 import SearchBar from "@/components/common/SearchBar.vue";
@@ -25,5 +24,8 @@ export default defineComponent({
 <style scoped>
 .main {
   text-align: center;
+}
+.search-bar {
+  margin: 2% 25% 2% 25%;
 }
 </style>
