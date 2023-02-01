@@ -2,14 +2,18 @@
   <el-container>
     <el-main class="main-box">
       <h2>회원가입</h2>
-      <el-form style="font-size:large">
+      <ValidationObserver>
+      <el-form style="font-size:large" @submit.prevent="formSubmit" method="post">
+       
+       <!-- 이메일 -->
+        <ValidationProvider ref="refEmail" rules="required|email">
         <el-row :gutter="20">
           <el-col><p><el-icon :size="20"><Message /></el-icon>이메일</p></el-col>
         </el-row>
 
         <el-row :gutter="20">
           <el-col :span="18">
-            <el-input placeholder="이메일 규칙" />
+            <el-input placeholder="이메일 규칙" v-model="email"/>
           </el-col>
           <el-col :span="6">
             <el-button
@@ -37,13 +41,17 @@
             </el-button>
           </el-col>
         </el-row>
+        </ValidationProvider>
 
+
+        <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash"></ValidationProvider>
+        <!-- 비밀번호 -->
         <el-row :gutter="20">
           <el-col>
             <p><el-icon :size="20"><Lock /></el-icon>비밀번호</p>
           </el-col>
           <el-col>
-            <el-input placeholder="비밀번호 규칙" />
+            <el-input placeholder="비밀번호 규칙" v-model="password"/>
           </el-col>
           <el-col style="margin-top: 3%">
             <el-input placeholder="비밀번호 재확인" />
@@ -62,24 +70,70 @@
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 100%"
+              type="submit"
             >
               완료
             </el-button>
           </el-col>
         </el-row>
       </el-form>
+    </ValidationObserver>
     </el-main>
   </el-container>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
 import { Message,Lock,User } from "@element-plus/icons-vue";
-export default defineComponent({
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+export default {
+  data(){
+    return{
+      email: "",
+      password: "",
+      name: "",
+    }
+  },
   components:{
-    Message,Lock,User
-  }
-});
+    Message,Lock,User,ValidationObserver,ValidationProvider,
+  },
+  methods: {
+      async formSubmit() {
+        const refEmail = await this.$refs.refEmail.validate()
+        if (!refEmail.valid) {
+          alert(refEmail.errors[0])
+          return false
+        }
+        const refPassword = await this.$refs.refPassword.validate()
+        if (!refPassword.valid) {
+          alert(refPassword.errors[0])
+          return false
+        }
+        const refName = await this.$refs.refName.validate()
+        if (!refName.valid) {
+          alert(refName.errors[0])
+          return false
+        }
+
+        this.$store
+          .dispatch("register", {
+            email: this.email,
+            password: this.password,
+            name: this.name,
+          })
+          .then(response => {
+            if (response.status == 200) {
+              this.$router.push({
+                name: "mypage",
+              })
+            }
+          })
+          .catch(({ message }) => alert(message))
+
+        return true
+      },
+    },
+};
 </script>
 
 <style scoped>
