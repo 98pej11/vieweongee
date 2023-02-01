@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MeetingServiceImpl implements MeetingService{
+public class MeetingServiceImpl implements MeetingService {
 
     private final MeetingScoreRepository meetingScoreRepository;
     private final MeetingParticipantRepository meetingParticipantRepository;
@@ -30,6 +30,7 @@ public class MeetingServiceImpl implements MeetingService{
 
     /**
      * 스터디 참가 상태를 변경 (예정 -> 완료)
+     *
      * @param studyId
      */
     @Transactional
@@ -42,7 +43,7 @@ public class MeetingServiceImpl implements MeetingService{
 
 
         //스터디 참가 상태 변경 (예정 >> 완료)
-        for(Progress progress : list){
+        for (Progress progress : list) {
             progress.changeStatusToTrue();
         }
         System.out.println(">>> 스터디 참가 상태 변경 완료");
@@ -50,6 +51,7 @@ public class MeetingServiceImpl implements MeetingService{
 
     /**
      * 스터디 참가자의 채점표 불러오기
+     *
      * @param studyId
      * @return List<MeetingScoreRequest>
      */
@@ -60,17 +62,16 @@ public class MeetingServiceImpl implements MeetingService{
 
         List<MeetingScoreRequest> result = new ArrayList<>();
 
-        for(Scorecard scorecard : list){
+        for (Scorecard scorecard : list) {
             MeetingScoreRequest temp = new MeetingScoreRequest(
                     scorecard.getScore_id().getUser().getId()
-                    ,scorecard.getAttitude()
-                    ,scorecard.getAbility()
-                    ,scorecard.getTeamwork()
-                    ,scorecard.getSolving()
-                    ,scorecard.getLoyalty()
-                    ,scorecard.getFeedback()
+                    , scorecard.getAttitude()
+                    , scorecard.getAbility()
+                    , scorecard.getTeamwork()
+                    , scorecard.getSolving()
+                    , scorecard.getLoyalty()
+                    , scorecard.getFeedback()
             );
-
             result.add(temp);
         }
 
@@ -79,6 +80,7 @@ public class MeetingServiceImpl implements MeetingService{
 
     /**
      * 스터디의 면접자 1명의 채점표의 점수를 갱신
+     *
      * @param studyId
      * @param score
      */
@@ -107,6 +109,7 @@ public class MeetingServiceImpl implements MeetingService{
 
     /**
      * 스터디 채점표 생성
+     *
      * @param studyId
      */
     @Transactional
@@ -115,7 +118,7 @@ public class MeetingServiceImpl implements MeetingService{
         //스터디 아이디로 참가자 명단 가져오고
         List<Participant> participants = meetingParticipantRepository.findAllByStudy_id(Long.parseLong(studyId));
         //그 명단에서 회원 아이디 다 받아옴
-        for(Participant p : participants){
+        for (Participant p : participants) {
             Long user_id = p.getParticipant_id().getUser().getId();
 
             //스터디 아이디와 회원 아이디로 ScorecardId 만들어줌
@@ -139,18 +142,15 @@ public class MeetingServiceImpl implements MeetingService{
         return true;
     }
 
+    /**
+     * 스터디 시작 시간, 진행 시간 찾기
+     * @param studyId
+     * @return
+     */
     @Transactional
     @Override
-    public String updateStudyStartTime(String studyId) {
-//        //스터디 아이디로 미팅 찾음
-//        Meeting meeting = meetingRepository.findById(Long.parseLong(studyId))
-//                .orElseThrow(() -> new IllegalArgumentException("no such data"));
-//
-//        //현재 시간으로 갱신
-//        LocalDateTime now = LocalDateTime.now();
-//        meeting.updateStartTime(now);
-//
-//        return now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+    public String getStudyStartTimeAndRunningTime(String studyId) {
+
         return null;
     }
 

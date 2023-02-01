@@ -22,37 +22,26 @@ public class MeetingController {
     }
 
     // 스터디원 자기소개서 전부 가져오기 >> 서버에서 저장된 경로 찾아서 파일 넘겨주기
-    // 스터디원 채점표 생성하기 >> 미팅 시작 버튼 눌렀을 때
-
-
-    //스터디 채점표 생성
 
     /**
      * 스터디 채점표 생성
+     *
      * @param study_ID
      * @return
      */
     @PostMapping("/{study_ID}/score")
     public ResponseEntity<Boolean> startMeeting(@PathVariable("study_ID") String study_ID) {
-        if(!meetingService.makeScorecard(study_ID)){
+        if (!meetingService.makeScorecard(study_ID)) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
-    //자기소개서 불러오기
-
     //미팅 시작 시간, 진행 시간
-
-//    @GetMapping("/{study_ID}/time")
-
-//    @PutMapping("/{study_ID}/start")
-//    public ResponseEntity<?> startTime(@PathVariable("study_ID") String study_ID){
-//        return new ResponseEntity<>(meetingService.updateStudyStartTime(study_ID), HttpStatus.OK);
-//    }
 
     /**
      * 스터디원의 채점표를 전부 불러옴
+     *
      * @param study_ID
      * @return List<MeetingScoreRequest>
      */
@@ -65,6 +54,7 @@ public class MeetingController {
 
     /**
      * 면접자 1명의 채점표 갱신
+     *
      * @param study_ID
      * @param meetingScoreRequest
      * @return
@@ -80,6 +70,7 @@ public class MeetingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 스터디 상태(진행/완료) 변경하기 >> 스터디에서 생성한 종료 시간이 됐을 때
-    // Video 컨트롤러에서 했음
+    // 스터디 상태(진행/완료) 변경하기 >> 스터디에서 생성한 종료 시간이 됐을 때 >> Video 컨트롤러에서 처리 완료
+
+    //스터디 순서 지정
 }
