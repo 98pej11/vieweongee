@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean checkPassword(PasswordCheckRequest userInfo) {
-        User dbUser = userRepository.findByEmail(userInfo.getEmail());
-        if(passwordEncoder.matches(userInfo.getPassword(), dbUser.getPassword()))
+        User dbUser = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
+        if(dbUser != null && passwordEncoder.matches(userInfo.getPassword(), dbUser.getPassword()))
             return true;
         return false;
     }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void modifyUser(UserModifyRequest userInfo) {
-        User dbUser = userRepository.findByEmail(userInfo.getEmail());
+        User dbUser = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
         String encryptPassword = passwordEncoder.encode(userInfo.getPassword());
         dbUser.update(userInfo.getNickname(), encryptPassword);
         userRepository.save(dbUser);

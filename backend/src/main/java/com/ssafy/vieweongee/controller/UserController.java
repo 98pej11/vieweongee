@@ -2,6 +2,7 @@ package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserGetInfo;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.service.EmailService;
@@ -117,8 +118,8 @@ public class UserController {
 
     //회원 정보 조회
     @GetMapping("/")
-    public ResponseEntity<?> getInfo (@RequestBody String email, String provider){
-        User user = userService.getUser(email, provider);
+    public ResponseEntity<?> getInfo (@RequestBody UserGetInfo userInfo){
+        User user = userService.getUser(userInfo.getEmail(), userInfo.getProvider());
         if(user == null)
             return ResponseEntity.status(500).body("회원 정보가 없습니다.");
         else {

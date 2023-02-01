@@ -5,10 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserModifyRequest {
+public class UserGetInfo {
     private String email;
-    private String nickname;
     private String provider;
-    private String password;
-    private String passwordCheck;
 }
