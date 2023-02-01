@@ -46,7 +46,7 @@ export default defineComponent({
     currentTab: "MyMain",
   }),
   methods: {
-    changeComp: function (compName: string) {
+    changeComp: function (compName) {
       this.currentTab = compName;
       console.log(this.currentTab);
     },

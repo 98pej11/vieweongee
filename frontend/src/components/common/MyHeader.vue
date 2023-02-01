@@ -74,16 +74,35 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { defineComponent, ref } from "vue";
+<script>
 import { BellFilled, UserFilled, Menu } from "@element-plus/icons-vue";
-import { setup } from "vue-class-component";
+import { defineComponent, ref } from "vue";
 
-const dialogVisible = ref(false);
-const count = ref(0);
-const load = () => {
-  count.value += 2;
-};
+export default defineComponent({
+  name: "MyHeader",
+  components: {
+    BellFilled,
+    UserFilled,
+    Menu,
+  },
+  setup() {
+    const dialogVisible = ref(false);
+    const count = 5;
+    function load() {
+      this.count += 1;
+      // console.log(this.count);
+    }
+
+    return {
+      load,
+      BellFilled,
+      UserFilled,
+      Menu,
+      dialogVisible,
+      count,
+    };
+  },
+});
 </script>
 
 <style scoped>

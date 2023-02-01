@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+// import { useStore } from "vuex";
 import { Search } from "@element-plus/icons-vue";
 
 export default defineComponent({
@@ -20,12 +20,12 @@ export default defineComponent({
     const searchQuery = ref("");
     const selectedCategory = ref("title");
     const router = useRouter();
-    const store = useStore();
+    // const store = useStore();
     const goToSearchResult = () => {
       if (searchQuery.value.trim()) {
-        let query = {};
+        // let query = {};
         if (selectedCategory.value === "title") {
-          query = { title: searchQuery.value, page: 1 };
+          // query = { title: searchQuery.value, page: 1 };
         }
       }
 
