@@ -1,27 +1,23 @@
 <template>
-  <div class="study">
+  <div>
     <StudyListCard></StudyListCard>
-    <!-- <StudyCreate></StudyCreate> -->
+    <StudyCreate></StudyCreate>
+    <StudyDetail></StudyDetail>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-// import StudyDetail from "@/components/board/StudyDetail.vue";
-// import StudyCreate from "@/components/board/StudyCreate.vue";
+<script>
+import StudyDetail from "@/components/board/StudyDetail.vue";
+import StudyCreate from "@/components/board/StudyCreate.vue";
 import StudyListCard from "@/components/board/StudyListCard.vue";
 
-export default defineComponent({
+export default {
   name: "StudyView",
   components: {
-    // StudyDetail,
-    // StudyCreate,
+    StudyDetail,
+    StudyCreate,
     StudyListCard,
   },
-});
+};
 </script>
-<style scoped>
-.study {
-  text-align: center;
-}
-</style>
+<style scoped></style>

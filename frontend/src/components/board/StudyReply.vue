@@ -1,8 +1,10 @@
 <template>
-  <el-container>
-    <el-main class="main-box">
+  <div class="container">
+    <div class="main main-box">
       <el-row>
-        <el-col class="font-weight-bold">댓글</el-col>
+        <el-col style="color: black; font-weight: bold; margin-bottom: 20px"
+          >댓글</el-col
+        >
       </el-row>
       <el-row>
         <el-col id="reply-field">
@@ -17,8 +19,8 @@
         </el-col>
       </el-row>
       <StudyReplyItem></StudyReplyItem>
-    </el-main>
-  </el-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -27,9 +29,18 @@ export default { name: "StudyReply", components: { StudyReplyItem } };
 </script>
 
 <style scoped>
-.el-container {
+.container {
   margin: 0 auto;
+  margin-top: 5%;
   width: 45%;
+}
+.main {
+  padding: 10%;
+  margin-bottom: 5%;
+}
+
+.el-input {
+  height: 40px;
 }
 
 #reply-field {
@@ -40,8 +51,8 @@ export default { name: "StudyReply", components: { StudyReplyItem } };
 #reply-button {
   z-index: 2;
   position: absolute;
-  top: 14%;
-  right: 5%;
+  top: 5px;
+  right: 5px;
 }
 
 button {

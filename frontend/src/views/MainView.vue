@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import MainCenter from "@/components/mainpage/MainCenter.vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
