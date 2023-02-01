@@ -4,16 +4,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
 import StudyCreate from "@/components/board/StudyCreate.vue";
 
-export default defineComponent({
+export default {
   name: "StudyView",
   components: {
     StudyCreate,
   },
-});
+};
 </script>
 <style scoped>
 .study {

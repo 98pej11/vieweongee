@@ -4,7 +4,7 @@
   <MyFooter></MyFooter>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import MyHeader from "./components/common/MyHeader.vue";
 import MyFooter from "./components/common/MyFooter.vue";
