@@ -40,7 +40,7 @@
   </el-container>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import { Lock } from "@element-plus/icons-vue";
 import { User } from "@element-plus/icons-vue";

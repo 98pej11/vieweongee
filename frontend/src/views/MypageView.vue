@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import MyMain from "@/components/mypage/MyMain.vue";
 import MyData from "@/components/mypage/MyData.vue";
