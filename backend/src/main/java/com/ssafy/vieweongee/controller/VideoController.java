@@ -1,6 +1,6 @@
 package com.ssafy.vieweongee.controller;
 
-import com.ssafy.vieweongee.service.MeetingProgressService;
+import com.ssafy.vieweongee.service.MeetingService;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/sessions")
 public class VideoController {
     @Autowired
-    MeetingProgressService meetingProgressService;
+    MeetingService meetingService;
 
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
@@ -111,7 +111,7 @@ public class VideoController {
             return new ResponseEntity<>("connection not found", HttpStatus.NOT_FOUND);
         }
         //모든 연결을 삭제했다면 스터디의 진행 상태를 변경해준다
-        meetingProgressService.updateStudyProgress(sessionId);
+        meetingService.updateStudyProgress(sessionId);
 
         return new ResponseEntity<>("delete connections complete", HttpStatus.OK);
 

@@ -1,9 +1,7 @@
 package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
-import com.ssafy.vieweongee.service.MeetingScoreService;
 import com.ssafy.vieweongee.service.MeetingService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +14,10 @@ import java.util.List;
 @RequestMapping("/meeting")
 public class MeetingController {
 
-    private final MeetingScoreService meetingScoreService;
     private final MeetingService meetingService;
 
     @Autowired
-    public MeetingController(MeetingScoreService meetingScoreService, MeetingService meetingService) {
-        this.meetingScoreService = meetingScoreService;
+    public MeetingController(MeetingService meetingService) {
         this.meetingService = meetingService;
     }
 
@@ -64,7 +60,7 @@ public class MeetingController {
     public ResponseEntity<List<MeetingScoreRequest>> showAllScorecard(
             @PathVariable("study_ID") String study_ID) {
 
-        return new ResponseEntity<>(meetingScoreService.getAllScore(study_ID), HttpStatus.OK);
+        return new ResponseEntity<>(meetingService.getAllScore(study_ID), HttpStatus.OK);
     }
 
     /**
@@ -77,7 +73,7 @@ public class MeetingController {
     public ResponseEntity<MeetingScoreRequest> modifyScorecard(
             @PathVariable("study_ID") String study_ID,
             @RequestBody MeetingScoreRequest meetingScoreRequest) {
-        meetingScoreService.updateScore(study_ID, meetingScoreRequest);
+        meetingService.updateScore(study_ID, meetingScoreRequest);
 
         //마이페이지에 통계 갱신
 
