@@ -30,5 +30,33 @@ public class MypageController {
         return ResponseEntity.status(200).body(result);
     }
 
+    //참여 스터디 여러개 조회
+//    @GetMapping("/mystudy")
+//    public ResponseEntity<?> myStudyList(@RequestBody ){
+//
+//    }
 
+    //참여 스터디 1개 조회
+//    @GetMapping("/mystudy/{study-id}")
+//    public ResponseEntity<?> myStudy(@RequestBody){
+//
+//    }
+
+    //회차별 통계 조회
+//    @GetMapping("/turn")
+//    public ResponseEntity<?> turnStatistics(@RequestBody){
+//
+//    }
+
+    //역량별 통계 조회
+//    @GetMapping("graph")
+//    public ResponseEntity<?> abilityStatistics(@RequestBody){
+//
+//    }
+
+    //참여 예정 스터디 조회(곧참스)
+//    @GetMapping("/mystudy/upcoming")
+//    public ResponseEntity<?> upcomingStudy(@RequestBody){
+//
+//    }
 }
