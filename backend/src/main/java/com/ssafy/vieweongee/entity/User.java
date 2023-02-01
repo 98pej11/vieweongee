@@ -1,5 +1,4 @@
 package com.ssafy.vieweongee.entity;
-import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import lombok.*;
@@ -25,10 +24,10 @@ public class User {
 //    @Column(length = 16)
     private String password;
     @Column(length = 10)
-    private String social_login;
+    private String provider;
 
-    @Column
-    private String social_token;
+//    @Column
+//    private String social_token;
 
     @Column(length = 10)
     @NotNull
@@ -63,12 +62,11 @@ public class User {
     private List<Reply> replies = new ArrayList<>();
 
     @Builder
-    public User(Long id, String email, String password, String social_login, String social_token, String nickname, boolean authority, String jwt_token, List<Notice> notices, List<Alarm> alarms, List<Study> studies, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments, List<Reply> replies) {
+    public User(Long id, String email, String password, String provider, String nickname, boolean authority, String jwt_token, List<Notice> notices, List<Alarm> alarms, List<Study> studies, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments, List<Reply> replies) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.social_login = social_login;
-        this.social_token = social_token;
+        this.provider = provider;
         this.nickname = nickname;
         this.authority = authority;
         this.jwt_token = jwt_token;
@@ -87,7 +85,7 @@ public class User {
         this.email = registInfo.getEmail();
         this.password = registInfo.getPassword();
         this.nickname = registInfo.getNickname();
-        this.social_login = "global";
+        this.provider = "global";
     }
 
     @Builder
@@ -104,5 +102,9 @@ public class User {
 
     public void deleteRefreshToken(String token){
         this.jwt_token = token;
+    }
+
+    public void updateTempPassword(String password){
+        this.password = password;
     }
 }

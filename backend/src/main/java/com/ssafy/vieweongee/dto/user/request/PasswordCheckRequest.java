@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PasswordCheckRequest {
     private String email;
+    private String provider;
     private String password;
     private String passwordCheck;
 }

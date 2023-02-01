@@ -1,7 +1,6 @@
 package com.ssafy.vieweongee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +25,20 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
+    public String createTempPassword() {
+        String password = "";
+        for (int i = 0; i < 12; i++) {
+            password += (char) ((Math.random() * 26) + 97);
+        }
+        return password;
+    }
+
+    @Override
     public MimeMessage createMessage(String to, String code) throws Exception{ // 회원가입 시 인증 메일 전송
         MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
-        message.setSubject("확인 코드: " + code); //제목
+        message.setSubject("뷰엉이 이메일 확인 코드"); //제목
 
         String msg="";
         msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">이메일 주소 확인</h1>";
@@ -40,7 +48,7 @@ public class EmailServiceImpl implements EmailService{
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용
-        message.setFrom(new InternetAddress("vieweongee07@gmail.com","vieweongee")); //보내는 사람
+        message.setFrom(new InternetAddress("vieweongee701@gmail.com","vieweongee")); //보내는 사람
 
         return message;
     }
@@ -50,7 +58,7 @@ public class EmailServiceImpl implements EmailService{
         MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
-        message.setSubject("임시 비밀번호: " + password); //제목
+        message.setSubject("뷰엉이 임시 비밀번호 발급"); //제목
 
         String msg="";
         msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">임시 비밀번호 발급</h1>";
@@ -60,29 +68,38 @@ public class EmailServiceImpl implements EmailService{
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용
-        message.setFrom(new InternetAddress("vieweongee07@gmail.com","vieweongee")); //보내는 사람
+        message.setFrom(new InternetAddress("vieweongee701@gmail.com","vieweongee")); //보내는 사람
+
         return message;
     }
 
     @Override
-    public String sendSimpleMessage(String to, String password) throws Exception {
+    public String sendSimpleMessage(String to, String type) throws Exception {
         MimeMessage message;
 
         String code = createAuthNum();
+        String password = createTempPassword();
+        String value = "";
 
-        if(password.equals("")){
+        if(type.equals("code")) {
             message = createMessage(to, code);
+            value = code;
+        }
+
+        else if(type.equals("password")){
+            message = createMessagePw(to, password);
+            value = password;
         }
         else
-            message = createMessagePw(to, password);
+            message = null;
 
         try { //예외처리
-//            System.out.println(message);
             emailSender.send(message);
         }
         catch(Exception e){
             e.printStackTrace();
         }
-        return code;
+
+        return value;
     }
 }

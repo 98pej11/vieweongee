@@ -36,13 +36,13 @@ public class UserController {
 
     //로그아웃
     @GetMapping("/signout")
-    public ResponseEntity<?> logout(@RequestBody String email){
+    public ResponseEntity<?> logout(@RequestBody String email, String provider){
         //delete RefreshToken
-        userService.deleteRefreshtoken(email);
+        userService.deleteRefreshtoken(email, provider);
         return ResponseEntity.status(200).body("로그아웃에 성공했습니다.");
     }
 
-    //회원 가입
+    //회원 가입. 이메일 인증번호 확인 후 진행
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody UserCreateRequest registInfo) {
         try {
@@ -72,36 +72,40 @@ public class UserController {
 
 //    인증 이메일 발송
     @PostMapping("/email-valid")
-    public ResponseEntity<?> sendEmail(@RequestBody String email){
+    public ResponseEntity<?> sendEmail(@RequestBody String email) {
         try {
-            emailService.sendSimpleMessage(email, ""); // sendSimpleMessage
-            return ResponseEntity.status(200).body("이메일 보내기 성공");
-
+            String code = emailService.sendSimpleMessage(email, "code");
+            Map<String, String> result = new HashMap<>();
+            result.put("data", code);
+            result.put("message", "이메일 보내기 성공");
+            return ResponseEntity.status(200).body(result);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("이메일 보내기 실패");
         }
-
     }
 
-    //이메일 인증
-//    @PostMapping("/email-valid/certi")
-//    public ResponseEntity<?> emailValid(){
-//
-//    }
-
-    //닉네임 중복검사
-//    @GetMapping("/nickname-check")
-//    public ResponseEntity<?> nicknameCheck(@RequestBody String nickname){
-//        if(!userService.checkDuplicatedNickname(nickname))
-//            return ResponseEntity.status(200).body("nickname is not duplicated");
-//        return ResponseEntity.status(409).body("nickname is duplicated");
-//    }
-
-    //refresh token 재발급
 
     //비밀번호 찾기 -> 임시 비밀번호 발급
+    @PutMapping("/password-find")
+    public ResponseEntity<?> findPassword(@RequestBody String email){
+        //일반 유저가 존재하는가
+        User user = userService.getUser(email, "global");
+        if(user == null)
+            return ResponseEntity.status(400).body("해당 이메일로 가입한 이력이 없습니다!");
 
+        try {
+            String pw = emailService.sendSimpleMessage(email, "password");
+            if(userService.saveTempPassword(email, pw))
+                return ResponseEntity.status(200).body("임시 비밀번호 발급 성공");
+            else
+                return ResponseEntity.status(400).body("임시 비밀번호 발급 실패");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("이메일 전송 실패");
+        }
+
+    }
 
     //비밀번호 확인
     @PostMapping("/password")
@@ -113,10 +117,10 @@ public class UserController {
 
     //회원 정보 조회
     @GetMapping("/")
-    public ResponseEntity<?> getInfo (@RequestBody String email){
-        User user = userService.getUserByEmail(email);
+    public ResponseEntity<?> getInfo (@RequestBody String email, String provider){
+        User user = userService.getUser(email, provider);
         if(user == null)
-            return ResponseEntity.status(500).body("회원 정보 찾기 불가");
+            return ResponseEntity.status(500).body("회원 정보가 없습니다.");
         else {
             Map<String, Object> result = new HashMap<>();
             result.put("data", user);

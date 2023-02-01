@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User login(User user) {
-        User dbUser = userRepository.findByEmail(user.getEmail());
+        User dbUser = userRepository.findByEmailAndProvider(user.getEmail(), user.getProvider());
         //비밀번호 일치
         if(dbUser != null && passwordEncoder.matches(user.getPassword(), dbUser.getPassword()))
             return dbUser;
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        User dbUser = userRepository.findByEmail(email);
+    public User getUser(String email, String provider) {
+        User dbUser = userRepository.findByEmailAndProvider(email, provider);
         return dbUser;
     }
 
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(PasswordCheckRequest userInfo){
-        User user = userRepository.findByEmail(userInfo.getEmail());
+        User user = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
         userRepository.delete(user);
     }
 
@@ -82,9 +82,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteRefreshtoken(String email) {
-        User logoutUser = userRepository.findByEmail(email);
+    public void deleteRefreshtoken(String email, String provider) {
+        User logoutUser = userRepository.findByEmailAndProvider(email, provider);
         logoutUser.deleteRefreshToken(null);
+    }
+
+
+    @Override
+    public boolean saveTempPassword(String email, String password) {
+        User dbUser = userRepository.findByEmailAndProvider(email, "global");
+        if(dbUser != null){
+            String tempPw = passwordEncoder.encode(password);
+            dbUser.updateTempPassword(tempPw);
+            userRepository.save(dbUser);
+            return true;
+        }
+        else
+            return false;
     }
 
 
