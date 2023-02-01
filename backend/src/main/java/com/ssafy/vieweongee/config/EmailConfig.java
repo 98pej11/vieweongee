@@ -11,30 +11,26 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
-//@PropertySource("classpath:email.properties")
+@PropertySource("classpath:email.properties")
 public class EmailConfig {
-//    @Value("${mail.smtp.port}")
-    @Value("${spring.mail.port}")
+    @Value("${mail.smtp.port}")
+
     private int port;
-//    @Value("${mail.smtp.socketFactory.port}")
-//    private int socketPort;
-//    @Value("${mail.smtp.auth}")
-    @Value("${spring.mail.properties.mail.smtp.auth}")
+    @Value("${mail.smtp.socketFactory.port}")
+    private int socketPort;
+    @Value("${mail.smtp.auth}")
+
     private boolean auth;
 
-//    @Value("${mail.smtp.starttls.enable}")
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    @Value("${mail.smtp.starttls.enable}")
     private boolean starttls;
-//    @Value("${mail.smtp.starttls.required}")
-    @Value("${spring.mail.properties.mail.smtp.starttls.required}")
+    @Value("${mail.smtp.starttls.required}")
     private boolean startlls_required;
-//    @Value("${mail.smtp.socketFactory.fallback}")
-//    private boolean fallback;
-//    @Value("${AdminMail.id}")
-    @Value("${spring.mail.username}")
+    @Value("${mail.smtp.socketFactory.fallback}")
+    private boolean fallback;
+    @Value("${AdminMail.id}")
     private String id;
-//    @Value("${AdminMail.password}")
-    @Value("${spring.mail.password}")
+    @Value("${AdminMail.password}")
     private String password;
 
     @Bean
@@ -52,12 +48,12 @@ public class EmailConfig {
         Properties pt = new Properties();
         pt.put("mail.smtp.host", id);
         pt.put("mail.smtp.password", password);
-//        pt.put("mail.smtp.socketFactory.port", socketPort);
+        pt.put("mail.smtp.socketFactory.port", socketPort);
         pt.put("mail.smtp.auth", auth);
         pt.put("mail.smtp.starttls.enable", starttls);
         pt.put("mail.smtp.starttls.required", startlls_required);
-//        pt.put("mail.smtp.socketFactory.fallback",fallback);
-//        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        pt.put("mail.smtp.socketFactory.fallback",fallback);
+        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return pt;
     }
 }

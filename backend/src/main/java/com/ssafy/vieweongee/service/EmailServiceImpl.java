@@ -27,8 +27,6 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public MimeMessage createMessage(String to, String code) throws Exception{ // 회원가입 시 인증 메일 전송
-//        logger.info("대상 : " + to);
-//        logger.info("인증 번호 : " + code);
         MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
@@ -42,15 +40,13 @@ public class EmailServiceImpl implements EmailService{
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용
-        message.setFrom(new InternetAddress("shadberry0319@gmail.com","vieweongee")); //보내는 사람
+        message.setFrom(new InternetAddress("vieweongee07@gmail.com","vieweongee")); //보내는 사람
 
         return message;
     }
 
     @Override
     public MimeMessage createMessagePw(String to, String password) throws Exception{ // 비밀번호찾기 시 임시 비밀번호 발급
-//        logger.info("대상 : "+ to);
-//        logger.info("임시 비밀번호 : " + password);
         MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to); //보내는 대상
@@ -64,7 +60,7 @@ public class EmailServiceImpl implements EmailService{
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용
-        message.setFrom(new InternetAddress("ssafy6a201@gmail.com","inview")); //보내는 사람
+        message.setFrom(new InternetAddress("vieweongee07@gmail.com","vieweongee")); //보내는 사람
         return message;
     }
 
@@ -75,19 +71,17 @@ public class EmailServiceImpl implements EmailService{
         String code = createAuthNum();
 
         if(password.equals("")){
-            System.out.println("MailServiceImpl : sendSimpleMessage");
             message = createMessage(to, code);
         }
         else
             message = createMessagePw(to, password);
 
         try { //예외처리
-            System.out.println(message);
+//            System.out.println(message);
             emailSender.send(message);
         }
         catch(Exception e){
             e.printStackTrace();
-            throw new IllegalArgumentException();
         }
         return code;
     }

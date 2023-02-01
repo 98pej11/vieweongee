@@ -73,7 +73,6 @@ public class UserController {
 //    인증 이메일 발송
     @PostMapping("/email-valid")
     public ResponseEntity<?> sendEmail(@RequestBody String email){
-//        String key = emailService.createAuthNum();
         try {
             emailService.sendSimpleMessage(email, ""); // sendSimpleMessage
             return ResponseEntity.status(200).body("이메일 보내기 성공");
