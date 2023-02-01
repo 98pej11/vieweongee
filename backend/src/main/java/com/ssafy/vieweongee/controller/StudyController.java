@@ -24,7 +24,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/study")
+@RequestMapping("/study")
 //@RequestMapping("/study")
 public class StudyController {
     private final StudyService studyService;
@@ -249,7 +249,8 @@ public class StudyController {
 //
 //        Long user_id = jwtTokenProvider.getUserSeq(token);
 
-        Long user_id = 3L;
+//        Long user_id = 3L;
+        Long user_id = 4L;
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
 
@@ -440,7 +441,7 @@ public class StudyController {
     @GetMapping("/{study_id}/comment")
     public ResponseEntity<?> getAllComment(@PathVariable("study_id") Long study_id) {
         List<CommentResponse> result = commentService.getAllComment(study_id);
-        if (result.isEmpty()) {
+        if (result == null) {
             String msg = "등록된 댓글이 없습니다.";
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(msg);
         }

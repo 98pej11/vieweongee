@@ -13,19 +13,19 @@ import java.util.List;
 @Service
 public class MeetingServiceImpl implements MeetingService {
 
-    private final MeetingScoreRepository meetingScoreRepository;
-    private final MeetingParticipantRepository meetingParticipantRepository;
+    private final ScoreRepository meetingScoreRepository;
+    private final ParticipantRepository participantRepository;
     private final UserRepository userRepository;
     private final StudyRepository studyRepository;
-    private final MeetingProgressRepository meetingProgressRepository;
+    private final ProgressRepository progressRepository;
 
     @Autowired
-    public MeetingServiceImpl(MeetingScoreRepository meetingScoreRepository, MeetingParticipantRepository meetingParticipantRepository, UserRepository userRepository, StudyRepository studyRepository, MeetingProgressRepository meetingProgressRepository) {
+    public MeetingServiceImpl(ScoreRepository meetingScoreRepository, ParticipantRepository participantRepository, UserRepository userRepository, StudyRepository studyRepository, ProgressRepository progressRepository) {
         this.meetingScoreRepository = meetingScoreRepository;
-        this.meetingParticipantRepository = meetingParticipantRepository;
+        this.participantRepository = participantRepository;
         this.userRepository = userRepository;
         this.studyRepository = studyRepository;
-        this.meetingProgressRepository = meetingProgressRepository;
+        this.progressRepository = progressRepository;
     }
 
     /**
@@ -38,7 +38,7 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateStudyProgress(String studyId) {
         System.out.println(">>>>>> service 진입");
         //스터디 아이디로 스터디 참가 이력 가져옴
-        List<Progress> list = meetingProgressRepository.findAllByStudy_id(Long.parseLong(studyId));
+        List<Progress> list = progressRepository.findAllByStudyId(Long.parseLong(studyId));
         System.out.println("스터디 참가 이력 size >> " + list.size());
 
 
@@ -58,7 +58,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public List<MeetingScoreRequest> getAllScore(String studyId) {
         //스터디 아이디로 해당되는 채점표 전부 가져오기
-        List<Scorecard> list = meetingScoreRepository.findAllByStudy_id(Long.parseLong(studyId));
+        List<Scorecard> list = meetingScoreRepository.findAllByStudyId(Long.parseLong(studyId));
 
         List<MeetingScoreRequest> result = new ArrayList<>();
 
@@ -116,7 +116,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public boolean makeScorecard(String studyId) {
         //스터디 아이디로 참가자 명단 가져오고
-        List<Participant> participants = meetingParticipantRepository.findAllByStudy_id(Long.parseLong(studyId));
+        List<Participant> participants = participantRepository.findAllByStudyId(Long.parseLong(studyId));
         //그 명단에서 회원 아이디 다 받아옴
         for (Participant p : participants) {
             Long user_id = p.getParticipant_id().getUser().getId();

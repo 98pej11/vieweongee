@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface ParticipantRepository extends JpaRepository<Participant, ParticipantId> {
     @Query("select p from Participant p where p.participant_id.study.id = :id")
-    List<Participant> findByStudyId(@Param("id") Long study_id);
+    List<Participant> findAllByStudyId(@Param("id") Long study_id);
 }

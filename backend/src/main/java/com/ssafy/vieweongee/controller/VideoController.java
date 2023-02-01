@@ -35,6 +35,7 @@ public class VideoController {
 
     /**
      * 세션 초기화 /api/sessions
+     *
      * @param params The Session properties
      * @return The Session ID
      */
@@ -49,14 +50,15 @@ public class VideoController {
 
     /**
      * 활성화 된 세션 검색 (1개) /api/sessions/{sessionId}
+     *
      * @param sessionId 생성된 세션 아이디
      * @return Session Object
      */
     @GetMapping("/{sessionId}")
     public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId)
-            throws OpenViduJavaClientException, OpenViduHttpException{
+            throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
-        if(session == null){ //해당 세션이 없을 때
+        if (session == null) { //해당 세션이 없을 때
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(session, HttpStatus.OK);
@@ -64,13 +66,14 @@ public class VideoController {
 
     /**
      * 활성화 된 세션 검색 (List) /api/sessions
+     *
      * @return Session Object List
      */
     @GetMapping
     public ResponseEntity<List<Session>> getAllActiveSession()
-            throws OpenViduJavaClientException, OpenViduHttpException{
+            throws OpenViduJavaClientException, OpenViduHttpException {
         List<Session> sessions = openvidu.getActiveSessions();
-        if(sessions == null){ //해당 세션이 없을 때
+        if (sessions == null) { //해당 세션이 없을 때
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(sessions, HttpStatus.OK);
@@ -78,13 +81,17 @@ public class VideoController {
 
     /**
      * 세션의 모든 연결 강제 종료 /api/sessions/{sessionId}
+     *
      * @param sessionId 세션 아이디 (세션 아이디를 스터디 아이디로 받아옴)
      * @return 0 : 세션 정상 종료, 1 : 세션이 존재하지않거나 정상 종료되지 않음
      */
     @DeleteMapping("/{sessionId}")
-    public ResponseEntity<?> deleteSession(@PathVariable("sessionId") String sessionId) {
+    public ResponseEntity<?> deleteSession(@PathVariable("sessionId") String sessionId)
+            throws OpenViduJavaClientException, OpenViduHttpException {
 
 //        System.out.println("studyID >> " + sessionId);
+
+        openvidu.fetch(); //모든 활성 세션 속성 업데이트
 
         Session session = openvidu.getActiveSession(sessionId); //활성화된 해당 세션 검색
 //        System.out.println("session Id >> "+session.getSessionId());
@@ -97,7 +104,7 @@ public class VideoController {
 //        System.out.println("Connection size >> "+ connections.size());
 
         boolean flag = true;
-        for(Connection connection : connections){
+        for (Connection connection : connections) {
             try {
 //                System.out.println("connection id >> " + connection.getConnectionId());
                 session.forceDisconnect(connection); //연결 정상 삭제
@@ -107,7 +114,7 @@ public class VideoController {
             }
         }
 
-        if(!flag){
+        if (!flag) {
             return new ResponseEntity<>("connection not found", HttpStatus.NOT_FOUND);
         }
         //모든 연결을 삭제했다면 스터디의 진행 상태를 변경해준다
@@ -119,6 +126,7 @@ public class VideoController {
 
     /**
      * 세션에서 새 연결 만듦 /api/sessions/{sessionId}/connection
+     *
      * @param sessionId The Session in which to create the Connection
      * @param params    The Connection properties
      * @return The Token associated to the Connection
@@ -145,14 +153,15 @@ public class VideoController {
 
     /**
      * 세션에서 연결 반환 (1개) /api/sessions/{sessionId}/connection/{connectionId}
-     * @param sessionId 세션 아이디
+     *
+     * @param sessionId    세션 아이디
      * @param connectionId 연결 아이디
      * @return Connection Object
      */
     @GetMapping("/{sessionId}/connection/{connectionId}")
     public ResponseEntity<Connection> getConnection(@PathVariable("sessionId") String sessionId,
                                                     @PathVariable("connectionId") String connectionId)
-            throws OpenViduJavaClientException, OpenViduHttpException{
+            throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId); //활성화된 해당 세션 검색
 
         openvidu.fetch(); //모든 활성 세션 속성 업데이트
@@ -162,7 +171,7 @@ public class VideoController {
         }
 
         Connection connection = session.getConnection(connectionId);
-        if(connection == null){
+        if (connection == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); //연결 못 찾음
         }
         return new ResponseEntity<>(connection, HttpStatus.OK);
@@ -170,12 +179,13 @@ public class VideoController {
 
     /**
      * 세션에서 연결 반환 (List) /api/sessions/{sessionId}/connection
+     *
      * @param sessionId 세션 아이디
      * @return Connection Object
      */
     @GetMapping("/{sessionId}/connection")
     public ResponseEntity<List<Connection>> getAllConnection(@PathVariable("sessionId") String sessionId)
-            throws OpenViduJavaClientException, OpenViduHttpException{
+            throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId); //활성화된 해당 세션 검색
 
         openvidu.fetch(); //모든 활성 세션 속성 업데이트

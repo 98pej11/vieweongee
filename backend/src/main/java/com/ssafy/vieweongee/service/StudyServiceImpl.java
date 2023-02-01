@@ -118,7 +118,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public List<Participant> getParticipantCnt(Long study_id) {
-        return participantRepository.findByStudyId(study_id);
+        return participantRepository.findAllByStudyId(study_id);
     }
 
     @Override
