@@ -18,7 +18,7 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script  >
 import { defineComponent } from "vue";
 // import MainCardItem from "@/components/mainpage/MainCardItem.vue";
 export default defineComponent({

@@ -2,14 +2,18 @@
   <el-container>
     <el-main class="main-box">
       <h2>로그인</h2>
-
-      <el-form style="font-size: large">
+      <ValidationObserver>
+      <el-form style="font-size: large" @submit.prevent="formSubmit" method="post">
         <el-row>
             <a><img src="@/assets/image/kakao.png" :width="80"/></a>
             <a><img src="@/assets/image/naver.png" :width="90"/></a>
             <a><img src="@/assets/image/google.png" :width="70" :height="70" style="margin-top: 8%;"/></a>
         </el-row>
         <p class="hr-sect" style="margin-top: 10%;">OR</p>
+
+
+        <!-- 이메일 -->
+        <ValidationProvider ref="refEmail" rules="required|email">
         <el-row :gutter="20">
           <el-col
             ><p>
@@ -17,11 +21,14 @@
             </p></el-col
           >
         </el-row>
-
         <el-row :gutter="20">
-          <el-col><el-input placeholder="이메일 입력" /></el-col>
+          <el-col><el-input placeholder="이메일 입력" v-model="email"/></el-col>
         </el-row>
+        </ValidationProvider>
 
+
+        <!-- 비밀번호 -->
+        <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash">
         <el-row :gutter="20">
           <el-col>
             <p>
@@ -29,10 +36,10 @@
             </p>
           </el-col>
         </el-row>
-
         <el-row :gutter="20">
-          <el-col><el-input placeholder="비밀번호 입력" /></el-col>
+          <el-col><el-input placeholder="비밀번호 입력" v-model="password"/></el-col>
         </el-row>
+        </ValidationProvider>
 
         <el-row :gutter="20">
           <el-col>
@@ -41,6 +48,7 @@
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 100%"
+              type="submit"
             >
               로그인
             </el-button>
@@ -64,19 +72,59 @@
           >
         </el-row>
       </el-form>
+      </ValidationObserver>
     </el-main>
   </el-container>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
 import { Message, Lock} from "@element-plus/icons-vue";
-export default defineComponent({
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+export default {
+  data(){ 
+    return{
+        email: "",
+        password: "",
+        name: "",
+    }
+  },
   components: {
     Message,
     Lock,
+    ValidationObserver,
+    ValidationProvider,
   },
-});
+  methods: {
+    async formSubmit() {
+        const refEmail = await this.$refs.refEmail.validate()
+        if (!refEmail.valid) {
+          alert(refEmail.errors[0])
+          return false
+        }
+        const refPassword = await this.$refs.refPassword.validate()
+        if (!refPassword.valid) {
+          alert(refPassword.errors[0])
+          return false
+        }
+
+        this.$store
+          .dispatch("login", {
+            email: this.email,
+            password: this.password,
+          })
+          .then(response => {
+            if (response.status == 200) {
+              this.$router.push({
+                name: "mypage",
+              })
+            }
+          })
+          .catch(({ message }) => alert(message))
+
+        return true;
+      },
+  },
+};
 </script>
 
 <style scoped>
