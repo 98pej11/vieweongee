@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.controller;
 
+import com.ssafy.vieweongee.dto.meeting.request.MeetingRatioRequest;
 import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
 import com.ssafy.vieweongee.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +74,11 @@ public class MeetingController {
     // 스터디 상태(진행/완료) 변경하기 >> 스터디에서 생성한 종료 시간이 됐을 때 >> Video 컨트롤러에서 처리 완료
 
     //스터디 순서 지정
+    @GetMapping("/{study_ID}/order")
+    public ResponseEntity<String> studyMeetingOrder(
+            @PathVariable("study_ID") String study_ID,
+            @RequestBody MeetingRatioRequest meetingRatioRequest){
+        return new ResponseEntity<>(meetingService.makeStudyOrder(study_ID, meetingRatioRequest), HttpStatus.OK);
+    }
+
 }

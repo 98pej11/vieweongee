@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.service;
 
+import com.ssafy.vieweongee.dto.meeting.request.MeetingRatioRequest;
 import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
 
 import java.util.Date;
@@ -22,5 +23,5 @@ public interface MeetingService {
     String getStudyStartTimeAndRunningTime(String studyId);
 
     //면접 순서 지정
-    String makeStudyOrder(String studyId);
+    String makeStudyOrder(String studyId, MeetingRatioRequest meetingRatioRequest);
 }
