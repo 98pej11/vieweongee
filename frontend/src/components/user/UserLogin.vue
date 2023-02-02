@@ -13,7 +13,7 @@
 
 
         <!-- 이메일 -->
-        <ValidationProvider ref="refEmail" rules="required|email">
+        <!-- <ValidationProvider ref="refEmail" rules="required|email"> -->
         <el-row :gutter="20">
           <el-col
             ><p>
@@ -22,13 +22,13 @@
           >
         </el-row>
         <el-row :gutter="20">
-          <el-col><el-input placeholder="이메일 입력" v-model="email"/></el-col>
+          <el-col><el-input placeholder="이메일 입력" v-model="email" @keyup.enter="confirm"/></el-col>
         </el-row>
-        </ValidationProvider>
+        <!-- </ValidationProvider> -->
 
 
         <!-- 비밀번호 -->
-        <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash">
+        <!-- <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash"> -->
         <el-row :gutter="20">
           <el-col>
             <p>
@@ -37,18 +37,20 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col><el-input placeholder="비밀번호 입력" v-model="password"/></el-col>
+          <el-col><el-input placeholder="비밀번호 입력" v-model="password" @keyup.enter="confirm"/></el-col>
         </el-row>
-        </ValidationProvider>
+        <!-- </ValidationProvider> -->
 
         <el-row :gutter="20">
           <el-col>
+            <router-link to=""></router-link>
             <el-button
               color="#9DADD8"
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 100%"
               type="submit"
+              @click="confirm"
             >
               로그인
             </el-button>
@@ -79,51 +81,43 @@
 
 <script>
 import { Message, Lock} from "@element-plus/icons-vue";
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import { mapState, mapActions } from "vuex";
+// import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+const memberStore = "memberStore";
+
 export default {
   data(){ 
     return{
+      user: {
         email: "",
         password: "",
         name: "",
+        message: "로그인에러"
+      }
     }
   },
   components: {
     Message,
     Lock,
-    ValidationObserver,
-    ValidationProvider,
+    // ValidationObserver,
+    // ValidationProvider,
+  },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
   },
   methods: {
-    async formSubmit() {
-        const refEmail = await this.$refs.refEmail.validate()
-        if (!refEmail.valid) {
-          alert(refEmail.errors[0])
-          return false
-        }
-        const refPassword = await this.$refs.refPassword.validate()
-        if (!refPassword.valid) {
-          alert(refPassword.errors[0])
-          return false
-        }
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo","userJoin"]),
 
-        this.$store
-          .dispatch("login", {
-            email: this.email,
-            password: this.password,
-          })
-          .then(response => {
-            if (response.status == 200) {
-              this.$router.push({
-                name: "mypage",
-              })
-            }
-          })
-          .catch(({ message }) => alert(message))
-
-        return true;
-      },
-  },
+    async confirm() {
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("accessToken");
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        this.$router.push({ name: "main" });
+      }
+    },
+   },
 };
 </script>
 
