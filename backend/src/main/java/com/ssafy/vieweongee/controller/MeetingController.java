@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.controller;
 
-import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class MeetingController {
         this.meetingService = meetingService;
     }
 
-    // 스터디원 자기소개서 전부 가져오기 >> 서버에서 저장된 경로 찾아서 파일 넘겨주기
+    // 스터디원 자기소개서 전부 가져오기 >> 서버 or 시그널
 
     /**
      * 스터디 채점표 생성
@@ -36,8 +37,6 @@ public class MeetingController {
         }
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
-
-    //미팅 시작 시간, 진행 시간
 
     /**
      * 스터디원의 채점표를 전부 불러옴
@@ -73,4 +72,11 @@ public class MeetingController {
     // 스터디 상태(진행/완료) 변경하기 >> 스터디에서 생성한 종료 시간이 됐을 때 >> Video 컨트롤러에서 처리 완료
 
     //스터디 순서 지정
+    @GetMapping("/{study_ID}/order")
+    public ResponseEntity<String> studyMeetingOrder(
+            @PathVariable("study_ID") String study_ID,
+            @RequestBody MeetingRatioRequest meetingRatioRequest){
+        return new ResponseEntity<>(meetingService.makeStudyOrder(study_ID, meetingRatioRequest), HttpStatus.OK);
+    }
+
 }

@@ -1,7 +1,5 @@
-package com.ssafy.vieweongee.dto.meeting.request;
+package com.ssafy.vieweongee.dto.meeting;
 
-import com.ssafy.vieweongee.entity.Scorecard;
-import com.ssafy.vieweongee.entity.ScorecardId;
 import lombok.*;
 
 /**
