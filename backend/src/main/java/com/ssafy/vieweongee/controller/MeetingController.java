@@ -1,7 +1,7 @@
 package com.ssafy.vieweongee.controller;
 
-import com.ssafy.vieweongee.dto.meeting.request.MeetingRatioRequest;
-import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class MeetingController {
         this.meetingService = meetingService;
     }
 
-    // 스터디원 자기소개서 전부 가져오기 >> 서버에서 저장된 경로 찾아서 파일 넘겨주기
+    // 스터디원 자기소개서 전부 가져오기 >> 서버 or 시그널
 
     /**
      * 스터디 채점표 생성
@@ -37,8 +37,6 @@ public class MeetingController {
         }
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
-
-    //미팅 시작 시간, 진행 시간
 
     /**
      * 스터디원의 채점표를 전부 불러옴

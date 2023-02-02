@@ -1,6 +1,6 @@
 package com.ssafy.vieweongee.entity;
 
-import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 

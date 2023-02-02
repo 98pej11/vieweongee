@@ -30,7 +30,6 @@ public class VideoController {
     @PostConstruct
     public void init() {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-//        System.out.println(">>>>>>>>>>> init 완료 <<<<<<<<<<<");
     }
 
     /**
@@ -42,7 +41,6 @@ public class VideoController {
     @PostMapping
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
-//        System.out.println("파라미터 정보 >> " + params.toString());
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
@@ -197,7 +195,4 @@ public class VideoController {
 //        List<Connection> connections = session.getActiveConnections();
         return new ResponseEntity<>(session.getActiveConnections(), HttpStatus.OK);
     }
-
-    // https://docs.openvidu.io/en/stable/reference-docs/REST-API/#delete-connection
-    //DELETE /openvidu/api/sessions/<SESSION_ID>/connection/<CONNECTION_ID>
 }

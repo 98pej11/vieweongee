@@ -1,7 +1,7 @@
 package com.ssafy.vieweongee.service;
 
-import com.ssafy.vieweongee.dto.meeting.request.MeetingRatioRequest;
-import com.ssafy.vieweongee.dto.meeting.request.MeetingScoreRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -38,17 +37,13 @@ public class MeetingServiceImpl implements MeetingService {
     @Transactional
     @Override
     public void updateStudyProgress(String studyId) {
-        System.out.println(">>>>>> service 진입");
         //스터디 아이디로 스터디 참가 이력 가져옴
         List<Progress> list = progressRepository.findAllByStudyId(Long.parseLong(studyId));
-        System.out.println("스터디 참가 이력 size >> " + list.size());
-
 
         //스터디 참가 상태 변경 (예정 >> 완료)
         for (Progress progress : list) {
             progress.changeStatusToTrue();
         }
-        System.out.println(">>> 스터디 참가 상태 변경 완료");
     }
 
     /**
@@ -142,19 +137,6 @@ public class MeetingServiceImpl implements MeetingService {
             meetingScoreRepository.save(scorecard);
         }
         return true;
-    }
-
-    /**
-     * 스터디 시작 시간, 진행 시간 찾기
-     *
-     * @param studyId
-     * @return
-     */
-    @Transactional
-    @Override
-    public String getStudyStartTimeAndRunningTime(String studyId) {
-
-        return null;
     }
 
     /**

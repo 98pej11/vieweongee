@@ -1,4 +1,4 @@
-package com.ssafy.vieweongee.dto.meeting.request;
+package com.ssafy.vieweongee.dto.meeting;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
