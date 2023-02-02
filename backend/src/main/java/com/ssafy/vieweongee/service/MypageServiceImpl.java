@@ -2,10 +2,7 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.exception.StudyNotFoundException;
-import com.ssafy.vieweongee.repository.ProgressRepository;
-import com.ssafy.vieweongee.repository.ScorecardRepository;
-import com.ssafy.vieweongee.repository.StudyRepository;
-import com.ssafy.vieweongee.repository.UserRepository;
+import com.ssafy.vieweongee.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +18,8 @@ public class MypageServiceImpl implements MypageService{
     private StudyRepository studyRepository;
     @Autowired
     private ScorecardRepository scorecardRepository;
+    @Autowired
+    private SummaryRepository summaryRepository;
 
     @Override
     public String findUserType(Long id) {
@@ -46,6 +45,12 @@ public class MypageServiceImpl implements MypageService{
     public Scorecard findFeedback(Long userId, Long studyId) {
         Scorecard feedback = scorecardRepository.findFeedback(userId, studyId);
         return feedback;
+    }
+
+    @Override
+    public Summary getAbilitySummary(Long userId) {
+        Summary summary = summaryRepository.findById(userId).get();
+        return summary;
     }
 
 

@@ -3,10 +3,7 @@ package com.ssafy.vieweongee.controller;
 import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
 import com.ssafy.vieweongee.dto.mypage.request.MyStudyFeedbackRequest;
 import com.ssafy.vieweongee.dto.mypage.response.MyStudyListResponse;
-import com.ssafy.vieweongee.entity.Progress;
-import com.ssafy.vieweongee.entity.Scorecard;
-import com.ssafy.vieweongee.entity.Study;
-import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -80,8 +77,9 @@ public class MypageController {
 //    }
 
     //역량별 통계 조회
-//    @GetMapping("graph")
-//    public ResponseEntity<?> abilityStatistics(@RequestBody){
+//    @GetMapping("/graph")
+//    public ResponseEntity<?> abilityStatistics(@RequestBody InquireTypeRequest userinfo){
+//        Summary summary = mypageService.getAbilitySummary(userinfo.getId());
 //
 //    }
 

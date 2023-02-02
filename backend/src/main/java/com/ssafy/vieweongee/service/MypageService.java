@@ -1,10 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
-import com.ssafy.vieweongee.entity.Progress;
-import com.ssafy.vieweongee.entity.Scorecard;
-import com.ssafy.vieweongee.entity.Study;
-import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.entity.*;
 
 import java.util.List;
 
@@ -13,4 +10,5 @@ public interface MypageService {
     List<Progress> findMyStudyList(Long userId);
     Study findStudyList(Long studyId);
     Scorecard findFeedback(Long userId, Long studyId);
+    Summary getAbilitySummary(Long userId);
 }
