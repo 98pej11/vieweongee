@@ -53,5 +53,17 @@ public class MypageServiceImpl implements MypageService{
         return summary;
     }
 
+    @Override
+    public List<Progress> findStudiedList(Long userId) {
+        List<Progress> studiedList = progressRepository.findByUser_idAndStatus(userId, true);
+        return studiedList;
+    }
+
+    @Override
+    public List<Progress> findUpcomingStudyList(Long userId) {
+        List<Progress> upcomingStudyList = progressRepository.findByUser_idAndStatus(userId, false);
+        return upcomingStudyList;
+    }
+
 
 }

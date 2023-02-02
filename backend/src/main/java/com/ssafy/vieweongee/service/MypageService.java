@@ -11,4 +11,7 @@ public interface MypageService {
     Study findStudyList(Long studyId);
     Scorecard findFeedback(Long userId, Long studyId);
     Summary getAbilitySummary(Long userId);
+    List<Progress> findStudiedList(Long userId);
+    List<Progress> findUpcomingStudyList(Long userId);
+
 }
