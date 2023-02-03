@@ -27,12 +27,11 @@
 
 | Application | Domain | Language | Front | Back | DB |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-| Desktop Web | WebRTC | JavaScript, Java | React | Spring | 미정ㄷㄷ |
+| Desktop Web | WebRTC | JavaScript, Java | Vue | Spring | MySQL |
 
 ### **Frontend**
 - Language : JavaScript, HTML, CSS
-- Framework : React.js, Redux
-
+- Framework : Vue, Vuex
 
 ### **Backend**
 - Language : Java
@@ -40,6 +39,7 @@
 - DB : MySQL
 - Server : AWS EC2, Nginx
 - Media Server : Kurento
+- WebRTC framework : Openvidu
 - CI/CD : Docker, Jenkins
 
 
