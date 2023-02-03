@@ -32,7 +32,7 @@
     </el-container>
   </template>
   
-  <script lang="ts">
+  <script  >
   import { defineComponent } from "vue";
   import { Message} from "@element-plus/icons-vue";
   export default defineComponent({

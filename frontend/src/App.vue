@@ -1,18 +1,18 @@
 <template>
   <MyHeader></MyHeader>
   <router-view />
-  <MyFooter></MyFooter>
+  <!-- <MyFooter></MyFooter> -->
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import MyHeader from "./components/common/MyHeader.vue";
-import MyFooter from "./components/common/MyFooter.vue";
+// import MyFooter from "./components/common/MyFooter.vue";
 export default defineComponent({
   name: "App",
   components: {
     MyHeader,
-    MyFooter,
+    // MyFooter,
   },
 });
 </script>

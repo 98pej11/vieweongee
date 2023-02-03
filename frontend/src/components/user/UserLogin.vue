@@ -68,7 +68,7 @@
   </el-container>
 </template>
 
-<script lang="ts">
+<script  >
 import { defineComponent } from "vue";
 import { Message, Lock} from "@element-plus/icons-vue";
 export default defineComponent({

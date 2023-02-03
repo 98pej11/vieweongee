@@ -5,7 +5,7 @@
     </div>
   </template>
   
-  <script lang="ts">
+  <script>
   import {defineComponent} from 'vue';
   import UserLogin from '@/components/user/UserLogin.vue';
   
