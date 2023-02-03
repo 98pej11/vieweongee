@@ -60,7 +60,7 @@
 
         <el-row :gutter="20">
           <el-col><p><el-icon :size="20"><User /></el-icon>닉네임</p></el-col>
-          <el-col><el-input placeholder="닉네임 규칙" /></el-col>
+          <el-col><el-input placeholder="닉네임 규칙" v-model="name"/></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -71,6 +71,7 @@
               size="large"
               style="margin: 10% auto; width: 100%"
               type="submit"
+              @click="join"
             >
               완료
             </el-button>
@@ -85,6 +86,9 @@
 <script>
 import { Message,Lock,User } from "@element-plus/icons-vue";
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import { mapState, mapActions } from "vuex";
+
+const memberStore = "memberStore";
 
 export default {
   data(){
@@ -97,42 +101,18 @@ export default {
   components:{
     Message,Lock,User,ValidationObserver,ValidationProvider,
   },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+  },
+
   methods: {
-      async formSubmit() {
-        const refEmail = await this.$refs.refEmail.validate()
-        if (!refEmail.valid) {
-          alert(refEmail.errors[0])
-          return false
-        }
-        const refPassword = await this.$refs.refPassword.validate()
-        if (!refPassword.valid) {
-          alert(refPassword.errors[0])
-          return false
-        }
-        const refName = await this.$refs.refName.validate()
-        if (!refName.valid) {
-          alert(refName.errors[0])
-          return false
-        }
-
-        this.$store
-          .dispatch("register", {
-            email: this.email,
-            password: this.password,
-            name: this.name,
-          })
-          .then(response => {
-            if (response.status == 200) {
-              this.$router.push({
-                name: "mypage",
-              })
-            }
-          })
-          .catch(({ message }) => alert(message))
-
-        return true
-      },
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo","userJoin"]),
+    
+    async join(){
+      await this.userJoin(this.user)
+      this.$router.push({ name: "main" });
     },
+  },
 };
 </script>
 
