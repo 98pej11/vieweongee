@@ -1,25 +1,25 @@
 <template>
-    <div class="signup">
-      <UserSignup />
-      <!--<SearchBar /> -->
-    </div>
-  </template>
-  
-  <script>
-  import {defineComponent} from 'vue';
+  <div class="signup">
+    <UserSignup />
+    <!--<SearchBar /> -->
+  </div>
+</template>
 
-  import UserSignup from '@/components/user/UserSignup.vue';
+<script   >
   
-  export default defineComponent({
-    name: 'MainView',
-    components: {
-      UserSignup
-    },
-    
-  }) 
-  </script>
-  <style scoped>
-  .MainCenter{
-    text-align: center;
-  }
-  </style>
+
+import UserSignup from '@/components/user/UserSignup.vue';
+
+export default  {
+  name: 'MainView',
+  components: {
+    UserSignup
+  },
+  
+}
+</script>
+<style scoped>
+.MainCenter{
+  text-align: center;
+}
+</style>

@@ -2,14 +2,18 @@
   <el-container>
     <el-main class="main-box">
       <h2>로그인</h2>
-
-      <el-form style="font-size: large">
+      <ValidationObserver>
+      <el-form style="font-size: large" @submit.prevent="formSubmit" method="post">
         <el-row>
             <a><img src="@/assets/image/kakao.png" :width="80"/></a>
             <a><img src="@/assets/image/naver.png" :width="90"/></a>
             <a><img src="@/assets/image/google.png" :width="70" :height="70" style="margin-top: 8%;"/></a>
         </el-row>
         <p class="hr-sect" style="margin-top: 10%;">OR</p>
+
+
+        <!-- 이메일 -->
+        <!-- <ValidationProvider ref="refEmail" rules="required|email"> -->
         <el-row :gutter="20">
           <el-col
             ><p>
@@ -17,11 +21,14 @@
             </p></el-col
           >
         </el-row>
-
         <el-row :gutter="20">
-          <el-col><el-input placeholder="이메일 입력" /></el-col>
+          <el-col><el-input placeholder="이메일 입력" v-model="email" @keyup.enter="confirm"/></el-col>
         </el-row>
+        <!-- </ValidationProvider> -->
 
+
+        <!-- 비밀번호 -->
+        <!-- <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash"> -->
         <el-row :gutter="20">
           <el-col>
             <p>
@@ -29,18 +36,21 @@
             </p>
           </el-col>
         </el-row>
-
         <el-row :gutter="20">
-          <el-col><el-input placeholder="비밀번호 입력" /></el-col>
+          <el-col><el-input placeholder="비밀번호 입력" v-model="password" @keyup.enter="confirm"/></el-col>
         </el-row>
+        <!-- </ValidationProvider> -->
 
         <el-row :gutter="20">
           <el-col>
+            <router-link to=""></router-link>
             <el-button
               color="#9DADD8"
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 100%"
+              type="submit"
+              @click="confirm"
             >
               로그인
             </el-button>
@@ -64,19 +74,51 @@
           >
         </el-row>
       </el-form>
+      </ValidationObserver>
     </el-main>
   </el-container>
 </template>
 
-<script  >
-import { defineComponent } from "vue";
+<script>
 import { Message, Lock} from "@element-plus/icons-vue";
-export default defineComponent({
+import { mapState, mapActions } from "vuex";
+// import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+const memberStore = "memberStore";
+
+export default {
+  data(){ 
+    return{
+      user: {
+        email: "",
+        password: "",
+        name: "",
+        message: "로그인에러"
+      }
+    }
+  },
   components: {
     Message,
     Lock,
+    // ValidationObserver,
+    // ValidationProvider,
   },
-});
+  computed: {
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+  },
+  methods: {
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo","userJoin"]),
+
+    async confirm() {
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("accessToken");
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        this.$router.push({ name: "main" });
+      }
+    },
+   },
+};
 </script>
 
 <style scoped>
