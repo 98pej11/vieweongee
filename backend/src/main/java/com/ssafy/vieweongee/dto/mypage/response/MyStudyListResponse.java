@@ -19,7 +19,6 @@ public class MyStudyListResponse {
     private boolean status;
 
     @Builder
-
     public MyStudyListResponse(Long id, String title, String company, String job, Date study_datetime, int running_time, boolean status) {
         this.id = id;
         this.title = title;

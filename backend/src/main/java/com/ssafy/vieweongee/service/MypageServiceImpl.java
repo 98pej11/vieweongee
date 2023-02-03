@@ -85,7 +85,7 @@ public class MypageServiceImpl implements MypageService{
         List<Alarm> latest = new ArrayList<>();
         if(alarms.size() >= 20){
             for(int i=0; i<20; i++)
-            latest.add(alarms.get(i));
+                latest.add(alarms.get(i));
             return latest;
         }
         else if(alarms.size() > 0)

@@ -4,6 +4,7 @@ import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
 import com.ssafy.vieweongee.dto.mypage.request.MyStudyFeedbackRequest;
 import com.ssafy.vieweongee.dto.mypage.response.AbilitySummaryResponse;
 import com.ssafy.vieweongee.dto.mypage.response.MyStudyListResponse;
+import com.ssafy.vieweongee.dto.mypage.response.TurnSummaryResponse;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class MypageController {
 
     //참여 스터디 여러개 조회
     @GetMapping("/mystudy")
-    public ResponseEntity<?> myStudyList(@RequestBody Long userId){
-        List<Progress> myStudyList = mypageService.findMyStudyList(userId);
+    public ResponseEntity<?> myStudyList(@RequestBody InquireTypeRequest userInfo){
+        List<Progress> myStudyList = mypageService.findMyStudyList(userInfo.getId());
         List<MyStudyListResponse> studyList = new ArrayList<>();
 
         for(Progress progress : myStudyList){
@@ -54,8 +55,8 @@ public class MypageController {
 
     //참여 스터디 1개 조회 - 피드백 / 예상 스터디
     @GetMapping("/mystudy/{study_id}")
-    public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") @RequestBody MyStudyFeedbackRequest info){
-        Scorecard feedback = mypageService.findFeedback(info.getUser_id(), info.getStudy_id());
+    public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") String studyId, @RequestBody InquireTypeRequest userInfo){
+        Scorecard feedback = mypageService.findFeedback(userInfo.getId(), Long.parseLong(studyId));
         Map<String, Object> result = new HashMap<>();
         if(feedback != null){
             result.put("data", feedback);
@@ -79,7 +80,7 @@ public class MypageController {
         else{
             List<Study> studied = new ArrayList<>();
             for(Progress progress : studiedList){
-                Study study = mypageService.findStudyList(progress.getProgress_id().getUser().getId());
+                Study study = mypageService.findStudyList(progress.getProgress_id().getStudy().getId());
                 studied.add(study);
             }
             // 스터디 시작 시간으로 정렬
@@ -90,49 +91,48 @@ public class MypageController {
                 }
             });
 
-
+            List<TurnSummaryResponse> response = new ArrayList<>();
             float total_average = 0;
             for(Study study : studied){
                 Scorecard scorecard = mypageService.findFeedback(userInfo.getId(), study.getId());
 
-//                궁금한 점
-//                1. 마이페이지의 회차별 통계는 소수점 두 자리 수까지 보여주는거? => 반올림?내림?
-//                2. 채점표의 점수가 0이 아닐때 평균 내기 -> 0이 아닌 개수를 어떻게 셀까
-//                3. 이 저장한 값을 어디에 리턴할까
-
                 int count = 0;
                 if(scorecard.getAttitude() != 0) {
-                    float attitude_average = Math.round((float)(scorecard.getAttitude() / scorecard.getInterviewer())*100/100);
+                    float attitude_average = (float) (Math.round((float)scorecard.getAttitude() / (float)scorecard.getInterviewer()*100)/100.0);
                     total_average += attitude_average;
                     count++;
                 }
                 if(scorecard.getAbility() != 0) {
-                    float ability_average = Math.round((float)(scorecard.getAbility() / scorecard.getInterviewer())*100/100);
+                    float ability_average = (float) (Math.round((float)scorecard.getAbility() / (float)scorecard.getInterviewer()*100)/100.0);
                     total_average += ability_average;
                     count++;
                 }
                 if(scorecard.getTeamwork() != 0) {
-                    float teamwork_average = Math.round((float)(scorecard.getTeamwork() / scorecard.getInterviewer())*100/100);
+                    float teamwork_average = (float) (Math.round((float)scorecard.getTeamwork() / (float)scorecard.getInterviewer()*100)/100.0);
                     total_average += teamwork_average;
                     count++;
                 }
                 if(scorecard.getSolving() != 0) {
-                    float solving_average = Math.round((float)(scorecard.getSolving() / scorecard.getInterviewer())*100/100);
+                    float solving_average = (float) (Math.round((float)scorecard.getSolving() / (float)scorecard.getInterviewer()*100)/100.0);
                     total_average += solving_average;
                     count++;
                 }
                 if(scorecard.getLoyalty() != 0) {
-                    float loyalty_average = Math.round((float)(scorecard.getLoyalty() / scorecard.getInterviewer())*100/100);
+                    float loyalty_average = (float) (Math.round((float)scorecard.getLoyalty() / (float)scorecard.getInterviewer()*100)/100.0);
                     total_average += loyalty_average;
                     count++;
                 }
-                total_average = Math.round((total_average / count)*100 / 100);
-            }
 
-            result.put("data", total_average);
+//                System.out.println("total_average: "+total_average +" count: "+count);
+                total_average = (float) (Math.round(total_average / (float)count *100) / 100.0);
+                TurnSummaryResponse summary = new TurnSummaryResponse(study.getId(), study.getTitle(), study.getStudy_datetime(), total_average);
+                response.add(summary);
+            }
+            result.put("data", response);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
-        }
+        }//else
+
     }
 
     //역량별 통계 조회
@@ -159,7 +159,14 @@ public class MypageController {
         else{
             List<MyStudyListResponse> willStudy = new ArrayList<>();
             for(Study study : upcomingStudyList){
-                MyStudyListResponse myStudy = new MyStudyListResponse(study.getId(), study.getTitle(), study.getCompany(), study.getJob(), study.getStudy_datetime(), study.getRunning_time(), false);
+                MyStudyListResponse myStudy = new MyStudyListResponse(
+                        study.getId(),
+                        study.getTitle(),
+                        study.getCompany(),
+                        study.getJob(),
+                        study.getStudy_datetime(),
+                        study.getRunning_time(),
+                        false);
                 willStudy.add(myStudy);
             }
 
