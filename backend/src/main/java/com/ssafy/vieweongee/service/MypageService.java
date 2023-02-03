@@ -13,5 +13,7 @@ public interface MypageService {
     Summary getAbilitySummary(Long userId);
     List<Progress> findStudiedList(Long userId);
     List<Progress> findUpcomingStudyList(Long userId);
+    List<Alarm> getAlarms(Long userId);
+    void readAlarms(Long userId);
 
 }

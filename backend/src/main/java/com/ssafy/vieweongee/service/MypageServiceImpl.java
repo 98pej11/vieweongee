@@ -6,7 +6,7 @@ import com.ssafy.vieweongee.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MypageServiceImpl implements MypageService{
@@ -20,6 +20,8 @@ public class MypageServiceImpl implements MypageService{
     private ScorecardRepository scorecardRepository;
     @Autowired
     private SummaryRepository summaryRepository;
+    @Autowired
+    private AlarmRepository alarmRepository;
 
     @Override
     public String findUserType(Long id) {
@@ -63,6 +65,42 @@ public class MypageServiceImpl implements MypageService{
     public List<Progress> findUpcomingStudyList(Long userId) {
         List<Progress> upcomingStudyList = progressRepository.findByUser_idAndStatus(userId, false);
         return upcomingStudyList;
+    }
+
+    @Override
+    public List<Alarm> getAlarms(Long userId) {
+        List<Alarm> alarms = alarmRepository.findByUser_id(userId);
+        //최신 알람으로 정렬
+        Collections.sort(alarms, new Comparator<Alarm>(){
+            @Override
+            public int compare(Alarm a1, Alarm a2){
+                return a2.getDatetime().compareTo(a1.getDatetime());
+            }
+        });
+
+        List<Alarm> latest = new ArrayList<>();
+        if(alarms.size() >= 20){
+            for(int i=0; i<20; i++)
+            latest.add(alarms.get(i));
+            return latest;
+        }
+        else if(alarms.size() > 0)
+            return alarms;
+        else
+            return null;
+    }
+
+    @Override
+    public void readAlarms(Long userId) {
+        List<Alarm> alarms = alarmRepository.findByUser_idAndSee(userId, false);
+
+        if(alarms.size() == 0)
+            return;
+
+        for(Alarm alarm : alarms){
+            alarm.updateSee(true);
+            alarmRepository.save(alarm);
+        }
     }
 
 

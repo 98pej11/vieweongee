@@ -50,4 +50,8 @@ public class Alarm {
         this.see = see;
         this.datetime = datetime;
     }
+
+    public void updateSee(boolean see){
+        this.see = see;
+    }
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.JobKOctets;
 import java.util.*;
 
 @RestController
@@ -182,8 +181,24 @@ public class MypageController {
     }
 
     //알림 전체 조회
-
+    @GetMapping("/alarm")
+    public ResponseEntity<?> getAlarms(@RequestBody InquireTypeRequest userInfo){
+        List<Alarm> alarms = mypageService.getAlarms(userInfo.getId());
+        Map<String, Object> result = new HashMap<>();
+        if(alarms != null){
+            result.put("data", alarms);
+            result.put("message", "SUCCESS");
+            return ResponseEntity.status(200).body(result);
+        }
+        result.put("data", alarms);
+        result.put("message", "알람이 없습니다.");
+        return ResponseEntity.status(201).body(result);
+    }
 
     //알림 읽음 처리
-
+    @PutMapping("/alarm")
+    public ResponseEntity<?> readAlarms(@RequestBody InquireTypeRequest userInfo){
+        mypageService.readAlarms(userInfo.getId());
+        return ResponseEntity.status(200).body("알림 읽기 완료!");
+    }
 }
