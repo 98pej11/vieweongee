@@ -22,7 +22,7 @@
               color="#9DADD8"
               size="larger"
               style="margin: 2%; width: 70%"
-              @click="dialogVisible = true"
+              @click="moveWrite()"
             >
               상세보기
             </el-button>
@@ -88,18 +88,19 @@
 </template>
 
 <script>
-// import http from "@/api/http";
+import http from "@/api/http";
+import { mapState } from "vuex";
 export default {
   name: "MyData",
   data() {
     return {
       articles: [],
-      fields: [
-        { key: "date", label: "", tdClass: "tdClass" },
-        // { key: "articleno", label: "글번호", tdClass: "tdClass" },
-        { key: "company", label: "제목", tdClass: "tdSubject" },
-        { key: "userid", label: "작성자", tdClass: "tdClass" },
-      ],
+      // fields: [
+      //   { key: "date", label: "", tdClass: "tdClass" },
+      //   // { key: "articleno", label: "글번호", tdClass: "tdClass" },
+      //   { key: "company", label: "제목", tdClass: "tdSubject" },
+      //   { key: "userid", label: "작성자", tdClass: "tdClass" },
+      // ],
       article: null,
       value: 3.7,
       dialogVisible: false,
@@ -200,16 +201,22 @@ export default {
       ],
     };
   },
-  // created() {
-  //       http.get(`/board`).then(({ data }) => {
-  //           this.articles = data;
-  //       });
-  //       if(this.global_isShow){
-  //         this.CLEAN_GLOBAL_ISSHOW();
-  //         this.viewArticle(this.global_article);
-  //       }
-  //   },
+  created() {
+        http.get(`/board/users/mystudy`).then(({ data }) => {
+            this.articles = data;
+        });
+        if(this.global_isShow){
+          this.CLEAN_GLOBAL_ISSHOW();
+          this.viewArticle(this.global_article);
+        }
+  },
+  computed: {
+    ...mapState(["global_article","global_isShow"]),
+  },
   methods: {
+    moveDetail(){
+      this.dialogVisible = true;
+    },
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0) {

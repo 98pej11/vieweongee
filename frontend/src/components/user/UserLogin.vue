@@ -22,7 +22,7 @@
           >
         </el-row>
         <el-row :gutter="20">
-          <el-col><el-input placeholder="이메일 입력" v-model="email" @keyup.enter="confirm"/></el-col>
+          <el-col><el-input placeholder="이메일 입력" v-model="user.email" @keyup.enter="confirm"/></el-col>
         </el-row>
         <!-- </ValidationProvider> -->
 
@@ -37,7 +37,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col><el-input placeholder="비밀번호 입력" v-model="password" @keyup.enter="confirm"/></el-col>
+          <el-col><el-input placeholder="비밀번호 입력" v-model="user.password" @keyup.enter="confirm"/></el-col>
         </el-row>
         <!-- </ValidationProvider> -->
 
@@ -93,7 +93,7 @@ export default {
         email: "",
         password: "",
         name: "",
-        message: "로그인에러"
+        message: ""
       }
     }
   },
@@ -111,9 +111,9 @@ export default {
 
     async confirm() {
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("accessToken");
+      // let token = sessionStorage.getItem("accessToken");
       if (this.isLogin) {
-        await this.getUserInfo(token);
+        // await this.getUserInfo(token);
         this.$router.push({ name: "main" });
       }
     },
