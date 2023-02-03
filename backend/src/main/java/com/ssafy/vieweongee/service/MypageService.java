@@ -12,7 +12,7 @@ public interface MypageService {
     Scorecard findFeedback(Long userId, Long studyId);
     Summary getAbilitySummary(Long userId);
     List<Progress> findStudiedList(Long userId);
-    List<Progress> findUpcomingStudyList(Long userId);
+    List<Study> findUpcomingStudyList(Long userId);
     List<Alarm> getAlarms(Long userId);
     void readAlarms(Long userId);
 

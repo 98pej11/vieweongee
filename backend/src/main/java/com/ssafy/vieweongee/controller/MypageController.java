@@ -149,7 +149,7 @@ public class MypageController {
     //참여 예정 스터디 조회(곧참스)
     @GetMapping("/mystudy/upcoming")
     public ResponseEntity<?> upcomingStudy(@RequestBody InquireTypeRequest userInfo){
-        List<Progress> upcomingStudyList = mypageService.findUpcomingStudyList(userInfo.getId());
+        List<Study> upcomingStudyList = mypageService.findUpcomingStudyList(userInfo.getId());
         Map<String, Object> result = new HashMap<>();
         if(upcomingStudyList == null){
             result.put("data", upcomingStudyList);
@@ -158,9 +158,8 @@ public class MypageController {
         }
         else{
             List<MyStudyListResponse> willStudy = new ArrayList<>();
-            for(Progress progress : upcomingStudyList){
-                Study study = mypageService.findStudyList(progress.getProgress_id().getUser().getId());
-                MyStudyListResponse myStudy = new MyStudyListResponse(study.getId(), study.getTitle(), study.getCompany(), study.getJob(), study.getStudy_datetime(), study.getRunning_time(), progress.isStatus());
+            for(Study study : upcomingStudyList){
+                MyStudyListResponse myStudy = new MyStudyListResponse(study.getId(), study.getTitle(), study.getCompany(), study.getJob(), study.getStudy_datetime(), study.getRunning_time(), false);
                 willStudy.add(myStudy);
             }
 
