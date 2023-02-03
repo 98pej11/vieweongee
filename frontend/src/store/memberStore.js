@@ -47,7 +47,7 @@ const memberStore = {
         await signin(
           user,
           ({ data }) => {
-            if (data.message === "success") {
+            if (data === "SUCCESS") {
               let accessToken = data["accessToken"];
               let refreshToken = data["refreshToken"];
               // console.log("login success token created!!!! >> ", accessToken, refreshToken);
@@ -73,7 +73,7 @@ const memberStore = {
         await findById(
           decodeToken.email,
           ({ data }) => {
-            if (data.message === "success") {
+            if (data === "SUCCESS") {
               commit("SET_USER_INFO", data.userInfo);
               // console.log("3. getUserInfo data >> ", data);
             } else {
@@ -92,7 +92,7 @@ const memberStore = {
         await tokenRegeneration(
           JSON.stringify(state.userInfo),
           ({ data }) => {
-            if (data.message === "success") {
+            if (data === "SUCCESS") {
               let accessToken = data["accessToken"];
               console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
               sessionStorage.setItem("accessToken", accessToken);
@@ -107,7 +107,7 @@ const memberStore = {
               await logout(
                 state.userInfo.userid,
                 ({ data }) => {
-                  if (data.message === "success") {
+                  if (data === "SUCCESS") {
                     console.log("리프레시 토큰 제거 성공");
                   } else {
                     console.log("리프레시 토큰 제거 실패");
@@ -132,7 +132,7 @@ const memberStore = {
         await logout(
           userid,
           ({ data }) => {
-            if (data.message === "success") {
+            if (data === "SUCCESS") {
               commit("SET_IS_LOGIN", false);
               commit("SET_USER_INFO", null);
               commit("SET_IS_VALID_TOKEN", false);

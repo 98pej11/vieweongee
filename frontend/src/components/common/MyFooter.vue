@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script type="ts">
+<script>
 export default {
   name: "MyFooter",
 };
