@@ -2,6 +2,7 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.exception.StudyNotFoundException;
+import com.ssafy.vieweongee.exception.UserNotFoundException;
 import com.ssafy.vieweongee.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,8 @@ public class MypageServiceImpl implements MypageService{
 
     @Override
     public String findUserType(Long id) {
-        User dbUser = userRepository.findById(id).get();
-        if(dbUser != null)
-            return dbUser.getProvider();
-        return null;
+        User dbUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        return dbUser.getProvider();
     }
 
     @Override

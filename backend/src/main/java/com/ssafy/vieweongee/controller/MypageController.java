@@ -18,12 +18,10 @@ public class MypageController {
     @Autowired
     MypageService mypageService;
 
-    //사용자 타입 조회 -> 필요할까...?
+    //사용자 타입 조회
     @GetMapping("/type")
     public ResponseEntity<?> inquireType(@RequestBody InquireTypeRequest userInfo){
         String type = mypageService.findUserType(userInfo.getId());
-        if(type == null)
-            return ResponseEntity.status(500).body("사용자가 존재하지 않습니다");
         Map<String, String> result = new HashMap<>();
         result.put("data", type);
         result.put("message", "사용자의 타입을 찾았습니다.");
