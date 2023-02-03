@@ -27,11 +27,12 @@
 
 | Application | Domain | Language | Front | Back | DB |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-| Desktop Web | WebRTC | JavaScript, Java | Vue | Spring | MySQL |
+| Desktop Web | WebRTC | JavaScript, Java | React | Spring | 미정ㄷㄷ |
 
 ### **Frontend**
 - Language : JavaScript, HTML, CSS
-- Framework : Vue, Vuex
+- Framework : React.js, Redux
+
 
 ### **Backend**
 - Language : Java
@@ -39,7 +40,6 @@
 - DB : MySQL
 - Server : AWS EC2, Nginx
 - Media Server : Kurento
-- WebRTC framework : Openvidu
 - CI/CD : Docker, Jenkins
 
 
@@ -88,7 +88,6 @@
 ## 프로젝트 산출물
 - [기능명세서](./산출물/기능명세서.md)
 - [와이어프레임](./산출물/와이어프레임.md)
-- [시퀀스다이어그램](./산출물/시퀀스다이어그램.md)
 
 ## 컨벤션
 - [코드 컨벤션](./산출물/코드컨벤션.md)
