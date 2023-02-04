@@ -1,9 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 
-import com.ssafy.vieweongee.dto.user.request.SocialCreateRequest;
 import com.ssafy.vieweongee.entity.User;
-
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,9 +47,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         if (social.equals("kakao")){
             log.info("나 들아왓어~~....");
-//            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-//            Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-//            log.info("카카오 어트리뷰투...{}", oAuth2User.getAttribute("kakao_account"));
 
             Map<String, Object>kakaoProfile = (Map<String, Object>)oAuth2User.getAttributes().get("kakao_account");
             Map<String, Object>kakaosAccount=(Map<String, Object>)kakaoProfile.get("profile");
