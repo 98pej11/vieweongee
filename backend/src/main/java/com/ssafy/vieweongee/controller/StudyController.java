@@ -11,8 +11,10 @@ import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.service.CommentService;
 import com.ssafy.vieweongee.service.StudyService;
+import com.ssafy.vieweongee.service.TokenService;
 import com.ssafy.vieweongee.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +26,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/study")
 //@RequestMapping("/study")
 public class StudyController {
     private final StudyService studyService;
-//    private final JwtTokenProvider jwtTokenProvider;
+    //    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final CommentService commentService;
+
+    private final TokenService tokenService;
 
     /** 스터디 모집 게시글 생성
      * @param createStudyRequest
@@ -39,18 +44,20 @@ public class StudyController {
     @PostMapping
 //    public ResponseEntity<?> createStudy(@RequestHeader(value = "Authorization") String token,
 //                                      @RequestBody StudyCreateRequest studyCreateRequest){
-    public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest) {
+    public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
 //        // jwt 토큰 확인
 //        if (!jwtTokenProvider.validateToken(token)) {
 //            return ResponseEntity
 //                    .status(HttpStatus.BAD_REQUEST)
 //                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
 //        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
 
-        Long user_id = 1L;
+
+        Long user_id = Long.parseLong(tokenService.getUid(access));
+        log.info("user id in create study is {}", user_id);
+//        Long user_id = 1L;
         User user = userService.getUserById(user_id);
+        log.info("user in study : {}",user.getName());
 
         // 스터디 생성
         Study study = studyService.createStudy(user, createStudyRequest);

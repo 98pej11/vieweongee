@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.dto.meeting;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 채점표 점수 변경을 위한 DTO

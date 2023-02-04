@@ -2,7 +2,6 @@ package com.ssafy.vieweongee.dto.comment;
 
 import com.ssafy.vieweongee.entity.Comment;
 import com.ssafy.vieweongee.entity.Reply;
-import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.entity.User;
 import lombok.Builder;
 import lombok.Getter;

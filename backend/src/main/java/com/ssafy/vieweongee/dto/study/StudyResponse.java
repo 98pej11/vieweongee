@@ -1,7 +1,6 @@
 package com.ssafy.vieweongee.dto.study;
 
 import com.ssafy.vieweongee.entity.Study;
-import com.ssafy.vieweongee.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,7 +35,7 @@ public class StudyResponse {
     public StudyResponse(Study study) {
         this.id = study.getId();
         this.user_id = study.getUser().getId();
-        this.user_nickname = study.getUser().getNickname();
+        this.user_nickname = study.getUser().getName();
         this.running_time = study.getRunning_time();
         this.personnel = study.getPersonnel();
         this.title = study.getTitle();
