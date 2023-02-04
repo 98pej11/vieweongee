@@ -1,7 +1,6 @@
 package com.ssafy.vieweongee.entity;
 
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,16 +24,11 @@ public class Participant {
     // 자기소개서 저장 경로
     private String save;
 
-    // 면접자로 참여했는지 여부
-    @ColumnDefault("false")
-    @Column(columnDefinition = "TINYINT(1)")
-    private boolean is_interviewer;
-
     @Builder
-    public Participant(ParticipantId participant_id, String filename, String save, boolean is_interviewer) {
+    public Participant(ParticipantId participant_id, String filename, String save) {
         this.participant_id = participant_id;
         this.filename = filename;
         this.save = save;
-        this.is_interviewer = is_interviewer;
     }
 }
+

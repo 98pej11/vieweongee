@@ -22,10 +22,6 @@ public class Summary implements Serializable {
     @MapsId
     @JoinColumn(name="user_id")
     private User user;
-//    @Id
-//    @OneToOne
-//    @JoinColumn(name="user_id",referencedColumnName="id")
-//    private User user_id;
 
     @ColumnDefault("0")
     private int attitude_count;
