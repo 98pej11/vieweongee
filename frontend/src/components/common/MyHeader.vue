@@ -32,7 +32,8 @@
           </el-dialog></a
         >
 
-        <a class="el-dropdown-link" style="display: inline-flex">
+        <!-- 로그인 전 -->
+        <a class="el-dropdown-link" style="display: inline-flex" v-if="!data">
           <el-dropdown>
             <el-icon :size="30"><UserFilled /></el-icon>
             <template #dropdown>
@@ -41,6 +42,26 @@
                   ><router-link to="/login"
                     >로그인</router-link
                   ></el-dropdown-item
+                >
+
+                <el-dropdown-item divided
+                  ><router-link to="/mypage"
+                    >마이페이지</router-link
+                  ></el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </a>
+
+        <!-- 로그인 후 -->
+        <a class="el-dropdown-link" style="display: inline-flex" v-if="data">
+          <el-dropdown>
+            <el-icon :size="30"><UserFilled /></el-icon>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click.prevent="onClickLogout"
+                  >로그아웃</el-dropdown-item
                 >
 
                 <el-dropdown-item divided
@@ -77,7 +98,9 @@
 <script>
 import { BellFilled, UserFilled, Menu } from "@element-plus/icons-vue";
 import { defineComponent, ref } from "vue";
+import { mapState, mapGetters, mapActions } from "vuex";
 
+const memberStore = "memberStore";
 export default defineComponent({
   name: "MyHeader",
   components: {
@@ -92,7 +115,6 @@ export default defineComponent({
       this.count += 1;
       // console.log(this.count);
     }
-
     return {
       load,
       BellFilled,
@@ -101,6 +123,28 @@ export default defineComponent({
       dialogVisible,
       count,
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "data"]),
+    ...mapGetters(["checkUserInfo"]),
+  },
+  methods: {
+    ...mapActions(memberStore, ["userLogout"]),
+    // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
+    onClickLogout() {
+      // this.SET_IS_LOGIN(false);
+      // this.SET_USER_INFO(null);
+      // sessionStorage.removeItem("access-token");
+      // if (this.$route.path != "/") this.$router.push({ name: "main" });
+      console.log(this.data.email);
+      //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
+      //+ satate에 isLogin, userInfo 정보 변경)
+      // this.$store.dispatch("userLogout", this.userInfo.userid);
+      this.userLogout(this.data.email);
+      sessionStorage.removeItem("accessToken"); //저장된 토큰 없애기
+      sessionStorage.removeItem("refreshToken"); //저장된 토큰 없애기
+      if (this.$route.path != "/") this.$router.push({ name: "main" });
+    },
   },
 });
 </script>

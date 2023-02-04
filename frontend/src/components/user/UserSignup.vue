@@ -2,18 +2,23 @@
   <el-container>
     <el-main class="main-box">
       <h2>회원가입</h2>
-      <ValidationObserver>
-      <el-form style="font-size:large" @submit.prevent="formSubmit" method="post">
-       
-       <!-- 이메일 -->
-        <ValidationProvider ref="refEmail" rules="required|email">
+      <el-form
+        style="font-size: large"
+        @submit.prevent="formSubmit"
+        method="post"
+      >
+        <!-- 이메일 -->
         <el-row :gutter="20">
-          <el-col><p><el-icon :size="20"><Message /></el-icon>이메일</p></el-col>
+          <el-col
+            ><p>
+              <el-icon :size="20"><Message /></el-icon>이메일
+            </p></el-col
+          >
         </el-row>
 
         <el-row :gutter="20">
           <el-col :span="18">
-            <el-input placeholder="이메일 규칙" v-model="email"/>
+            <el-input placeholder="이메일 규칙" v-model="user.email" />
           </el-col>
           <el-col :span="6">
             <el-button
@@ -28,7 +33,7 @@
 
         <el-row :gutter="20" style="margin-top: 3%">
           <el-col :span="18">
-            <el-input placeholder="이메일 인증번호" />
+            <el-input placeholder="이메일 인증번호" v-model="user.emailcheck" />
           </el-col>
           <el-col :span="6">
             <el-button
@@ -41,26 +46,34 @@
             </el-button>
           </el-col>
         </el-row>
-        </ValidationProvider>
 
-
-        <ValidationProvider ref="refPassword" rules="required|min:8|max:20|alpha_dash"></ValidationProvider>
         <!-- 비밀번호 -->
         <el-row :gutter="20">
           <el-col>
-            <p><el-icon :size="20"><Lock /></el-icon>비밀번호</p>
+            <p>
+              <el-icon :size="20"><Lock /></el-icon>비밀번호
+            </p>
           </el-col>
           <el-col>
-            <el-input placeholder="비밀번호 규칙" v-model="password"/>
+            <el-input placeholder="비밀번호 규칙" v-model="user.password" />
           </el-col>
           <el-col style="margin-top: 3%">
-            <el-input placeholder="비밀번호 재확인" />
+            <el-input
+              placeholder="비밀번호 재확인"
+              v-model="user.passwordcheck"
+            />
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
-          <el-col><p><el-icon :size="20"><User /></el-icon>닉네임</p></el-col>
-          <el-col><el-input placeholder="닉네임 규칙" v-model="name"/></el-col>
+          <el-col
+            ><p>
+              <el-icon :size="20"><User /></el-icon>닉네임
+            </p></el-col
+          >
+          <el-col
+            ><el-input placeholder="닉네임 규칙" v-model="user.name"
+          /></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -78,38 +91,44 @@
           </el-col>
         </el-row>
       </el-form>
-    </ValidationObserver>
     </el-main>
   </el-container>
 </template>
 
 <script>
-import { Message,Lock,User } from "@element-plus/icons-vue";
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
-import { mapState, mapActions } from "vuex";
+import { Message, Lock, User } from "@element-plus/icons-vue";
+import { mapActions } from "vuex";
 
 const memberStore = "memberStore";
 
 export default {
-  data(){
-    return{
-      email: "",
-      password: "",
-      name: "",
-    }
+  data() {
+    return {
+      user: {
+        email: "",
+        emailcheck: "",
+        password: "",
+        passwordcheck: "",
+        name: "",
+      },
+    };
   },
-  components:{
-    Message,Lock,User,ValidationObserver,ValidationProvider,
+  components: {
+    Message,
+    Lock,
+    User,
+    // ValidationObserver,
+    // ValidationProvider,
   },
   computed: {
-    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+    // ...mapState(memberStore, ["isLogin", "isLoginError", ""]),
   },
 
   methods: {
-    ...mapActions(memberStore, ["userConfirm", "getUserInfo","userJoin"]),
-    
-    async join(){
-      await this.userJoin(this.user)
+    ...mapActions(memberStore, ["userJoin"]),
+
+    async join() {
+      await this.userJoin(this.user);
       this.$router.push({ name: "main" });
     },
   },
@@ -128,7 +147,7 @@ h2 {
   margin-top: 5%;
   width: 45%;
 }
-.el-icon{
+.el-icon {
   margin-right: 2%;
   size: large;
 }
@@ -140,6 +159,4 @@ h2 {
 p {
   margin: 30px 0 10px 0;
 }
-
-
 </style>

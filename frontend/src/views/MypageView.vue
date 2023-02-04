@@ -34,7 +34,6 @@ import MyModify from "@/components/mypage/MyModify.vue";
 import MyDelete from "@/components/mypage/MyDelete.vue";
 
 export default defineComponent({
-  name: "MainView",
   components: {
     MyMain,
     MyData,

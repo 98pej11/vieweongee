@@ -7,12 +7,15 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 비밀번호 입력" v-model="userInfo.password"/>
+            <el-input
+              placeholder="변경할 비밀번호 입력"
+              v-model="data.password"
+            />
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="비밀번호 재확인" v-model="userInfo.password"/>
+            <el-input placeholder="비밀번호 재확인" v-model="data.password" />
           </el-col>
         </el-row>
         <el-row class="text"
@@ -20,7 +23,7 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 닉네임 입력" v-model="userInfo.name"/>
+            <el-input placeholder="변경할 닉네임 입력" v-model="data.name" />
           </el-col>
         </el-row>
         <el-row :gutter="20" style="text-align: center">
@@ -56,22 +59,22 @@ export default defineComponent({
     User,
   },
   computed: {
-    ...mapState(memberStore, ["userInfo","isLogin"]),
+    ...mapState(memberStore, ["data", "isLogin"]),
   },
-  methods:{
-    ...mapActions(memberStore, ["userUpdate","userDelete","getUserInfo"]),
+  methods: {
+    ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
 
     async confirm() {
       // alert("confirm");
-      await this.userUpdate(this.userInfo);
+      await this.userUpdate(this.data);
       let token = sessionStorage.getItem("accessToken");
       if (this.isLogin) {
-        await this.getUserInfo(token);
+        await this.get(token);
         alert("회원 정보 수정완료");
         this.$router.push({ name: "main" });
       }
-    }, 
-  }
+    },
+  },
 });
 </script>
 <style scoped>

@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 
-import { signin, findById, tokenRegeneration, logout, update, join, deleteUser, preDeleteUser } from "@/api/users";
+import { signin, findById, tokenRegeneration, signout, update, signup, deleteUser, preDeleteUser } from "@/api/users";
 // import http from "@/api/http";
 
 const memberStore = {
@@ -9,12 +9,12 @@ const memberStore = {
     state: {
       isLogin: false,
       isLoginError: false,
-      userInfo: null,
+      data: null,
       isValidToken: false,
     },
     getters: {
       checkUserInfo: function (state) {
-        return state.userInfo;
+        return state.data;
       },
       checkToken: function (state) {
         return state.isValidToken;
@@ -30,15 +30,14 @@ const memberStore = {
       SET_IS_VALID_TOKEN: (state, isValidToken) => {
         state.isValidToken = isValidToken;
       },
-      SET_USER_INFO: (state, userInfo) => {
+      SET_USER_INFO: (state, data) => {
         state.isLogin = true;
-        state.userInfo = userInfo;
+        state.data = data;
       },
-  
       CLEAR_USER_INFO: (state) =>{
         state.isLogin= false;
         state.isLoginError= false;
-        state.userInfo= null;
+        state.data= null;
         state.isValidToken= false;
       },
     },
@@ -47,15 +46,15 @@ const memberStore = {
         await signin(
           user,
           ({ data }) => {
-            if (data === "SUCCESS") {
-              let accessToken = data["accessToken"];
-              let refreshToken = data["refreshToken"];
+            if (data.message === "SUCCESS") {
+              let accessToken = data["ACCESS"];
+              let refreshToken = data["REFRESH"];
               // console.log("login success token created!!!! >> ", accessToken, refreshToken);
               commit("SET_IS_LOGIN", true);
               commit("SET_IS_LOGIN_ERROR", false);
               commit("SET_IS_VALID_TOKEN", true);
-              sessionStorage.setItem("accessToken", accessToken);
-              sessionStorage.setItem("refreshToken", refreshToken);
+              sessionStorage.setItem("ACCESS", accessToken);
+              sessionStorage.setItem("REFRESH", refreshToken);
             } else {
               commit("SET_IS_LOGIN", false);
               commit("SET_IS_LOGIN_ERROR", true);
@@ -73,8 +72,9 @@ const memberStore = {
         await findById(
           decodeToken.email,
           ({ data }) => {
-            if (data === "SUCCESS") {
-              commit("SET_USER_INFO", data.userInfo);
+            if (data.message === "SUCCESS") {
+              // 여기 userInfo
+              commit("SET_USER_INFO", data.data);
               // console.log("3. getUserInfo data >> ", data);
             } else {
               console.log("유저 정보 없음!!!!");
@@ -90,12 +90,12 @@ const memberStore = {
       async tokenRegeneration({ commit, state }) {
         console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("accessToken"));
         await tokenRegeneration(
-          JSON.stringify(state.userInfo),
+          JSON.stringify(state.data),
           ({ data }) => {
-            if (data === "SUCCESS") {
-              let accessToken = data["accessToken"];
+            if (data.message === "SUCCESS") {
+              let accessToken = data["ACCESS"];
               console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
-              sessionStorage.setItem("accessToken", accessToken);
+              sessionStorage.setItem("ACCESS", accessToken);
               commit("SET_IS_VALID_TOKEN", true);
             }
           },
@@ -104,10 +104,10 @@ const memberStore = {
             if (error.response.status === 401) {
               console.log("갱신 실패");
               // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
-              await logout(
-                state.userInfo.userid,
+              await signout(
+                state.data.email,
                 ({ data }) => {
-                  if (data === "SUCCESS") {
+                  if (data.message === "SUCCESS") {
                     console.log("리프레시 토큰 제거 성공");
                   } else {
                     console.log("리프레시 토큰 제거 실패");
@@ -128,11 +128,11 @@ const memberStore = {
           }
         );
       },
-      async userLogout({ commit }, userid) {
-        await logout(
-          userid,
+      async userLogout({ commit }, email) {
+        await signout(
+          email,
           ({ data }) => {
-            if (data === "SUCCESS") {
+            if (data.message === "SUCCESS") {
               commit("SET_IS_LOGIN", false);
               commit("SET_USER_INFO", null);
               commit("SET_IS_VALID_TOKEN", false);
@@ -157,7 +157,7 @@ const memberStore = {
       },
   
       async userJoin(user){
-        await join(user,
+        await signup(user,
           ()=>{
             console.log("회원가입 성공");
           }),

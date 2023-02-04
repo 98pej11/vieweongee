@@ -7,16 +7,16 @@ async function signin(user, success, fail) {
   }
 
   async function findById(userid, success, fail) {
-    api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
+    api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
     await api.get(`/users/email-check`).then(success).catch(fail);
   }
   
   async function tokenRegeneration(user, success, fail) {
-    api.defaults.headers["refreshToken"] = sessionStorage.getItem("refreshToken"); //axios header에 refreshToken 셋팅
+    api.defaults.headers["REFRESH"] = sessionStorage.getItem("refreshToken"); //axios header에 refreshToken 셋팅
     await api.post(`/users/check-refresh`, user).then(success).catch(fail);
   }
   
-  async function logout(userid, success, fail) {
+  async function signout(userid, success, fail) {
     await api.get(`/users/signout`).then(success).catch(fail);
   }
   
@@ -24,7 +24,7 @@ async function signin(user, success, fail) {
     await api.put(`/users`,JSON.stringify(user)).then(success).catch(fail);
   }
   
-  async function join(user, success, fail){
+  async function signup(user, success, fail){
     await api.post(`/users/signup`,JSON.stringify(user)).then(success).catch(fail);
   }
   
@@ -36,4 +36,4 @@ async function signin(user, success, fail) {
     await api.delete(`/users`).then(success).catch(fail);
   }
   
-  export { signin, findById, tokenRegeneration, logout, update, join, deleteUser };
+  export { signin, findById, tokenRegeneration, signout, update, signup, deleteUser };
