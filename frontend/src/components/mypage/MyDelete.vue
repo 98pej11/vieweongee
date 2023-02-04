@@ -16,7 +16,10 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="본인 비밀번호 확인" v-model="userInfo.password"/>
+            <el-input
+              placeholder="본인 비밀번호 확인"
+              v-model="data.password"
+            />
           </el-col>
         </el-row>
 
@@ -53,17 +56,17 @@ export default defineComponent({
     User,
   },
   computed: {
-    ...mapState(memberStore, ["userInfo","isLogin"]),
+    ...mapState(memberStore, ["data", "isLogin"]),
   },
-  methods:{
-    ...mapActions(memberStore, ["userUpdate","userDelete","getUserInfo"]),
+  methods: {
+    ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
 
-    async withdraw(){
-      await this.userDelete(this.userInfo.userid);
-      alert("회원탈퇴 완료"); 
+    async withdraw() {
+      await this.userDelete(this.data.userid);
+      alert("회원탈퇴 완료");
       this.$router.push({ name: "main" });
-    }
-  }
+    },
+  },
 });
 </script>
 <style scoped>
