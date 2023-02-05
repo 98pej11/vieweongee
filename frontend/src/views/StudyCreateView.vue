@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import StudyCreate from "@/components/board/StudyCreate.vue";
+import StudyCreate from "@/components/study/StudyCreate.vue";
 
 export default {
   name: "StudyView",
