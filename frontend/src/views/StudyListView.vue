@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import StudyDetail from "@/components/board/StudyDetail.vue";
-import StudyCreate from "@/components/board/StudyCreate.vue";
-import StudyListCard from "@/components/board/StudyListCard.vue";
+import StudyDetail from "@/components/study/StudyDetail.vue";
+import StudyCreate from "@/components/study/StudyCreate.vue";
+import StudyListCard from "@/components/study/StudyListCard.vue";
 
 export default {
   name: "StudyView",

@@ -1,60 +1,116 @@
 <template>
   <div class="card-list">
-    <div v-for="(data, index) in cardData" :key="index" class="card-div">
-      <div>(인원수)</div>
-      <div class="title">{{ data.title }}</div>
-      <div class="card-contents">
-        <div>기업</div>
-        <div>{{ data.ent }}</div>
-      </div>
-      <div class="card-contents">
-        <div>직무</div>
-        <div>{{ data.dept }}</div>
-      </div>
-      <div class="card-contents">
-        <div>기업</div>
-        <div>{{ data.date }}</div>
-      </div>
-    </div>
+    <el-row justify="space-evenly">
+      <el-col
+        :xs="24"
+        :md="6"
+        :lg="6"
+        v-for="(data, index) in cardData"
+        :key="index"
+        class="card-div"
+      >
+        <div>
+          <div class="person-div">
+            <el-icon :size="17"><User /></el-icon>&nbsp;{{ data.capacity }} / 6
+          </div>
+          <div class="title">{{ data.title }}</div>
+          <div class="card-contents">
+            <div>기업</div>
+            <div>{{ data.ent }}</div>
+          </div>
+          <div class="card-contents">
+            <div>직무</div>
+            <div>{{ data.dept }}</div>
+          </div>
+          <div class="card-contents">
+            <div>기업</div>
+            <div>{{ data.date }}</div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
-<script  >
-import { defineComponent } from "vue";
-// import MainCardItem from "@/components/mainpage/MainCardItem.vue";
-export default defineComponent({
+<script>
+import { User } from "@element-plus/icons-vue";
+import { mapState, mapActions } from "vuex";
+// import http from "@/api/http.js";
+
+const studyStore = "studyStore";
+
+export default {
   name: "MainCardList",
   components: {
+    User,
     // MainCardItem,
   },
-  setup() {
-    const cardData = [
-      {
-        title: "싸피 비전공자 면접스터디 구해요",
-        ent: "SSAFY",
-        dept: "프론트엔드",
-        date: "2023.01.12 10:00",
-      },
-      {
-        title: "신한은행 면접스터디",
-        ent: "신한은행",
-        dept: "백엔드",
-        date: "2023.01.11 19:00",
-      },
-      {
-        title: "유플러스 백엔드 면접",
-        ent: "유플러스",
-        dept: "백엔드",
-        date: "2023.01.10 11:00",
-      },
-    ];
-    return { cardData };
+
+  data() {
+    return {
+      allStudy: [{}],
+
+      cardData: [
+        {
+          title: "싸피 비전공자 면접스터디 구해요",
+          ent: "SSAFY",
+          dept: "프론트엔드",
+          capacity: 1,
+          date: "2023.01.12 10:00",
+        },
+        {
+          title: "신한은행 면접스터디",
+          ent: "신한은행",
+          dept: "백엔드",
+          capacity: 3,
+          date: "2023.01.11 19:00",
+        },
+        {
+          title: "유플러스 백엔드 면접",
+          ent: "유플러스",
+          dept: "백엔드",
+          capacity: 5,
+          date: "2023.01.10 11:00",
+        },
+      ],
+    };
   },
-});
+  mounted() {
+    // axios 통신
+    // this.setAllStudys();
+    // json parser 테스트
+    // this.setdata();
+  },
+  computed: {
+    ...mapState(studyStore, ["isError", "studyID"]),
+  },
+  methods: {
+    ...mapActions(studyStore, ["getList"]),
+    // setdata() {
+    //   http.get(`/posts/1/comments`).then((data) => {
+    //     console.log(data);
+    //     this.allStudy = data.data;
+    //     console.log(this.allStudy);
+    //   });
+    // },
+
+    async setAllStudys() {
+      await this.getList();
+      this.allStudy = this.studyList;
+    },
+  },
+};
 </script>
 <style scoped>
-.card-list {
+.person-div {
+  padding: 5px;
+  width: 65px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  border-radius: 30px;
+  background-color: #d3daff;
+}
+.card-list {
+  margin-top: 30px;
   padding: 20px;
 }
 .card-contents {
@@ -65,8 +121,8 @@ export default defineComponent({
 .card-div {
   font-family: "nexonlv1";
   min-width: 280px;
-  margin: 30px;
   padding: 20px;
+  margin-bottom: 20px;
   border: 4px solid rgba(227, 232, 252, 0.5);
   border-radius: 10px;
   box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);

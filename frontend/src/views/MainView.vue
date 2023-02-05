@@ -25,7 +25,4 @@ export default defineComponent({
 .main {
   text-align: center;
 }
-.search-bar {
-  margin: 2% 25% 2% 25%;
-}
 </style>
