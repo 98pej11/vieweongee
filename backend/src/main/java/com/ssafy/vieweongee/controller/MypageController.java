@@ -4,6 +4,7 @@ import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
 import com.ssafy.vieweongee.dto.mypage.request.MyStudyFeedbackRequest;
 import com.ssafy.vieweongee.dto.mypage.response.AbilitySummaryResponse;
 import com.ssafy.vieweongee.dto.mypage.response.MyStudyListResponse;
+import com.ssafy.vieweongee.dto.mypage.response.ScorecardResponse;
 import com.ssafy.vieweongee.dto.mypage.response.TurnSummaryResponse;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
@@ -25,7 +26,7 @@ public class MypageController {
         String type = mypageService.findUserType(userInfo.getId());
         Map<String, String> result = new HashMap<>();
         result.put("data", type);
-        result.put("message", "사용자의 타입을 찾았습니다.");
+        result.put("message", "SUCCESS");
         return ResponseEntity.status(200).body(result);
     }
 
@@ -44,11 +45,11 @@ public class MypageController {
         Map<String, Object> result = new HashMap<>();
         result.put("data", studyList);
         if(studyList.size() == 0){
-            result.put("message", "일정이 없습니다.");
-            return ResponseEntity.status(200).body(result);
+            result.put("message", "EMPTY");
+            return ResponseEntity.status(204).body(result);
         }
         else{
-            result.put("message", "내 스터디 목록 반환 성공");
+            result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
     }
@@ -56,14 +57,14 @@ public class MypageController {
     //참여 스터디 1개 조회 - 피드백 / 예상 스터디
     @GetMapping("/mystudy/{study_id}")
     public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") String studyId, @RequestBody InquireTypeRequest userInfo){
-        Scorecard feedback = mypageService.findFeedback(userInfo.getId(), Long.parseLong(studyId));
+        ScorecardResponse feedback = mypageService.calFeedback(userInfo.getId(), Long.parseLong(studyId));
         Map<String, Object> result = new HashMap<>();
         if(feedback != null){
             result.put("data", feedback);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
-        return ResponseEntity.status(201).body("진행 예정인 스터디입니다."); //스터디 링크로 가야함
+        return ResponseEntity.status(204).body("EMPTY"); //스터디 링크로 가야함
 
     }
 
@@ -74,8 +75,8 @@ public class MypageController {
         Map<String, Object> result = new HashMap<>();
         if(studiedList == null){
             result.put("data", studiedList);
-            result.put("message", "스터디 이력이 없습니다."); //완료된 스터디 없을 때
-            return ResponseEntity.status(201).body(result);
+            result.put("message", "EMPTY"); //완료된 스터디 없을 때
+            return ResponseEntity.status(204).body(result);
         }
         else{
             List<Study> studied = new ArrayList<>();
@@ -149,36 +150,23 @@ public class MypageController {
     //참여 예정 스터디 조회(곧참스)
     @GetMapping("/mystudy/upcoming")
     public ResponseEntity<?> upcomingStudy(@RequestBody InquireTypeRequest userInfo){
-        List<Study> upcomingStudyList = mypageService.findUpcomingStudyList(userInfo.getId());
+        List<MyStudyListResponse> upcomingStudyList = mypageService.findUpcomingStudyList(userInfo.getId());
         Map<String, Object> result = new HashMap<>();
         if(upcomingStudyList == null){
             result.put("data", upcomingStudyList);
-            result.put("message", "참여 예정 스터디가 없습니다.");
-            return ResponseEntity.status(201).body(result);
+            result.put("message", "EMPTY");
+            return ResponseEntity.status(204).body(result);
         }
         else{
-            List<MyStudyListResponse> willStudy = new ArrayList<>();
-            for(Study study : upcomingStudyList){
-                MyStudyListResponse myStudy = new MyStudyListResponse(
-                        study.getId(),
-                        study.getTitle(),
-                        study.getCompany(),
-                        study.getJob(),
-                        study.getStudy_datetime(),
-                        study.getRunning_time(),
-                        false);
-                willStudy.add(myStudy);
-            }
-
             //정렬
-            Collections.sort(willStudy, new Comparator<MyStudyListResponse>(){
+            Collections.sort(upcomingStudyList, new Comparator<MyStudyListResponse>(){
                 @Override
                 public int compare(MyStudyListResponse o1, MyStudyListResponse o2) {
                     return o1.getStudy_datetime().compareTo(o2.getStudy_datetime());
                 }
             });
 
-            result.put("data", willStudy);
+            result.put("data", upcomingStudyList);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
@@ -194,15 +182,16 @@ public class MypageController {
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
+
         result.put("data", alarms);
-        result.put("message", "알람이 없습니다.");
-        return ResponseEntity.status(201).body(result);
+        result.put("message", "EMPTY");
+        return ResponseEntity.status(204).body(result);
     }
 
     //알림 읽음 처리
     @PutMapping("/alarm")
     public ResponseEntity<?> readAlarms(@RequestBody InquireTypeRequest userInfo){
         mypageService.readAlarms(userInfo.getId());
-        return ResponseEntity.status(200).body("알림 읽기 완료!");
+        return ResponseEntity.status(200).body("SUCCESS");
     }
 }
