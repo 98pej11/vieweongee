@@ -6,6 +6,7 @@ import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface StudyService {
@@ -32,5 +33,8 @@ public interface StudyService {
 
     void cancelStudy(User user, Study study);
 
-    void updateResume(User user, Study study, MultipartFile resume);
+    @Transactional
+    void updateResume(User user, Study study, MultipartFile resume, String url);
+
+
 }

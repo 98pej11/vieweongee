@@ -1,9 +1,13 @@
 package com.ssafy.vieweongee.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
 @Entity
 //@IdClass(ParticipantId.class)
@@ -30,5 +34,6 @@ public class Participant {
         this.filename = filename;
         this.save = save;
     }
+
 }
 
