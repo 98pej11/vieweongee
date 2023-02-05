@@ -4,12 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-
 import com.ssafy.vieweongee.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,8 +13,9 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 @Slf4j
@@ -143,7 +139,8 @@ public class TokenService {
                         .build();
         log.info("체크토큰의 verifier는...{}",verifier);
         // 만료됐으면 에러남
-        String id= verifier.verify(token).getClaim("Id").toString();
+        String id= String.valueOf(verifier.verify(token).getClaim("Id"));
+        log.info("토큰서비스에서 id!!!! {}",Long.parseLong(id.replaceAll("\"","")));
         return id;
     }
 }
