@@ -1,53 +1,70 @@
 <template>
   <div class="card-list">
-    <div v-for="(data, index) in cardData" :key="index" class="card-div">
-      <div>(인원수)</div>
-      <div class="title">{{ data.title }}</div>
+    <div v-for="(data, index) in studytops" :key="index" class="card-div">
+      <div>{{ data.total_number_of_people }}</div>
+      <div class="title">{{ data.study_title }}</div>
       <div class="card-contents">
         <div>기업</div>
-        <div>{{ data.ent }}</div>
+        <div>{{ data.company }}</div>
       </div>
       <div class="card-contents">
         <div>직무</div>
-        <div>{{ data.dept }}</div>
+        <div>{{ data.job }}</div>
       </div>
       <div class="card-contents">
-        <div>기업</div>
-        <div>{{ data.date }}</div>
+        <div>날짜</div>
+        <div>{{ data.study_datetime }}</div>
       </div>
     </div>
   </div>
 </template>
-<script  >
+<script>
 import { defineComponent } from "vue";
+import http from "@/api/http";
+import { mapState } from "vuex";
+
 // import MainCardItem from "@/components/mainpage/MainCardItem.vue";
 export default defineComponent({
   name: "MainCardList",
   components: {
     // MainCardItem,
   },
-  setup() {
-    const cardData = [
-      {
-        title: "싸피 비전공자 면접스터디 구해요",
-        ent: "SSAFY",
-        dept: "프론트엔드",
-        date: "2023.01.12 10:00",
-      },
-      {
-        title: "신한은행 면접스터디",
-        ent: "신한은행",
-        dept: "백엔드",
-        date: "2023.01.11 19:00",
-      },
-      {
-        title: "유플러스 백엔드 면접",
-        ent: "유플러스",
-        dept: "백엔드",
-        date: "2023.01.10 11:00",
-      },
-    ];
-    return { cardData };
+  data() {
+    return {
+      studytops: [],
+      // cardData: [
+      //   {
+      //     title: "싸피 비전공자 면접스터디 구해요",
+      //     ent: "SSAFY",
+      //     dept: "프론트엔드",
+      //     date: "2023.01.12 10:00",
+      //   },
+      //   {
+      //     title: "신한은행 면접스터디",
+      //     ent: "신한은행",
+      //     dept: "백엔드",
+      //     date: "2023.01.11 19:00",
+      //   },
+      //   {
+      //     title: "유플러스 백엔드 면접",
+      //     ent: "유플러스",
+      //     dept: "백엔드",
+      //     date: "2023.01.10 11:00",
+      //   },
+      // ],
+    };
+  },
+  created() {
+    http.get(`/study/top3`).then(({ data }) => {
+      this.studytops = data;
+    });
+    if (this.global_isShow) {
+      this.CLEAN_GLOBAL_ISSHOW();
+      this.viewArticle(this.global_article);
+    }
+  },
+  computed: {
+    ...mapState(["global_article", "global_isShow"]),
   },
 });
 </script>
@@ -55,7 +72,7 @@ export default defineComponent({
 .card-list {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  /* padding: 20px; */
 }
 .card-contents {
   display: flex;
