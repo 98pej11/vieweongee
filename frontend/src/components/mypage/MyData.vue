@@ -1,20 +1,20 @@
 <template>
   <div>
     <!-- <div>
-      <el-calendar :range="[new Date(2019, 2, 4), new Date(2019, 2, 24)]" />
+      <el-calendar :range="[new study_datetime(2019, 2, 4), new study_datetime(2019, 2, 24)]" />
     </div> -->
     <el-container>
       <el-main class="outline-box">
         <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
         <el-table
           class="el-table"
-          :data="tableData"
-          style="width: 100%; font-size:medium"
-          :class="tableRowClassName"
+          :data="mystudys"
+          style="width: 100%; font-size: medium"
+          :class="tableRowClasscompany"
         >
-          <el-table-column prop="date" label="날짜" width="150%" />
-          <el-table-column prop="name" label="기업명" width="200%" />
-          <el-table-column prop="address" label="항목" width="350%" />
+          <el-table-column prop="study_datetime" label="날짜" width="150%" />
+          <el-table-column prop="company" label="기업명" width="200%" />
+          <el-table-column prop="study_title" label="항목" width="350%" />
           <!-- 버튼 -->
           <el-table-column prop="type" label="버튼" width="150%">
             <el-button
@@ -22,7 +22,7 @@
               color="#9DADD8"
               size="larger"
               style="margin: 2%; width: 70%"
-              @click="moveWrite()"
+              @click="viewStudy"
             >
               상세보기
             </el-button>
@@ -31,34 +31,51 @@
         <el-dialog
           class="el-dialog"
           v-model="dialogVisible"
+          :data="mystudy"
           width="900px"
           style="border-radius: 5%; background-color: #eeecf8"
         >
-          <h2 class="text-h6 mb-3" style="margin-bottom:0%">삼성 SDS 면접 스터디</h2>
-          <h2 class="text-h6 mb-3" style="margin-bottom:2%; text-align: right; margin-right: 3%;">2023.02.03</h2>
+          <h2 class="text-h6 mb-3" style="margin-bottom: 0%">
+            {{ mystudy.study_title }}
+          </h2>
+          <h2
+            class="text-h6 mb-3"
+            style="margin-bottom: 2%; text-align: right; margin-right: 3%"
+          >
+            {{ mystudy.study_datetime }}
+          </h2>
           <el-tabs type="border-card" class="demo-tabs">
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
                   <span>채점표</span>
                 </span>
               </template>
               <el-table
-                border 
+                border
                 class="el-table"
                 :span-method="objectSpanMethod"
-                :data="scoreData"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :class="tableRowClassName"
+                :class="tableRowClasscompany"
               >
                 <!-- <el-table-column type="selection" width="35"></el-table-column> -->
-                <el-table-column border prop="type" label="대분류" width="150%" />
-                <el-table-column border prop="name1" label="항목" width="400%" />
+                <el-table-column
+                  border
+                  prop="type"
+                  label="대분류"
+                  width="150%"
+                />
+                <el-table-column
+                  border
+                  prop="company1"
+                  label="항목"
+                  width="400%"
+                />
+                <!-- 여기를 어찌 해야할깡 -->
                 <el-table-column border label="점수" width="300%">
                   <el-rate
-                    v-model="value"
+                    v-model="mystudy.attitude"
                     disabled
                     show-score
                     text-color="#ff9900"
@@ -74,10 +91,10 @@
                   <span>피드백</span>
                 </span>
               </template>
-              <ul style="font-size:large">
-                <li> 아주 잘해떠요 </li>
-                <li> 목소리가 너무 작았어요 </li>
-                <li> 회사에 대한 이해도가 높아 보였어용 </li>
+              <ul style="font-size: large">
+                {{
+                  mystudy.feedback
+                }}
               </ul>
             </el-tab-pane>
           </el-tabs>
@@ -94,132 +111,147 @@ export default {
   name: "MyData",
   data() {
     return {
-      articles: [],
+      mystudys: [],
       // fields: [
-      //   { key: "date", label: "", tdClass: "tdClass" },
+      //   { key: "study_datetime", 2label: "", tdClass: "tdClass" },
       //   // { key: "articleno", label: "글번호", tdClass: "tdClass" },
       //   { key: "company", label: "제목", tdClass: "tdSubject" },
       //   { key: "userid", label: "작성자", tdClass: "tdClass" },
       // ],
-      article: null,
-      value: 3.7,
+      mystudy: null,
       dialogVisible: false,
       // 기본 채점템플릿
       tableData: [
         {
-          date: "2016-05-03",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-03",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-02",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-04",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-01",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-04",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-01",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-04",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-01",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-04",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
         {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
+          study_datetime: "2016-05-01",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
         },
       ],
       scoreData: [
         {
           type: "태도",
-          name1: "자신감 있는 표정과 목소리인가?",
+          company1: "자신감 있는 표정과 목소리인가?",
         },
         {
           type: "태도",
-          name1: "기본 준비 자세가 올바른가?",
+          company1: "기본 준비 자세가 올바른가?",
         },
         {
           type: "직무역량",
-          name1: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
+          company1: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
         },
         {
           type: "직무역량",
-          name1: "직무 수행에 필요한 역량을 갖췄는가?",
+          company1: "직무 수행에 필요한 역량을 갖췄는가?",
         },
         {
           type: "팀워크",
-          name1: "다양한 의견을 수렴한 경험이 있는가?",
+          company1: "다양한 의견을 수렴한 경험이 있는가?",
         },
         {
           type: "팀워크",
-          name1: "적극적으로 참여하는 자세를 가졌는가?",
+          company1: "적극적으로 참여하는 자세를 가졌는가?",
         },
         {
           type: "문제해결",
-          name1: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
+          company1: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
         },
         {
           type: "문제해결",
-          name1: "해결에 도움이 되는 방향성을 제시하였는가?",
+          company1: "해결에 도움이 되는 방향성을 제시하였는가?",
         },
         {
           type: "기업이해도",
-          name1: "기업에 대한 이해도가 높은가?",
+          company1: "기업에 대한 이해도가 높은가?",
         },
         {
           type: "기업이해도",
-          name1: "퇴사 가능성이 있는가?",
+          company1: "퇴사 가능성이 있는가?",
         },
       ],
     };
   },
   created() {
-        http.get(`/board/users/mystudy`).then(({ data }) => {
-            this.articles = data;
-        });
-        if(this.global_isShow){
-          this.CLEAN_GLOBAL_ISSHOW();
-          this.viewArticle(this.global_article);
-        }
+    http.get(`/board/users/mystudy`).then(({ data }) => {
+      this.mystudys = data;
+    });
+    if (this.global_isShow) {
+      this.CLEAN_GLOBAL_ISSHOW();
+      this.viewArticle(this.global_article);
+    }
   },
   computed: {
-    ...mapState(["global_article","global_isShow"]),
+    ...mapState(["global_article", "global_isShow"]),
   },
   methods: {
-    moveDetail(){
-      this.dialogVisible = true;
+    viewStudy(mystudy) {
+      // this.dialogVisible = true;
+      if (this.mystudy == null || this.mystudy.study_ID != mystudy.study_ID) {
+        http
+          .get(`/users/mystudy/${mystudy.study_ID}`)
+          .then(({ data }) => {
+            this.mystudy = data;
+          })
+          .then(() => {
+            this.dialogVisible = true;
+            // if(this.mystudy.fileInfos.length == 0)
+            //   this.mystudy.fileInfos = [{saveFile: "ssafy_logo.png"}];
+            // this.getComments(this.article.articleno);
+          });
+      } else {
+        this.dialogVisible = false;
+        this.mystudy = null;
+      }
     },
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
+      if (columnIndex === 0 || columnIndex === 2) {
         if (rowIndex % 2 === 0) {
           return {
             rowspan: 2,
@@ -234,7 +266,7 @@ export default {
       }
     },
     // 채점표 템플릿 Style 적용 ( 구현 미완료 )
-    tableRowClassName({ rowIndex, columnIndex }) {
+    tableRowClasscompany({ rowIndex, columnIndex }) {
       if (columnIndex === 1 || columnIndex === 2 || rowIndex === 1) {
         console.log(rowIndex);
         return "warning-row";
@@ -242,7 +274,6 @@ export default {
       return "";
     },
   },
-  
 };
 </script>
 <style scoped>
