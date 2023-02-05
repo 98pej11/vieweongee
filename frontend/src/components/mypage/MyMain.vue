@@ -39,6 +39,8 @@
 
 <script>
 import { defineComponent } from "vue";
+// import http from "@/api/http";
+// import { mapState } from "vuex";
 
 export default defineComponent({
   name: "MyMain",

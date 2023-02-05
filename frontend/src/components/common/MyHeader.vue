@@ -38,17 +38,12 @@
             <el-icon :size="30"><UserFilled /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item
-                  ><router-link to="/login"
-                    >로그인</router-link
-                  ></el-dropdown-item
-                >
-
-                <el-dropdown-item divided
-                  ><router-link to="/mypage"
-                    >마이페이지</router-link
-                  ></el-dropdown-item
-                >
+                <!-- <router-link to="/login"> -->
+                <el-dropdown-item @click="gologin"> 로그인 </el-dropdown-item>
+                <!-- </router-link> -->
+                <el-dropdown-item divided @click="open"
+                  >마이페이지
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -64,10 +59,8 @@
                   >로그아웃</el-dropdown-item
                 >
 
-                <el-dropdown-item divided
-                  ><router-link to="/mypage"
-                    >마이페이지</router-link
-                  ></el-dropdown-item
+                <el-dropdown-item divided @click="gomypage"
+                  >마이페이지</el-dropdown-item
                 >
               </el-dropdown-menu>
             </template>
@@ -79,10 +72,8 @@
             <el-icon :size="30"><Menu /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item
-                  ><router-link to="/studylist"
-                    >스터디 게시판</router-link
-                  ></el-dropdown-item
+                <el-dropdown-item @click="goboard"
+                  >스터디 게시판</el-dropdown-item
                 >
 
                 <el-dropdown-item divided>공지사항</el-dropdown-item>
@@ -99,6 +90,7 @@
 import { BellFilled, UserFilled, Menu } from "@element-plus/icons-vue";
 import { defineComponent, ref } from "vue";
 import { mapState, mapGetters, mapActions } from "vuex";
+import { ElMessageBox } from "element-plus";
 
 const memberStore = "memberStore";
 export default defineComponent({
@@ -132,18 +124,26 @@ export default defineComponent({
     ...mapActions(memberStore, ["userLogout"]),
     // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
-      // this.SET_IS_LOGIN(false);
-      // this.SET_USER_INFO(null);
-      // sessionStorage.removeItem("access-token");
-      // if (this.$route.path != "/") this.$router.push({ name: "main" });
       console.log(this.data.email);
-      //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
-      //+ satate에 isLogin, userInfo 정보 변경)
-      // this.$store.dispatch("userLogout", this.userInfo.userid);
       this.userLogout(this.data.email);
       sessionStorage.removeItem("accessToken"); //저장된 토큰 없애기
       sessionStorage.removeItem("refreshToken"); //저장된 토큰 없애기
-      if (this.$route.path != "/") this.$router.push({ name: "main" });
+      this.$router.push({ name: "main" });
+    },
+    gologin() {
+      this.$router.push({ name: "login" });
+    },
+    gomypage() {
+      this.$router.push({ name: "mypage" });
+    },
+    goboard() {
+      this.$router.push({ name: "studylist" });
+    },
+    open() {
+      ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
+        confirmButtonText: "확인",
+      });
+      this.gologin();
     },
   },
 });
