@@ -2,6 +2,7 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserInfo;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.exception.UserNotFoundException;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -87,16 +86,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean checkPassword(PasswordCheckRequest userInfo) {
-        User dbUser = userRepository.getUserByEmailandSocial(userInfo.getEmail(), userInfo.getProvider());
-        if(dbUser != null && passwordEncoder.matches(userInfo.getPassword(), dbUser.getPassword()))
+    public boolean checkPassword(PasswordCheckRequest pwCheck) {
+        User dbUser = userRepository.findById(pwCheck.getId()).get();
+        if(dbUser != null && passwordEncoder.matches(pwCheck.getPassword(), dbUser.getPassword()))
             return true;
         return false;
     }
 
     @Override
-    public void deleteUser(PasswordCheckRequest userInfo){
-        User user = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
+    public void deleteUser(Long id){
+        User user = userRepository.findById(id).get();
         userRepository.delete(user);
     }
 
@@ -148,8 +147,11 @@ public class UserServiceImpl implements UserService{
 //            User user=new User(dbUser.getEmail(), dbUser.get)
         userRepository.logoutUpdate(id);
 //        }
-
-
+    }
+    @Override
+    public String getEmail(Long id) {
+        String email = userRepository.getEmailById(id);
+        return email;
     }
 
 }

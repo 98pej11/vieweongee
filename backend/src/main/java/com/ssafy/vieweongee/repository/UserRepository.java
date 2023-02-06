@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.jwt_token=null WHERE u.id=:id")
     void logoutUpdate(@Param("id") Long id);
+
+    @Query("select u.email from User u where u.id=:id")
+    String getEmailById(@Param("id") Long id);
 
 //    @Query("DELETE u FROM User u WHERE u.email=:email and u.social_login=:social")
 //    void deleteByJwtToken(String refreshToken);
