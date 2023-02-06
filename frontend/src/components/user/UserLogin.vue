@@ -111,6 +111,7 @@ export default {
         email: "",
         password: "",
         name: "",
+        message: "",
       },
     };
   },
@@ -121,16 +122,20 @@ export default {
     // ValidationProvider,
   },
   computed: {
-    ...mapState(memberStore, ["isLogin", "isLoginError", ""]),
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
   },
   methods: {
-    ...mapActions(memberStore, ["userConfirm", "get", "userJoin"]),
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userJoin"]),
 
     async confirm() {
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("accessToken");
+      let token = sessionStorage.getItem("ACCESS");
+      // let myemail = sessionStorage.getItem("userinfo_email");
       if (this.isLogin) {
-        await this.get(token);
+        // await this.getUserInfo(myemail);
+        await this.getUserInfo(token);
+        // console.log("내 토큰입니다 : "+ token);
+        // console.log("내 정보입니다 : "+ this.userInfo);
         this.$router.push({ name: "main" });
       }
     },

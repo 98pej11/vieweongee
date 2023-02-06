@@ -33,6 +33,7 @@
         >
 
         <!-- 로그인 전 -->
+        <!-- <a class="el-dropdown-link" style="display: inline-flex" v-if="data === null"> -->
         <a class="el-dropdown-link" style="display: inline-flex" v-if="!data">
           <el-dropdown>
             <el-icon :size="30"><UserFilled /></el-icon>
@@ -50,7 +51,7 @@
         </a>
 
         <!-- 로그인 후 -->
-        <a class="el-dropdown-link" style="display: inline-flex" v-if="data">
+        <a class="el-dropdown-link" style="display: inline-flex" v-else>
           <el-dropdown>
             <el-icon :size="30"><UserFilled /></el-icon>
             <template #dropdown>
@@ -100,9 +101,14 @@ export default defineComponent({
     UserFilled,
     Menu,
   },
+  // mounted(){
+  //   this.getIs();
+  // },
   setup() {
     const dialogVisible = ref(false);
     const count = 5;
+    const HeaderCheck = false;
+
     function load() {
       this.count += 1;
       // console.log(this.count);
@@ -114,21 +120,36 @@ export default defineComponent({
       Menu,
       dialogVisible,
       count,
+      HeaderCheck,
     };
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "data"]),
     ...mapGetters(["checkUserInfo"]),
+    // isLogin(){return this.isLogin},
   },
+  // watch:{
+  //   isLogin(){
+  //     console.log(this.isLogin);
+  //     // console.log(val + " 와치");
+  //     // sessionStorage.setItem("isLogin",val);
+  //   }
+  // },
   methods: {
+    // getIs(){
+    //   // 로그인 여부 저장 (헤더를 위해)
+    //   sessionStorage.setItem("isLogin", this.isLogin);
+    //   // 왜 .. 자꾸 undefined...?
+    //   console.log("로그인 여뷰 ===> " + this.isLogin);
+    // },
     ...mapActions(memberStore, ["userLogout"]),
     // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
-      console.log(this.data.email);
-      this.userLogout(this.data.email);
-      sessionStorage.removeItem("accessToken"); //저장된 토큰 없애기
-      sessionStorage.removeItem("refreshToken"); //저장된 토큰 없애기
-      this.$router.push({ name: "main" });
+      this.userLogout(sessionStorage.getItem("ACCESS"));
+      // this.userLogout(this.data.email); // state에 저장된 유저 정보
+      sessionStorage.removeItem("ACCESS"); //저장된 토큰 없애기
+      sessionStorage.removeItem("REFRESH"); //저장된 토큰 없애기
+      this.$router.go({ name: "main" });
     },
     gologin() {
       this.$router.push({ name: "login" });
