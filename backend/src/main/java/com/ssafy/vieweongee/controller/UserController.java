@@ -218,7 +218,7 @@ public class UserController {
     @DeleteMapping("/")
     public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
         if(userService.checkPassword(userInfo)){
-            userService.deleteUser(userInfo);
+            userService.deleteUser(userInfo.getId());
             return ResponseEntity.status(200).body("SUCCESS");
         }
         return ResponseEntity.status(409).body("FAIL");

@@ -2,6 +2,7 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
+import com.ssafy.vieweongee.dto.user.request.UserInfo;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.exception.UserNotFoundException;
@@ -93,8 +94,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUser(PasswordCheckRequest userInfo){
-        User user = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
+    public void deleteUser(Long id){
+        User user = userRepository.findById(id).get();
         userRepository.delete(user);
     }
 
