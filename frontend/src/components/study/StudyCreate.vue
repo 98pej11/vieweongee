@@ -262,6 +262,7 @@ export default {
       // console.log(msg);
       // console.log(this.studyFormInfo);
       // 2. 날짜 제한이 맞으면
+      console.log(this.studyFormInfo);
       if (this.checkDate(this.studyFormInfo.studyDatetime)) this.confirm();
     },
 

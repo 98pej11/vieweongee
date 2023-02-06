@@ -53,6 +53,11 @@
           <el-button round color="#E1E6FF" class="me-2">
             자기소개서 업로드
           </el-button>
+          <!-- v-if 글 작성자 !== 로그인 유저 -->
+          <el-button @click="registStudy" round color="#9DADD8" class="me-2">
+            신청
+          </el-button>
+          <!-- v-if 글 작성자 === 로그인 유저 -->
           <el-button @click="modifyStudy" round color="#9DADD8" class="me-2">
             수정
           </el-button>
@@ -93,14 +98,21 @@ export default {
     ...mapState(studyStore, ["isError", "studyID", "studyInfo"]),
   },
   mounted() {
-    this.getDetails();
+    // this.getDetails();
   },
   methods: {
     ...mapActions(studyStore, ["getInfo"]),
 
     // 컴포넌트 전환
-    modifyStudy() {},
+    modifyStudy() {
+      this.$router.push({
+        name: "studymodify",
+        params: { studyid: this.studyID },
+      });
+    },
     deleteStudy() {},
+    // 스터디 신청
+    registStudy() {},
 
     // 스터디 글 정보 불러오기
     async getDetails() {

@@ -2,7 +2,7 @@
   <div class="main">
     <MainCenter />
     <SearchBar></SearchBar>
-    <MainCardList></MainCardList>
+    <MainCardList @move="move"></MainCardList>
   </div>
 </template>
 
@@ -18,6 +18,15 @@ export default defineComponent({
     MainCenter,
     MainCardList,
     SearchBar,
+  },
+  data() {
+    return { studyId: 1 };
+  },
+  methods: {
+    // move(id) {
+    //   this.studyId = id;
+    //   console.log(this.studyId);
+    // },
   },
 });
 </script>

@@ -19,12 +19,13 @@ const studyStore = {
     studyID: 0,
     studyList: [
       {
+        id: 0,
         title: "",
         company: "",
         job: "",
         personnel: 1,
         type: "",
-        user_id: "",
+        user_id: 0,
         user_nickname: "",
         study_datetime: "",
         regist_datetime: "",
@@ -33,12 +34,13 @@ const studyStore = {
       },
     ],
     studyInfo: {
+      id: 0,
       study_title: "",
       company: "",
       job: "",
       personnel: 1,
       type: "",
-      user_id: "",
+      user_id: 0,
       user_nickname: "",
       study_datetime: "",
       regist_datetime: "",
@@ -48,10 +50,10 @@ const studyStore = {
     commentList: [
       {
         depth: 1,
-        user_id: "",
+        user_id: 0,
         user_nickname: "",
-        comment_id: "",
-        reply_id: "",
+        comment_id: 0,
+        reply_id: 0,
         content: "",
         datetime: "",
       },
@@ -69,10 +71,17 @@ const studyStore = {
       list.forEach((el) => {
         state.studyList.push({
           id: el.id,
-          comment: el.comment,
-          user: el.user,
+          title: el.title,
+          company: el.company,
+          job: el.job,
+          personnel: el.personnel,
+          type: el.type,
+          user_id: el.user_id,
+          user_nickname: el.user_nickname,
+          study_datetime: el.study_datetime,
+          regist_datetime: el.regist_datetime,
+          running_time: el.running_time,
           content: el.content,
-          datetime: el.datetime,
         });
       });
     },

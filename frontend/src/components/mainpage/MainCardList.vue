@@ -9,7 +9,7 @@
         :key="index"
         class="card-div"
       >
-        <div>
+        <div @click="move(data.id)">
           <div class="person-div">
             <el-icon :size="17"><User /></el-icon>&nbsp;{{ data.capacity }} / 6
           </div>
@@ -47,10 +47,12 @@ export default {
 
   data() {
     return {
+      type: "detail",
       allStudy: [{}],
 
       cardData: [
         {
+          id: 1,
           title: "싸피 비전공자 면접스터디 구해요",
           ent: "SSAFY",
           dept: "프론트엔드",
@@ -58,6 +60,7 @@ export default {
           date: "2023.01.12 10:00",
         },
         {
+          id: 2,
           title: "신한은행 면접스터디",
           ent: "신한은행",
           dept: "백엔드",
@@ -65,6 +68,7 @@ export default {
           date: "2023.01.11 19:00",
         },
         {
+          id: 3,
           title: "유플러스 백엔드 면접",
           ent: "유플러스",
           dept: "백엔드",
@@ -97,6 +101,16 @@ export default {
       await this.getList();
       this.allStudy = this.studyList;
     },
+    move(id) {
+      console.log("클릭 : " + this.studyID);
+      this.$router.push({
+        name: "studyview",
+        params: { studyid: id },
+      });
+    },
+    // move(id) {
+    // this.$emit("move", id);
+    // },
   },
 };
 </script>

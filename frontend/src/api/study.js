@@ -4,7 +4,7 @@ const api = http;
 
 // 게시글 CRUD
 async function createStudy(info, success, fail) {
-  api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
 
   await api
     .post(`/users/study`, JSON.stringify(info))
@@ -14,18 +14,21 @@ async function createStudy(info, success, fail) {
 async function getAllStudy(success, fail) {
   await api.get(`/users/study`).then(success).catch(fail);
 }
+async function getTopStudy(success, fail) {
+  await api.get(`/users/study/top3`).then(success).catch(fail);
+}
 async function getStudy(study_ID, success, fail) {
   await api.get(`/users/study/${study_ID}`).then(success).catch(fail);
 }
 async function modifyStudy(study_ID, info, success, fail) {
-  api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
+  // api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
   await api
     .put(`/users/study/${study_ID}`, JSON.stringify(info))
     .then(success)
     .catch(fail);
 }
 async function deleteStudy(study_ID, success, fail) {
-  api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
+  // api.defaults.headers["accessToken"] = sessionStorage.getItem("accessToken");
   await api.delete(`/users/study/${study_ID}`).then(success).catch(fail);
 }
 
