@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UserModifyRequest {
     private String email;
-    private String nickname;
+    private String name;
     private String provider;
     private String password;
     private String passwordCheck;

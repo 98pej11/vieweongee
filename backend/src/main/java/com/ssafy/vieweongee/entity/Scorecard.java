@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.entity;
 
+import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -57,6 +58,21 @@ public class Scorecard implements Serializable{
         this.loyalty = loyalty;
         this.feedback = feedback;
         this.interviewer = interviewer;
+    }
+
+
+    /**
+     * 면접자의 한 회차 스터디 점수 업데이트를 위함
+     * @param scoreRequest
+     */
+    public void changeScore(MeetingScoreRequest scoreRequest){
+        this.attitude += scoreRequest.getAttitude();
+        this.ability += scoreRequest.getAbility();
+        this.teamwork += scoreRequest.getTeamwork();
+        this.solving += scoreRequest.getSolving();
+        this.loyalty += scoreRequest.getLoyalty();
+        this.feedback += "\n" + scoreRequest.getFeedback();
+        this.interviewer += 1;
     }
 }
 

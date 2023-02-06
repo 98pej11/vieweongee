@@ -1,5 +1,7 @@
 package com.ssafy.vieweongee.service;
 
+//import org.springframework.ws.mime.MimeMessage;
+
 import javax.mail.internet.MimeMessage;
 
 public interface EmailService {
@@ -9,3 +11,4 @@ public interface EmailService {
     MimeMessage createMessagePw(String to, String password) throws Exception;
     String sendSimpleMessage(String to, String password) throws Exception;
 }
+
