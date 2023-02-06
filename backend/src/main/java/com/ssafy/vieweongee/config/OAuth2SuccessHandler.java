@@ -67,8 +67,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         login.setEmail(user.getEmail());
 
         result.put("data",login);
+        result.put("access", AccessJwt);
+        result.put("refresh", RefreshToken);
         result.put("massage","SUCCESS");
-        response.addHeader("ACCESS", AccessJwt);
+//        response.addHeader("ACCESS", AccessJwt);
         log.info("ACCESS : {}",AccessJwt);
         log.info("REFRESH : {}", RefreshToken);
 //        response.addHeader("refresh",refreshToken);

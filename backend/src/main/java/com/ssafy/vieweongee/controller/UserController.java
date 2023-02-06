@@ -53,9 +53,9 @@ public class UserController {
             log.info("리프레쉬 앤 엑세스 : {} // {}", refreshToken, accessToken);
             tokenService.setRefreshToken(userId,refreshToken);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("ACCESS", accessToken);
-            headers.add("REFRESH", refreshToken);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add("ACCESS", accessToken);
+//            headers.add("REFRESH", refreshToken);
 
             UserLoginResponse login=new UserLoginResponse();
             login.setId(loginUser.getId());
@@ -63,9 +63,11 @@ public class UserController {
             login.setEmail(loginUser.getEmail());
 
             result.put("data",login);
+            result.put("access", accessToken);
+            result.put("refresh", refreshToken);
             result.put("massage","SUCCESS");
 
-            return ResponseEntity.ok().headers(headers).body(result);
+            return ResponseEntity.status(200).body(result);
         }
         result.put("data",null);
         result.put("massage","FAIL");
