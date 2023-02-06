@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PasswordCheckRequest {
-    private Long id;
-    private String password;
+public class EmailInfo {
+    private String email;
 }

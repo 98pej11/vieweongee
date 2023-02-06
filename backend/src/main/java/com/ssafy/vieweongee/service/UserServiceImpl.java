@@ -12,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService{
@@ -87,9 +85,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean checkPassword(PasswordCheckRequest userInfo) {
-        User dbUser = userRepository.getUserByEmailandSocial(userInfo.getEmail(), userInfo.getProvider());
-        if(dbUser != null && passwordEncoder.matches(userInfo.getPassword(), dbUser.getPassword()))
+    public boolean checkPassword(PasswordCheckRequest pwCheck) {
+        User dbUser = userRepository.findById(pwCheck.getId()).get();
+        if(dbUser != null && passwordEncoder.matches(pwCheck.getPassword(), dbUser.getPassword()))
             return true;
         return false;
     }
@@ -148,8 +146,11 @@ public class UserServiceImpl implements UserService{
 //            User user=new User(dbUser.getEmail(), dbUser.get)
         userRepository.logoutUpdate(id);
 //        }
-
-
+    }
+    @Override
+    public String getEmail(Long id) {
+        String email = userRepository.getEmailById(id);
+        return email;
     }
 
 }

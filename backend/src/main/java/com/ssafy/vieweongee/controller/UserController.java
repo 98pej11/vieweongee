@@ -3,6 +3,7 @@ package com.ssafy.vieweongee.controller;
 import com.nimbusds.oauth2.sdk.Message;
 import com.ssafy.vieweongee.dto.study.CreateStudyRequest;
 import com.ssafy.vieweongee.dto.user.request.*;
+import com.ssafy.vieweongee.dto.user.response.UserInfoResponse;
 import com.ssafy.vieweongee.dto.user.response.UserLoginResponse;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.service.EmailService;
@@ -62,7 +63,7 @@ public class UserController {
             login.setName(loginUser.getName());
             login.setEmail(loginUser.getEmail());
 
-            result.put("data",login);
+//            result.put("data",login); // 원래 주면 안 됨
             result.put("access", accessToken);
             result.put("refresh", refreshToken);
             result.put("massage","SUCCESS");
@@ -104,8 +105,8 @@ public class UserController {
     }
 
     //email 중복 검사
-    @GetMapping("/email-check")
-    public ResponseEntity<?> emailCheck(@RequestBody String email){
+    @GetMapping("/email-check/{email}")
+    public ResponseEntity<?> emailCheck(@PathVariable("email") String email){
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
 
@@ -120,9 +121,9 @@ public class UserController {
 
     //  인증 이메일 발송
     @PostMapping("/email-valid")
-    public ResponseEntity<?> sendEmail(@RequestBody String email) {
+    public ResponseEntity<?> sendEmail(@RequestBody EmailInfo emailInfo) {
         try {
-            String code = emailService.sendSimpleMessage(email, "code");
+            String code = emailService.sendSimpleMessage(emailInfo.getEmail(), "code");
             Map<String, String> result = new HashMap<>();
             result.put("data", code);
             result.put("message","SUCCESS");
@@ -139,11 +140,11 @@ public class UserController {
 
     //비밀번호 찾기 -> 임시 비밀번호 발급
     @PutMapping("/password-find")
-    public ResponseEntity<?> findPassword(@RequestBody String email){
+    public ResponseEntity<?> findPassword(@RequestBody UserInfo userInfo){
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
         //일반 유저가 존재하는가
-        User user = userService.getUser(email, "global");
+        User user = userService.getUserById(userInfo.getId());
         log.info("user controller 비번 찾는 즁 : {}",user);
         if(user == null){
             result.put("message","FAIL:USER");
@@ -151,6 +152,7 @@ public class UserController {
         }
 
         try {
+            String email = userService.getEmail(userInfo.getId());
             String pw = emailService.sendSimpleMessage(email, "password");
             if(userService.saveTempPassword(email, pw)){
                 result.put("message","SUCCESS");
@@ -170,16 +172,16 @@ public class UserController {
 
     //비밀번호 확인
     @PostMapping("/password")
-    public ResponseEntity<?> verifyPassword(@RequestBody PasswordCheckRequest userInfo){
-        if(userService.checkPassword(userInfo))
+    public ResponseEntity<?> verifyPassword(@RequestBody PasswordCheckRequest pwCheck){
+        if(userService.checkPassword(pwCheck))
             return ResponseEntity.status(200).body("SUCCESS");
         return ResponseEntity.status(409).body("FAIL");
     }
 
     //회원 정보 조회
     @GetMapping("/")
-    public ResponseEntity<?> getInfo (@RequestBody UserGetInfo userInfo){
-        User user = userService.getUser(userInfo.getEmail(), userInfo.getProvider());
+    public ResponseEntity<?> getInfo (@RequestBody UserInfo userInfo){
+        User user = userService.getUserById(userInfo.getId());
         Map<String, Object> result = new HashMap<>();
         if(user == null){
             result.put("data", null);
@@ -187,8 +189,8 @@ public class UserController {
             return ResponseEntity.status(500).body(result);
         }
         else {
-
-            result.put("data", user);
+            UserInfoResponse userInfoResponse = new UserInfoResponse(user.getEmail(), user.getName(), user.getProvider());
+            result.put("data", userInfoResponse);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
@@ -270,9 +272,9 @@ public class UserController {
         if (check==true){
             Long id=userToken.getId();
             userService.logout(id, accessToken);
-            return ResponseEntity.status(200).body("로그아웃 완료");
+            return ResponseEntity.status(200).body("SUCCESS");
         }
-        return ResponseEntity.status(409).body("로그아웃 실패 - 토큰 만료");
+        return ResponseEntity.status(409).body("FAIL:TOKEN");
     }
 
 

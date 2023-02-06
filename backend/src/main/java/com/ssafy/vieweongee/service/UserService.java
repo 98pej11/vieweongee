@@ -15,7 +15,7 @@ public interface UserService {
     User getUserById(Long id);
     boolean checkDuplicatedEmail(String email);
     boolean checkDuplicatedNickname(String nickname);
-    boolean checkPassword(PasswordCheckRequest userInfo);
+    boolean checkPassword(PasswordCheckRequest pwCheck);
     void deleteUser(PasswordCheckRequest userInfo);
     void modifyUser(UserModifyRequest userInfo);
     void deleteRefreshtoken(String email, String provider);
@@ -24,4 +24,5 @@ public interface UserService {
     String getJwtToken(Long id);
 
     void logout(Long id, String accessToken);
+    String getEmail(Long id);
 }
