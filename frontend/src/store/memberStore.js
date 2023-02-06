@@ -57,8 +57,8 @@ const memberStore = {
         ({ data }) => {
           console.log(data);
           if (data.massage === "SUCCESS") {
-            let ACCESS = data["ACCESS"];
-            let REFRESH = data["REFRESH"];
+            let ACCESS = data.access;
+            let REFRESH = data.refresh;
             // console.log(ACCESS + " 그리고 " + REFRESH);
             // console.log(JSON.stringify(ACCESS));
             // console.log("login success token created!!!! >> ", accessToken, refreshToken);
