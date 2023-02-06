@@ -45,16 +45,24 @@ const memberStore = {
       async userConfirm({ commit }, user) {
         await signin(
           user,
-          ({ data }) => {
+          ({data}) => {
+            console.log(data);
             if (data.message === "SUCCESS") {
-              let accessToken = data["ACCESS"];
-              let refreshToken = data["REFRESH"];
+              let ACCESS = data["ACCESS"];
+              let REFRESH = data["REFRESH"];
+              // console.log(ACCESS + " 그리고 " + REFRESH);
+              // console.log(JSON.stringify(ACCESS));
               // console.log("login success token created!!!! >> ", accessToken, refreshToken);
               commit("SET_IS_LOGIN", true);
               commit("SET_IS_LOGIN_ERROR", false);
               commit("SET_IS_VALID_TOKEN", true);
-              sessionStorage.setItem("ACCESS", accessToken);
-              sessionStorage.setItem("REFRESH", refreshToken);
+              sessionStorage.setItem("ACCESS", ACCESS);
+              sessionStorage.setItem("REFRESH", REFRESH);
+              // console.log("유저인포받아오기: "+ JSON.stringify(data.userinfo));
+              commit("SET_USER_INFO", data.userinfo);
+              // sessionStorage.setItem("userinfo_id", data.userinfo.id); 세션에 저장하는 방식.... = bad..
+              // sessionStorage.setItem("userinfo_email", data.userinfo.email);
+
             } else {
               commit("SET_IS_LOGIN", false);
               commit("SET_IS_LOGIN_ERROR", true);
@@ -67,14 +75,18 @@ const memberStore = {
         );
       },
       async getUserInfo({ commit, dispatch }, token) {
+      // async getUserInfo({ commit, dispatch }, myemail) {
         let decodeToken = jwtDecode(token);
-        // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+        console.log("2. getUserInfo() decodeToken :: ", decodeToken);
         await findById(
-          decodeToken.email,
-          ({ data }) => {
+          // myemail,
+          decodeToken.Id,
+          ({data}) => {
             if (data.message === "SUCCESS") {
-              // 여기 userInfo
-              commit("SET_USER_INFO", data.data);
+              console.log("이프문 안으로 들어왓다. ");
+              // 백엔드에서 받아오는 userInfo가 없음
+              // commit("SET_USER_INFO", this.state.data);
+              // console.log("유저정보 바다와서 state에 올렸따 :  "  + data.userinfo);
               // console.log("3. getUserInfo data >> ", data);
             } else {
               console.log("유저 정보 없음!!!!");
@@ -128,10 +140,24 @@ const memberStore = {
           }
         );
       },
-      async userLogout({ commit }, email) {
+      // async userLogout({ commit }, email) {
+      async userLogout({ commit },token) {
+        // 엥 백엔드로직은 toekn 넘겨주는듯
+        let decodeToken = jwtDecode(token);
+
+        //오브젝트 생성
+        let obj = {id:"",accessToken:""};
+        obj.id = decodeToken.Id;
+        obj.accessToken = token;
+
+        console.log("토큰해독 : " + decodeToken);
+        console.log("생성한 오브젝트"+obj);
         await signout(
-          email,
+          obj,
+          // email,
+          // token,
           ({ data }) => {
+            console.log("로그아웃 백엔드에서 날라오는" + data);
             if (data.message === "SUCCESS") {
               commit("SET_IS_LOGIN", false);
               commit("SET_USER_INFO", null);
@@ -158,7 +184,8 @@ const memberStore = {
   
       async userJoin(user){
         await signup(user,
-          ()=>{
+          ({data})=>{            console.log(data);
+
             console.log("회원가입 성공");
           }),
           (error)=>{
