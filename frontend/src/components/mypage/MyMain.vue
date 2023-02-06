@@ -10,25 +10,43 @@
       </el-carousel>
     </div>
     <h3 class="text-h6 mb-3">나의 스터디 전체 통계</h3>
-    <div class="demo-progress">
-      <el-progress :percentage="50" />
-      <el-progress :percentage="100" :format="format" />
-      <el-progress :percentage="100" status="success" />
-      <el-progress :percentage="100" status="warning" />
-      <el-progress :percentage="50" status="exception" />
-    </div>
+
+    <el-row>
+      <el-col :span="12">
+        <div class="demo-progress" style="">
+          <h4>회차별 통계자료</h4>
+          <el-progress :percentage="50"></el-progress>
+          <el-progress :percentage="100" :format="format" />
+          <el-progress :percentage="100" status="success" />
+          <el-progress :percentage="100" status="warning" />
+          <el-progress :percentage="50" status="exception" />
+        </div>
+      </el-col>
+
+      <el-col :span="12">
+        <div class="demo-progress">
+          <h4>역량별 통계자료</h4>
+          <el-progress :percentage="50"></el-progress>
+          <el-progress :percentage="100" :format="format" />
+          <el-progress :percentage="100" status="success" />
+          <el-progress :percentage="100" status="warning" />
+          <el-progress :percentage="50" status="exception" />
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+// import http from "@/api/http";
+// import { mapState } from "vuex";
 
 export default defineComponent({
   name: "MyMain",
   data() {
     return {
       format: (percentage) => (percentage === 100 ? "Full" : `${percentage}%`),
-      
     };
   },
 });
@@ -42,10 +60,14 @@ h3 {
 
 .demo-progress {
   margin-top: 10%;
+  margin-left: 10%;
+  /* display: block; */
+  justify-content: center;
+  align-content: center;
 }
 .demo-progress .el-progress--line {
   margin-bottom: 15px;
-  width: 50%;
+  width: 90%;
 }
 .el-carousel__item h3 {
   color: #475669;

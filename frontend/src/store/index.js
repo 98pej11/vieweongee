@@ -4,6 +4,7 @@ import { createStore } from "vuex";
 // import http from "@/api/http";
 import createPersistedState from "vuex-persistedstate";
 import memberStore from "@/store/memberStore";
+import createPersistedState from 'vuex-persistedstate';
 // import commentStore from "@/store/modules/commentStore";
 
 export default createStore({
@@ -12,7 +13,9 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    memberStore: memberStore,
+    memberStore,
   },
-  plugins: [createPersistedState({ paths: ["memberStore"] })],
-});
+  plugins: [createPersistedState({
+    paths: ["memberStore"]
+})]
+})

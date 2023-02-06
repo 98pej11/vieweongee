@@ -28,7 +28,6 @@ public class Progress implements Serializable {
         this.progress_id = progress_id;
         this.status = status;
     }
-
     /**
      * 참여 예정인 스터디를 참여 완료로 변경
      */

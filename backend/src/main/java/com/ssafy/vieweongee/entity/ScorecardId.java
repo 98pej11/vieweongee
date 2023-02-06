@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.*;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 

@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.entity;
 
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -14,7 +15,6 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-//@DynamicUpdate //변경한 필드만 대응
 public class Scorecard implements Serializable{
     // 회원, 스터디 아이디
     @EmbeddedId
@@ -60,6 +60,7 @@ public class Scorecard implements Serializable{
         this.interviewer = interviewer;
     }
 
+
     /**
      * 면접자의 한 회차 스터디 점수 업데이트를 위함
      * @param scoreRequest
@@ -74,3 +75,4 @@ public class Scorecard implements Serializable{
         this.interviewer += 1;
     }
 }
+

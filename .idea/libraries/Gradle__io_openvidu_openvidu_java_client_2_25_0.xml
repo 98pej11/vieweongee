@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.openvidu:openvidu-java-client:2.25.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.openvidu/openvidu-java-client/2.25.0/f1fd45647f43c34fb043c4d827d11bc0a5aea2c5/openvidu-java-client-2.25.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.openvidu/openvidu-java-client/2.25.0/66c604a91b12b7123bf9931149e5c59e81c557be/openvidu-java-client-2.25.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
