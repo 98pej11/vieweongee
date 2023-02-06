@@ -86,10 +86,10 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateScore(String studyId, MeetingScoreRequest score) {
         //스터디 아이디와 회원 아이디로 ScorecardId 만들어줌
         User user = userRepository.findById(score.getId())
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no user data"));
 
         Study study = studyRepository.findById(Long.parseLong(studyId))
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no study data"));
 
         ScorecardId scorecardId = ScorecardId.builder()
                 .user(user)
@@ -98,7 +98,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         //얘로 채점표를 찾음
         Scorecard scorecard = meetingScoreRepository.findById(scorecardId)
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no score data"));
 
         //엔티티의 점수 변경 메서드 실행해줌
         scorecard.changeScore(score);
@@ -157,6 +157,10 @@ public class MeetingServiceImpl implements MeetingService {
 
         //스터디 아이디로 참가자 리스트 가져옴
         List<Participant> participants = participantRepository.findAllByStudyId(Long.parseLong(studyId));
+
+        for(Participant p : participants){
+            System.out.println("참자가 아이디 >> " + p.getParticipant_id().getUser().getId());
+        }
 
         //스터디 참가자 수 확인
         int totalCnt = participants.size();
