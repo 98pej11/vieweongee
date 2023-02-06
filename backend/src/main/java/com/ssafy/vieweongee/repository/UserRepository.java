@@ -40,3 +40,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query("DELETE u FROM User u WHERE u.email=:email and u.social_login=:social")
 //    void deleteByJwtToken(String refreshToken);
 }
+

@@ -44,11 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .anyRequest().permitAll()
+                .anyRequest().permitAll()
                 .and()					//추가
-                    .oauth2Login().successHandler(successHandler)			// OAuth2기반의 로그인인 경우
-                    .userInfoEndpoint()			// 로그인 성공 후 사용자정보를 가져온다
-                    .userService(oAuth2UserService);	//사용자정보를 처리할 때 사용한다
+                .oauth2Login().successHandler(successHandler)			// OAuth2기반의 로그인인 경우
+                .userInfoEndpoint()			// 로그인 성공 후 사용자정보를 가져온다
+                .userService(oAuth2UserService);	//사용자정보를 처리할 때 사용한다
 //                .and();
 
 //        http.addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
@@ -102,3 +102,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 }
+

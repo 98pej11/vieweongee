@@ -80,11 +80,11 @@ public class UserController {
 
             //비밀번호 확인
             if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
-                return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
+                return ResponseEntity.status(409).body("FAIL:PW");
 
             //닉네임 중복검사
             if(userService.checkDuplicatedNickname(registInfo.getName()))
-                return ResponseEntity.status(409).body("nickname이 중복됩니다.");
+                return ResponseEntity.status(409).body("FAIL:NAME");
 
             //회원 가입
             User user = userService.createUser(registInfo);
@@ -215,9 +215,9 @@ public class UserController {
     public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
         if(userService.checkPassword(userInfo)){
             userService.deleteUser(userInfo);
-            return ResponseEntity.status(200).body("회원탈퇴 성공");
+            return ResponseEntity.status(200).body("SUCCESS");
         }
-        return ResponseEntity.status(409).body("비밀번호가 일치하지 않습니다.");
+        return ResponseEntity.status(409).body("FAIL");
 
     }
 

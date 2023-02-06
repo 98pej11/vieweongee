@@ -8,7 +8,6 @@ import com.ssafy.vieweongee.entity.User;
 public interface UserService {
     User login(User user);
     User createUser(UserCreateRequest registInfo);
-
     Long getUserId(User user);
 
     User getUser(String email, String provider);

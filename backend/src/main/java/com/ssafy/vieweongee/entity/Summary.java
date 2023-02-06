@@ -75,3 +75,4 @@ public class Summary implements Serializable {
         this.loyalty_average = loyalty_average;
     }
 }
+

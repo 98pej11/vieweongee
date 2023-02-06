@@ -11,3 +11,4 @@ public interface EmailService {
     MimeMessage createMessagePw(String to, String password) throws Exception;
     String sendSimpleMessage(String to, String password) throws Exception;
 }
+

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByEmail(String email) {
         User dbUser = userRepository.findByEmailUser(email);
-       return dbUser;
+        return dbUser;
 //        userRepository.findByEmail(email)
 //                .ifPresent(return );
     }
@@ -153,5 +153,4 @@ public class UserServiceImpl implements UserService{
     }
 
 }
-
 
