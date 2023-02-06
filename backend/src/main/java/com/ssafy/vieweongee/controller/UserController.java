@@ -266,12 +266,12 @@ public class UserController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity logout(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
-        String accessToken=userToken.getAccessToken();
-        boolean check=tokenService.checkTokenValid(userToken.getAccessToken());
+    public ResponseEntity logout(@RequestHeader(value = "ACCESS") String token){
+        boolean check=tokenService.checkTokenValid(token);
         if (check==true){
-            Long id=userToken.getId();
-            userService.logout(id, accessToken);
+            Long id = Long.parseLong(tokenService.getUid(token).replaceAll("\"",""));
+            System.out.println(id);
+            userService.logout(id, token);
             return ResponseEntity.status(200).body("SUCCESS");
         }
         return ResponseEntity.status(409).body("FAIL:TOKEN");
