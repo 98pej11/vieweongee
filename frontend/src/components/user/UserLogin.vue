@@ -129,13 +129,9 @@ export default {
 
     async confirm() {
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("ACCESS");
-      // let myemail = sessionStorage.getItem("userinfo_email");
+      // let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
-        // await this.getUserInfo(myemail);
-        await this.getUserInfo(token);
-        // console.log("내 토큰입니다 : "+ token);
-        // console.log("내 정보입니다 : "+ this.userInfo);
+        // await this.getUserInfo(token);
         this.$router.push({ name: "main" });
       }
     },

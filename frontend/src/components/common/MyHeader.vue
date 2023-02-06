@@ -34,7 +34,11 @@
 
         <!-- 로그인 전 -->
         <!-- <a class="el-dropdown-link" style="display: inline-flex" v-if="data === null"> -->
-        <a class="el-dropdown-link" style="display: inline-flex" v-if="!data">
+        <a
+          class="el-dropdown-link"
+          style="display: inline-flex"
+          v-if="!isLogin"
+        >
           <el-dropdown>
             <el-icon :size="30"><UserFilled /></el-icon>
             <template #dropdown>
@@ -126,22 +130,8 @@ export default defineComponent({
   computed: {
     ...mapState(memberStore, ["isLogin", "data"]),
     ...mapGetters(["checkUserInfo"]),
-    // isLogin(){return this.isLogin},
   },
-  // watch:{
-  //   isLogin(){
-  //     console.log(this.isLogin);
-  //     // console.log(val + " 와치");
-  //     // sessionStorage.setItem("isLogin",val);
-  //   }
-  // },
   methods: {
-    // getIs(){
-    //   // 로그인 여부 저장 (헤더를 위해)
-    //   sessionStorage.setItem("isLogin", this.isLogin);
-    //   // 왜 .. 자꾸 undefined...?
-    //   console.log("로그인 여뷰 ===> " + this.isLogin);
-    // },
     ...mapActions(memberStore, ["userLogout"]),
     // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
