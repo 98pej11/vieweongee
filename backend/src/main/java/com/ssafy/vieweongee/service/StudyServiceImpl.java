@@ -78,7 +78,9 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public Study getStudyDetail(Long study_id) {
-        return studyRepository.findById(study_id).orElseThrow(() -> new StudyNotFoundException());
+//        return studyRepository.findById(study_id).orElseThrow(() -> new StudyNotFoundException());
+        Study result = studyRepository.findById(study_id).orElse(null);
+        return result;
     }
 
     @Override
