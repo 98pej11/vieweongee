@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 

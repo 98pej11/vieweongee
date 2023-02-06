@@ -1,4 +1,5 @@
 package com.ssafy.vieweongee.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import lombok.*;

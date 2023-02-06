@@ -2,10 +2,7 @@ package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
 import com.ssafy.vieweongee.dto.mypage.request.MyStudyFeedbackRequest;
-import com.ssafy.vieweongee.dto.mypage.response.AbilitySummaryResponse;
-import com.ssafy.vieweongee.dto.mypage.response.MyStudyListResponse;
-import com.ssafy.vieweongee.dto.mypage.response.ScorecardResponse;
-import com.ssafy.vieweongee.dto.mypage.response.TurnSummaryResponse;
+import com.ssafy.vieweongee.dto.mypage.response.*;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,8 +174,14 @@ public class MypageController {
     public ResponseEntity<?> getAlarms(@RequestBody InquireTypeRequest userInfo){
         List<Alarm> alarms = mypageService.getAlarms(userInfo.getId());
         Map<String, Object> result = new HashMap<>();
+        List<AlarmListResponse> alarmList = new ArrayList<>();
+
         if(alarms != null){
-            result.put("data", alarms);
+            for(Alarm alarm : alarms){
+                AlarmListResponse alarmListRes = new AlarmListResponse(alarm.getContent(), alarm.getDatetime(), alarm.getStudy().getId(), alarm.getUser().getId());
+                alarmList.add(alarmListRes);
+            }
+            result.put("data", alarmList);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
