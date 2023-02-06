@@ -25,12 +25,14 @@
               color="#9DADD8"
               size="large"
               style="margin: 3% auto; width: 100%"
+              @click="emailcheck"
             >
               중복확인
             </el-button>
           </el-col>
         </el-row>
 
+        <!-- 이메일 인증번호 어떻게 받아요? -->
         <el-row :gutter="20" style="margin-top: 3%">
           <el-col :span="18">
             <el-input placeholder="이메일 인증번호" v-model="user.emailcheck" />
@@ -106,9 +108,9 @@ export default {
     return {
       user: {
         email: "",
-        emailcheck: "",
+        // emailcheck: "",
         password: "",
-        passwordcheck: "",
+        passwordCheck: "",
         name: "",
       },
     };
@@ -125,12 +127,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(memberStore, ["userJoin"]),
+    ...mapActions(memberStore, ["userJoin","checkEmail"]),
 
     async join() {
       await this.userJoin(this.user);
       this.$router.push({ name: "main" });
     },
+
+    async emailcheck(){
+      await this.checkEmail(this.user);
+      this.$router.push({ name: "main" });
+    }
   },
 };
 </script>

@@ -67,9 +67,9 @@ export default defineComponent({
     async confirm() {
       // alert("confirm");
       await this.userUpdate(this.data);
-      let token = sessionStorage.getItem("accessToken");
+      let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
-        await this.get(token);
+        await this.getUserInfo(token);
         alert("회원 정보 수정완료");
         this.$router.push({ name: "main" });
       }

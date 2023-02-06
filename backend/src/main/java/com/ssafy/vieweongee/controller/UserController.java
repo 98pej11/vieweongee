@@ -63,7 +63,7 @@ public class UserController {
             login.setName(loginUser.getName());
             login.setEmail(loginUser.getEmail());
 
-//            result.put("data",login); // 원래 주면 안 됨
+//          result.put("data",login); // 원래 주면 안 됨
             result.put("access", accessToken);
             result.put("refresh", refreshToken);
             result.put("massage","SUCCESS");
@@ -267,6 +267,7 @@ public class UserController {
 
     @PostMapping("/signout")
     public ResponseEntity logout(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
+        System.out.println(userToken.getAccessToken());
         String accessToken=userToken.getAccessToken();
         boolean check=tokenService.checkTokenValid(userToken.getAccessToken());
         if (check==true){

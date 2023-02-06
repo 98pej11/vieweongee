@@ -4,6 +4,7 @@ import router from "@/router";
 import {
   signin,
   findById,
+  getCode,
   tokenRegeneration,
   signout,
   update,
@@ -19,6 +20,7 @@ const memberStore = {
     isLogin: false,
     isLoginError: false,
     data: null,
+    code: null,
     isValidToken: false,
   },
   getters: {
@@ -49,6 +51,9 @@ const memberStore = {
       state.data = null;
       state.isValidToken = false;
     },
+    SET_EMAIL_CODE: (state, data) => {
+      state.code = data;
+    }
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -82,6 +87,45 @@ const memberStore = {
         }
       );
     },
+
+    // 이메일 중복검사
+    async checkEmail({ commit }, email){
+      await findById(
+        email,
+        ({ data }) => {
+          if (data.message === "SUCCESS") {
+            console.log("findById 안으로 보 바다와서 state에 올렸따 :  "  + data.userinfo);
+            // console.log("들어왓다. ");
+            // 백엔드에서 받아오는 userInfo가 없음
+            // commit("SET_USER_INFO", this.state.data);
+            // console.log("유저정3. getUserInfo data >> ", data);
+          } else {
+            console.log("유저 정보 없음!!!!");
+          }
+        },
+        async (error) => {
+          console.log(
+            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
+            error.response.status
+          );
+          commit("SET_IS_VALID_TOKEN", false);
+        }
+      );
+    },
+
+    async getEmailCode({commit}, email){
+      await getCode(
+        email,
+        ({data}) => {
+          if(data.message === "SUCCESS"){
+            commit("SET_EMAIL_CODE", data.data);
+          }  else {
+            console.log("유저 정보 없음!!!!");
+          }
+        }
+      );
+    },
+
     async getUserInfo({ commit, dispatch }, token) {
       // async getUserInfo({ commit, dispatch }, myemail) {
       let decodeToken = jwtDecode(token);
@@ -155,7 +199,7 @@ const memberStore = {
     },
     // async userLogout({ commit }, email) {
     async userLogout({ commit }, token) {
-      // 엥 백엔드로직은 toekn 넘겨주는듯
+      // 엥 백엔드로직은 toekn 넘겨주는듯 
       let decodeToken = jwtDecode(token);
 
       //오브젝트 생성
