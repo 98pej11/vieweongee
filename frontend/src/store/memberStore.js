@@ -56,7 +56,7 @@ const memberStore = {
         user,
         ({ data }) => {
           console.log(data);
-          if (data.message === "SUCCESS") {
+          if (data.massage === "SUCCESS") {
             let ACCESS = data["ACCESS"];
             let REFRESH = data["REFRESH"];
             // console.log(ACCESS + " 그리고 " + REFRESH);
@@ -68,7 +68,7 @@ const memberStore = {
             sessionStorage.setItem("ACCESS", ACCESS);
             sessionStorage.setItem("REFRESH", REFRESH);
             // console.log("유저인포받아오기: "+ JSON.stringify(data.userinfo));
-            commit("SET_USER_INFO", data.userinfo);
+            // commit("SET_USER_INFO", data.userinfo);
             // sessionStorage.setItem("userinfo_id", data.userinfo.id); 세션에 저장하는 방식.... = bad..
             // sessionStorage.setItem("userinfo_email", data.userinfo.email);
           } else {
@@ -87,11 +87,10 @@ const memberStore = {
       let decodeToken = jwtDecode(token);
       console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
-        // myemail,
         decodeToken.Id,
         ({ data }) => {
           if (data.message === "SUCCESS") {
-            console.log("이프문 안으로 들어왓다. ");
+            console.log("findById 안으로 들어왓다. ");
             // 백엔드에서 받아오는 userInfo가 없음
             // commit("SET_USER_INFO", this.state.data);
             // console.log("유저정보 바다와서 state에 올렸따 :  "  + data.userinfo);

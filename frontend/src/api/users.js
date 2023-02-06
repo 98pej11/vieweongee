@@ -13,7 +13,7 @@ async function findById(userid, success, fail) {
   // async function findById(myemail, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
-    .get(`/users/email-check?userid=` + userid)
+    .get(`/users/email-check?email=` + userid)
     .then(success)
     .catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
