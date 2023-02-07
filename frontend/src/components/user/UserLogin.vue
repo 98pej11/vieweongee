@@ -129,9 +129,9 @@ export default {
 
     async confirm() {
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("ACCESS");
+      // let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
-        await this.getUserInfo(token);
+        // await this.getUserInfo(token);
         this.$router.push({ name: "main" });
       }
     },

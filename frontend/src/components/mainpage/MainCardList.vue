@@ -20,84 +20,57 @@
 </template>
 <script>
 import { defineComponent } from "vue";
-import http from "@/api/http";
+// import http from "@/api/http";
 import { mapState } from "vuex";
 
 // import MainCardItem from "@/components/mainpage/MainCardItem.vue";
 export default defineComponent({
   name: "MainCardList",
   components: {
-    User,
     // MainCardItem,
   },
   data() {
     return {
-      studytops: [],
+      // studytops: [],
       // cardData: [
-      //   {
-      //     title: "싸피 비전공자 면접스터디 구해요",
-      //     ent: "SSAFY",
-      //     dept: "프론트엔드",
-      //     date: "2023.01.12 10:00",
-      //   },
-      //   {
-      //     title: "신한은행 면접스터디",
-      //     ent: "신한은행",
-      //     dept: "백엔드",
-      //     date: "2023.01.11 19:00",
-      //   },
-      //   {
-      //     title: "유플러스 백엔드 면접",
-      //     ent: "유플러스",
-      //     dept: "백엔드",
-      //     date: "2023.01.10 11:00",
-      //   },
-      // ],
+      studytops: [
+        {
+          title: "싸피 비전공자 면접스터디 구해요",
+          ent: "SSAFY",
+          dept: "프론트엔드",
+          date: "2023.01.12 10:00",
+        },
+        {
+          title: "신한은행 면접스터디",
+          ent: "신한은행",
+          dept: "백엔드",
+          date: "2023.01.11 19:00",
+        },
+        {
+          title: "유플러스 백엔드 면접",
+          ent: "유플러스",
+          dept: "백엔드",
+          date: "2023.01.10 11:00",
+        },
+      ],
     };
   },
   created() {
-    http.get(`/study/top3`).then(({ data }) => {
-      this.studytops = data;
-    });
-    if (this.global_isShow) {
-      this.CLEAN_GLOBAL_ISSHOW();
-      this.viewArticle(this.global_article);
-    }
+    // http.get(`/study/top3`).then(({ data }) => {
+    //   this.studytops = data;
+    // });
+    // if (this.global_isShow) {
+    //   this.CLEAN_GLOBAL_ISSHOW();
+    //   this.viewArticle(this.global_article);
+    // }
   },
   computed: {
     ...mapState(["global_article", "global_isShow"]),
   },
-  methods: {
-    ...mapActions(studyStore, ["getList"]),
-    // setdata() {
-    //   http.get(`/posts/1/comments`).then((data) => {
-    //     console.log(data);
-    //     this.allStudy = data.data;
-    //     console.log(this.allStudy);
-    //   });
-    // },
-
-    async setAllStudys() {
-      await this.getList();
-      this.allStudy = this.studyList;
-    },
-    move(id) {
-      console.log("클릭 : " + this.studyID);
-      this.$router.push({
-        name: "studyview",
-        params: { studyid: id },
-      });
-    },
-    // move(id) {
-    // this.$emit("move", id);
-    // },
-  },
-};
+});
 </script>
 <style scoped>
-.person-div {
-  padding: 5px;
-  width: 65px;
+.card-list {
   display: flex;
   justify-content: center;
   /* padding: 20px; */
@@ -110,8 +83,8 @@ export default defineComponent({
 .card-div {
   font-family: "nexonlv1";
   min-width: 280px;
+  margin: 30px;
   padding: 20px;
-  margin-bottom: 20px;
   border: 4px solid rgba(227, 232, 252, 0.5);
   border-radius: 10px;
   box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);

@@ -21,10 +21,7 @@ async function findById(userid, success, fail) {
 
 async function getCode(email, success, fail) {
   // async function findById(myemail, success, fail) {
-  await api
-    .post(`/users/email-valid`, email)
-    .then(success)
-    .catch(fail);
+  await api.post(`/users/email-valid`, email).then(success).catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
 }
 

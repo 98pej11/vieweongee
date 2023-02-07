@@ -53,7 +53,7 @@ const memberStore = {
     },
     SET_EMAIL_CODE: (state, data) => {
       state.code = data;
-    }
+    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -72,10 +72,6 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", true);
             sessionStorage.setItem("ACCESS", ACCESS);
             sessionStorage.setItem("REFRESH", REFRESH);
-            // console.log("유저인포받아오기: "+ JSON.stringify(data.userinfo));
-            // commit("SET_USER_INFO", data.userinfo);
-            // sessionStorage.setItem("userinfo_id", data.userinfo.id); 세션에 저장하는 방식.... = bad..
-            // sessionStorage.setItem("userinfo_email", data.userinfo.email);
           } else {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
@@ -89,12 +85,14 @@ const memberStore = {
     },
 
     // 이메일 중복검사
-    async checkEmail({ commit }, email){
+    async checkEmail({ commit }, email) {
       await findById(
         email,
         ({ data }) => {
           if (data.message === "SUCCESS") {
-            console.log("findById 안으로 보 바다와서 state에 올렸따 :  "  + data.userinfo);
+            console.log(
+              "findById 안으로 바다와서 state에 올렸따 :  " + data.userinfo
+            );
             // console.log("들어왓다. ");
             // 백엔드에서 받아오는 userInfo가 없음
             // commit("SET_USER_INFO", this.state.data);
@@ -113,17 +111,14 @@ const memberStore = {
       );
     },
 
-    async getEmailCode({commit}, email){
-      await getCode(
-        email,
-        ({data}) => {
-          if(data.message === "SUCCESS"){
-            commit("SET_EMAIL_CODE", data.data);
-          }  else {
-            console.log("유저 정보 없음!!!!");
-          }
+    async getEmailCode({ commit }, email) {
+      await getCode(email, ({ data }) => {
+        if (data.message === "SUCCESS") {
+          commit("SET_EMAIL_CODE", data.data);
+        } else {
+          console.log("유저 정보 없음!!!!");
         }
-      );
+      });
     },
 
     async getUserInfo({ commit, dispatch }, token) {
@@ -199,7 +194,7 @@ const memberStore = {
     },
     // async userLogout({ commit }, email) {
     async userLogout({ commit }, token) {
-      // 엥 백엔드로직은 toekn 넘겨주는듯 
+      // 엥 백엔드로직은 toekn 넘겨주는듯
       let decodeToken = jwtDecode(token);
 
       //오브젝트 생성
