@@ -23,7 +23,7 @@ export default {
     return { type: "studylist" };
   },
   mounted() {
-    // this.showList();
+    this.showList();
   },
   methods: {},
 };

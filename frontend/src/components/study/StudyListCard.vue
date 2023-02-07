@@ -44,7 +44,6 @@ export default {
     onClick() {
       console.log("생성폼");
       this.$router.push({ name: "studycreate" });
-      // this.$emit("showComp", type);
     },
   },
 };

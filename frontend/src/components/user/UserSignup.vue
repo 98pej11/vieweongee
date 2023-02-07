@@ -127,17 +127,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(memberStore, ["userJoin","checkEmail"]),
+    ...mapActions(memberStore, ["userJoin", "checkEmail"]),
 
     async join() {
       await this.userJoin(this.user);
       this.$router.push({ name: "main" });
     },
 
-    async emailcheck(){
+    async emailcheck() {
       await this.checkEmail(this.user);
       this.$router.push({ name: "main" });
-    }
+    },
   },
 };
 </script>
