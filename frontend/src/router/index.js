@@ -5,6 +5,7 @@ import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import FindpwdView from "../views/FindpwdView.vue";
 import MypageView from "../views/MypageView.vue";
+import MeetingRoom from "../views/MeetingRoom.vue";
 
 const routes = [
   {
@@ -59,6 +60,11 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
+  },
+  {
+    path: "/meeting",
+    name: "meeting",
+    component: MeetingRoom,
   },
 ];
 
