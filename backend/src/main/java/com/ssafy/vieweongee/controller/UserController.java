@@ -63,7 +63,7 @@ public class UserController {
             login.setName(loginUser.getName());
             login.setEmail(loginUser.getEmail());
 
-//            result.put("data",login); // 원래 주면 안 됨
+//          result.put("data",login); // 원래 주면 안 됨
             result.put("access", accessToken);
             result.put("refresh", refreshToken);
             result.put("massage","SUCCESS");

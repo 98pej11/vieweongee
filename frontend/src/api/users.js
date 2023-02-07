@@ -19,6 +19,12 @@ async function findById(userid, success, fail) {
   // await api.get(`/users/email-check`).then(success).catch(fail);
 }
 
+async function getCode(email, success, fail) {
+  // async function findById(myemail, success, fail) {
+  await api.post(`/users/email-valid`, email).then(success).catch(fail);
+  // await api.get(`/users/email-check`).then(success).catch(fail);
+}
+
 async function tokenRegeneration(user, success, fail) {
   api.defaults.headers["REFRESH"] = sessionStorage.getItem("REFRESH"); //axios header에 refreshToken 셋팅
   await api.post(`/users/check-refresh`, user).then(success).catch(fail);
@@ -55,6 +61,7 @@ async function deleteUser(userid, success, fail) {
 export {
   signin,
   findById,
+  getCode,
   tokenRegeneration,
   signout,
   update,

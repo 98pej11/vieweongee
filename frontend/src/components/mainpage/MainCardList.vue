@@ -20,7 +20,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
-import http from "@/api/http";
+// import http from "@/api/http";
 import { mapState } from "vuex";
 
 // import MainCardItem from "@/components/mainpage/MainCardItem.vue";
@@ -31,37 +31,38 @@ export default defineComponent({
   },
   data() {
     return {
-      studytops: [],
+      // studytops: [],
       // cardData: [
-      //   {
-      //     title: "싸피 비전공자 면접스터디 구해요",
-      //     ent: "SSAFY",
-      //     dept: "프론트엔드",
-      //     date: "2023.01.12 10:00",
-      //   },
-      //   {
-      //     title: "신한은행 면접스터디",
-      //     ent: "신한은행",
-      //     dept: "백엔드",
-      //     date: "2023.01.11 19:00",
-      //   },
-      //   {
-      //     title: "유플러스 백엔드 면접",
-      //     ent: "유플러스",
-      //     dept: "백엔드",
-      //     date: "2023.01.10 11:00",
-      //   },
-      // ],
+      studytops: [
+        {
+          title: "싸피 비전공자 면접스터디 구해요",
+          ent: "SSAFY",
+          dept: "프론트엔드",
+          date: "2023.01.12 10:00",
+        },
+        {
+          title: "신한은행 면접스터디",
+          ent: "신한은행",
+          dept: "백엔드",
+          date: "2023.01.11 19:00",
+        },
+        {
+          title: "유플러스 백엔드 면접",
+          ent: "유플러스",
+          dept: "백엔드",
+          date: "2023.01.10 11:00",
+        },
+      ],
     };
   },
   created() {
-    http.get(`/study/top3`).then(({ data }) => {
-      this.studytops = data;
-    });
-    if (this.global_isShow) {
-      this.CLEAN_GLOBAL_ISSHOW();
-      this.viewArticle(this.global_article);
-    }
+    // http.get(`/study/top3`).then(({ data }) => {
+    //   this.studytops = data;
+    // });
+    // if (this.global_isShow) {
+    //   this.CLEAN_GLOBAL_ISSHOW();
+    //   this.viewArticle(this.global_article);
+    // }
   },
   computed: {
     ...mapState(["global_article", "global_isShow"]),
