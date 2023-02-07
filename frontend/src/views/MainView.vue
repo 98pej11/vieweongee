@@ -4,7 +4,7 @@
     <h3>면접 걱정을 덜어주는 모의면접 플랫폼</h3>
     <h3 style="margin-top: 5%">최근 스터디</h3>
     <SearchBar></SearchBar>
-    <MainCardList @move="move"></MainCardList>
+    <MainCardList compType="main"></MainCardList>
   </div>
 </template>
 
@@ -20,15 +20,6 @@ export default defineComponent({
     MainCenter,
     MainCardList,
     SearchBar,
-  },
-  data() {
-    return { studyId: 1 };
-  },
-  methods: {
-    // move(id) {
-    //   this.studyId = id;
-    //   console.log(this.studyId);
-    // },
   },
 });
 </script>

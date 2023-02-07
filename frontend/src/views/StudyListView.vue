@@ -22,9 +22,6 @@ export default {
   data() {
     return { type: "studylist" };
   },
-  mounted() {
-    this.showList();
-  },
   methods: {},
 };
 </script>
