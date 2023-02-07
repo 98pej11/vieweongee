@@ -47,20 +47,10 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping
-//    public ResponseEntity<?> createStudy(@RequestHeader(value = "Authorization") String token,
-//                                      @RequestBody StudyCreateRequest studyCreateRequest){
     public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//        Long.parseLong(id.replaceAll("\"",""))
 
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         log.info("user id in create study is {}", user_id);
-//        Long user_id = 1L;
         User user = userService.getUserById(user_id);
         log.info("user in study : {}",user.getName());
 
@@ -83,17 +73,7 @@ public class StudyController {
      * @return study_id
      */
     @PutMapping("/{study_id}")
-//    public ResponseEntity<?> updateStudy(@RequestHeader(value = "Authorization") String token,
-//                                         @PathVariable("study_id") Long study_id,
-//                                         @RequestBody Study study){
-    public ResponseEntity<?> updateStudy(@PathVariable("study_id") Long study_id, @RequestBody Study study) {
-
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
+    public ResponseEntity<?> updateStudy(@PathVariable("study_id") Long study_id, @RequestBody Study study, @RequestHeader("ACCESS") String access) {
 
         Long result = studyService.updateStudy(study_id, study).getId();
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -105,17 +85,7 @@ public class StudyController {
      * @return null
      */
     @DeleteMapping("/{study_id}")
-//    public ResponseEntity<?> deleteStudy(@RequestHeader(value = "Authorization") String token,
-//                                         @PathVariable("study_id") Long id) {
-    public ResponseEntity<?> deleteStudy(@PathVariable("study_id") Long study_id) {
-
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-
+    public ResponseEntity<?> deleteStudy(@PathVariable("study_id") Long study_id,@RequestHeader("ACCESS") String access) {
         studyService.deleteStudy(study_id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -213,19 +183,8 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping("/{study_id}/member")
-//    public ResponseEntity<?> applyStudy(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id) {
-    public ResponseEntity<?> applyStudy(@PathVariable("study_id") Long study_id) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
-
-        Long user_id = 4L;
+    public ResponseEntity<?> applyStudy(@PathVariable("study_id") Long study_id, @RequestHeader("ACCESS") String access) {
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
 
@@ -249,20 +208,9 @@ public class StudyController {
      * @return null
      */
     @DeleteMapping("/{study_id}/member")
-//    public ResponseEntity<?> cancelStudy(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id) {
-    public ResponseEntity<?> cancelStudy(@PathVariable("study_id") Long study_id) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
+    public ResponseEntity<?> cancelStudy(@PathVariable("study_id") Long study_id,@RequestHeader("ACCESS") String access) {
 
-//        Long user_id = 3L;
-        Long user_id = 4L;
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
 
@@ -279,21 +227,11 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping("/{study_id}/comment")
-//    public ResponseEntity<?> createComment(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id,
-//                                        @RequestBody CreateCommentRequest createCommentRequest) {
     public ResponseEntity<?> createComment(@PathVariable("study_id") Long study_id,
-                                           @RequestBody CreateCommentRequest createCommentRequest) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
+                                           @RequestBody CreateCommentRequest createCommentRequest,
+                                           @RequestHeader("ACCESS") String access) {
 
-        Long user_id = 1L;
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
         Comment comment = commentService.createComment(user, study, createCommentRequest);
@@ -309,22 +247,12 @@ public class StudyController {
      * @return study_id
      */
     @PutMapping("/{study_id}/comment/{comment_id}")
-//    public ResponseEntity<?> updateComment(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id,
-//                                        @PathVariable("comment_id") Long comment_id,
-//                                        @RequestBody Comment comment) {
     public ResponseEntity<?> updateComment(@PathVariable("study_id") Long study_id,
                                            @PathVariable("comment_id") Long comment_id,
-                                           @RequestBody Comment comment) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
+                                           @RequestBody Comment comment,
+                                           @RequestHeader("ACCESS") String access) {
 
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         commentService.updateComment(comment_id, comment);
 
         return ResponseEntity.status(HttpStatus.OK).body(study_id);
@@ -337,18 +265,9 @@ public class StudyController {
      * @return study_id
      */
     @DeleteMapping("/{study_id}/comment/{comment_id}")
-//    public ResponseEntity<?> deleteComment(@RequestHeader(value = "Authorization") String token,
-//                                         @PathVariable("study_id") Long study_id,
-//                                         @PathVariable("comment_id") Long comment_id) {
     public ResponseEntity<?> deleteComment(@PathVariable("study_id") Long study_id,
-                                           @PathVariable("comment_id") Long comment_id) {
-
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
+                                           @PathVariable("comment_id") Long comment_id,
+                                           @RequestHeader("ACCESS") String access) {
 
         commentService.deleteComment(comment_id);
         return ResponseEntity.status(HttpStatus.OK).body(study_id);
@@ -362,23 +281,11 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping("/{study_id}/comment/{comment_id}/reply")
-//    public ResponseEntity<?> createReply(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id,
-//                                        @PathVariable("comment_id") Long comment_id,
-//                                        @RequestBody CreateReplyRequest createReplyRequest) {
     public ResponseEntity<?> createReply(@PathVariable("study_id") Long study_id,
                                          @PathVariable("comment_id") Long comment_id,
-                                         @RequestBody CreateReplyRequest createReplyRequest) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
-
-        Long user_id = 2L;
+                                         @RequestBody CreateReplyRequest createReplyRequest,
+                                         @RequestHeader("ACCESS") String access) {
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         User user = userService.getUserById(user_id);
         Comment comment = commentService.getCommentById(comment_id);
         commentService.createReply(user, comment, createReplyRequest);
@@ -395,23 +302,11 @@ public class StudyController {
      * @return study_id
      */
     @PutMapping("/{study_id}/comment/{comment_id}/{reply_id}")
-//    public ResponseEntity<?> updateReply(@RequestHeader(value = "Authorization") String token,
-//                                        @PathVariable("study_id") Long study_id,
-//                                        @PathVariable("comment_id") Long comment_id,
-//                                        @PathVariable("reply_id"),
-//                                        @RequestBody Reply reply) {
     public ResponseEntity<?> updateReply(@PathVariable("study_id") Long study_id,
                                          @PathVariable("comment_id") Long comment_id,
                                          @PathVariable("reply_id") Long reply_id,
-                                         @RequestBody Reply reply) {
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
-//
-//        Long user_id = jwtTokenProvider.getUserSeq(token);
+                                         @RequestBody Reply reply,
+                                         @RequestHeader("ACCESS") String access) {
 
         commentService.updateReply(reply_id, reply);
 
@@ -432,7 +327,8 @@ public class StudyController {
 //                                         @PathVariable("reply_id") Long reply_id) {
     public ResponseEntity<?> deleteComment(@PathVariable("study_id") Long study_id,
                                            @PathVariable("comment_id") Long comment_id,
-                                           @PathVariable("reply_id") Long reply_id) {
+                                           @PathVariable("reply_id") Long reply_id,
+                                           @RequestHeader("ACCESS") String access) {
 
 //        // jwt 토큰 확인
 //        if (!jwtTokenProvider.validateToken(token)) {
@@ -440,7 +336,7 @@ public class StudyController {
 //                    .status(HttpStatus.BAD_REQUEST)
 //                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
 //        }
-
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         commentService.deleteReply(reply_id);
         return ResponseEntity.status(HttpStatus.OK).body(study_id);
     }

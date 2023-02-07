@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.*;
@@ -71,7 +72,26 @@ public class MeetingServiceImpl implements MeetingService {
             );
             result.add(temp);
         }
+        return result;
+    }
 
+    /**
+     * 스터디의 참가자들의 자기소개서 불러옴
+     *
+     * @param studyId
+     */
+    @Override
+    public List<MeetingResumeRequest> getAllResume(Long studyId) {
+        List<Participant> resumes = participantRepository.findAllByStudyId(studyId);
+        List<MeetingResumeRequest> result=new ArrayList<>();
+
+        for (Participant participant : resumes){
+            MeetingResumeRequest temp=new MeetingResumeRequest(
+                    participant.getParticipant_id().getUser().getId()
+                    , participant.getSave()
+            );
+            result.add(temp);
+        }
         return result;
     }
 
@@ -234,6 +254,7 @@ public class MeetingServiceImpl implements MeetingService {
             }
             return result.toString();
         }
+
         //5 | 1:4 | 2:3 3:2
         if (totalCnt == 5) {
             if (intervieweeCnt == 2) {
@@ -277,4 +298,5 @@ public class MeetingServiceImpl implements MeetingService {
 
         return null;
     }
+
 }

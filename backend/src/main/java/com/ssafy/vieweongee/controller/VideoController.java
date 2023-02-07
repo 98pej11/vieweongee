@@ -1,7 +1,11 @@
 package com.ssafy.vieweongee.controller;
 
+import com.ssafy.vieweongee.entity.Participant;
+import com.ssafy.vieweongee.repository.ParticipantRepository;
 import com.ssafy.vieweongee.service.MeetingService;
+import com.ssafy.vieweongee.service.TokenService;
 import io.openvidu.java.client.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,6 +18,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Slf4j
 @RequestMapping("/sessions")
 public class VideoController {
     @Autowired
@@ -26,6 +31,14 @@ public class VideoController {
     private String OPENVIDU_SECRET;
 
     private OpenVidu openvidu;
+
+    private final TokenService tokenService;
+    @Autowired
+    private ParticipantRepository participantRepository;
+
+    public VideoController(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @PostConstruct
     public void init() {
@@ -131,7 +144,8 @@ public class VideoController {
      */
     @PostMapping("/{sessionId}/connection")
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
-                                                   @RequestBody(required = false) Map<String, Object> params)
+                                                   @RequestBody(required = false) Map<String, Object> params,
+                                                   @RequestHeader("ACCESS") String access)
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId); //활성화된 해당 세션 검색
 
@@ -139,14 +153,24 @@ public class VideoController {
         //필요 정보 : 스터디 아이디(sessionId), 참가자 아이디
         //로그인한 사용자의 정보는 : 이메일, accesstoken
         //스터디 참가자일때 세션 참가 가능, 참가자기 아니라면 참가 불가능
+        log.info("now 액세스 토큰 is {}", tokenService.getUid(access));
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        List<Participant> participants=participantRepository.findAllByStudyId(Long.valueOf(sessionId));
+
+        for (Participant participant : participants){
+            if (participant.getParticipant_id().getUser().getId().equals(user_id)){
+                ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+                Connection connection = session.createConnection(properties);
+                return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+            }
+        }
 
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); //세션이 없는 경우
         }
 
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-        Connection connection = session.createConnection(properties);
-        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     /**
