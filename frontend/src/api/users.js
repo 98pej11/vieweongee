@@ -9,11 +9,11 @@ async function signin(user, success, fail) {
     .catch(fail);
 }
 
-async function findById(userid, success, fail) {
+async function findByEmail(email, success, fail) {
   // async function findById(myemail, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
-    .get(`/users/email-check?email=` + userid)
+    .get(`/users/email-check/` + email)
     .then(success)
     .catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
@@ -21,7 +21,7 @@ async function findById(userid, success, fail) {
 
 async function getCode(email, success, fail) {
   // async function findById(myemail, success, fail) {
-  await api.post(`/users/email-valid`, email).then(success).catch(fail);
+  await api.get(`/users/email-valid/`+ email).then(success).catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
 }
 
@@ -44,6 +44,7 @@ async function update(user, success, fail) {
 }
 
 async function signup(user, success, fail) {
+  console.log("users : " + JSON.stringify(user))
   await api
     .post(`/users/signup`, JSON.stringify(user))
     .then(success)
@@ -60,7 +61,7 @@ async function deleteUser(userid, success, fail) {
 
 export {
   signin,
-  findById,
+  findByEmail,
   getCode,
   tokenRegeneration,
   signout,
