@@ -1,7 +1,5 @@
 package com.ssafy.vieweongee.controller;
 
-import com.nimbusds.oauth2.sdk.Message;
-import com.ssafy.vieweongee.dto.study.CreateStudyRequest;
 import com.ssafy.vieweongee.dto.user.request.*;
 import com.ssafy.vieweongee.dto.user.response.UserInfoResponse;
 import com.ssafy.vieweongee.dto.user.response.UserLoginResponse;
@@ -12,16 +10,12 @@ import com.ssafy.vieweongee.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -110,7 +104,7 @@ public class UserController {
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
 
-        if(userService.checkDuplicatedEmail(email)){
+        if(!userService.checkDuplicatedEmail(email)){
             result.put("message","SUCCESS");
             log.info("here");
             return ResponseEntity.status(200).body(result);
@@ -120,10 +114,10 @@ public class UserController {
     }
 
     //  인증 이메일 발송
-    @PostMapping("/email-valid")
-    public ResponseEntity<?> sendEmail(@RequestBody EmailInfo emailInfo) {
+    @GetMapping("/email-valid/{email}")
+    public ResponseEntity<?> sendEmail(@PathVariable("email") String email) {
         try {
-            String code = emailService.sendSimpleMessage(emailInfo.getEmail(), "code");
+            String code = emailService.sendSimpleMessage(email, "code");
             Map<String, String> result = new HashMap<>();
             result.put("data", code);
             result.put("message","SUCCESS");
