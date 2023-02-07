@@ -51,9 +51,9 @@ export default {
 
     // 댓글 작성
 
-    async CommentSubmit(id, content) {
-      await this.createCommentConfirm(id, content);
-    },
+    // async CommentSubmit(id, content) {
+    //   await this.createCommentConfirm(id, content);
+    // },
   },
 };
 </script>

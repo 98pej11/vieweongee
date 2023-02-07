@@ -22,7 +22,7 @@
       </el-col>
     </el-row>
     <div>
-      <MainCardList></MainCardList>
+      <MainCardList compType="study"></MainCardList>
     </div>
   </div>
 </template>
@@ -34,15 +34,10 @@ import MainCardList from "@/components/mainpage/MainCardList.vue";
 export default {
   name: "StudyListCard",
   components: { SearchBar, CirclePlus, MainCardList, Calendar, Picture },
-  data() {
-    return {
-      // type: "create",
-      studyId: 0,
-    };
-  },
+
   methods: {
     onClick() {
-      console.log("생성폼");
+      console.log("생성폼으로 이동");
       this.$router.push({ name: "studycreate" });
     },
   },

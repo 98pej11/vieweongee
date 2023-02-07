@@ -1,7 +1,9 @@
 // import router from "@/router";
 
 import {
+  getSearch,
   createStudy,
+  getTopStudy,
   getAllStudy,
   getStudy,
   modifyStudy,
@@ -10,7 +12,7 @@ import {
   modifyComment,
   deleteComment,
   getAllComment,
-} from "@/api/study.js";
+} from "@/api/study";
 
 const studyStore = {
   namespaced: true,
@@ -20,7 +22,7 @@ const studyStore = {
     studyList: [
       {
         id: 0,
-        title: "",
+        study_title: "",
         company: "",
         job: "",
         personnel: 1,
@@ -61,14 +63,21 @@ const studyStore = {
   },
   getters: {},
   mutations: {
+    CLEAR_LIST: (state) => {
+      state.studyList = [{}];
+    },
     SET_IS_SUCCESS: (state, isCreated) => {
       state.isCreated = isCreated;
     },
-    SET_STUDY_ID: (state, studyId) => {
-      state.studyId = studyId;
+    SET_STUDY_ID: (state, studyID) => {
+      state.studyID = studyID;
     },
-    SET_ALL_STUDY: (state, list) => {
+    SET_STUDY_LIST: (state, list) => {
       list.forEach((el) => {
+        // DateTime 포맷
+        var dateFormat = el.study_datetime.substr(0, 16);
+        dateFormat = dateFormat.replace("T", " ");
+
         state.studyList.push({
           id: el.id,
           title: el.title,
@@ -78,7 +87,7 @@ const studyStore = {
           type: el.type,
           user_id: el.user_id,
           user_nickname: el.user_nickname,
-          study_datetime: el.study_datetime,
+          study_datetime: dateFormat,
           regist_datetime: el.regist_datetime,
           running_time: el.running_time,
           content: el.content,
@@ -87,6 +96,13 @@ const studyStore = {
     },
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
+      var dateFormat1 = studyInfo.study_datetime.substr(0, 16);
+      var dateFormat2 = studyInfo.regist_datetime.substr(0, 16);
+      dateFormat1 = dateFormat1.replace("T", " ");
+      dateFormat2 = dateFormat2.replace("T", " ");
+
+      state.studyInfo.study_datetime = dateFormat1;
+      state.studyInfo.regist_datetime = dateFormat2;
     },
     SET_ALL_COMMENT: (state, list) => {
       list.forEach((el) => {
@@ -101,6 +117,47 @@ const studyStore = {
     },
   },
   actions: {
+    // 스터디 검색
+    async searchConfirm({ commit }, words) {
+      await getSearch(words, ({ data }) => {
+        console.log("검색합니다" + words);
+        console.log(data);
+        console.log(data.msg);
+        commit("SET_STUDY_LIST", data);
+      });
+    },
+    // 스터디 조회 (메인페이지)
+    async getTopList({ commit }) {
+      await getTopStudy(
+        ({ data }) => {
+          console.log("메인데이타");
+          console.log(data);
+          commit("SET_STUDY_LIST", data);
+        }
+        // async (error) => {
+        //   if (error.response.status === 401) {
+        //     console.log("401에러");
+        //     commit("SET_IS_SUCCESS", false);
+        //   }
+        // }
+      );
+    },
+    // 스터디 조회 (스터디게시판)
+    async getAllList({ commit }) {
+      await getAllStudy(
+        ({ data }) => {
+          console.log("스터디데이타");
+          console.log(data);
+          commit("SET_STUDY_LIST", data);
+        }
+        // async (error) => {
+        //   if (error.response.status === 401) {
+        //     console.log("401에러");
+        //     commit("SET_IS_SUCCESS", false);
+        //   }
+        // }
+      );
+    },
     // 스터디 생성
     async createConfirm({ commit }, studyInfo) {
       await createStudy(
@@ -120,30 +177,16 @@ const studyStore = {
         }
       );
     },
-    // 스터디 전체 목록
-    async getList({ commit }) {
-      await getAllStudy(
-        (data) => {
-          console.log(data);
-          commit("SET_ALL_STUDY", data);
-        },
-        async (error) => {
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        },
-        async (error) => {
-          console.log(error);
-        }
-      );
-    },
+
     // 스터디 상세보기
     async getInfo({ commit }, study_ID) {
+      console.log("몇번이냐" + study_ID + " 타입" + typeof study_ID);
+      // let id = parseInt(study_ID);
       await getStudy(
+        // id,
         study_ID,
-        (data) => {
-          console.log(data);
+        ({ data }) => {
+          // console.log("상세보기:" + data);
           commit("SET_STUDY_INFO", data);
         },
         async (error) => {
@@ -245,7 +288,7 @@ const studyStore = {
       );
     },
     // 전체 댓글 조회
-    async getcommentList({ commit }, study_ID) {
+    async getCommentList({ commit }, study_ID) {
       await getAllComment(
         study_ID,
         (data) => {

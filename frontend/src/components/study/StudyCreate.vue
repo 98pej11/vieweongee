@@ -211,7 +211,7 @@ const multipleSelection = ref([]);
 export default {
   name: "StudyCreate",
   computed: {
-    ...mapState(studyStore, ["isError", "studyID"]),
+    ...mapState(studyStore, ["isError", "studyId"]),
   },
 
   methods: {
