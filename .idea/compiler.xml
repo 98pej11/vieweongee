@@ -11,6 +11,8 @@
         <module name="Vieweongee.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="com.ssafy.Vieweongee.main" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
