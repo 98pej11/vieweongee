@@ -2,11 +2,7 @@
   <div>
     <el-input style="max-width: 700px; height: 50px">
       <template #append>
-        <el-button
-          :icon="Search"
-          @click="goToSearchResult"
-          id="search-btn"
-        ></el-button>
+        <el-button :icon="Search" @click="goToSearchResult"></el-button>
       </template>
     </el-input>
   </div>

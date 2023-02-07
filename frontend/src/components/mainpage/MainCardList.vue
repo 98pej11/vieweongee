@@ -27,7 +27,6 @@ import { mapState } from "vuex";
 export default defineComponent({
   name: "MainCardList",
   components: {
-    User,
     // MainCardItem,
   },
   data() {
@@ -67,37 +66,10 @@ export default defineComponent({
   computed: {
     ...mapState(["global_article", "global_isShow"]),
   },
-  methods: {
-    ...mapActions(studyStore, ["getList"]),
-    // setdata() {
-    //   http.get(`/posts/1/comments`).then((data) => {
-    //     console.log(data);
-    //     this.allStudy = data.data;
-    //     console.log(this.allStudy);
-    //   });
-    // },
-
-    async setAllStudys() {
-      await this.getList();
-      this.allStudy = this.studyList;
-    },
-    move(id) {
-      console.log("클릭 : " + this.studyID);
-      this.$router.push({
-        name: "studyview",
-        params: { studyid: id },
-      });
-    },
-    // move(id) {
-    // this.$emit("move", id);
-    // },
-  },
-};
+});
 </script>
 <style scoped>
-.person-div {
-  padding: 5px;
-  width: 65px;
+.card-list {
   display: flex;
   justify-content: center;
   /* padding: 20px; */
@@ -110,8 +82,8 @@ export default defineComponent({
 .card-div {
   font-family: "nexonlv1";
   min-width: 280px;
+  margin: 30px;
   padding: 20px;
-  margin-bottom: 20px;
   border: 4px solid rgba(227, 232, 252, 0.5);
   border-radius: 10px;
   box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);

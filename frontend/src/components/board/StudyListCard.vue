@@ -16,9 +16,11 @@
         <SearchBar />
       </el-col>
       <el-col :span="6">
-        <el-button @click="onClick" size="large" class="plus-btn">
-          <el-icon><CirclePlus /></el-icon>
-        </el-button>
+        <router-link to="/studycreate">
+          <el-button size="large" class="plus-btn">
+            <el-icon><CirclePlus /></el-icon>
+          </el-button>
+        </router-link>
       </el-col>
     </el-row>
     <div>
@@ -28,25 +30,13 @@
 </template>
 <script>
 import SearchBar from "@/components/common/SearchBar.vue";
-import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
+import { CirclePlus } from "@element-plus/icons-vue";
+import { Calendar } from "@element-plus/icons-vue";
+import { Picture } from "@element-plus/icons-vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
 
 export default {
-  name: "StudyListCard",
   components: { SearchBar, CirclePlus, MainCardList, Calendar, Picture },
-  data() {
-    return {
-      // type: "create",
-      studyId: 0,
-    };
-  },
-  methods: {
-    onClick() {
-      console.log("생성폼");
-      this.$router.push({ name: "studycreate" });
-      // this.$emit("showComp", type);
-    },
-  },
 };
 </script>
 <style scoped>
