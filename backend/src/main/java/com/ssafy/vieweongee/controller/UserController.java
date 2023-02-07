@@ -32,7 +32,7 @@ public class UserController {
     EmailService emailService;
 
     //로그인
-    @ResponseBody
+//    @ResponseBody
     @PostMapping("/signin")
     public ResponseEntity login(@RequestBody User user) {
 //        log.info("나 로그인하러 왔옹 : {}", user.getEmail());
@@ -71,20 +71,26 @@ public class UserController {
 
     //회원 가입
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody UserCreateRequest registInfo) {
+    public ResponseEntity<?> register(@RequestBody UserCreateRequest user) {
         try {
             //email 중복 검사, email 인증번호 보내기
 
             //비밀번호 확인
-            if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
-                return ResponseEntity.status(409).body("FAIL:PW");
+//            if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
+//                return ResponseEntity.status(409).body("FAIL:PW");
 
             //닉네임 중복검사
-            if(userService.checkDuplicatedNickname(registInfo.getName()))
-                return ResponseEntity.status(409).body("FAIL:NAME");
+//            if(userService.checkDuplicatedNickname(registInfo.getName()))
+//                return ResponseEntity.status(409).body("FAIL:NAME");
+
+            System.out.println(user.getEmail());
+            System.out.println(user.getName());
 
             //회원 가입
-            User user = userService.createUser(registInfo);
+            userService.createUser(user);
+
+            System.out.println(user.getEmail());
+            System.out.println(user.getName());
             Map<String, Object> result = new HashMap<>();
             result.put("data", null);
             result.put("message","SUCCESS");
@@ -130,6 +136,22 @@ public class UserController {
             return ResponseEntity.status(500).body(result);
         }
     }
+//    @PostMapping("/email-valid")
+//    public ResponseEntity<?> sendEmail(@RequestBody EmailInfo emailInfo) {
+//                try {
+//                    String code = emailService.sendSimpleMessage(emailInfo.getEmail(), "code");
+//                    Map<String, String> result = new HashMap<>();
+//                    result.put("data", code);
+//                    result.put("message","SUCCESS");
+//                    return ResponseEntity.status(200).body(result);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Map<String, String> result = new HashMap<>();
+//            result.put("data", null);
+//            result.put("message", "FAIL");
+//            return ResponseEntity.status(500).body(result);
+//        }
+//    }
 
 
     //비밀번호 찾기 -> 임시 비밀번호 발급

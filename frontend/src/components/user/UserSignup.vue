@@ -35,7 +35,7 @@
         <!-- 이메일 인증번호 어떻게 받아요? -->
         <el-row :gutter="20" style="margin-top: 3%">
           <el-col :span="18">
-            <el-input placeholder="이메일 인증번호" v-model="user.emailcheck" />
+            <el-input placeholder="이메일 인증번호"  v-model="emailCheck"/>
           </el-col>
           <el-col :span="6">
             <el-button
@@ -43,6 +43,7 @@
               class="mt-10 mb-10"
               size="large"
               style="margin: 3% auto; width: 100%"
+              @click="codeCheck"
             >
               확인
             </el-button>
@@ -62,7 +63,7 @@
           <el-col style="margin-top: 3%">
             <el-input
               placeholder="비밀번호 재확인"
-              v-model="user.passwordcheck"
+              v-model="user.passwordCheck"
             />
           </el-col>
         </el-row>
@@ -99,16 +100,17 @@
 
 <script>
 import { Message, Lock, User } from "@element-plus/icons-vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const memberStore = "memberStore";
 
 export default {
   data() {
     return {
+      emailCheck: "",
+
       user: {
         email: "",
-        // emailcheck: "",
         password: "",
         passwordCheck: "",
         name: "",
@@ -123,21 +125,30 @@ export default {
     // ValidationProvider,
   },
   computed: {
-    // ...mapState(memberStore, ["isLogin", "isLoginError", ""]),
+    ...mapState(memberStore, ["isLogin", "isLoginError", "code"]),
   },
 
   methods: {
     ...mapActions(memberStore, ["userJoin", "checkEmail"]),
 
     async join() {
+      console.log("vuecomponent : " + JSON.stringify(this.user))
       await this.userJoin(this.user);
       this.$router.push({ name: "main" });
     },
 
     async emailcheck() {
       await this.checkEmail(this.user);
-      this.$router.push({ name: "main" });
     },
+
+    codeCheck(){
+      if(this.code === this.emailCheck){
+        console.log("인증코드 확인");
+      }
+      else{
+        console.log("인증 재확인 요망");
+      }
+    }
   },
 };
 </script>

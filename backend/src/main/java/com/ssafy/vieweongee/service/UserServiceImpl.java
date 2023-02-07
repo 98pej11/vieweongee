@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(UserCreateRequest registInfo) {
         registInfo.setPassword(passwordEncoder.encode(registInfo.getPassword()));
+        log.info("------------ 유저 저장-----------{}",registInfo.getEmail());
         User user = new User(registInfo);
         return userRepository.save(user);
     }

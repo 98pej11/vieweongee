@@ -3,7 +3,7 @@ import router from "@/router";
 
 import {
   signin,
-  findById,
+  findByEmail,
   getCode,
   tokenRegeneration,
   signout,
@@ -22,8 +22,12 @@ const memberStore = {
     data: null,
     code: null,
     isValidToken: false,
+
   },
   getters: {
+    checkIsLogin: function (state) {
+      return state.isLogin;
+    }, 
     checkUserInfo: function (state) {
       return state.data;
     },
@@ -83,22 +87,23 @@ const memberStore = {
         }
       );
     },
-
+    
     // 이메일 중복검사
-    async checkEmail({ commit }, email) {
-      await findById(
-        email,
+    async checkEmail({ commit, dispatch}, user) {
+      console.log(user.email);
+      await findByEmail(
+        user.email,
         ({ data }) => {
           if (data.message === "SUCCESS") {
             console.log(
-              "findById 안으로 바다와서 state에 올렸따 :  " + data.userinfo
-            );
+              "회원가입 가능함! :  " );
             // console.log("들어왓다. ");
             // 백엔드에서 받아오는 userInfo가 없음
             // commit("SET_USER_INFO", this.state.data);
             // console.log("유저정3. getUserInfo data >> ", data);
+            dispatch("getEmailCode", user.email);
           } else {
-            console.log("유저 정보 없음!!!!");
+            console.log("이메일 중복!");
           }
         },
         async (error) => {
@@ -110,11 +115,14 @@ const memberStore = {
         }
       );
     },
-
+    
     async getEmailCode({ commit }, email) {
+      console.log("실행되니..?!!!!");
       await getCode(email, ({ data }) => {
         if (data.message === "SUCCESS") {
+          console.log("코드 보내따!!!!");
           commit("SET_EMAIL_CODE", data.data);
+          // sessionStorage.setItem("code", code);
         } else {
           console.log("유저 정보 없음!!!!");
         }
@@ -125,7 +133,7 @@ const memberStore = {
       // async getUserInfo({ commit, dispatch }, myemail) {
       let decodeToken = jwtDecode(token);
       console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-      await findById(
+      await findByEmail(
         decodeToken.Id,
         ({ data }) => {
           if (data.message === "SUCCESS") {
@@ -233,15 +241,17 @@ const memberStore = {
         };
     },
 
-    async userJoin(user) {
+    async userJoin({ commit },user) {
+      console.log("memberstor : " + JSON.stringify(user))
       await signup(user, ({ data }) => {
         console.log(data);
-
+        commit("SET_IS_LOGIN",this.isLogin);
         console.log("회원가입 성공");
-      }),
+      },
         (error) => {
           console.log(error);
-        };
+        }
+      )
     },
 
     async userDelete({ commit }, userid) {
