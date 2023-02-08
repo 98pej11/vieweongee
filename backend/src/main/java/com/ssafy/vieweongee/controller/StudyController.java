@@ -9,6 +9,7 @@ import com.ssafy.vieweongee.entity.Comment;
 import com.ssafy.vieweongee.entity.Reply;
 import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.repository.CommentRepository;
 import com.ssafy.vieweongee.repository.ParticipantRepository;
 import com.ssafy.vieweongee.service.*;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,6 +31,7 @@ import java.util.List;
 @RequestMapping("/study")
 //@RequestMapping("/study")
 public class StudyController {
+    private final CommentRepository commentRepository;
     private final ParticipantRepository participantRepository;
     private final StudyService studyService;
     //    private final JwtTokenProvider jwtTokenProvider;
@@ -47,12 +50,12 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping
-        public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
-
-            Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
-            log.info("user id in create study is {}", user_id);
-            User user = userService.getUserById(user_id);
-            log.info("user in study : {}",user.getName());
+    public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
+        Map<String, Object> result = new HashMap<>();
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        log.info("user id in create study is {}", user_id);
+        User user = userService.getUserById(user_id);
+        log.info("user in study : {}",user.getName());
 
             // 스터디 생성
             Study study = studyService.createStudy(user, createStudyRequest);
@@ -60,10 +63,11 @@ public class StudyController {
             // 참가 명단에 추가
             studyService.registParticipant(user, study);
 
-            // 참가 이력 생성
-            studyService.createProgress(user, study);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(study.getId());
+        // 참가 이력 생성
+        studyService.createProgress(user, study);
+        result.put("data",study.getId());
+        result.put("message","SUCCESS");
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     /**
@@ -74,8 +78,12 @@ public class StudyController {
      */
     @PutMapping("/{study_id}")
     public ResponseEntity<?> updateStudy(@PathVariable("study_id") Long study_id, @RequestBody Study study, @RequestHeader("ACCESS") String access) {
+        Map<String, Object> result = new HashMap<>();
+        Long studyId = studyService.updateStudy(study_id, study).getId();
 
-        Long result = studyService.updateStudy(study_id, study).getId();
+        result.put("data",studyId);
+        result.put("message","SUCCESS");
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -86,6 +94,9 @@ public class StudyController {
      */
     @DeleteMapping("/{study_id}")
     public ResponseEntity<?> deleteStudy(@PathVariable("study_id") Long study_id,@RequestHeader("ACCESS") String access) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("data",null);
+        result.put("message", "SUCCESS");
         studyService.deleteStudy(study_id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -97,16 +108,20 @@ public class StudyController {
     @GetMapping
     public ResponseEntity<?> getAllStudy() {
         List<Study> studyList = studyService.getAllStudy();
+        Map<String, Object> result = new HashMap<>();
         if (studyList.isEmpty()) {
             String msg = "등록된 스터디가 없습니다.";
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(msg);
+            result.put("data",null);
+            result.put("message",msg);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
         }
 
-        List<StudyResponse> result = new ArrayList<>();
+        List<StudyResponse> results = new ArrayList<>();
         for(int i = 0; i < studyList.size(); i++) {
-            result.add(new StudyResponse(studyList.get(i)));
+            results.add(new StudyResponse(studyList.get(i)));
         }
-
+        result.put("data",results);
+        result.put("message","SECCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -116,17 +131,21 @@ public class StudyController {
      */
     @GetMapping("/top3")
     public ResponseEntity<?> getTop3Study() {
+        Map<String, Object> result = new HashMap<>();
         List<Study> studyList = studyService.getTop3Study();
         if (studyList.isEmpty()) {
+            result.put("data",null);
             String msg = "등록된 스터디가 없습니다.";
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(msg);
+            result.put("message",msg);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
         }
 
-        List<StudyResponse> result = new ArrayList<>();
+        List<StudyResponse> results = new ArrayList<>();
         for(int i = 0; i < studyList.size(); i++) {
-            result.add(new StudyResponse(studyList.get(i)));
+            results.add(new StudyResponse(studyList.get(i)));
         }
-
+        result.put("data",results);
+        result.put("message","SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -139,18 +158,21 @@ public class StudyController {
     public ResponseEntity<?> searchStudy(@PathVariable String words) {
         // 콤마와 띄어쓰기로 구분하여 List로 바꾸기
         String search = words.replace(",", "|").replace(" ", "|");
-
+        Map<String, Object> result = new HashMap<>();
         List<Study> studyList = studyService.searchStudy(search);
         if (studyList.isEmpty()) {
+            result.put("data",null);
             String msg = "검색하신 스터디가 없습니다.";
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(msg);
+            result.put("message",msg);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
         }
 
-        List<StudyResponse> result = new ArrayList<>();
+        List<StudyResponse> results = new ArrayList<>();
         for(int i = 0; i < studyList.size(); i++) {
-            result.add(new StudyResponse(studyList.get(i)));
+            results.add(new StudyResponse(studyList.get(i)));
         }
-
+        result.put("data",results);
+        result.put("message","SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -159,10 +181,13 @@ public class StudyController {
      * @param study_id
      * @return studyResponse
      */
-    @GetMapping("/{study_id}")
-    public ResponseEntity<StudyResponse> getStudyDetail(@PathVariable("study_id") Long study_id) {
+    @GetMapping("/detail/{study_id}")
+    public ResponseEntity<?> getStudyDetail(@PathVariable("study_id") Long study_id) {
         Study study = studyService.getStudyDetail(study_id);
-        StudyResponse result = new StudyResponse(study);
+        Map<String, Object> result = new HashMap<>();
+        StudyResponse results = new StudyResponse(study);
+        result.put("data",results);
+        result.put("message", "SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -173,7 +198,10 @@ public class StudyController {
      */
     @GetMapping("/{study_id}/current-people")
     public ResponseEntity<?> getParticipantCnt(@PathVariable("study_id") Long study_id) {
-        int result = studyService.getParticipantCnt(study_id).size();
+        int results = studyService.getParticipantCnt(study_id).size();
+        Map<String, Object> result = new HashMap<>();
+        result.put("data",results);
+        result.put("message","SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -188,9 +216,12 @@ public class StudyController {
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
 
+        Map<String, Object> result = new HashMap<>();
         // 마감 여부 확인
         if (studyService.getParticipantCnt(study_id).size() >= study.getPersonnel()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("마감된 스터디입니다.");
+            result.put("data",null);
+            result.put("message", "FAIL-SOLDOUT");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
         }
 
         // 참가 명단에 추가
@@ -199,6 +230,8 @@ public class StudyController {
         // 참가 이력 생성
         studyService.createProgress(user, study);
 
+        result.put("data",null);
+        result.put("message", "SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -209,14 +242,15 @@ public class StudyController {
      */
     @DeleteMapping("/{study_id}/member")
     public ResponseEntity<?> cancelStudy(@PathVariable("study_id") Long study_id,@RequestHeader("ACCESS") String access) {
-
+        Map<String, Object> result = new HashMap<>();
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
 
         // 참가 명단, 참가 이력에서 삭제
         studyService.cancelStudy(user, study);
-
+        result.put("data",null);
+        result.put("message","SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -235,8 +269,10 @@ public class StudyController {
         User user = userService.getUserById(user_id);
         Study study = studyService.getStudyDetail(study_id);
         Comment comment = commentService.createComment(user, study, createCommentRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(comment.getStudy().getId());
+        Map<String, Object> result = new HashMap<>();
+        result.put("data",comment.getStudy().getId());
+        result.put("message","SUCCESS");
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     /**
@@ -254,8 +290,11 @@ public class StudyController {
 
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         commentService.updateComment(comment_id, comment);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data",study_id);
+        result.put("message","SUCCESS");
 
-        return ResponseEntity.status(HttpStatus.OK).body(study_id);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -270,7 +309,10 @@ public class StudyController {
                                            @RequestHeader("ACCESS") String access) {
 
         commentService.deleteComment(comment_id);
-        return ResponseEntity.status(HttpStatus.OK).body(study_id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data",study_id);
+        result.put("message","SUCCESS");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -290,7 +332,10 @@ public class StudyController {
         Comment comment = commentService.getCommentById(comment_id);
         commentService.createReply(user, comment, createReplyRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(study_id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", study_id);
+        result.put("message", "SUCCESS");
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     /**
@@ -309,8 +354,10 @@ public class StudyController {
                                          @RequestHeader("ACCESS") String access) {
 
         commentService.updateReply(reply_id, reply);
-
-        return ResponseEntity.status(HttpStatus.OK).body(study_id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", study_id);
+        result.put("message", "SUCCESS");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -321,24 +368,18 @@ public class StudyController {
      * @return study_id
      */
     @DeleteMapping("/{study_id}/comment/{comment_id}/{reply_id}")
-//    public ResponseEntity<?> deleteComment(@RequestHeader(value = "Authorization") String token,
-//                                         @PathVariable("study_id") Long study_id,
-//                                         @PathVariable("comment_id") Long comment_id)
-//                                         @PathVariable("reply_id") Long reply_id) {
     public ResponseEntity<?> deleteComment(@PathVariable("study_id") Long study_id,
                                            @PathVariable("comment_id") Long comment_id,
                                            @PathVariable("reply_id") Long reply_id,
                                            @RequestHeader("ACCESS") String access) {
 
-//        // jwt 토큰 확인
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         commentService.deleteReply(reply_id);
-        return ResponseEntity.status(HttpStatus.OK).body(study_id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", study_id);
+        result.put("message","SUCCESS");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -348,12 +389,16 @@ public class StudyController {
      */
     @GetMapping("/{study_id}/comment")
     public ResponseEntity<?> getAllComment(@PathVariable("study_id") Long study_id) {
-        List<CommentResponse> result = commentService.getAllComment(study_id);
-        if (result == null) {
+        List<CommentResponse> results = commentService.getAllComment(study_id);
+        Map<String, Object> result = new HashMap<>();
+        if (results == null) {
             String msg = "등록된 댓글이 없습니다.";
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(msg);
+            result.put("data",null);
+            result.put("message",msg);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
         }
-
+        result.put("data", results);
+        result.put("message", "SUCCESS");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -364,9 +409,6 @@ public class StudyController {
      * @return study_id
      */
     @PutMapping("/{study_id}/resume")
-//    public ResponseEntity<?> uploadResume(@RequestHeader(value = "Authorization") String token,
-//            @PathVariable("study_id") Long study_id,
-//            @RequestBody MultipartFile resume) {
     public ResponseEntity<?> uploadResume(@PathVariable("study_id") Long study_id,
                                           @RequestBody MultipartFile resume,@RequestHeader("ACCESS") String access) throws IOException {
 

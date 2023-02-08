@@ -2,10 +2,8 @@ package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
-import com.ssafy.vieweongee.dto.user.request.UserInfo;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
-import com.ssafy.vieweongee.exception.UserNotFoundException;
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,23 +87,26 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean checkPassword(PasswordCheckRequest pwCheck) {
         User dbUser = userRepository.getUserById(pwCheck.getId());
-        if(dbUser != null && passwordEncoder.matches(pwCheck.getPassword(), dbUser.getPassword()))
-            return true;
+        log.info("받은 비번 : {}",pwCheck.getPassword());
+        log.info("디비 비번 : {}",dbUser.getPassword());
+
+        if(dbUser != null && passwordEncoder.matches(pwCheck.getPassword(), dbUser.getPassword())){
+            log.info("비번 일치");
+            return true;}
         return false;
     }
 
     @Override
     public void deleteUser(Long id){
-        User user = userRepository.findById(id).get();
-        log.info("서비스임플 {}",user.getId());
-
+        User user = userRepository.getUserById(id);
         userRepository.delete(user);
     }
 
     @javax.transaction.Transactional
     @Override
     public void modifyUser(UserModifyRequest userInfo) {
-        User dbUser = userRepository.getUserById(userInfo.getId());
+        User dbUser=userRepository.getUserById(userInfo.getId());
+//        User dbUser = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
         String encryptPassword = passwordEncoder.encode(userInfo.getPassword());
         dbUser.update(userInfo.getName(), encryptPassword);
         userRepository.save(dbUser);

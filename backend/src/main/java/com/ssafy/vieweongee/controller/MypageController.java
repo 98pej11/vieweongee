@@ -1,10 +1,10 @@
 package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
-import com.ssafy.vieweongee.dto.mypage.request.MyStudyFeedbackRequest;
 import com.ssafy.vieweongee.dto.mypage.response.*;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
+import com.ssafy.vieweongee.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +16,36 @@ import java.util.*;
 public class MypageController {
     @Autowired
     MypageService mypageService;
+    private final TokenService tokenService;
 
-    //사용자 타입 조회
+    public MypageController(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
+    /**
+     * 사용자 타입 조회
+     *
+     * @return type
+     */
     @GetMapping("/type")
-    public ResponseEntity<?> inquireType(@RequestBody InquireTypeRequest userInfo){
-        String type = mypageService.findUserType(userInfo.getId());
+    public ResponseEntity<?> inquireType(@RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        String type = mypageService.findUserType(userId);
         Map<String, String> result = new HashMap<>();
         result.put("data", type);
         result.put("message", "SUCCESS");
         return ResponseEntity.status(200).body(result);
     }
 
-    //참여 스터디 여러개 조회
+    /**
+     * 참여 스터디 여러개 조회
+     *
+     * @return type
+     */
     @GetMapping("/mystudy")
-    public ResponseEntity<?> myStudyList(@RequestBody InquireTypeRequest userInfo){
-        List<Progress> myStudyList = mypageService.findMyStudyList(userInfo.getId());
+    public ResponseEntity<?> myStudyList(@RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        List<Progress> myStudyList = mypageService.findMyStudyList(userId);
         List<MyStudyListResponse> studyList = new ArrayList<>();
 
         for(Progress progress : myStudyList){
@@ -43,7 +58,7 @@ public class MypageController {
         result.put("data", studyList);
         if(studyList.size() == 0){
             result.put("message", "EMPTY");
-            return ResponseEntity.status(204).body(result);
+            return ResponseEntity.status(200).body(result);
         }
         else{
             result.put("message", "SUCCESS");
@@ -51,29 +66,41 @@ public class MypageController {
         }
     }
 
-    //참여 스터디 1개 조회 - 피드백 / 예상 스터디
+    /**
+     * 참여 스터디 1개 조회 - 피드백 / 예상 스터디
+     * @param studyId
+     * @return result
+     */
     @GetMapping("/mystudy/{study_id}")
-    public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") String studyId, @RequestBody InquireTypeRequest userInfo){
-        ScorecardResponse feedback = mypageService.calFeedback(userInfo.getId(), Long.parseLong(studyId));
+    public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") String studyId, @RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        ScorecardResponse feedback = mypageService.calFeedback(userId, Long.parseLong(studyId));
         Map<String, Object> result = new HashMap<>();
         if(feedback != null){
             result.put("data", feedback);
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
-        return ResponseEntity.status(204).body("EMPTY"); //스터디 링크로 가야함
+        result.put("data",null);
+        result.put("message", "FAIL");
+        return ResponseEntity.status(200).body(result); //스터디 링크로 가야함
 
     }
 
-    //회차별 통계 조회
+    /**
+     * 회차별 통계 조회
+     *
+     * @return result
+     */
     @GetMapping("/turn")
-    public ResponseEntity<?> turnStatistics(@RequestBody InquireTypeRequest userInfo){
-        List<Progress> studiedList = mypageService.findStudiedList(userInfo.getId());
+    public ResponseEntity<?> turnStatistics(@RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        List<Progress> studiedList = mypageService.findStudiedList(userId);
         Map<String, Object> result = new HashMap<>();
-        if(studiedList == null){
+        if(studiedList.size() == 0){
             result.put("data", studiedList);
             result.put("message", "EMPTY"); //완료된 스터디 없을 때
-            return ResponseEntity.status(204).body(result);
+            return ResponseEntity.status(200).body(result);
         }
         else{
             List<Study> studied = new ArrayList<>();
@@ -92,7 +119,7 @@ public class MypageController {
             List<TurnSummaryResponse> response = new ArrayList<>();
             float total_average = 0;
             for(Study study : studied){
-                Scorecard scorecard = mypageService.findFeedback(userInfo.getId(), study.getId());
+                Scorecard scorecard = mypageService.findFeedback(userId, study.getId());
 
                 int count = 0;
                 if(scorecard.getAttitude() != 0) {
@@ -133,21 +160,36 @@ public class MypageController {
 
     }
 
-    //역량별 통계 조회
+    /**
+     * 역량별 통계 조회
+     *
+     * @return result
+     */
     @GetMapping("/graph")
-    public ResponseEntity<?> abilityStatistics(@RequestBody InquireTypeRequest userinfo){
-        Summary summary = mypageService.getAbilitySummary(userinfo.getId());
-        AbilitySummaryResponse ability = new AbilitySummaryResponse(summary.getAttitude_average(), summary.getAbility_average(), summary.getTeamwork_average(), summary.getSolving_average(), summary.getLoyalty_average());
+    public ResponseEntity<?> abilityStatistics(@RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        Summary summary = mypageService.getAbilitySummary(userId);
         Map<String, Object> result = new HashMap<>();
+        if(summary.getSolving_average()==0 && summary.getTeamwork_average()==0 && summary.getAbility_average()==0 && summary.getAttitude_average()==0 && summary.getLoyalty_average()==0){
+            result.put("data", null);
+            result.put("message", "EMPTY");
+            return ResponseEntity.status(200).body(result);
+        }
+        AbilitySummaryResponse ability = new AbilitySummaryResponse(summary.getAttitude_average(), summary.getAbility_average(), summary.getTeamwork_average(), summary.getSolving_average(), summary.getLoyalty_average());
         result.put("data", ability);
         result.put("message", "SUCCESS");
         return ResponseEntity.status(200).body(result);
     }
 
-    //참여 예정 스터디 조회(곧참스)
+    /**
+     * 참여 예정 스터디 조회 (곧참스)
+     *
+     * @return result
+     */
     @GetMapping("/mystudy/upcoming")
-    public ResponseEntity<?> upcomingStudy(@RequestBody InquireTypeRequest userInfo){
-        List<MyStudyListResponse> upcomingStudyList = mypageService.findUpcomingStudyList(userInfo.getId());
+    public ResponseEntity<?> upcomingStudy(@RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        List<MyStudyListResponse> upcomingStudyList = mypageService.findUpcomingStudyList(userId);
         Map<String, Object> result = new HashMap<>();
         if(upcomingStudyList == null){
             result.put("data", upcomingStudyList);
@@ -169,10 +211,15 @@ public class MypageController {
         }
     }
 
-    //알림 전체 조회
+    /**
+     * 알림 전체 조회
+     *
+     * @return result
+     */
     @GetMapping("/alarm")
-    public ResponseEntity<?> getAlarms(@RequestBody InquireTypeRequest userInfo){
-        List<Alarm> alarms = mypageService.getAlarms(userInfo.getId());
+    public ResponseEntity<?> getAlarms(@RequestHeader("ACCESS") String access){
+        Long userId=Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        List<Alarm> alarms = mypageService.getAlarms(userId);
         Map<String, Object> result = new HashMap<>();
         List<AlarmListResponse> alarmList = new ArrayList<>();
 
@@ -191,10 +238,15 @@ public class MypageController {
         return ResponseEntity.status(204).body(result);
     }
 
-    //알림 읽음 처리
+    /**
+     * 알림 읽음 처리
+     *
+     * @return result
+     */
     @PutMapping("/alarm")
-    public ResponseEntity<?> readAlarms(@RequestBody InquireTypeRequest userInfo){
-        mypageService.readAlarms(userInfo.getId());
+    public ResponseEntity<?> readAlarms(@RequestHeader("ACCESS") String access){
+        Long userId=Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        mypageService.readAlarms(userId);
         return ResponseEntity.status(200).body("SUCCESS");
     }
 }
