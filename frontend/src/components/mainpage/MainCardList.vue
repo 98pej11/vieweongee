@@ -1,5 +1,5 @@
 <template>
-  <div class="card-list">
+  <div class="card-list" v-if="this.studyList.length !== 0">
     <el-row justify="space-evenly">
       <el-col
         :xs="24"
@@ -50,11 +50,14 @@ export default {
   },
   created() {
     console.log("타입", this.compType);
-    this.CLEAR_LIST();
-    if (this.compType == "main") {
-      this.maininit();
-    } else {
-      this.studyinit();
+    if (this.$route.params.type !== "search") {
+      if (this.compType == "main") {
+        this.CLEAR_LIST();
+        this.maininit();
+      } else if (this.compType == "study") {
+        this.CLEAR_LIST();
+        this.studyinit();
+      }
     }
   },
   methods: {
@@ -70,23 +73,13 @@ export default {
     move(id) {
       // 스테이트 변경
       this.SET_STUDY_ID(id);
-
-      console.log("찐 글번호 : " + id);
       console.log("스테이트 변경 완료" + this.studyID);
-      this.$router.push({ name: "studyview", params: { studyid: id } });
+      this.$router.push({ name: "studyview" });
     },
   },
 };
 </script>
 <style scoped>
-.person-div {
-  padding: 5px;
-  width: 65px;
-  display: flex;
-  justify-content: flex-start;
-  border-radius: 30px;
-  background-color: #d3daff;
-}
 .card-list {
   max-width: 70%;
   margin: 0 auto;
@@ -122,5 +115,13 @@ export default {
   font-size: large;
   text-align: center;
   margin: 3% 0 10% 0;
+}
+.person-div {
+  padding: 5px;
+  width: 75px;
+  display: flex;
+  margin: 0 auto;
+  border-radius: 30px;
+  background-color: #d3daff;
 }
 </style>

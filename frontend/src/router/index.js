@@ -24,12 +24,17 @@ const routes = [
         component: () => import("@/components/study/StudyListCard.vue"),
       },
       {
+        path: "search/:type",
+        name: "search",
+        component: () => import("@/components/study/StudyListCard.vue"),
+      },
+      {
         path: "create",
         name: "studycreate",
         component: () => import("@/components/study/StudyCreate.vue"),
       },
       {
-        path: "view/:studyid",
+        path: "view",
         name: "studyview",
         component: () => import("@/components/study/StudyDetail.vue"),
       },
