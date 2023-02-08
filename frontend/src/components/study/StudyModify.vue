@@ -7,7 +7,7 @@
           <el-row :gutter="20">
             <el-col><p>제목</p></el-col>
             <el-col>
-              <el-input v-model="myStudy.title" ref="title" />
+              <el-input v-model="studyInfo.title" ref="title" />
             </el-col>
           </el-row>
 
@@ -22,11 +22,11 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-input v-model="myStudy.companyName" disabled />
+              <el-input v-model="studyInfo.company" disabled />
             </el-col>
 
             <el-col :span="12">
-              <el-select v-model="myStudy.job" class="m-2" disabled>
+              <el-select v-model="studyInfo.job" class="m-2" disabled>
                 <el-option
                   v-for="item in jobOptions"
                   :key="item.value"
@@ -41,7 +41,7 @@
             <el-col><p>일시</p></el-col>
             <el-col>
               <el-date-picker
-                v-model="myStudy.studyDatetime"
+                v-model="studyInfo.study_datetime"
                 ref="date"
                 type="datetime"
                 style="width: 100%"
@@ -64,7 +64,7 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-select
-                v-model="myStudy.personnel"
+                v-model="studyInfo.personnel"
                 ref="personnel"
                 class="m-2 select"
                 placeholder="인원 수를 선택하세요."
@@ -79,7 +79,7 @@
             </el-col>
             <el-col :span="12">
               <el-select
-                v-model="myStudy.type"
+                v-model="studyInfo.type"
                 ref="type"
                 class="m-2"
                 placeholder="면접 유형을 선택하세요."
@@ -99,7 +99,7 @@
             style="display: flex; justify-content: space-around"
           >
             <el-col><p>진행시간</p></el-col>
-            <el-radio-group v-model="myStudy.runningTime">
+            <el-radio-group v-model="this.studyInfo.running_time">
               <el-radio :label="1">1시간</el-radio>
               <el-radio :label="2">2시간</el-radio>
               <el-radio :label="3">3시간</el-radio>
@@ -114,7 +114,7 @@
                 ref="desc"
                 type="textarea"
                 maxlength="300"
-                v-model="myStudy.content"
+                v-model="studyInfo.content"
                 class="text-area"
                 :autosize="{ minRows: 5, maxRows: 5 }"
                 show-word-limit
@@ -142,6 +142,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { ref } from "vue";
 import moment from "moment";
 // import { useStore } from "vuex";
 // import { useRouter } from "vue-router";
@@ -150,7 +151,7 @@ const studyStore = "studyStore";
 export default {
   name: "studyModify",
   mounted() {
-    this.setInfo();
+    this.setRadio();
   },
   computed: {
     ...mapState(studyStore, ["modifyError", "studyID", "studyInfo"]),
@@ -159,57 +160,15 @@ export default {
   methods: {
     ...mapActions(studyStore, ["modifyConfirm", "getInfo"]),
 
-    async setInfo() {
-      await this.getInfo();
-      this.myStudy = this.studyInfo;
+    setRadio() {
+      let runtime = this.studyInfo.running_time;
+      if (runtime == 1) this.radio = ref("1");
+      if (runtime == 2) this.radio = ref("2");
+      if (runtime == 3) this.radio = ref("3");
+      if (runtime == 4) this.radio = ref("4");
     },
-
     async confirm() {
       await this.modifyConfirm(this.studyID, this.myStudy);
-    },
-
-    // 스터디 생성 폼 submit
-    submitForm() {
-      // 1. 빈칸이 없으면
-      // let err = true;
-      // let msg = "";
-      // !this.myStudy.title &&
-      //   ((msg = "제목을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.title.focus());
-      // err &&
-      //   !this.myStudy.company &&
-      //   ((msg = "기업을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.company.focus());
-      // err &&
-      //   !this.myStudy.job &&
-      //   ((msg = "직군을 입력해주세요"), (err = false), this.$refs.job.focus());
-      // err &&
-      //   !this.myStudy.date &&
-      //   ((msg = "날짜를 입력해주세요"), (err = false), this.$refs.date.focus());
-      // err &&
-      //   !this.myStudy.personnel &&
-      //   ((msg = "인원을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.personnel.focus());
-      // err &&
-      //   !this.myStudy.type &&
-      //   ((msg = "유형을 입력해주세요"), (err = false), this.$refs.type.focus());
-      // err &&
-      //   !this.myStudy.runningTime &&
-      //   ((msg = "진행시간을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.time.focus());
-      // err &&
-      //   !this.myStudy.content &&
-      //   ((msg = "내용을 입력해주세요"), (err = false), this.$refs.desc.focus());
-      // if (!err) alert(msg);
-
-      // console.log(msg);
-      // console.log(this.myStudy);
-      // 2. 날짜 제한이 맞으면
-      if (this.checkDate(this.myStudy.studyDatetime)) this.confirm();
     },
 
     // 날짜 선택 제한
@@ -226,30 +185,32 @@ export default {
       if (diffDay > -1 && diffTime < 24) return false;
       if (diffDay < -1 && diffTime < -24) return true;
     },
+
+    submitForm() {
+      this.modifyInfo = this.studyInfo;
+    },
   },
 
   data() {
     return {
+      // 진행시간 라디오 버튼 세팅
+      radio: ref("1"),
       // 모달창 이벤트 변수
+      modifyInfo: {
+        id: 0,
+        study_title: "",
+        company: "",
+        job: "",
+        personnel: 1,
+        type: "",
+        user_id: 0,
+        user_nickname: "",
+        study_datetime: "",
+        regist_datetime: "",
+        running_time: 1,
+        content: "",
+      },
       alertMsg: "24시간 이후로 선택해주세요",
-      // 스터디 생성 정보
-      myStudy: [
-        {
-          title: "",
-          company: "",
-          job: "",
-          personnel: 1,
-          type: "",
-          studyDatetime: "",
-          runningTime: 1,
-          content: "",
-          attitude: 0,
-          ability: 0,
-          teamwork: 0,
-          solving: 0,
-          loyalty: 0,
-        },
-      ],
       typeOptions: [
         {
           value: "일대다",

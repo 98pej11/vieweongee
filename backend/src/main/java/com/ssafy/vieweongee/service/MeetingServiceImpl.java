@@ -191,7 +191,9 @@ public class MeetingServiceImpl implements MeetingService {
 //        System.out.println("전체수, 면접자" + totalCnt + " " + intervieweeCnt);
 
         //면접 회차 저장
-        result.append(totalCnt).append("!");
+        int turn = totalCnt % intervieweeCnt == 0 ? totalCnt / intervieweeCnt : totalCnt / intervieweeCnt + 1;
+        result.append(turn).append("!");
+
 
         //비율 확인
         if (intervieweeCnt == 1) { //1:1, 1:N
