@@ -71,8 +71,8 @@ public class MypageController {
      * @param studyId
      * @return result
      */
-    @GetMapping("/mystudy/{study_id}")
-    public ResponseEntity<?> myStudyFeedback (@PathVariable("study_id") String studyId, @RequestHeader("ACCESS") String access){
+    @GetMapping("/mystudy/{id}")
+    public ResponseEntity<?> myStudyFeedback (@PathVariable("id") String studyId, @RequestHeader("ACCESS") String access){
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         ScorecardResponse feedback = mypageService.calFeedback(userId, Long.parseLong(studyId));
         Map<String, Object> result = new HashMap<>();
