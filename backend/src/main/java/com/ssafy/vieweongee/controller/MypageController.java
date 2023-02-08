@@ -1,6 +1,5 @@
 package com.ssafy.vieweongee.controller;
 
-import com.ssafy.vieweongee.dto.mypage.request.InquireTypeRequest;
 import com.ssafy.vieweongee.dto.mypage.response.*;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.service.MypageService;
@@ -81,6 +80,7 @@ public class MypageController {
             result.put("message", "SUCCESS");
             return ResponseEntity.status(200).body(result);
         }
+
         result.put("data",null);
         result.put("message", "FAIL");
         return ResponseEntity.status(200).body(result); //스터디 링크로 가야함
