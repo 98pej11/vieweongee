@@ -1,7 +1,5 @@
 package com.ssafy.vieweongee.controller;
 
-import com.nimbusds.oauth2.sdk.Message;
-import com.ssafy.vieweongee.dto.study.CreateStudyRequest;
 import com.ssafy.vieweongee.dto.user.request.*;
 import com.ssafy.vieweongee.dto.user.response.UserInfoResponse;
 import com.ssafy.vieweongee.dto.user.response.UserLoginResponse;
@@ -12,16 +10,12 @@ import com.ssafy.vieweongee.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -38,12 +32,9 @@ public class UserController {
     EmailService emailService;
 
     //로그인
-    @ResponseBody
+//    @ResponseBody
     @PostMapping("/signin")
     public ResponseEntity login(@RequestBody User user) {
-//        log.info("나 로그인하러 왔옹 : {}", user.getEmail());
-//        log.info("여긴 유저 컨트롤러.. 유저 이메일은 {} 유저 프로바이더는 : {}", user.getEmail(), "global");
-
         User loginUser = userService.login(user);
         Map<String, Object> result = new HashMap<>();
         if(loginUser != null){
@@ -77,20 +68,26 @@ public class UserController {
 
     //회원 가입
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody UserCreateRequest registInfo) {
+    public ResponseEntity<?> register(@RequestBody UserCreateRequest user) {
         try {
             //email 중복 검사, email 인증번호 보내기
 
             //비밀번호 확인
-            if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
-                return ResponseEntity.status(409).body("FAIL:PW");
+//            if(!registInfo.getPassword().equals(registInfo.getPasswordCheck()))
+//                return ResponseEntity.status(409).body("FAIL:PW");
 
             //닉네임 중복검사
-            if(userService.checkDuplicatedNickname(registInfo.getName()))
-                return ResponseEntity.status(409).body("FAIL:NAME");
+//            if(userService.checkDuplicatedNickname(registInfo.getName()))
+//                return ResponseEntity.status(409).body("FAIL:NAME");
+
+            System.out.println(user.getEmail());
+            System.out.println(user.getName());
 
             //회원 가입
-            User user = userService.createUser(registInfo);
+            userService.createUser(user);
+
+            System.out.println(user.getEmail());
+            System.out.println(user.getName());
             Map<String, Object> result = new HashMap<>();
             result.put("data", null);
             result.put("message","SUCCESS");
@@ -110,7 +107,7 @@ public class UserController {
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
 
-        if(userService.checkDuplicatedEmail(email)){
+        if(!userService.checkDuplicatedEmail(email)){
             result.put("message","SUCCESS");
             log.info("here");
             return ResponseEntity.status(200).body(result);
@@ -120,10 +117,10 @@ public class UserController {
     }
 
     //  인증 이메일 발송
-    @PostMapping("/email-valid")
-    public ResponseEntity<?> sendEmail(@RequestBody EmailInfo emailInfo) {
+    @GetMapping("/email-valid/{email}")
+    public ResponseEntity<?> sendEmail(@PathVariable("email") String email) {
         try {
-            String code = emailService.sendSimpleMessage(emailInfo.getEmail(), "code");
+            String code = emailService.sendSimpleMessage(email, "code");
             Map<String, String> result = new HashMap<>();
             result.put("data", code);
             result.put("message","SUCCESS");
@@ -136,6 +133,22 @@ public class UserController {
             return ResponseEntity.status(500).body(result);
         }
     }
+//    @PostMapping("/email-valid")
+//    public ResponseEntity<?> sendEmail(@RequestBody EmailInfo emailInfo) {
+//                try {
+//                    String code = emailService.sendSimpleMessage(emailInfo.getEmail(), "code");
+//                    Map<String, String> result = new HashMap<>();
+//                    result.put("data", code);
+//                    result.put("message","SUCCESS");
+//                    return ResponseEntity.status(200).body(result);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Map<String, String> result = new HashMap<>();
+//            result.put("data", null);
+//            result.put("message", "FAIL");
+//            return ResponseEntity.status(500).body(result);
+//        }
+//    }
 
 
     //비밀번호 찾기 -> 임시 비밀번호 발급
@@ -198,9 +211,12 @@ public class UserController {
 
     //회원 정보 수정
     @PutMapping("/")
-    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo){
+    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo, @RequestHeader("ACCESS") String access){
+        // 비번 비번체크 닉네임 (토큰 헤더로 주면 여기서 id 찾아서 )
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        modifyInfo.setId(user_id);
         if(!userService.checkDuplicatedNickname(modifyInfo.getName())){
             if(modifyInfo.getPassword().equals(modifyInfo.getPasswordCheck())){
                 userService.modifyUser(modifyInfo);
@@ -212,19 +228,30 @@ public class UserController {
         }
         result.put("message","FAIL");
         return ResponseEntity.status(409).body(result);
+//        result.put("message","FAIL");/*
+//        return ResponseEntity.status(409).body(result);*/
     }
 
     //회원 탈퇴
-    @DeleteMapping("/")
-    public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
+    @DeleteMapping("/{password}")
+    public ResponseEntity<?> withdrawalUser(@PathVariable("password") String password, @RequestHeader("ACCESS") String access){
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        PasswordCheckRequest userInfo =  new PasswordCheckRequest();
+        userInfo.setId(user_id);
+        userInfo.setPassword(password);
+//        userInfo.setId(user_id);
+        log.info("회원 탈퇴 : {}",userInfo.getId());
+        Map<String, Object> result = new HashMap<>();
         if(userService.checkPassword(userInfo)){
             userService.deleteUser(userInfo.getId());
-            return ResponseEntity.status(200).body("SUCCESS");
+            result.put("data",null);
+            result.put("message","SUCCESS");
+            return ResponseEntity.status(200).body(result);
         }
-        return ResponseEntity.status(409).body("FAIL");
-
+        result.put("data",null);
+        result.put("message","FAIL");
+        return ResponseEntity.status(409).body(result);
     }
-
     // 액세스 토큰 확인
     @PostMapping("/check-access")
     public ResponseEntity checkAccess(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
@@ -241,7 +268,6 @@ public class UserController {
         return ResponseEntity.status(409).body("FAIL");
         // 원래 리프레쉬 토큰도 검증해야...ㄷㄷ
     }
-
 
     @PostMapping("/check-refresh")
     public ResponseEntity checkRefresh(@RequestBody UserCheckRequest userToken, HttpServletRequest response){
@@ -266,13 +292,12 @@ public class UserController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity logout(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
-        System.out.println(userToken.getAccessToken());
-        String accessToken=userToken.getAccessToken();
-        boolean check=tokenService.checkTokenValid(userToken.getAccessToken());
+    public ResponseEntity logout(@RequestHeader(value = "ACCESS") String token){
+        boolean check=tokenService.checkTokenValid(token);
         if (check==true){
-            Long id=userToken.getId();
-            userService.logout(id, accessToken);
+            Long id = Long.parseLong(tokenService.getUid(token).replaceAll("\"",""));
+            System.out.println(id);
+            userService.logout(id, token);
             return ResponseEntity.status(200).body("SUCCESS");
         }
         return ResponseEntity.status(409).body("FAIL:TOKEN");

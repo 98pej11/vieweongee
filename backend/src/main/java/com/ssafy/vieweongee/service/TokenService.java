@@ -137,7 +137,7 @@ public class TokenService {
         JWTVerifier verifier =
                 JWT.require(Algorithm.HMAC512(secretKey))
                         .build();
-        log.info("체크토큰의 verifier는...{}",verifier);
+        log.info("getUid의 verifier는...{}",verifier);
         // 만료됐으면 에러남
         String id= String.valueOf(verifier.verify(token).getClaim("Id"));
         log.info("토큰서비스에서 id!!!! {}",Long.parseLong(id.replaceAll("\"","")));

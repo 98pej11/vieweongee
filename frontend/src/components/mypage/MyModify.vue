@@ -9,13 +9,13 @@
           <el-col>
             <el-input
               placeholder="변경할 비밀번호 입력"
-              v-model="data.password"
+              v-model="user.password"
             />
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="비밀번호 재확인" v-model="data.password" />
+            <el-input placeholder="비밀번호 재확인"  v-model="user.passwordCheck"/>
           </el-col>
         </el-row>
         <el-row class="text"
@@ -23,7 +23,7 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 닉네임 입력" v-model="data.name" />
+            <el-input placeholder="변경할 닉네임 입력"  v-model="user.name"/>
           </el-col>
         </el-row>
         <el-row :gutter="20" style="text-align: center">
@@ -58,6 +58,15 @@ export default defineComponent({
     Lock,
     User,
   },
+  data(){
+    return{
+      user: {
+        password: "",
+        passwordCheck: "",
+        name: "",
+      },
+    }
+  },
   computed: {
     ...mapState(memberStore, ["data", "isLogin"]),
   },
@@ -66,10 +75,10 @@ export default defineComponent({
 
     async confirm() {
       // alert("confirm");
-      await this.userUpdate(this.data);
-      let token = sessionStorage.getItem("ACCESS");
+      await this.userUpdate(this.user);
+      // let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
-        await this.getUserInfo(token);
+        // await this.getUserInfo(token);
         alert("회원 정보 수정완료");
         this.$router.push({ name: "main" });
       }

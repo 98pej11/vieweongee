@@ -43,7 +43,6 @@ public class CommentServiceImpl implements CommentService {
                 .study(origin.getStudy())
                 .user(origin.getUser())
                 .build();
-
         commentRepository.save(result);
 
         return result;

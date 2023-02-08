@@ -111,7 +111,8 @@ export default defineComponent({
   setup() {
     const dialogVisible = ref(false);
     const count = 5;
-    const HeaderCheck = false;
+    // const start = true;
+
 
     function load() {
       this.count += 1;
@@ -124,12 +125,12 @@ export default defineComponent({
       Menu,
       dialogVisible,
       count,
-      HeaderCheck,
+      // start,
     };
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "data"]),
-    ...mapGetters(["checkUserInfo"]),
+    ...mapGetters(["checkUserInfo","checkIsLogin"]),
   },
   methods: {
     ...mapActions(memberStore, ["userLogout"]),

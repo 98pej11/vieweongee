@@ -1,10 +1,12 @@
 package com.ssafy.vieweongee.controller;
 
 import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.service.MeetingService;
 import com.ssafy.vieweongee.service.StudyService;
+import com.ssafy.vieweongee.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +23,13 @@ public class MeetingController {
 
     private final MeetingService meetingService;
     private final StudyService studyService;
+    private final TokenService tokenService;
 
     @Autowired
-    public MeetingController(MeetingService meetingService, StudyService studyService) {
+    public MeetingController(MeetingService meetingService, StudyService studyService, TokenService tokenService) {
         this.meetingService = meetingService;
         this.studyService = studyService;
+        this.tokenService=tokenService;
     }
 
     // 스터디원 자기소개서 전부 가져오기 >> 서버 or 시그널
@@ -37,7 +41,7 @@ public class MeetingController {
      * @return
      */
     @PostMapping("/{study_ID}/score")
-    public ResponseEntity<?> startMeeting(@PathVariable("study_ID") String study_ID) {
+    public ResponseEntity<?> startMeeting(@PathVariable("study_ID") String study_ID, @RequestHeader("ACCESS") String access) {
         Map<String, String> result = new HashMap<>();
         //해당 스터디가 존재하는지 확인
         Study study = studyService.getStudyDetail(Long.parseLong(study_ID));
@@ -62,7 +66,7 @@ public class MeetingController {
      */
     @GetMapping("/{study_ID}/score")
     public ResponseEntity<?> showAllScorecard(
-            @PathVariable("study_ID") String study_ID) {
+            @PathVariable("study_ID") String study_ID, @RequestHeader("ACCESS") String access) {
         Map<String, Object> result = new HashMap<>();
         //스터디 찾음
         Study study = studyService.getStudyDetail(Long.parseLong(study_ID));
@@ -83,7 +87,16 @@ public class MeetingController {
         result.put("data", score);
         return ResponseEntity.ok().body(result);
     }
-
+    /**
+     * 스터디원의 자소서를 전부 불러옴
+     *
+     * @param study_ID
+     * @return List<MeetingScoreRequest>
+     */
+    @GetMapping("{study_ID}/resume")
+    public ResponseEntity<List<MeetingResumeRequest>> showAllResume(@PathVariable("study_ID") Long study_ID, @RequestHeader("ACCESS") String access){
+        return new ResponseEntity<>(meetingService.getAllResume(study_ID), HttpStatus.OK);
+    }
     /**
      * 면접자 1명의 채점표 갱신
      *
@@ -119,7 +132,8 @@ public class MeetingController {
     @GetMapping("/{study_ID}/order")
     public ResponseEntity<?> studyMeetingOrder(
             @PathVariable("study_ID") String study_ID,
-            @RequestBody MeetingRatioRequest meetingRatioRequest) {
+            @RequestBody MeetingRatioRequest meetingRatioRequest,
+            @RequestHeader("ACCESS") String access) {
         Map<String, String> result = new HashMap<>();
         //스터디 찾음
         Study study = studyService.getStudyDetail(Long.parseLong(study_ID));

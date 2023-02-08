@@ -3,14 +3,13 @@ import router from "@/router";
 
 import {
   signin,
-  findById,
+  findByEmail,
   getCode,
   tokenRegeneration,
   signout,
   update,
   signup,
   deleteUser,
-  preDeleteUser,
 } from "@/api/users";
 // import http from "@/api/http";
 
@@ -22,8 +21,12 @@ const memberStore = {
     data: null,
     code: null,
     isValidToken: false,
+
   },
   getters: {
+    checkIsLogin: function (state) {
+      return state.isLogin;
+    }, 
     checkUserInfo: function (state) {
       return state.data;
     },
@@ -83,22 +86,23 @@ const memberStore = {
         }
       );
     },
-
+   
     // 이메일 중복검사
-    async checkEmail({ commit }, email) {
-      await findById(
-        email,
+    async checkEmail({ commit, dispatch}, user) {
+      console.log(user.email);
+      await findByEmail(
+        user.email,
         ({ data }) => {
           if (data.message === "SUCCESS") {
             console.log(
-              "findById 안으로 바다와서 state에 올렸따 :  " + data.userinfo
-            );
+              "회원가입 가능함! :  " );
             // console.log("들어왓다. ");
             // 백엔드에서 받아오는 userInfo가 없음
             // commit("SET_USER_INFO", this.state.data);
             // console.log("유저정3. getUserInfo data >> ", data);
+            dispatch("getEmailCode", user.email);
           } else {
-            console.log("유저 정보 없음!!!!");
+            console.log("이메일 중복!");
           }
         },
         async (error) => {
@@ -110,11 +114,14 @@ const memberStore = {
         }
       );
     },
-
+    
     async getEmailCode({ commit }, email) {
+      console.log("실행되니..?!!!!");
       await getCode(email, ({ data }) => {
         if (data.message === "SUCCESS") {
+          console.log("코드 보내따!!!!");
           commit("SET_EMAIL_CODE", data.data);
+          // sessionStorage.setItem("code", code);
         } else {
           console.log("유저 정보 없음!!!!");
         }
@@ -125,7 +132,7 @@ const memberStore = {
       // async getUserInfo({ commit, dispatch }, myemail) {
       let decodeToken = jwtDecode(token);
       console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-      await findById(
+      await findByEmail(
         decodeToken.Id,
         ({ data }) => {
           if (data.message === "SUCCESS") {
@@ -224,37 +231,42 @@ const memberStore = {
       );
     },
 
-    async userUpdate(user) {
-      await update(user, () => {
+   
+
+    async userJoin({ commit },user) {
+      console.log("memberstor : " + JSON.stringify(user))
+      await signup(user, ({ data }) => {
+        console.log(data);
+        commit("SET_IS_LOGIN",this.isLogin);
+        console.log("회원가입 성공");
+      },
+        (error) => {
+          console.log(error);
+        }
+      )
+    },
+    async userUpdate({ commit }, user) {
+      console.log("di");
+      let token = sessionStorage.getItem("ACCESS");
+      await update(user, token,({ data }) => {
+        
+        console.log(data);
+        commit("SET_IS_LOGIN",this.isLogin);
         console.log("업데이트 성공");
       }),
         (error) => {
           console.log(error);
         };
     },
-
-    async userJoin(user) {
-      await signup(user, ({ data }) => {
+    async userDelete({ commit }, user) {
+      let token = sessionStorage.getItem("ACCESS");
+      await deleteUser(user.password, token, ({data}) => {
         console.log(data);
-
-        console.log("회원가입 성공");
-      }),
-        (error) => {
-          console.log(error);
-        };
-    },
-
-    async userDelete({ commit }, userid) {
-      await preDeleteUser(userid, () => {
-        console.log("사전삭제 완료");
-      }),
-        (error) => {
-          console.log(error);
-        };
-
-      await deleteUser(userid, () => {
-        console.log("유저삭제완료");
-        commit("CLEAR_USER_INFO");
+        // console.log(data);
+        if (data.message === "SUCCESS") {
+          console.log("유저삭제완료");
+          commit("CLEAR_USER_INFO");
+        }
       }),
         (error) => {
           console.log(error);

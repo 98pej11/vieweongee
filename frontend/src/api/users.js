@@ -9,11 +9,11 @@ async function signin(user, success, fail) {
     .catch(fail);
 }
 
-async function findById(userid, success, fail) {
+async function findByEmail(email, success, fail) {
   // async function findById(myemail, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
-    .get(`/users/email-check?email=` + userid)
+    .get(`/users/email-check/` + email)
     .then(success)
     .catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
@@ -21,7 +21,7 @@ async function findById(userid, success, fail) {
 
 async function getCode(email, success, fail) {
   // async function findById(myemail, success, fail) {
-  await api.post(`/users/email-valid`, email).then(success).catch(fail);
+  await api.get(`/users/email-valid/`+ email).then(success).catch(fail);
   // await api.get(`/users/email-check`).then(success).catch(fail);
 }
 
@@ -40,10 +40,12 @@ async function signout(obj, success, fail) {
 }
 
 async function update(user, success, fail) {
-  await api.put(`/users`, JSON.stringify(user)).then(success).catch(fail);
+  console.log("users : " + JSON.stringify(user))
+  await api.put(`/users/`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 async function signup(user, success, fail) {
+  console.log("users : " + JSON.stringify(user))
   await api
     .post(`/users/signup`, JSON.stringify(user))
     .then(success)
@@ -54,13 +56,14 @@ async function signup(user, success, fail) {
 //   await api.delete(`/board/byuser/${userid}`).then(success).catch(fail);
 // }
 
-async function deleteUser(userid, success, fail) {
-  await api.delete(`/users`).then(success).catch(fail);
+async function deleteUser(password, success, fail) {
+  console.log("비번 : " + password);
+  await api.delete(`/users/` + password).then(success).catch(fail);
 }
 
 export {
   signin,
-  findById,
+  findByEmail,
   getCode,
   tokenRegeneration,
   signout,
