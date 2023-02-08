@@ -181,7 +181,7 @@ public class StudyController {
      * @param study_id
      * @return studyResponse
      */
-    @GetMapping("/{study_id}")
+    @GetMapping("/detail/{study_id}")
     public ResponseEntity<?> getStudyDetail(@PathVariable("study_id") Long study_id) {
         Study study = studyService.getStudyDetail(study_id);
         Map<String, Object> result = new HashMap<>();
