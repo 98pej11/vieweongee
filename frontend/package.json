@@ -22,7 +22,8 @@
     "vue-router": "^4.0.3",
     "vue-template-compiler": "^2.7.14",
     "vuex": "^4.1.0",
-    "vuex-persistedstate": "^4.1.0"
+    "vuex-persistedstate": "^4.1.0",
+    "openvidu-browser": "^2.25.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
