@@ -58,7 +58,7 @@ public class MypageController {
         result.put("data", studyList);
         if(studyList.size() == 0){
             result.put("message", "EMPTY");
-            return ResponseEntity.status(204).body(result);
+            return ResponseEntity.status(200).body(result);
         }
         else{
             result.put("message", "SUCCESS");
@@ -83,7 +83,7 @@ public class MypageController {
         }
         result.put("data",null);
         result.put("message", "FAIL");
-        return ResponseEntity.status(204).body(result); //스터디 링크로 가야함
+        return ResponseEntity.status(200).body(result); //스터디 링크로 가야함
 
     }
 
@@ -97,10 +97,10 @@ public class MypageController {
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         List<Progress> studiedList = mypageService.findStudiedList(userId);
         Map<String, Object> result = new HashMap<>();
-        if(studiedList == null){
+        if(studiedList.size() == 0){
             result.put("data", studiedList);
             result.put("message", "EMPTY"); //완료된 스터디 없을 때
-            return ResponseEntity.status(204).body(result);
+            return ResponseEntity.status(200).body(result);
         }
         else{
             List<Study> studied = new ArrayList<>();
@@ -169,8 +169,13 @@ public class MypageController {
     public ResponseEntity<?> abilityStatistics(@RequestHeader("ACCESS") String access){
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         Summary summary = mypageService.getAbilitySummary(userId);
-        AbilitySummaryResponse ability = new AbilitySummaryResponse(summary.getAttitude_average(), summary.getAbility_average(), summary.getTeamwork_average(), summary.getSolving_average(), summary.getLoyalty_average());
         Map<String, Object> result = new HashMap<>();
+        if(summary.getSolving_average()==0 && summary.getTeamwork_average()==0 && summary.getAbility_average()==0 && summary.getAttitude_average()==0 && summary.getLoyalty_average()==0){
+            result.put("data", null);
+            result.put("message", "EMPTY");
+            return ResponseEntity.status(200).body(result);
+        }
+        AbilitySummaryResponse ability = new AbilitySummaryResponse(summary.getAttitude_average(), summary.getAbility_average(), summary.getTeamwork_average(), summary.getSolving_average(), summary.getLoyalty_average());
         result.put("data", ability);
         result.put("message", "SUCCESS");
         return ResponseEntity.status(200).body(result);
