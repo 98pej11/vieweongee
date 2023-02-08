@@ -5,6 +5,7 @@ import LoginView from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import FindpwdView from "../views/FindpwdView.vue";
 import MypageView from "../views/MypageView.vue";
+import MeetingRoom from "../views/MeetingRoom.vue";
 
 const routes = [
   {
@@ -65,6 +66,11 @@ const routes = [
     name: "mypage",
     component: MypageView,
   },
+  {
+    path: "/meeting",
+    name: "meeting",
+    component: MeetingRoom,
+  }, //나중에 스터디 상세&곧참스에서 /:studyId 붙이는 방식으로 수정 필요
 ];
 
 const router = createRouter({

@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 import memberStore from "@/store/memberStore";
 import studyStore from "@/store/studyStore";
 // import commentStore from "@/store/modules/commentStore";
+import meetingStore from "@/store/meetingStore";
 
 export default createStore({
   state: {},
@@ -12,6 +13,7 @@ export default createStore({
   modules: {
     memberStore,
     studyStore,
+    meetingStore,
   },
   plugins: [
     // createPersistedState({
