@@ -24,9 +24,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                         "/study/{study_id}/comment/{comment_id}/reply",
                         "/study/{study_id}/comment/{comment_id}/{reply_id}",
                         "/study/{study_id}/resume",
-                        "/meeting/*","/sessions/{sessionID}/connection"
-                        );
-
+                        "/meeting/*","/sessions/{sessionID}/connection",
+                        "users/type","users/"
+                        )
+                .excludePathPatterns("/study/top3", "study/detail/{study_id}");
     }
 
 }

@@ -35,9 +35,6 @@ public class UserController {
 //    @ResponseBody
     @PostMapping("/signin")
     public ResponseEntity login(@RequestBody User user) {
-//        log.info("나 로그인하러 왔옹 : {}", user.getEmail());
-//        log.info("여긴 유저 컨트롤러.. 유저 이메일은 {} 유저 프로바이더는 : {}", user.getEmail(), "global");
-
         User loginUser = userService.login(user);
         Map<String, Object> result = new HashMap<>();
         if(loginUser != null){
@@ -214,9 +211,12 @@ public class UserController {
 
     //회원 정보 수정
     @PutMapping("/")
-    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo){
+    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo, @RequestHeader("ACCESS") String access){
+        // 비번 비번체크 닉네임 (토큰 헤더로 주면 여기서 id 찾아서 )
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        modifyInfo.setId(user_id);
         if(!userService.checkDuplicatedNickname(modifyInfo.getName())){
             if(modifyInfo.getPassword().equals(modifyInfo.getPasswordCheck())){
                 userService.modifyUser(modifyInfo);
@@ -231,14 +231,24 @@ public class UserController {
     }
 
     //회원 탈퇴
-    @DeleteMapping("/")
-    public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
+    @DeleteMapping("/{password}")
+    public ResponseEntity<?> withdrawalUser(@PathVariable("password") String password, @RequestHeader("ACCESS") String access){
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        PasswordCheckRequest userInfo =  new PasswordCheckRequest();
+        userInfo.setId(user_id);
+        userInfo.setPassword(password);
+//        userInfo.setId(user_id);
+        log.info("회원 탈퇴 : {}",userInfo.getId());
+        Map<String, Object> result = new HashMap<>();
         if(userService.checkPassword(userInfo)){
             userService.deleteUser(userInfo.getId());
-            return ResponseEntity.status(200).body("SUCCESS");
+            result.put("data",null);
+            result.put("message","SUCCESS");
+            return ResponseEntity.status(200).body(result);
         }
-        return ResponseEntity.status(409).body("FAIL");
-
+        result.put("data",null);
+        result.put("message","FAIL");
+        return ResponseEntity.status(409).body(result);
     }
 
     // 액세스 토큰 확인
@@ -257,7 +267,6 @@ public class UserController {
         return ResponseEntity.status(409).body("FAIL");
         // 원래 리프레쉬 토큰도 검증해야...ㄷㄷ
     }
-
 
     @PostMapping("/check-refresh")
     public ResponseEntity checkRefresh(@RequestBody UserCheckRequest userToken, HttpServletRequest response){
