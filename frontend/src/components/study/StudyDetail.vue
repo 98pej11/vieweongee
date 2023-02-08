@@ -3,14 +3,18 @@
     <div class="container">
       <div class="main main-box">
         <h2 class="text-h6 mb-3">{{ studyInfo.title }}</h2>
-        <el-row>
+        <el-row justify="space-between">
           <el-col :span="20">
             <div>
-              {{ studyInfo.user_nickname }} 님 | {{ studyInfo.regist_datetime }}
+              {{ studyInfo.user_nickname }} 님 |
+              {{ studyInfo.regist_datetime }}
             </div>
           </el-col>
           <el-col :span="4">
-            <div>인원수 {{ studyInfo.personnel }}</div>
+            <div class="person-div">
+              <el-icon :size="17"><User /></el-icon>&nbsp; {{ this.current }} /
+              {{ studyInfo.personnel }}
+            </div>
           </el-col>
         </el-row>
         <hr />
@@ -46,20 +50,55 @@
         </el-row>
 
         <el-row justify="end">
-          <el-button round color="#E1E6FF" class="me-2">
+          <el-button v-if="isOpened" round color="#E1E6FF" class="me-2">
             자기소개서 업로드
           </el-button>
-          <!-- v-if 글 작성자 !== 로그인 유저 -->
-          <el-button @click="registStudy" round color="#9DADD8" class="me-2">
+          <el-button
+            v-if="!isApplied && isOpened"
+            @click="applyStudy"
+            round
+            color="#9DADD8"
+            class="me-2"
+          >
             신청
           </el-button>
-          <!-- v-if 글 작성자 === 로그인 유저 -->
-          <el-button @click="modifyStudy" round color="#9DADD8" class="me-2">
-            수정
+          <el-button
+            v-if="isApplied && !isOpened"
+            @click="cancleStudy"
+            round
+            color="#FFCD9F"
+            class="me-2"
+          >
+            신청취소
           </el-button>
-          <el-button @click="deleteStudy" round color="#FF5151" class="me-3"
-            >삭제
+          <el-button
+            v-if="isOpened"
+            @click="enterMeeting"
+            round
+            color="#FFCD9F"
+            class="me-2"
+          >
+            입장
           </el-button>
+          <el-button
+            v-if="!isOpened"
+            round
+            disabled
+            color="#555454"
+            class="me-2 done"
+          >
+            종료
+          </el-button>
+        </el-row>
+        <el-row justify="end" style="margin-top: 10px">
+          <div v-if="this.token_id == this.studyInfo.user_id">
+            <el-button @click="modifyStudy" round color="#9DADD8" class="me-2">
+              수정
+            </el-button>
+            <el-button @click="deleteOpen" round color="#FF5151" class="me-3"
+              >삭제
+            </el-button>
+          </div>
         </el-row>
         <hr />
         <el-row>
@@ -78,33 +117,77 @@
         </el-row>
       </div>
     </div>
-    <!-- <StudyComment></StudyComment> -->
+    <StudyComment></StudyComment>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-// import StudyComment from "@/components/study/StudyComment.vue";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { User } from "@element-plus/icons-vue";
+import StudyComment from "@/components/study/StudyComment.vue";
+import moment from "moment";
 
 const studyStore = "studyStore";
 
 export default {
   name: "StudyDetail",
-  // components: { StudyComment },
+  components: { StudyComment, User },
   computed: {
-    ...mapState(studyStore, ["isError", "studyID", "studyInfo"]),
+    ...mapState(studyStore, [
+      "isError",
+      "isApplied",
+      "studyID",
+      "current",
+      "token_id",
+      "studyInfo",
+      "commentList",
+    ]),
   },
   mounted() {
     this.init();
   },
+  data() {
+    return {
+      isOpened: false,
+    };
+  },
   methods: {
-    ...mapActions(studyStore, ["getInfo"]),
+    ...mapActions(studyStore, [
+      "getInfo",
+      "getCommentList",
+      "applyStudyConfirm",
+      "cancleStudyConfirm",
+      "getPersonnel",
+      "deleteConfirm",
+    ]),
+    ...mapMutations(studyStore, ["SET_APPLY_SUCCESS"]),
 
     // 스터디 글 정보 조회
     async init() {
-      console.log("스테이트의 타입  " + typeof this.studyID);
+      // if (this.token_id == this.studyInfo.user_id)
+      //   console.log(
+      //     "같네요. " + this.studyInfo.user_id + " / " + this.token_id
+      //   );
+      this.SET_APPLY_SUCCESS(false);
       await this.getInfo(this.studyID);
-      // await this.getInfo(this.$route.params.studyid);
+      await this.getPersonnel(this.studyID);
+      await this.getCommentList(this.studyID);
+      await this.checkOpened();
+    },
+
+    checkOpened() {
+      // 미팅 시작시간 24시간 전이면 참여 가능
+      const startTime = moment(this.studyInfo.study_datetime);
+      const now = moment();
+      let diff = moment.duration(startTime.diff(now)).asHours();
+
+      if (diff >= 0 && diff < 24) this.isOpened = true;
+      else console.log("이미" + diff + "시간 지난 스터디 ! ");
+    },
+
+    enterMeeting() {
+      // 미팅 참여 !!!! 새 창으로 슈슉
+      // this.$router.push();
     },
 
     // 컴포넌트 전환
@@ -114,10 +197,23 @@ export default {
         params: { studyid: this.studyID },
       });
     },
-    deleteStudy() {},
 
     // 스터디 참가 신청하기
-    registStudy() {},
+    async applyStudy() {
+      await this.applyStudyConfirm(this.studyID);
+      await this.getPersonnel(this.studyID);
+    },
+
+    // 스터디 참가 신청 취소
+    async cancleStudy() {
+      await this.cancleStudyConfirm(this.studyID);
+      await this.getPersonnel(this.studyID);
+    },
+
+    async deleteOpen() {
+      console.log("삭제할게요");
+      await this.deleteConfirm(this.studyID);
+    },
   },
 };
 </script>
@@ -146,5 +242,13 @@ hr {
 }
 button {
   color: white;
+}
+.person-div {
+  padding: 5px;
+  width: 75px;
+  display: flex;
+  margin: 0 auto;
+  border-radius: 30px;
+  background-color: #d3daff;
 }
 </style>
