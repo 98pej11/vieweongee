@@ -10,7 +10,6 @@ import {
   update,
   signup,
   deleteUser,
-  preDeleteUser,
 } from "@/api/users";
 // import http from "@/api/http";
 
@@ -87,7 +86,7 @@ const memberStore = {
         }
       );
     },
-    
+   
     // 이메일 중복검사
     async checkEmail({ commit, dispatch}, user) {
       console.log(user.email);
@@ -232,14 +231,7 @@ const memberStore = {
       );
     },
 
-    async userUpdate(user) {
-      await update(user, () => {
-        console.log("업데이트 성공");
-      }),
-        (error) => {
-          console.log(error);
-        };
-    },
+   
 
     async userJoin({ commit },user) {
       console.log("memberstor : " + JSON.stringify(user))
@@ -253,18 +245,28 @@ const memberStore = {
         }
       )
     },
-
-    async userDelete({ commit }, userid) {
-      await preDeleteUser(userid, () => {
-        console.log("사전삭제 완료");
+    async userUpdate({ commit }, user) {
+      console.log("di");
+      let token = sessionStorage.getItem("ACCESS");
+      await update(user, token,({ data }) => {
+        
+        console.log(data);
+        commit("SET_IS_LOGIN",this.isLogin);
+        console.log("업데이트 성공");
       }),
         (error) => {
           console.log(error);
         };
-
-      await deleteUser(userid, () => {
-        console.log("유저삭제완료");
-        commit("CLEAR_USER_INFO");
+    },
+    async userDelete({ commit }, user) {
+      let token = sessionStorage.getItem("ACCESS");
+      await deleteUser(user.password, token, ({data}) => {
+        console.log(data);
+        // console.log(data);
+        if (data.message === "SUCCESS") {
+          console.log("유저삭제완료");
+          commit("CLEAR_USER_INFO");
+        }
       }),
         (error) => {
           console.log(error);

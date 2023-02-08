@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean checkPassword(PasswordCheckRequest pwCheck) {
-        User dbUser = userRepository.findById(pwCheck.getId()).get();
+        User dbUser = userRepository.getUserById(pwCheck.getId());
         if(dbUser != null && passwordEncoder.matches(pwCheck.getPassword(), dbUser.getPassword()))
             return true;
         return false;
@@ -97,13 +97,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(Long id){
         User user = userRepository.findById(id).get();
+        log.info("서비스임플 {}",user.getId());
+
         userRepository.delete(user);
     }
 
     @javax.transaction.Transactional
     @Override
     public void modifyUser(UserModifyRequest userInfo) {
-        User dbUser = userRepository.findByEmailAndProvider(userInfo.getEmail(), userInfo.getProvider());
+        User dbUser = userRepository.getUserById(userInfo.getId());
         String encryptPassword = passwordEncoder.encode(userInfo.getPassword());
         dbUser.update(userInfo.getName(), encryptPassword);
         userRepository.save(dbUser);

@@ -214,33 +214,49 @@ public class UserController {
 
     //회원 정보 수정
     @PutMapping("/")
-    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo){
+    public ResponseEntity<?> editInfo(@RequestBody UserModifyRequest modifyInfo, @RequestHeader("ACCESS") String access){
+
         Map<String, Object> result = new HashMap<>();
         result.put("data",null);
-        if(!userService.checkDuplicatedNickname(modifyInfo.getName())){
-            if(modifyInfo.getPassword().equals(modifyInfo.getPasswordCheck())){
-                userService.modifyUser(modifyInfo);
-                result.put("message","SUCCESS");
-                return ResponseEntity.status(200).body(result);
-            }
-            result.put("message","FAIL");
-            return ResponseEntity.status(409).body(result);
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        modifyInfo.setId(user_id);
+//        if(!userService.checkDuplicatedNickname(modifyInfo.getName())){
+//
+//        }
+        log.info(modifyInfo.getName()+ "나 들어왔어");
+        if(modifyInfo.getPassword().equals(modifyInfo.getPasswordCheck())){
+
+            userService.modifyUser(modifyInfo);
+            log.info(modifyInfo.getName()+ "나 요기있어");
+            result.put("message","SUCCESS");
+            return ResponseEntity.status(200).body(result);
         }
         result.put("message","FAIL");
         return ResponseEntity.status(409).body(result);
+//        result.put("message","FAIL");/*
+//        return ResponseEntity.status(409).body(result);*/
     }
 
     //회원 탈퇴
-    @DeleteMapping("/")
-    public ResponseEntity<?> withdrawalUser(@RequestBody PasswordCheckRequest userInfo){
+    @DeleteMapping("/{password}")
+    public ResponseEntity<?> withdrawalUser(@PathVariable("password") String password, @RequestHeader("ACCESS") String access){
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        PasswordCheckRequest userInfo =  new PasswordCheckRequest();
+        userInfo.setId(user_id);
+        userInfo.setPassword(password);
+//        userInfo.setId(user_id);
+        Map<String, Object> result = new HashMap<>();
         if(userService.checkPassword(userInfo)){
             userService.deleteUser(userInfo.getId());
-            return ResponseEntity.status(200).body("SUCCESS");
+            log.info("탈퇴 비번 체크 됐나?");
+            result.put("data",null);
+            result.put("message","SUCCESS");
+            return ResponseEntity.status(200).body(result);
         }
-        return ResponseEntity.status(409).body("FAIL");
-
+        result.put("data",null);
+        result.put("message","FAIL");
+        return ResponseEntity.status(409).body(result);
     }
-
     // 액세스 토큰 확인
     @PostMapping("/check-access")
     public ResponseEntity checkAccess(@RequestBody UserCheckRequest userToken, HttpServletResponse response){

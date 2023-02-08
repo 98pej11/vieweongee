@@ -47,23 +47,23 @@ public class StudyController {
      * @return study_id
      */
     @PostMapping
-    public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
+        public ResponseEntity<?> createStudy(@RequestBody CreateStudyRequest createStudyRequest, @RequestHeader("ACCESS") String access) {
 
-        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
-        log.info("user id in create study is {}", user_id);
-        User user = userService.getUserById(user_id);
-        log.info("user in study : {}",user.getName());
+            Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+            log.info("user id in create study is {}", user_id);
+            User user = userService.getUserById(user_id);
+            log.info("user in study : {}",user.getName());
 
-        // 스터디 생성
-        Study study = studyService.createStudy(user, createStudyRequest);
+            // 스터디 생성
+            Study study = studyService.createStudy(user, createStudyRequest);
 
-        // 참가 명단에 추가
-        studyService.registParticipant(user, study);
+            // 참가 명단에 추가
+            studyService.registParticipant(user, study);
 
-        // 참가 이력 생성
-        studyService.createProgress(user, study);
+            // 참가 이력 생성
+            studyService.createProgress(user, study);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(study.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(study.getId());
     }
 
     /**

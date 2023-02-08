@@ -40,7 +40,8 @@ async function signout(obj, success, fail) {
 }
 
 async function update(user, success, fail) {
-  await api.put(`/users`, JSON.stringify(user)).then(success).catch(fail);
+  console.log("users : " + JSON.stringify(user))
+  await api.put(`/users/`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 async function signup(user, success, fail) {
@@ -55,8 +56,9 @@ async function signup(user, success, fail) {
 //   await api.delete(`/board/byuser/${userid}`).then(success).catch(fail);
 // }
 
-async function deleteUser(userid, success, fail) {
-  await api.delete(`/users`).then(success).catch(fail);
+async function deleteUser(password, success, fail) {
+  console.log("비번 : " + password);
+  await api.delete(`/users/` + password).then(success).catch(fail);
 }
 
 export {

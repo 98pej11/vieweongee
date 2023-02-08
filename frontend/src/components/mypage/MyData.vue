@@ -1,21 +1,17 @@
 <template>
   <div>
-    <!-- <div>
-      <el-calendar :range="[new study_datetime(2019, 2, 4), new study_datetime(2019, 2, 24)]" />
-    </div> -->
     <el-container>
       <el-main class="outline-box">
         <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
         <el-table
           class="el-table"
-          :data="mystudys"
+          :data="tableData"
           style="width: 100%; font-size: medium"
           :class="tableRowClasscompany"
         >
           <el-table-column prop="study_datetime" label="날짜" width="150%" />
           <el-table-column prop="company" label="기업명" width="200%" />
           <el-table-column prop="study_title" label="항목" width="350%" />
-          <!-- 버튼 -->
           <el-table-column prop="type" label="버튼" width="150%">
             <el-button
               block
@@ -59,7 +55,6 @@
                 @selection-change="handleSelectionChange"
                 :class="tableRowClasscompany"
               >
-                <!-- <el-table-column type="selection" width="35"></el-table-column> -->
                 <el-table-column
                   border
                   prop="type"
@@ -72,7 +67,6 @@
                   label="항목"
                   width="400%"
                 />
-                <!-- 여기를 어찌 해야할깡 -->
                 <el-table-column border label="점수" width="300%">
                   <el-rate
                     v-model="mystudy.attitude"
@@ -112,15 +106,14 @@ export default {
   data() {
     return {
       mystudys: [],
-      // fields: [
-      //   { key: "study_datetime", 2label: "", tdClass: "tdClass" },
-      //   // { key: "articleno", label: "글번호", tdClass: "tdClass" },
-      //   { key: "company", label: "제목", tdClass: "tdSubject" },
-      //   { key: "userid", label: "작성자", tdClass: "tdClass" },
-      // ],
-      mystudy: null,
+      mystudy: [
+        {
+          study_datetime: "2016-05-03",
+          company: "Tom",
+          study_title: "No. 189, Grove St, Los Angeles",
+        },
+      ],
       dialogVisible: false,
-      // 기본 채점템플릿
       tableData: [
         {
           study_datetime: "2016-05-03",
@@ -218,7 +211,7 @@ export default {
     };
   },
   created() {
-    http.get(`/board/users/mystudy`).then(({ data }) => {
+    http.get(`/users/mystudy`).then(({ data }) => {
       this.mystudys = data;
     });
     if (this.global_isShow) {

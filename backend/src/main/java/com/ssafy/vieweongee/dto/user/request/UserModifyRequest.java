@@ -11,4 +11,6 @@ public class UserModifyRequest {
     private String provider;
     private String password;
     private String passwordCheck;
+
+    private Long Id;
 }
