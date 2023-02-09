@@ -35,7 +35,7 @@ async function createStudy(info, success, fail) {
 
 // 스터디 수정
 async function modifyStudy(study_ID, info, success, fail) {
-  // api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
   await api
     .put(`/study/${study_ID}`, JSON.stringify(info))
     .then(success)
