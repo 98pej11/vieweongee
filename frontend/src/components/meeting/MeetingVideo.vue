@@ -28,6 +28,14 @@
         />
       </div>
     </div>
+
+    <div class="chat-container">
+			<MeetingChatting
+				:session="session"
+				:myUserName="myUserName"
+			/>
+		</div>
+
   </div>
 </template>
 
@@ -37,6 +45,7 @@ import { OpenVidu } from "openvidu-browser";
 import { mapState, mapMutations, mapActions } from "vuex";
 import http from "../../api/http.js";
 import jwtDecode from "jwt-decode";
+import MeetingChatting from './MeetingChatting.vue';
 
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
@@ -45,7 +54,7 @@ const api = http;
 export default {
   name: "MeetingVideo",
   components: {
-    UserVideo,
+    UserVideo,MeetingChatting,
   },
   data() {
     return {
@@ -58,6 +67,7 @@ export default {
 
       // Join form
       myStudyId: "2", //스터디 아이디로 사용
+      myUserName:'두리두두',
     };
   },
   computed: {
@@ -190,7 +200,7 @@ export default {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         this.session
-          .connect(token, { clientData: this.myId })
+          .connect(token, { clientData: this.myId, myNickname: this.myUserName })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
 
