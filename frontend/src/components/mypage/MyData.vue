@@ -6,22 +6,24 @@
         <el-table
           class="el-table"
           :data="mystudys"
-          style="width: 100%; font-size: medium"
+          style="width: 100%; font-size: medium;"
           :class="tableRowClasscompany"
         >
           <el-table-column prop="study_datetime" label="날짜" width="150%" />
           <el-table-column prop="company" label="기업명" width="200%" />
           <el-table-column prop="title" label="항목" width="350%" />
           <el-table-column label="버튼" width="150%">
-            <el-button
-              block
-              color="#9DADD8"
-              size="larger"
-              style="margin: 2%; width: 70%"
-              @click="viewStudy"
-            >
-              상세보기
-            </el-button>
+            <template v-slot="scope">
+              <el-button
+                block
+                color="#9DADD8"
+                size="larger"
+                style="margin: 2%; width: 70%"
+                @click="viewStudy(scope.row)"
+              >
+                상세보기
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
         <el-dialog
@@ -70,15 +72,16 @@
                 />
 
                 <!-- 여기를 어떻게 해야할까 -->
-                <el-table-column border label="점수" width="300%">
+                <!-- <el-table-column border prop="score" v-model=score label="점수" width="300%">
                   <el-rate
-                    v-model="mystudy.attitude"
+                    v-model = score
                     disabled
                     show-score
                     text-color="#ff9900"
                     score-template="{value} points"
                   />
-                </el-table-column>
+                </el-table-column> -->
+                <el-table-column border prop="score" label="점수" width="300%"></el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane>
@@ -89,7 +92,7 @@
               </template>
               <ul style="font-size: large">
                 {{
-                  mystudy.feedback
+                  this.scorecard.feedback
                 }}
               </ul>
             </el-tab-pane>
@@ -105,18 +108,20 @@ import http from "@/api/http";
 import { mapState } from "vuex";
 
 const config = {
-headers: {
-  ACCESS: sessionStorage.getItem("ACCESS")
-}
+  headers: {
+    ACCESS: sessionStorage.getItem("ACCESS"),
+  },
 };
 
 export default {
   name: "MyData",
   data() {
     return {
+      start: 0,
+      scorecard: null,
       mystudys: [],
       mystudy: null,
-      
+
       dialogVisible: false,
       tableData: [
         {
@@ -170,12 +175,73 @@ export default {
           title: "No. 189, Grove St, Los Angeles",
         },
       ],
-      scoreData: []
+      scoreData: [
+        {
+          type: "태도",
+          question: "자신감 있는 표정과 목소리인가?",
+          score: "",
+          index: 0,
+        },
+        {
+          type: "태도",
+          question: "기본 준비 자세가 올바른가?",
+          score: "",
+          index: 1,
+        },
+        {
+          type: "직무역량",
+          question: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
+          score: "",
+          index: 2,
+        },
+        {
+          type: "직무역량",
+          question: "직무 수행에 필요한 역량을 갖췄는가?",
+          score: "",
+          index: 3,
+        },
+        {
+          type: "팀워크",
+          question: "다양한 의견을 수렴한 경험이 있는가?",
+          score: "",
+          index: 4,
+        },
+        {
+          type: "팀워크",
+          question: "적극적으로 참여하는 자세를 가졌는가?",
+          score: "",
+          index: 5,
+        },
+        {
+          type: "문제해결",
+          question: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
+          score: "",
+          index: 6,
+        },
+        {
+          type: "문제해결",
+          question: "해결에 도움이 되는 방향성을 제시하였는가?",
+          score: "",
+          index: 7,
+        },
+        {
+          type: "기업이해도",
+          question: "기업에 대한 이해도가 높은가?",
+          score: "",
+          index: 8,
+        },
+        {
+          type: "기업이해도",
+          question: "퇴사 가능성이 있는가?",
+          score: "",
+          index: 9,
+        },
+      ],
     };
   },
   // 마이페이지 전체 글 받아오기
   created() {
-    http.get(`/users/mystudy`,config).then(({ data }) => {
+    http.get(`/users/mystudy`, config).then(({ data }) => {
       console.log("전체 글 받아옵니다");
       console.log(data.data);
       this.mystudys = data.data;
@@ -190,78 +256,32 @@ export default {
   },
   methods: {
     // 나의 스터디 1개 조회
-    viewStudy() {
-      http
-      .get(`/users/mystudy/${this.mystudy.id}`,config)
-      .then(({ data }) => {
-          // console.log("글 1개 조회 성공" + this.dialogVisible);
-          // console.log(data.data);
-          this.mystudy = data.data;
-          this.dialogVisible = true;
-          })
-          .then(() => {
-           
-            // if(this.mystudy.fileInfos.length == 0)
-            //   this.mystudy.fileInfos = [{saveFile: "ssafy_logo.png"}];
-            // this.getComments(this.article.articleno);
-          });
-      
-      // console.log(this.mystudy.attitude);
+    viewStudy(row) {
+      console.log("검색하려는 스터디 데이터 >> ");
 
-      if(this.mystudy.attitude){
-        this.scoreData += [{
-          type: "태도",
-          question: "자신감 있는 표정과 목소리인가?",
-        },
-        {
-          type: "태도",
-          question: "기본 준비 자세가 올바른가?",
-        }];
-      }
-      if(this.mystudy.ability){
-        this.scoreData += [{
-          type: "직무역량",
-          question: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
-        },
-        {
-          type: "직무역량",
-          question: "직무 수행에 필요한 역량을 갖췄는가?",
-        },];
-      }
-      if(this.mystudy.teamwork){
-        this.scoreData += [{
-          type: "팀워크",
-          question: "다양한 의견을 수렴한 경험이 있는가?",
-        },
-        {
-          type: "팀워크",
-          question: "적극적으로 참여하는 자세를 가졌는가?",
-        },
-       
-       ];
-      }
-      if(this.mystudy.solving){
-        this.scoreData += [ {
-          type: "문제해결",
-          question: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
-        },
-        {
-          type: "문제해결",
-          question: "해결에 도움이 되는 방향성을 제시하였는가?",
-        },];
-      }
-      if(this.mystudy.loyalty){
-        this.scoreData += [ {
-          type: "기업이해도",
-          question: "기업에 대한 이해도가 높은가?",
-        },
-        {
-          type: "기업이해도",
-          question: "퇴사 가능성이 있는가?",
-        },];
-      }
+      console.log(row);
+      http.get(`/users/mystudy/${row.id}`, config).then(({ data }) => {
+
+        // if(data.message==="SUCCESS")
+        // console.log("글 1개 조회 성공" + this.dialogVisible);
+        console.log(data.data);
+        this.scorecard = data.data;
+        console.log(this.scorecard.attitude_average);
+        this.scoreData[0].score = this.scorecard.attitude_average;
+        this.scoreData[1].score = this.scorecard.attitude_average;
+        this.scoreData[2].score = this.scorecard.ability_average;
+        this.scoreData[3].score = this.scorecard.ability_average;
+        this.scoreData[4].score = this.scorecard.teamwork_average;
+        this.scoreData[5].score = this.scorecard.teamwork_average;
+        this.scoreData[6].score = this.scorecard.solving_average;
+        this.scoreData[7].score = this.scorecard.solving_average;
+        this.scoreData[8].score = this.scorecard.loyalty_average;
+        this.scoreData[9].score = this.scorecard.loyalty_average;
+        this.mystudy = row;
+        this.dialogVisible = true;
+      });
     },
-    
+
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0 || columnIndex === 2) {
@@ -326,6 +346,11 @@ p {
 }
 .el-table {
   display: flex;
+  width: 100%;
+  table-layout: fixed;
+}
+.el-table .el-table-column{
+  width: 100%;
 }
 .confirm-btn {
   color: white;
