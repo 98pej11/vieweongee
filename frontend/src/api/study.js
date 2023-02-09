@@ -33,7 +33,6 @@ async function getStudy(params, success, fail) {
 // 스터디 생성
 async function createStudy(info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-
   await api.post(`/study`, JSON.stringify(info)).then(success).catch(fail);
 }
 

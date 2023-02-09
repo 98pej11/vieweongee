@@ -227,13 +227,37 @@ export default {
     // 스터디 생성 폼 submit
     async submitForm() {
       console.log(this.studyFormInfo);
-      if (this.checkDate(this.studyFormInfo.study_datetime)) this.confirm();
-      else {
+      if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
+        this.studyFormInfo.study_datetime =
+          this.studyFormInfo.study_datetime.replace(" ", "T");
+
+        console.log("바궜단다" + this.studyFormInfo.study_datetime);
+        this.studyFormInfo.job = "default english";
+        this.studyFormInfo.type = "default english";
+        this.confirm();
+      } else {
+        console.log("빈칸이 있단다 ");
         this.isError = true;
         await this.sleep(3000).then(() => {
           this.isError = false;
         });
       }
+    },
+    // 유효성 검사
+    isEmpty() {
+      if (
+        this.studyFormInfo.title == "" ||
+        this.studyFormInfo.company == "" ||
+        this.studyFormInfo.job == "" ||
+        this.studyFormInfo.study_datetime == "" ||
+        this.studyFormInfo.type == "" ||
+        this.studyFormInfo.running_time == 0 ||
+        this.studyFormInfo.personnel == 0
+      ) {
+        return false;
+      }
+
+      return true;
     },
 
     // 날짜 선택 제한
@@ -316,10 +340,10 @@ export default {
         title: "",
         company: "",
         job: "",
-        personnel: 1,
+        personnel: 0,
         type: "",
         study_datetime: "",
-        running_time: 1,
+        running_time: 0,
         content: "",
         attitude: 0,
         ability: 0,

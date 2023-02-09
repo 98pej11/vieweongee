@@ -191,9 +191,7 @@ const studyStore = {
         ({ data }) => {
           console.log(data.data);
           console.log("생성성공");
-          // console.log(data.headers);
-          // console.log(data.body);
-          commit("SET_STUDY_ID", data);
+          commit("SET_STUDY_ID", data.data);
         }
         // async (error) => {
         //   // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
