@@ -66,7 +66,7 @@
             신청
           </el-button>
           <el-button
-            v-if="isApplied && !isOpened"
+            v-if="isApplied && !isOpened && !isAuthor"
             @click="cancleStudy"
             round
             color="#FFCD9F"
@@ -112,6 +112,7 @@
             </el-button>
           </div>
         </el-row>
+
         <hr />
         <el-row>
           <el-col style="color: black; font-weight: bold; margin-bottom: 20px"
@@ -129,9 +130,11 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import { ElMessageBox } from "element-plus";
 import { User } from "@element-plus/icons-vue";
-import StudyComment from "@/components/study/StudyComment.vue";
+import jwtDecode from "jwt-decode";
 import moment from "moment";
+import StudyComment from "@/components/study/StudyComment.vue";
 
 const studyStore = "studyStore";
 
@@ -144,7 +147,6 @@ export default {
       "isApplied",
       "studyID",
       "current",
-      "token_id",
       "studyInfo",
       "commentList",
       "appliedList",
@@ -159,6 +161,7 @@ export default {
       isPossible: false,
       isAuthor: false,
       isDone: false,
+      myId: 0,
     };
   },
   methods: {
@@ -169,40 +172,35 @@ export default {
       "cancleStudyConfirm",
       "getPersonnel",
       "deleteConfirm",
-      "getMyApplied",
     ]),
     ...mapMutations(studyStore, ["SET_APPLY_SUCCESS"]),
 
     // 스터디 글 정보 조회
     async init() {
-      this.SET_APPLY_SUCCESS(false);
-      await this.getInfo(this.studyID);
+      console.log("미로그인? 로그인? : ");
+
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      const params = {
+        study_ID: this.studyID,
+        user_ID: this.myId,
+      };
+
+      // this.SET_APPLY_SUCCESS(false);
+      // await this.getInfo(this.studyID);
+      await this.getInfo(params); // 객체를 줘야함
       await this.getPersonnel(this.studyID);
       await this.getCommentList(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
-      // this.getApplied();
 
       // 로그인 유저 == 글 작성자
-      if (this.token_id == this.studyInfo.user_id) {
+      if (this.myId == 0) this.isAuthor = false;
+      else if (this.myId == this.studyInfo.user_id) {
         this.isAuthor = true;
       }
     },
-
-    // getApplied() {
-    //   // 내가 신청한
-    //   this.getMyApplied();
-
-    //   console.log(this.appliedList);
-
-    //   // console.log(this.appliedList[0].study_id);
-
-    //   this.appliedList.forEach((el) => {
-    //     if (el.study_id == this.studyID) {
-    //       console.log("같네요 ㅋ");
-    //     }
-    //   });
-    // },
 
     // 신청 가능 여부
     checkPossible() {
@@ -245,8 +243,14 @@ export default {
 
     // 스터디 참가 신청하기
     async applyStudy() {
-      await this.applyStudyConfirm(this.studyID);
-      await this.getPersonnel(this.studyID);
+      if (this.myId == 0) {
+        ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
+          confirmButtonText: "확인",
+        });
+      } else {
+        await this.applyStudyConfirm(this.studyID);
+        await this.getPersonnel(this.studyID);
+      }
     },
 
     // 스터디 참가 신청 취소
