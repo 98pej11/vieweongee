@@ -20,6 +20,7 @@
     "v-infinite-scroll": "^1.0.4",
     "vee-validate": "^4.7.3",
     "vue": "^3.2.13",
+    "vue-local-scope": "^0.0.1",
     "vue-router": "^4.0.3",
     "vue-template-compiler": "^2.7.14",
     "vuex": "^4.1.0",

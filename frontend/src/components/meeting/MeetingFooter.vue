@@ -3,13 +3,7 @@
     <el-button round>채팅</el-button>
 
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
-    <el-button
-      v-if="isLeader && nowTurn == null"
-      type="success"
-      round
-      @click="startMeeting"
-      >미팅시작</el-button
-    >
+    <el-button v-if="isLeader && nowTurn == null" type="success" round @click="startMeeting">미팅시작</el-button>
     <el-button
       id="endBtn"
       v-if="isLeader && nowTurn != null"
@@ -50,12 +44,8 @@ export default {
   },
   created() {},
   methods: {
-    ...mapMutations(meetingStore, [
-      "SET_LEADER_ORDER",
-      "SET_NOWTURN",
-      "SET_LEADER_TURN",
-    ]),
-    ...mapActions(meetingStore, ["getOrder", "makeScorecards"]),
+    ...mapMutations(meetingStore, ["SET_LEADER_ORDER", "SET_NOWTURN", "SET_LEADER_TURN"]),
+    ...mapActions(meetingStore, ["makeScoreAndGetOrder", "makeScorecards"]),
     async startMeeting() {
       if (this.intervieweeRate == 0) {
         alert("면접자 : 면접관 비율을 선택해주세요!");
@@ -67,10 +57,10 @@ export default {
             interviewee: this.intervieweeRate,
           },
         };
-        //면접 순서를 정상적으로 받아오면 채점표를 생성
-        //채점표 생성이 완료되면 면접 순서를 저장
+        //채점표를 생성한다
+        //면접순서를 받아온다
         //방장의 면접 순서가 감지되면 시그널 전송
-        await this.getOrder(params);
+        await this.makeScoreAndGetOrder(params);
         console.log("받아온 스터디 순서 >> " + this.leaderOrder);
       }
     },

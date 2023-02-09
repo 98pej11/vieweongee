@@ -1,5 +1,5 @@
 <template>
-  <div class="card-list" v-if="this.studyList.length !== 0">
+  <div class="card-list">
     <el-row justify="space-evenly">
       <el-col
         :xs="24"
@@ -11,7 +11,11 @@
       >
         <div @click="move(data.id)">
           <div class="person-div">
-            <el-icon :size="17"><User /></el-icon>&nbsp;{{ data.personnel }} / 6
+            &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
+              this.currentList[index]
+            }}
+            /
+            {{ data.personnel }}&nbsp;
           </div>
           <div class="title">{{ data.title }}</div>
           <div class="card-contents">
@@ -46,10 +50,14 @@ export default {
     compType: String,
   },
   computed: {
-    ...mapState(studyStore, ["studyList", "studyID"]),
+    ...mapState(studyStore, [
+      "studyList",
+      "studyID",
+      "currentList",
+      "getCurrentPerson",
+    ]),
   },
   created() {
-    console.log("타입", this.compType);
     if (this.$route.params.type !== "search") {
       if (this.compType == "main") {
         this.CLEAR_LIST();
@@ -61,19 +69,30 @@ export default {
     }
   },
   methods: {
-    ...mapActions(studyStore, ["getTopList", "getAllList"]),
+    ...mapActions(studyStore, ["getTopList", "getAllList", "getPersonnel"]),
     ...mapMutations(studyStore, ["CLEAR_LIST", "SET_STUDY_ID"]),
 
     async maininit() {
       await this.getTopList();
+      // 현재 참가자 수 받아오기
+      for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
+        await this.getPersonnel(this.studyList[idx].id);
+      }
     },
     async studyinit() {
       await this.getAllList();
+
+      // 현재 참가자 수 받아오기
+      for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
+        await this.getPersonnel(this.studyList[idx].id);
+      }
     },
+
+    // 세부 페이지로 이동
     move(id) {
-      // 스테이트 변경
       this.SET_STUDY_ID(id);
-      console.log("스테이트 변경 완료" + this.studyID);
       this.$router.push({ name: "studyview" });
     },
   },
@@ -117,10 +136,11 @@ export default {
   margin: 3% 0 10% 0;
 }
 .person-div {
-  padding: 5px;
-  width: 75px;
+  /* padding: 5px; */
+  margin-right: auto;
+  width: 80px;
   display: flex;
-  margin: 0 auto;
+  padding: 5px 0 5px 5px;
   border-radius: 30px;
   background-color: #d3daff;
 }
