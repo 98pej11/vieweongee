@@ -1,10 +1,13 @@
-import { getInterviewOrder } from "../api/meeting";
+import {
+  getInterviewOrder,
+  postScorecards,
+  getAllScorecards,
+} from "../api/meeting";
 
 const meetingStore = {
   namespaced: true,
   state: {
     myId: null, //나의 아이디
-    storePublisher: undefined, //스트림이 연결 되었는지 확인용
 
     isLeader: false, //방장
     isInterviewee: false, //면접자
@@ -28,9 +31,6 @@ const meetingStore = {
     SET_MYID(state, id) {
       //나의 아이디 설정
       state.myId = id;
-    },
-    SET_STORE_PUBLISHER(state, publisher) {
-      state.storePublisher = publisher;
     },
     SET_IS_LEADER(state, flag) {
       //방장으로 설정/해체
@@ -58,14 +58,6 @@ const meetingStore = {
     SET_INTERVIEWEERATE(state, cnt) {
       state.intervieweeRate = cnt; //방장이 설정한 면접자 수
     },
-    // ADD_INTERVIEWEECOUNT(state) {
-    //   //면접자가 나가기 버튼을 누를 때마다 추가
-    //   state.intervieweeCount++;
-    // },
-    // CLEAR_INTERVIEWEECOUNT(state) {
-    //   //면접 회차가 변경되면 초기화
-    //   state.intervieweeCount = 0;
-    // },
     SET_TOTALTURN(state, turn) {
       state.totalTurn = turn;
     },
@@ -75,19 +67,56 @@ const meetingStore = {
     SET_LEADER_TURN(state, turn) {
       state.leaderTurn = turn;
     },
+    SET_SCORE_LIST(state, list) {
+      state.scoreList = list;
+    },
   },
   actions: {
-    async getOrder({ commit }, params) {
+    async getOrder({ commit, dispatch }, params) {
       await getInterviewOrder(
         params,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            //정상적으로 받아왔을 때
+            //정상적으로 받아왔을 때 채점표 생성부터 처리
+            console.log("방장님 면접 순서 잘 받아왔는데 채점표부터 생성할게요");
+            dispatch("makeScorecards", params.study_ID);
             //면접 순서 저장 처리
             // commit("SET_INTERVIEW_ORDER", data.data);
             commit("SET_LEADER_ORDER", data.data);
             // console.log(data.data);
             // console.log("리더의 순서 지정 성공 >> " + state.leaderOrder);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async makeScorecards(study_ID) {
+      //채점표 생성하기
+      await postScorecards(
+        study_ID,
+        ({ data }) => {
+          if (data.message == "SUCCESS") {
+            //정상처리
+            console.log("방장님 채점표 생성 완료했어요");
+            console.log(data);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async getScorecards({ commit }, study_ID) {
+      //채점표 전부 가져오기
+      await getAllScorecards(
+        study_ID,
+        ({ data }) => {
+          if (data.message == "SUCCESS") {
+            console.log("채점표 전부 가져왔어요");
+            console.log(data.data);
+            commit("SET_SCORE_LIST", data.data);
           }
         },
         (error) => {
