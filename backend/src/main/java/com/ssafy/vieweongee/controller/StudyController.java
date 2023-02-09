@@ -5,10 +5,7 @@ import com.ssafy.vieweongee.dto.comment.CreateCommentRequest;
 import com.ssafy.vieweongee.dto.comment.CreateReplyRequest;
 import com.ssafy.vieweongee.dto.study.CreateStudyRequest;
 import com.ssafy.vieweongee.dto.study.StudyResponse;
-import com.ssafy.vieweongee.entity.Comment;
-import com.ssafy.vieweongee.entity.Reply;
-import com.ssafy.vieweongee.entity.Study;
-import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.CommentRepository;
 import com.ssafy.vieweongee.repository.ParticipantRepository;
 import com.ssafy.vieweongee.service.*;
@@ -181,13 +178,35 @@ public class StudyController {
      * @param study_id
      * @return studyResponse
      */
-    @GetMapping("/detail/{study_id}")
-    public ResponseEntity<?> getStudyDetail(@PathVariable("study_id") Long study_id) {
+    @GetMapping("/detail/{study_id}/{user_id}")
+    public ResponseEntity<?> getStudyDetail(@PathVariable("study_id") Long study_id,
+                                            @PathVariable("user_id") Long user_id) {
         Study study = studyService.getStudyDetail(study_id);
+
         Map<String, Object> result = new HashMap<>();
+
         StudyResponse results = new StudyResponse(study);
+
         result.put("data",results);
-        result.put("message", "SUCCESS");
+
+        if (user_id==0){
+            result.put("message", "OTHER");
+        }
+        else{
+//            Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+            List<Participant> studies = participantRepository.findAllByStudyId(study_id);
+            for (Participant participant:studies){
+                // 해당 스터디 아이디에 해당하는 참가 기록에 토큰에서 뽑은 유저 아이디가 있으면 신청한 스터디
+                if (participant.getParticipant_id().getUser().getId().equals(user_id)){
+                    result.put("message","MINE");
+                }else{
+                    result.put("message","OTHER");
+                }
+            }
+//            result.put("message", "MINE");
+        }
+
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
