@@ -41,6 +41,7 @@ async function signout(obj, success, fail) {
 
 async function update(user, success, fail) {
   console.log("users : " + JSON.stringify(user))
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.put(`/users/`, JSON.stringify(user)).then(success).catch(fail);
 }
 
@@ -58,6 +59,7 @@ async function signup(user, success, fail) {
 
 async function deleteUser(password, success, fail) {
   console.log("비번 : " + password);
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.delete(`/users/` + password).then(success).catch(fail);
 }
 
