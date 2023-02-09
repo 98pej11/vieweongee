@@ -189,9 +189,14 @@ const studyStore = {
       await createStudy(
         studyInfo,
         ({ data }) => {
-          console.log(data.data);
-          console.log("생성성공");
-          commit("SET_STUDY_ID", data.data);
+          if (data.message == "SUCCESS") {
+            console.log("얻어왔어요");
+            console.log(data.data);
+            commit("SET_IS_SUCCESS", true);
+            commit("SET_STUDY_ID", data.data);
+          } else {
+            commit("SET_IS_SUCCESS", false);
+          }
         }
         // async (error) => {
         //   // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
@@ -224,13 +229,14 @@ const studyStore = {
       );
     },
     // 스터디 수정
-    async modifyConfirm({ commit }, study_ID, info) {
+    async modifyConfirm({ commit }, params) {
       await modifyStudy(
-        study_ID,
-        info,
-        (data) => {
-          console.log(data);
-          commit("SET_STUDY_ID", data.body);
+        params,
+        ({ data }) => {
+          console.log("수정성공 번호 ! ");
+          console.log(data.data);
+          commit("SET_IS_SUCCESS", true);
+          commit("SET_STUDY_ID", data.data + 1);
         },
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
