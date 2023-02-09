@@ -9,7 +9,7 @@
       <el-row>
         <el-col id="comment-field">
           <el-input
-            v-model="myComment"
+            v-model="myComment.content"
             label="댓글을 입력하세요..."
             type="text"
           ></el-input>
@@ -18,19 +18,19 @@
               round
               color="#9DADD8"
               class="mt-1"
-              @click="CommentSubmit(this.studyID, myComment)"
+              @click="CommentSubmit()"
               >등록</el-button
             >
           </div>
         </el-col>
       </el-row>
-      <StudyCommentItem></StudyCommentItem>
+      <!-- <StudyCommentItem></StudyCommentItem> -->
     </div>
   </div>
 </template>
 
 <script>
-import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
+// import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
 import { mapState, mapActions } from "vuex";
 
 const studyStore = "studyStore";
@@ -38,22 +38,33 @@ const studyStore = "studyStore";
 export default {
   name: "StudyComment",
   components: {
-    StudyCommentItem,
+    // StudyCommentItem,
+  },
+  computed: {
     ...mapState(studyStore, ["isError", "studyID", "commentList"]),
   },
   data() {
     return {
-      myComment: {},
+      myComment: {
+        // depth: 1,
+        // user_id: 0,
+        // user_nickname: "",
+        // comment_id: 0,
+        // reply_id: 0,
+        content: "",
+      },
     };
   },
   methods: {
     ...mapActions(studyStore, ["createCommentConfirm"]),
 
-    // 댓글 작성
+    // 유저 닉네임 얻어와야함
 
-    // async CommentSubmit(id, content) {
-    //   await this.createCommentConfirm(id, content);
-    // },
+    // 댓글 작성
+    async CommentSubmit() {
+      console.log("vuecomponent : " + JSON.stringify(this.myComment));
+      await this.createCommentConfirm(this.studyID, this.myComment);
+    },
   },
 };
 </script>

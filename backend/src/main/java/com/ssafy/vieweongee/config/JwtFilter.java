@@ -26,14 +26,14 @@ public class JwtFilter implements HandlerInterceptor {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        log.info("jwt 필터에 들어왔드아아아아아악 {}", accessToken);
+        log.info("IN jwt~~~~~~~~~~~~~~~  {}", accessToken);
 
         if (!StringUtils.isEmpty(accessToken)){
             try{
                 if (!tokenService.checkTokenValid(accessToken) ){
                     PrintWriter out=response.getWriter();
                     response.setStatus(400);
-                    log.info("토큰이 유효하지않드아아아아아");
+                    log.info("token MOT validate---------------------------");
 //                    jsonString=ob.writeValueAsString(new )
                     return false;
                 }

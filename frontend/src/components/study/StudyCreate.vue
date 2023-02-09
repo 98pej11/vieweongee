@@ -338,6 +338,7 @@ export default {
       // 스터디 생성 정보
       studyFormInfo: [
         {
+          id: 0, // 꼭 넘겨주어야 한다 !!
           title: "",
           company: "",
           job: "",

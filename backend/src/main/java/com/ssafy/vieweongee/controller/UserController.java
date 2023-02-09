@@ -228,6 +228,8 @@ public class UserController {
         }
         result.put("message","FAIL");
         return ResponseEntity.status(409).body(result);
+//        result.put("message","FAIL");/*
+//        return ResponseEntity.status(409).body(result);*/
     }
 
     //회원 탈퇴
@@ -250,7 +252,6 @@ public class UserController {
         result.put("message","FAIL");
         return ResponseEntity.status(409).body(result);
     }
-
     // 액세스 토큰 확인
     @PostMapping("/check-access")
     public ResponseEntity checkAccess(@RequestBody UserCheckRequest userToken, HttpServletResponse response){

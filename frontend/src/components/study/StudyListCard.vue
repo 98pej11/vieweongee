@@ -28,8 +28,8 @@
 </template>
 <script>
 import SearchBar from "@/components/common/SearchBar.vue";
-import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
+import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
 
 export default {
   name: "StudyListCard",

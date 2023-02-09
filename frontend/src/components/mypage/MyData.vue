@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <div>
-      <el-calendar :range="[new study_datetime(2019, 2, 4), new study_datetime(2019, 2, 24)]" />
-    </div> -->
     <el-container>
       <el-main class="outline-box">
         <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
@@ -14,9 +11,8 @@
         >
           <el-table-column prop="study_datetime" label="날짜" width="150%" />
           <el-table-column prop="company" label="기업명" width="200%" />
-          <el-table-column prop="study_title" label="항목" width="350%" />
-          <!-- 버튼 -->
-          <el-table-column prop="type" label="버튼" width="150%">
+          <el-table-column prop="title" label="항목" width="350%" />
+          <el-table-column label="버튼" width="150%">
             <el-button
               block
               color="#9DADD8"
@@ -36,7 +32,7 @@
           style="border-radius: 5%; background-color: #eeecf8"
         >
           <h2 class="text-h6 mb-3" style="margin-bottom: 0%">
-            {{ mystudy.study_title }}
+            {{ mystudy.title }}
           </h2>
           <h2
             class="text-h6 mb-3"
@@ -58,8 +54,8 @@
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
                 :class="tableRowClasscompany"
+                :data="scoreData"
               >
-                <!-- <el-table-column type="selection" width="35"></el-table-column> -->
                 <el-table-column
                   border
                   prop="type"
@@ -68,11 +64,12 @@
                 />
                 <el-table-column
                   border
-                  prop="company1"
+                  prop="question"
                   label="항목"
                   width="400%"
                 />
-                <!-- 여기를 어찌 해야할깡 -->
+
+                <!-- 여기를 어떻게 해야할까 -->
                 <el-table-column border label="점수" width="300%">
                   <el-rate
                     v-model="mystudy.attitude"
@@ -87,7 +84,6 @@
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
                   <span>피드백</span>
                 </span>
               </template>
@@ -107,119 +103,82 @@
 <script>
 import http from "@/api/http";
 import { mapState } from "vuex";
+
+const config = {
+headers: {
+  ACCESS: sessionStorage.getItem("ACCESS")
+}
+};
+
 export default {
   name: "MyData",
   data() {
     return {
       mystudys: [],
-      // fields: [
-      //   { key: "study_datetime", 2label: "", tdClass: "tdClass" },
-      //   // { key: "articleno", label: "글번호", tdClass: "tdClass" },
-      //   { key: "company", label: "제목", tdClass: "tdSubject" },
-      //   { key: "userid", label: "작성자", tdClass: "tdClass" },
-      // ],
       mystudy: null,
+      
       dialogVisible: false,
-      // 기본 채점템플릿
       tableData: [
         {
           study_datetime: "2016-05-03",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-02",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-04",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-01",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-04",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-01",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-04",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-01",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-04",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
         {
           study_datetime: "2016-05-01",
           company: "Tom",
-          study_title: "No. 189, Grove St, Los Angeles",
+          title: "No. 189, Grove St, Los Angeles",
         },
       ],
-      scoreData: [
-        {
-          type: "태도",
-          company1: "자신감 있는 표정과 목소리인가?",
-        },
-        {
-          type: "태도",
-          company1: "기본 준비 자세가 올바른가?",
-        },
-        {
-          type: "직무역량",
-          company1: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
-        },
-        {
-          type: "직무역량",
-          company1: "직무 수행에 필요한 역량을 갖췄는가?",
-        },
-        {
-          type: "팀워크",
-          company1: "다양한 의견을 수렴한 경험이 있는가?",
-        },
-        {
-          type: "팀워크",
-          company1: "적극적으로 참여하는 자세를 가졌는가?",
-        },
-        {
-          type: "문제해결",
-          company1: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
-        },
-        {
-          type: "문제해결",
-          company1: "해결에 도움이 되는 방향성을 제시하였는가?",
-        },
-        {
-          type: "기업이해도",
-          company1: "기업에 대한 이해도가 높은가?",
-        },
-        {
-          type: "기업이해도",
-          company1: "퇴사 가능성이 있는가?",
-        },
-      ],
+      scoreData: []
     };
   },
+  // 마이페이지 전체 글 받아오기
   created() {
-    http.get(`/board/users/mystudy`).then(({ data }) => {
-      this.mystudys = data;
+    http.get(`/users/mystudy`,config).then(({ data }) => {
+      console.log("전체 글 받아옵니다");
+      console.log(data.data);
+      this.mystudys = data.data;
     });
     if (this.global_isShow) {
       this.CLEAN_GLOBAL_ISSHOW();
@@ -230,25 +189,79 @@ export default {
     ...mapState(["global_article", "global_isShow"]),
   },
   methods: {
-    viewStudy(mystudy) {
-      // this.dialogVisible = true;
-      if (this.mystudy == null || this.mystudy.study_ID != mystudy.study_ID) {
-        http
-          .get(`/users/mystudy/${mystudy.study_ID}`)
-          .then(({ data }) => {
-            this.mystudy = data;
+    // 나의 스터디 1개 조회
+    viewStudy() {
+      http
+      .get(`/users/mystudy/${this.mystudy.id}`,config)
+      .then(({ data }) => {
+          // console.log("글 1개 조회 성공" + this.dialogVisible);
+          // console.log(data.data);
+          this.mystudy = data.data;
+          this.dialogVisible = true;
           })
           .then(() => {
-            this.dialogVisible = true;
+           
             // if(this.mystudy.fileInfos.length == 0)
             //   this.mystudy.fileInfos = [{saveFile: "ssafy_logo.png"}];
             // this.getComments(this.article.articleno);
           });
-      } else {
-        this.dialogVisible = false;
-        this.mystudy = null;
+      
+      // console.log(this.mystudy.attitude);
+
+      if(this.mystudy.attitude){
+        this.scoreData += [{
+          type: "태도",
+          question: "자신감 있는 표정과 목소리인가?",
+        },
+        {
+          type: "태도",
+          question: "기본 준비 자세가 올바른가?",
+        }];
+      }
+      if(this.mystudy.ability){
+        this.scoreData += [{
+          type: "직무역량",
+          question: "지원한 직무에 대한 구체적인 이해도를 가졌는가?",
+        },
+        {
+          type: "직무역량",
+          question: "직무 수행에 필요한 역량을 갖췄는가?",
+        },];
+      }
+      if(this.mystudy.teamwork){
+        this.scoreData += [{
+          type: "팀워크",
+          question: "다양한 의견을 수렴한 경험이 있는가?",
+        },
+        {
+          type: "팀워크",
+          question: "적극적으로 참여하는 자세를 가졌는가?",
+        },
+       
+       ];
+      }
+      if(this.mystudy.solving){
+        this.scoreData += [ {
+          type: "문제해결",
+          question: "문제를 해결하고자 하는 열정, 끈기, 의지를 가졌는가?",
+        },
+        {
+          type: "문제해결",
+          question: "해결에 도움이 되는 방향성을 제시하였는가?",
+        },];
+      }
+      if(this.mystudy.loyalty){
+        this.scoreData += [ {
+          type: "기업이해도",
+          question: "기업에 대한 이해도가 높은가?",
+        },
+        {
+          type: "기업이해도",
+          question: "퇴사 가능성이 있는가?",
+        },];
       }
     },
+    
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0 || columnIndex === 2) {

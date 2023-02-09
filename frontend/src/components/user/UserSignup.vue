@@ -134,7 +134,7 @@ export default {
     async join() {
       console.log("vuecomponent : " + JSON.stringify(this.user))
       await this.userJoin(this.user);
-      this.$router.push({ name: "main" });
+      this.$router.push({ name: "login" });
     },
 
     async emailcheck() {

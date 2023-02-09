@@ -18,7 +18,7 @@
           <el-col>
             <el-input
               placeholder="본인 비밀번호 확인"
-              v-model="data.password"
+              v-model="user.password"
             />
           </el-col>
         </el-row>
@@ -55,6 +55,14 @@ export default defineComponent({
     Lock,
     User,
   },
+  data(){
+    return{
+      user: {
+        id: "",
+        password: "",
+      }
+    }
+  },
   computed: {
     ...mapState(memberStore, ["data", "isLogin"]),
   },
@@ -62,7 +70,7 @@ export default defineComponent({
     ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
 
     async withdraw() {
-      await this.userDelete(this.data.userid);
+      await this.userDelete(this.user);
       alert("회원탈퇴 완료");
       this.$router.push({ name: "main" });
     },
