@@ -244,13 +244,22 @@ export default {
     // 스터디 참가 신청하기
     async applyStudy() {
       if (this.myId == 0) {
-        ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
-          confirmButtonText: "확인",
-        });
+        this.alertOpen();
+        // ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
+        //   confirmButtonText: "확인",
+        // });
       } else {
         await this.applyStudyConfirm(this.studyID);
         await this.getPersonnel(this.studyID);
       }
+    },
+    alertOpen() {
+      ElMessageBox.confirm("로그인 후 이용 부탁드립니다", {
+        confirmButtonText: "OK",
+        type: "warning",
+      }).then(() => {
+        this.$router.push({ name: "login" });
+      });
     },
 
     // 스터디 참가 신청 취소
