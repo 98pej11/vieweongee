@@ -223,7 +223,7 @@ const studyStore = {
             "현재 로그인 유저의 아이디 " +
               jwtDecode(sessionStorage.getItem("ACCESS")).Id
           );
-          commit("SET_STUDY_INFO", data);
+          commit("SET_STUDY_INFO", data.data);
           commit(
             "SET_LOGIN_ID",
             jwtDecode(sessionStorage.getItem("ACCESS")).Id

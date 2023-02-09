@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button round>채팅</el-button>
+
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
     <el-button
       v-if="isLeader && nowTurn == null"
@@ -24,12 +25,16 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
 
 export default {
   name: "MeetingFooter",
+  data(){
+    return {
+      message: ""
+    }
+  },
   computed: {
     ...mapState(meetingStore, [
       "isLeader",

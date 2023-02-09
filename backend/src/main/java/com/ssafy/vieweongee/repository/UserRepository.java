@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,10 +24,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByJwtToken(String token);
 
     List<User> getUserByEmail(String email);
+
     @Query("SELECT u FROM User u WHERE u.email=:email and u.provider=:social")
     User getUserByEmailandSocial(@Param("email") String email, @Param("social") String social);
 
-    User findByEmailAndProvider(String email, String provider);
+    @Query("SELECT u FROM User u WHERE u.email=:email and u.provider=:provider")
+    User findByEmailAndProvider(@Param("email") String email, @Param("provider") String provider);
+
     @Query("SELECT u FROM User u WHERE u.email=:email")
     User getUserByEmailUser(@Param("email") String email);
 

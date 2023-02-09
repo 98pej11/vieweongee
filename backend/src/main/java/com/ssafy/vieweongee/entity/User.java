@@ -3,13 +3,14 @@ package com.ssafy.vieweongee.entity;
 import com.ssafy.vieweongee.dto.user.request.SocialCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-//import javax.management.relation.Role;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -48,7 +48,7 @@ async function getAllStudy(success, fail) {
 // 스터디 1개 상세정보 조회
 async function getStudy(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/${study_ID}`).then(success).catch(fail);
+  await api.get(`/study/detail/${study_ID}`).then(success).catch(fail);
   // 추후 /study/detail/{} 로 수정해야합니다 !!! !
 }
 async function modifyStudy(study_ID, info, success, fail) {

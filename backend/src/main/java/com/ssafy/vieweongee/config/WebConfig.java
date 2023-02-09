@@ -27,7 +27,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                         "/meeting/*","/sessions/{sessionID}/connection",
                         "users/type","users/"
                         )
-                .excludePathPatterns("/study/top3", "study/detail/{study_id}");
+                .excludePathPatterns("/study/top3", "study/detail/{study_id}/{user_id}");
     }
 
 }
