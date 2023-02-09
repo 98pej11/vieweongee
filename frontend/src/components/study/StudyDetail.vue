@@ -130,7 +130,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import { ElMessageBox } from "element-plus";
+import { ElMessage } from "element-plus";
 import { User } from "@element-plus/icons-vue";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
@@ -244,22 +244,15 @@ export default {
     // 스터디 참가 신청하기
     async applyStudy() {
       if (this.myId == 0) {
-        this.alertOpen();
-        // ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
-        //   confirmButtonText: "확인",
-        // });
+        ElMessage({
+          type: "error",
+          message: "로그인 후 이용 부탁드립니다",
+        });
+        this.$router.push({ name: "login" });
       } else {
         await this.applyStudyConfirm(this.studyID);
         await this.getPersonnel(this.studyID);
       }
-    },
-    alertOpen() {
-      ElMessageBox.confirm("로그인 후 이용 부탁드립니다", {
-        confirmButtonText: "OK",
-        type: "warning",
-      }).then(() => {
-        this.$router.push({ name: "login" });
-      });
     },
 
     // 스터디 참가 신청 취소
