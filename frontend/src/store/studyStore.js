@@ -208,17 +208,25 @@ const studyStore = {
     },
 
     // 스터디 상세보기
-    async getInfo({ commit }, study_ID) {
+    // async getInfo({ commit }, study_ID) {
+    //   await getStudy(
+    //     // id,
+    //     study_ID,
+
+    // 객체 넘겨주는 걸로 변경
+    async getInfo({ commit }, params) {
       await getStudy(
-        // id,
-        study_ID,
+        params,
         ({ data }) => {
           console.log(
             "현재 로그인 유저의 아이디 " +
               jwtDecode(sessionStorage.getItem("ACCESS")).Id
           );
-          console.log(study_ID);
-          commit("SET_STUDY_INFO", data.data);
+          console.log(params.study_ID);
+          console.log(params.user_ID);
+          console.log("데이타는");
+          console.log(data.data);
+          // commit("SET_STUDY_INFO", data.data);
           commit(
             "SET_LOGIN_ID",
             jwtDecode(sessionStorage.getItem("ACCESS")).Id

@@ -130,8 +130,9 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { User } from "@element-plus/icons-vue";
-import StudyComment from "@/components/study/StudyComment.vue";
+import jwtDecode from "jwt-decode";
 import moment from "moment";
+import StudyComment from "@/components/study/StudyComment.vue";
 
 const studyStore = "studyStore";
 
@@ -159,6 +160,7 @@ export default {
       isPossible: false,
       isAuthor: false,
       isDone: false,
+      myId: 0,
     };
   },
   methods: {
@@ -175,8 +177,19 @@ export default {
 
     // 스터디 글 정보 조회
     async init() {
-      this.SET_APPLY_SUCCESS(false);
-      await this.getInfo(this.studyID);
+      console.log("미로그인? 로그인? : ");
+
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      const params = {
+        study_ID: this.studyID,
+        user_ID: this.myId,
+      };
+
+      // this.SET_APPLY_SUCCESS(false);
+      // await this.getInfo(this.studyID);
+      await this.getInfo(params); // 객체를 줘야함
       await this.getPersonnel(this.studyID);
       await this.getCommentList(this.studyID);
       await this.checkPossible();
