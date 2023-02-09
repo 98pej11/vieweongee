@@ -81,6 +81,7 @@ const studyStore = {
       state.studyList = [];
       state.commentList = [];
       state.currentList = [];
+      state.isCreated = false;
       state.noResult = false;
       state.isApplied = false;
     },
@@ -190,8 +191,6 @@ const studyStore = {
         studyInfo,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            console.log("얻어왔어요");
-            console.log(data.data);
             commit("SET_IS_SUCCESS", true);
             commit("SET_STUDY_ID", data.data);
           } else {
@@ -233,10 +232,8 @@ const studyStore = {
       await modifyStudy(
         params,
         ({ data }) => {
-          console.log("수정성공 번호 ! ");
-          console.log(data.data);
           commit("SET_IS_SUCCESS", true);
-          commit("SET_STUDY_ID", data.data + 1);
+          commit("SET_STUDY_ID", data.data);
         },
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
