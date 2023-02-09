@@ -8,6 +8,46 @@ async function getSearch(words, success, fail) {
   await api.get(`/study/search/${words}`).then(success).catch(fail);
 }
 
+// 메인화면 글 3개 조회
+async function getTopStudy(success, fail) {
+  // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/study/top3`).then(success).catch(fail);
+}
+
+// 전체 글 조회
+async function getAllStudy(success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/study`).then(success).catch(fail);
+}
+
+// 스터디 1개 상세정보 조회
+async function getStudy(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/study/detail/${study_ID}`).then(success).catch(fail);
+}
+
+// 스터디 생성
+async function createStudy(info, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+
+  await api.post(`/study`, JSON.stringify(info)).then(success).catch(fail);
+}
+
+// 스터디 수정
+async function modifyStudy(study_ID, info, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
+  await api
+    .put(`/study/${study_ID}`, JSON.stringify(info))
+    .then(success)
+    .catch(fail);
+}
+
+// 스터디 삭제
+async function deleteStudy(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.delete(`/study/${study_ID}`).then(success).catch(fail);
+}
+
 // 스터디 참가 신청하기
 async function applyStudy(study_id, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -25,42 +65,10 @@ async function getCurrent(study_ID, success, fail) {
   await api.get(`/study/${study_ID}/current-people`).then(success).catch(fail);
 }
 
-// 스터디 CRUD
-async function createStudy(info, success, fail) {
+// 내가 신청한 스터디 조회
+async function getMyStudy(success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-
-  await api
-    .delete(`/users/study`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
-}
-// 메인화면 글 3개 조회
-async function getTopStudy(success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/top3`).then(success).catch(fail);
-}
-// 전체 글 조회
-async function getAllStudy(success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study`).then(success).catch(fail);
-}
-
-// 스터디 1개 상세정보 조회
-async function getStudy(study_ID, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/${study_ID}`).then(success).catch(fail);
-  // 추후 /study/detail/{} 로 수정해야합니다 !!! !
-}
-async function modifyStudy(study_ID, info, success, fail) {
-  // api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
-  await api
-    .put(`/study/${study_ID}`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
-}
-async function deleteStudy(study_ID, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
-  await api.delete(`/study/${study_ID}`).then(success).catch(fail);
+  await api.get(`/users/mystudy/upcoming`).then(success).catch(fail);
 }
 
 // 댓글 CRUD
@@ -72,6 +80,7 @@ async function createComment(study_ID, myComment, success, fail) {
     .then(success)
     .catch(fail);
 }
+
 async function modifyComment(study_ID, comment_ID, info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -106,4 +115,5 @@ export {
   applyStudy,
   cancleStudy,
   getCurrent,
+  getMyStudy,
 };

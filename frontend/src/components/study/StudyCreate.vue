@@ -27,7 +27,7 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-input
-                v-model="studyFormInfo.companyName"
+                v-model="studyFormInfo.company"
                 ref="company"
                 placeholder="기업을 입력하세요."
               />
@@ -54,7 +54,7 @@
             <el-col><p>일시</p></el-col>
             <el-col>
               <el-date-picker
-                v-model="studyFormInfo.studyDatetime"
+                v-model="studyFormInfo.study_datetime"
                 ref="date"
                 type="datetime"
                 style="width: 100%"
@@ -64,6 +64,9 @@
               />
             </el-col>
           </el-row>
+          <el-row v-show="isError">
+            <el-alert title="24시간 이후로 선택해주세요" type="error"
+          /></el-row>
 
           <el-row :gutter="20">
             <el-col :span="12">
@@ -157,7 +160,7 @@
             style="display: flex; justify-content: space-around"
           >
             <el-col><p>진행시간</p></el-col>
-            <el-radio-group v-model="studyFormInfo.runningTime">
+            <el-radio-group v-model="studyFormInfo.running_time">
               <el-radio :label="1">1시간</el-radio>
               <el-radio :label="2">2시간</el-radio>
               <el-radio :label="3">3시간</el-radio>
@@ -222,48 +225,15 @@ export default {
     },
 
     // 스터디 생성 폼 submit
-    submitForm() {
-      // 1. 빈칸이 없으면
-      // let err = true;
-      // let msg = "";
-      // !this.studyFormInfo.title &&
-      //   ((msg = "제목을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.title.focus());
-      // err &&
-      //   !this.studyFormInfo.company &&
-      //   ((msg = "기업을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.company.focus());
-      // err &&
-      //   !this.studyFormInfo.job &&
-      //   ((msg = "직군을 입력해주세요"), (err = false), this.$refs.job.focus());
-      // err &&
-      //   !this.studyFormInfo.date &&
-      //   ((msg = "날짜를 입력해주세요"), (err = false), this.$refs.date.focus());
-      // err &&
-      //   !this.studyFormInfo.personnel &&
-      //   ((msg = "인원을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.personnel.focus());
-      // err &&
-      //   !this.studyFormInfo.type &&
-      //   ((msg = "유형을 입력해주세요"), (err = false), this.$refs.type.focus());
-      // err &&
-      //   !this.studyFormInfo.runningTime &&
-      //   ((msg = "진행시간을 입력해주세요"),
-      //   (err = false),
-      //   this.$refs.time.focus());
-      // err &&
-      //   !this.studyFormInfo.content &&
-      //   ((msg = "내용을 입력해주세요"), (err = false), this.$refs.desc.focus());
-      // if (!err) alert(msg);
-
-      // console.log(msg);
-      // console.log(this.studyFormInfo);
-      // 2. 날짜 제한이 맞으면
+    async submitForm() {
       console.log(this.studyFormInfo);
-      if (this.checkDate(this.studyFormInfo.studyDatetime)) this.confirm();
+      if (this.checkDate(this.studyFormInfo.study_datetime)) this.confirm();
+      else {
+        this.isError = true;
+        await this.sleep(3000).then(() => {
+          this.isError = false;
+        });
+      }
     },
 
     // 날짜 선택 제한
@@ -289,6 +259,7 @@ export default {
     handleSelectionChange(val) {
       multipleSelection.value = val;
     },
+    // 채점 템플릿 선택 사항
     setScoringList() {
       if (multipleSelection.value.length == 0) this.isChecked = true;
       else {
@@ -327,33 +298,36 @@ export default {
       }
       return "";
     },
+    // 시간 지연
+    sleep(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    },
   },
 
   data() {
     return {
-      // 모달창 이벤트 변수
-      dialogVisible: false,
-      alertMsg: "24시간 이후로 선택해주세요",
+      isError: false, // 유효성 여부 변수
+      dialogVisible: false, // 모달창 이벤트 변수
+      // alertMsg: "24시간 이후로 선택해주세요",
       isChecked: false,
       // 스터디 생성 정보
-      studyFormInfo: [
-        {
-          id: 0, // 꼭 넘겨주어야 한다 !!
-          title: "",
-          company: "",
-          job: "",
-          personnel: 1,
-          type: "",
-          studyDatetime: "",
-          runningTime: 1,
-          content: "",
-          attitude: 0,
-          ability: 0,
-          teamwork: 0,
-          solving: 0,
-          loyalty: 0,
-        },
-      ],
+      studyFormInfo: {
+        id: 0, // 꼭 넘겨주어야 한다 !!
+        title: "",
+        company: "",
+        job: "",
+        personnel: 1,
+        type: "",
+        study_datetime: "",
+        running_time: 1,
+        content: "",
+        attitude: 0,
+        ability: 0,
+        teamwork: 0,
+        solving: 0,
+        loyalty: 0,
+      },
+
       typeOptions: [
         {
           value: "일대다",
