@@ -12,7 +12,9 @@
           </el-col>
           <el-col :span="4">
             <div class="person-div">
-              <el-icon :size="17"><User /></el-icon>&nbsp; {{ this.current }} /
+              &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
+                this.current
+              }}&nbsp;/
               {{ studyInfo.personnel }}
             </div>
           </el-col>
@@ -50,20 +52,21 @@
         </el-row>
 
         <el-row justify="end">
-          <el-button v-if="isOpened" round color="#E1E6FF" class="me-2">
+          <el-button v-if="isApplied" round color="#E1E6FF" class="me-2">
             자기소개서 업로드
           </el-button>
           <el-button
-            v-if="!isApplied && isOpened"
+            v-if="!isApplied && isPossible && !isAuthor"
             @click="applyStudy"
             round
             color="#9DADD8"
             class="me-2"
+            style="color: white"
           >
             신청
           </el-button>
           <el-button
-            v-if="isApplied && !isOpened"
+            v-if="isApplied && !isPossible"
             @click="cancleStudy"
             round
             color="#FFCD9F"
@@ -72,7 +75,16 @@
             신청취소
           </el-button>
           <el-button
-            v-if="isOpened"
+            v-if="!isPossible"
+            round
+            disabled
+            color="#555454"
+            class="me-2 done"
+          >
+            마감
+          </el-button>
+          <el-button
+            v-if="isOpened && isApplied"
             @click="enterMeeting"
             round
             color="#FFCD9F"
@@ -91,7 +103,7 @@
           </el-button>
         </el-row>
         <el-row justify="end" style="margin-top: 10px">
-          <div v-if="this.token_id == this.studyInfo.user_id">
+          <div v-if="isAuthor && isPossible">
             <el-button @click="modifyStudy" round color="#9DADD8" class="me-2">
               수정
             </el-button>
@@ -107,13 +119,7 @@
           >
         </el-row>
         <el-row>
-          <el-col style="color: black"
-            >{{ studyInfo.content }}
-            <!-- 싸피 10기 비전공자 면접 스터디를 -->
-            <!-- 모집합니다.<br />자기소개서를 기반으로 한 기본 질문 중심으로 진행 -->
-            <!-- 예정입니다.<br /> -->
-            <!-- PT 면접은 진행하지 않습니다. -->
-          </el-col>
+          <el-col style="color: black">{{ studyInfo.content }} </el-col>
         </el-row>
       </div>
     </div>
@@ -149,6 +155,8 @@ export default {
   data() {
     return {
       isOpened: false,
+      isPossible: false,
+      isAuthor: false,
     };
   },
   methods: {
@@ -164,25 +172,37 @@ export default {
 
     // 스터디 글 정보 조회
     async init() {
-      // if (this.token_id == this.studyInfo.user_id)
-      //   console.log(
-      //     "같네요. " + this.studyInfo.user_id + " / " + this.token_id
-      //   );
       this.SET_APPLY_SUCCESS(false);
       await this.getInfo(this.studyID);
       await this.getPersonnel(this.studyID);
       await this.getCommentList(this.studyID);
+      await this.checkPossible();
       await this.checkOpened();
+
+      if (this.token_id == this.studyInfo.user_id) {
+        this.isAuthor = true;
+      }
+    },
+
+    checkPossible() {
+      // 미팅 시작시간 24시간 전이면 신청 가능
+      const startTime = moment(this.studyInfo.study_datetime);
+      const now = moment();
+      let diff = moment.duration(startTime.diff(now)).asHours();
+
+      if (diff > 24) this.isPossible = true;
+      else if (diff >= 0 && diff < 24) this.isPossible = false;
+      console.log(diff);
     },
 
     checkOpened() {
-      // 미팅 시작시간 24시간 전이면 참여 가능
+      // 미팅 시작시간 24시간 전이면 신청 가능
       const startTime = moment(this.studyInfo.study_datetime);
       const now = moment();
       let diff = moment.duration(startTime.diff(now)).asHours();
 
       if (diff >= 0 && diff < 24) this.isOpened = true;
-      else console.log("이미" + diff + "시간 지난 스터디 ! ");
+      else if (diff < 0) this.isOpened = false;
     },
 
     enterMeeting() {
@@ -213,6 +233,7 @@ export default {
     async deleteOpen() {
       console.log("삭제할게요");
       await this.deleteConfirm(this.studyID);
+      this.$router.push("main");
     },
   },
 };
@@ -229,6 +250,9 @@ export default {
   margin-bottom: 5%;
 }
 
+button {
+  color: white;
+}
 .el-row > :nth-child(1) {
   color: gray;
 }
@@ -240,13 +264,11 @@ hr {
   color: gray;
   margin: 20px 0 20px 0;
 }
-button {
-  color: white;
-}
 .person-div {
-  padding: 5px;
+  /* padding: 5px; */
   width: 75px;
   display: flex;
+  padding: 5px 0 5px 0;
   margin: 0 auto;
   border-radius: 30px;
   background-color: #d3daff;
