@@ -8,16 +8,6 @@ async function getSearch(words, success, fail) {
   await api.get(`/study/search/${words}`).then(success).catch(fail);
 }
 
-// 스터디 CRUD
-async function createStudy(info, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-
-  await api
-    .delete(`/users/study`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
-}
-
 // 메인화면 글 3개 조회
 async function getTopStudy(success, fail) {
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -34,6 +24,13 @@ async function getAllStudy(success, fail) {
 async function getStudy(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/study/detail/${study_ID}`).then(success).catch(fail);
+}
+
+// 스터디 생성
+async function createStudy(info, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+
+  await api.post(`/study`, JSON.stringify(info)).then(success).catch(fail);
 }
 
 // 스터디 수정

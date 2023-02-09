@@ -191,7 +191,8 @@ const studyStore = {
       await createStudy(
         studyInfo,
         ({ data }) => {
-          console.log(data);
+          console.log(data.data);
+          console.log("생성성공");
           // console.log(data.headers);
           // console.log(data.body);
           commit("SET_STUDY_ID", data);
