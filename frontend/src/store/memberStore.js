@@ -246,10 +246,10 @@ const memberStore = {
       )
     },
     async userUpdate({ commit }, user) {
-      console.log("di");
       let token = sessionStorage.getItem("ACCESS");
+      console.log(token);
+      console.log("스토어임");
       await update(user, token,({ data }) => {
-        
         console.log(data);
         commit("SET_IS_LOGIN",this.isLogin);
         console.log("업데이트 성공");
