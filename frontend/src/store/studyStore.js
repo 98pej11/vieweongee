@@ -1,5 +1,4 @@
 // import router from "@/router";
-import jwtDecode from "jwt-decode";
 
 import {
   getSearch,
@@ -22,7 +21,6 @@ import {
 const studyStore = {
   namespaced: true,
   state: {
-    token_id: 0,
     isCreated: false,
     isApplied: false, // 신청 여부
 
@@ -76,9 +74,9 @@ const studyStore = {
   },
   getters: {},
   mutations: {
-    SET_LOGIN_ID: (state, token_id) => {
-      state.token_id = token_id;
-    },
+    // SET_LOGIN_ID: (state, token_id) => {
+    //   state.token_id = token_id;
+    // },
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
@@ -208,29 +206,19 @@ const studyStore = {
     },
 
     // 스터디 상세보기
-    // async getInfo({ commit }, study_ID) {
-    //   await getStudy(
-    //     // id,
-    //     study_ID,
-
-    // 객체 넘겨주는 걸로 변경
     async getInfo({ commit }, params) {
       await getStudy(
         params,
         ({ data }) => {
-          console.log(
-            "현재 로그인 유저의 아이디 " +
-              jwtDecode(sessionStorage.getItem("ACCESS")).Id
-          );
-          console.log(params.study_ID);
-          console.log(params.user_ID);
-          console.log("데이타는");
-          console.log(data.data);
-          // commit("SET_STUDY_INFO", data.data);
-          commit(
-            "SET_LOGIN_ID",
-            jwtDecode(sessionStorage.getItem("ACCESS")).Id
-          );
+          // 이미 신청한 스터디
+          if (data.message == "MINE") {
+            commit("SET_APPLY_SUCCESS", true);
+          }
+          // 신청하지 않은 스터디
+          else {
+            commit("SET_APPLY_SUCCESS", false);
+          }
+          commit("SET_STUDY_INFO", data.data);
         },
         async (error) => {
           console.log(error);
