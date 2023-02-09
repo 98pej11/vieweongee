@@ -24,10 +24,10 @@ const studyStore = "studyStore";
 
 export default {
   name: "MeetingFooter",
-  data(){
+  data() {
     return {
-      message: ""
-    }
+      message: "",
+    };
   },
   computed: {
     ...mapState(meetingStore, [

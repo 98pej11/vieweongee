@@ -78,6 +78,8 @@ export default {
       "isInterviewee",
       "isInterviewer",
       "leaderTurn",
+      "nowScoreList",
+      "totalTurn",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
@@ -98,6 +100,7 @@ export default {
         await this.getScorecards(this.studyInfo.id);
         //면접 순서 리스트에 저장
         await this.setInterviewList(this.interviewOrder);
+        this.showOrderAlert(this.nowTurn);
       }
     },
     // interviewOrderList() {
@@ -188,7 +191,8 @@ export default {
           //미팅 시작 버튼 누르면 0회차가 전송됨
           //면접 종료 버튼을 누르면 +1 회차가 전송됨
 
-          alert("3초 뒤 회차가 변경됩니다.\n채점표를 저장해주세요.");
+          // let turn = this.nowTurn;
+          // this.showOrderAlert(turn + 1);
           setTimeout(() => {
             this.SET_NOWTURN(event.data);
           }, 3000); //지금은 5초
@@ -350,6 +354,25 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    showOrderAlert(turn) {
+      //미팅 시작시 알림 ㅇㅇㅇ,ㅇㅇㅇ님이 면접자 입니다. 30초 뒤 면접이 시작됩니다.
+      //회차 진행시 1/4회 면접 완료. 3분 후에 채점이 종료됩니다. 채점 내용 기입 후 저장을 눌러주세요.
+      let str = "🔔알림🔔\n\n";
+      //현재 회차의 면접자, 면접관을 알려줌
+      if (turn == 0) {
+        this.nowScoreList.forEach((el) => {
+          str += el.id + " ";
+        });
+        str += "님이 면접자 입니다.\n\n곧 면접이 시작됩니다.";
+      } else {
+        str += "3분 후에 채점이 종료됩니다.\n면접관은 채점 내용 기입 후 저장을 눌러주세요.\n\n다음 회차는 ";
+        this.interviewOrderList[turn].forEach((el) => {
+          str += el + " ";
+        });
+        str += "님이 면접자 입니다.";
+      }
+      alert(str);
     },
   },
 };

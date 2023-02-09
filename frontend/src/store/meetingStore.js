@@ -193,27 +193,27 @@ const meetingStore = {
     },
     setShowScoreList({ commit, state }, turn) {
       //면접관이라면 채점표 저장
-      if (state.isInterviewer) {
-        let list = [];
-        //현재 회차의 면접자 아이디, 채점표의 아이디 비교하여 해당하는 것만 보여줌
-        for (let i = 0; i < state.interviewOrderList[turn].length; i++) {
-          //현재 회차의 면접자수만큼
-          for (let j = 0; j < state.scoreList.length; j++) {
-            //스터디 참가자 수만큼
-            if (state.interviewOrderList[turn][i] == state.scoreList[j].id) {
-              //현재회차아이디와 채점표 아이디가 같으면
-              list.push(state.scoreList[j]);
-              break;
-            }
+      // if (state.isInterviewer) {
+      let list = [];
+      //현재 회차의 면접자 아이디, 채점표의 아이디 비교하여 해당하는 것만 보여줌
+      for (let i = 0; i < state.interviewOrderList[turn].length; i++) {
+        //현재 회차의 면접자수만큼
+        for (let j = 0; j < state.scoreList.length; j++) {
+          //스터디 참가자 수만큼
+          if (state.interviewOrderList[turn][i] == state.scoreList[j].id) {
+            //현재회차아이디와 채점표 아이디가 같으면
+            list.push(state.scoreList[j]);
+            break;
           }
         }
-        commit("SET_NOW_SCORE_LIST", list);
-        console.log("보여줄 채점표 보여줄게요");
-        console.log(state.nowScoreList);
-      } else {
-        //면접관이 아니라면
-        console.log("채점표를 볼 수 없어요");
       }
+      commit("SET_NOW_SCORE_LIST", list);
+      console.log("보여줄 채점표 보여줄게요");
+      console.log(state.nowScoreList);
+      // } else {
+      //면접관이 아니라면
+      // console.log("채점표를 볼 수 없어요");
+      // }
     },
   },
 };
