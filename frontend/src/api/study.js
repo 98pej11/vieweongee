@@ -7,6 +7,7 @@ async function getSearch(words, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/study/search/${words}`).then(success).catch(fail);
 }
+
 // 스터디 CRUD
 async function createStudy(info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -16,11 +17,13 @@ async function createStudy(info, success, fail) {
     .then(success)
     .catch(fail);
 }
+
 // 메인화면 글 3개 조회
 async function getTopStudy(success, fail) {
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/study/top3`).then(success).catch(fail);
 }
+
 // 전체 글 조회
 async function getAllStudy(success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -32,6 +35,8 @@ async function getStudy(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/study/detail/${study_ID}`).then(success).catch(fail);
 }
+
+// 스터디 수정
 async function modifyStudy(study_ID, info, success, fail) {
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
   await api
@@ -63,6 +68,12 @@ async function getCurrent(study_ID, success, fail) {
   await api.get(`/study/${study_ID}/current-people`).then(success).catch(fail);
 }
 
+// 내가 신청한 스터디 조회
+async function getMyStudy(success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/users/mystudy/upcoming`).then(success).catch(fail);
+}
+
 // 댓글 CRUD
 async function createComment(study_ID, myComment, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -72,6 +83,7 @@ async function createComment(study_ID, myComment, success, fail) {
     .then(success)
     .catch(fail);
 }
+
 async function modifyComment(study_ID, comment_ID, info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -106,4 +118,5 @@ export {
   applyStudy,
   cancleStudy,
   getCurrent,
+  getMyStudy,
 };

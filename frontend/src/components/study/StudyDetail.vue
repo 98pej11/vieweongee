@@ -66,7 +66,7 @@
             신청
           </el-button>
           <el-button
-            v-if="isApplied && !isPossible"
+            v-if="isApplied && !isOpened"
             @click="cancleStudy"
             round
             color="#FFCD9F"
@@ -93,7 +93,7 @@
             입장
           </el-button>
           <el-button
-            v-if="!isOpened"
+            v-if="isDone"
             round
             disabled
             color="#555454"
@@ -147,6 +147,7 @@ export default {
       "token_id",
       "studyInfo",
       "commentList",
+      "appliedList",
     ]),
   },
   mounted() {
@@ -157,6 +158,7 @@ export default {
       isOpened: false,
       isPossible: false,
       isAuthor: false,
+      isDone: false,
     };
   },
   methods: {
@@ -167,6 +169,7 @@ export default {
       "cancleStudyConfirm",
       "getPersonnel",
       "deleteConfirm",
+      "getMyApplied",
     ]),
     ...mapMutations(studyStore, ["SET_APPLY_SUCCESS"]),
 
@@ -178,35 +181,57 @@ export default {
       await this.getCommentList(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
+      // this.getApplied();
 
+      // 로그인 유저 == 글 작성자
       if (this.token_id == this.studyInfo.user_id) {
         this.isAuthor = true;
       }
     },
 
+    // getApplied() {
+    //   // 내가 신청한
+    //   this.getMyApplied();
+
+    //   console.log(this.appliedList);
+
+    //   // console.log(this.appliedList[0].study_id);
+
+    //   this.appliedList.forEach((el) => {
+    //     if (el.study_id == this.studyID) {
+    //       console.log("같네요 ㅋ");
+    //     }
+    //   });
+    // },
+
+    // 신청 가능 여부
     checkPossible() {
-      // 미팅 시작시간 24시간 전이면 신청 가능
       const startTime = moment(this.studyInfo.study_datetime);
       const now = moment();
       let diff = moment.duration(startTime.diff(now)).asHours();
 
+      // 미팅 시작시간 24시간 전이면 신청 가능
       if (diff > 24) this.isPossible = true;
+      // 아니면 신청 불가
       else if (diff >= 0 && diff < 24) this.isPossible = false;
       console.log(diff);
     },
 
+    // 화상회의 참여 가능 여부
     checkOpened() {
-      // 미팅 시작시간 24시간 전이면 신청 가능
+      // 시작시간 24시간 전부터 화상회의 참여 가능
       const startTime = moment(this.studyInfo.study_datetime);
       const now = moment();
       let diff = moment.duration(startTime.diff(now)).asHours();
 
       if (diff >= 0 && diff < 24) this.isOpened = true;
       else if (diff < 0) this.isOpened = false;
+      else if (diff < -28) this.isDone = true;
     },
 
+    // 화상회의 참여
     enterMeeting() {
-      // 미팅 참여 !!!! 새 창으로 슈슉
+      // 화상회의 참여 !!!! 새 창으로 슈슉
       // this.$router.push();
     },
 
@@ -230,10 +255,10 @@ export default {
       await this.getPersonnel(this.studyID);
     },
 
+    // 스터디 삭제
     async deleteOpen() {
-      console.log("삭제할게요");
       await this.deleteConfirm(this.studyID);
-      this.$router.push("main");
+      this.$router.push({ name: "studylist" });
     },
   },
 };

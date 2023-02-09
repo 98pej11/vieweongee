@@ -16,6 +16,7 @@ import {
   applyStudy,
   cancleStudy,
   getCurrent,
+  getMyStudy,
 } from "@/api/study";
 
 const studyStore = {
@@ -23,13 +24,14 @@ const studyStore = {
   state: {
     token_id: 0,
     isCreated: false,
-    isApplied: false,
-    studyID: 0,
-    noResult: false,
+    isApplied: false, // 신청 여부
 
+    appliedList: [], // 내가 신청한 리스트
+
+    studyID: 0, // 검색 결과
+    noResult: false, // 신청자 수
     current: 0,
     currentList: [],
-
     studyList: [
       {
         id: 0,
@@ -80,7 +82,9 @@ const studyStore = {
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
+      state.currentList = [];
       state.noResult = false;
+      state.isApplied = false;
     },
     SET_IS_SUCCESS: (state, isCreated) => {
       state.isCreated = isCreated;
@@ -89,6 +93,11 @@ const studyStore = {
     SET_APPLY_SUCCESS: (state, isApplied) => {
       state.isApplied = isApplied;
     },
+    // 스터디 신청 여부
+    SET_MY_APPLIED: (state, list) => {
+      state.appliedList = list;
+    },
+
     // 검색 결과
     SET_SEARCH_RESULT: (state, noResult) => {
       state.noResult = noResult;
@@ -207,6 +216,7 @@ const studyStore = {
             "현재 로그인 유저의 아이디 " +
               jwtDecode(sessionStorage.getItem("ACCESS")).Id
           );
+          console.log(study_ID);
           commit("SET_STUDY_INFO", data.data);
           commit(
             "SET_LOGIN_ID",
@@ -238,20 +248,13 @@ const studyStore = {
     },
     // 스터디 삭제
     async deleteConfirm({ commit }, study_ID) {
-      await deleteStudy(
-        study_ID,
-        ({ data }) => {
-          console.log(data.data);
-          console.log(data.data.message);
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-      );
+      await deleteStudy(study_ID, ({ data }) => {
+        console.log(data);
+        console.log(data.data);
+        console.log(data.message);
+        commit("SET_IS_SUCCESS", true);
+        if (data.message == "SUCCESS") console.log("삭제성공이래");
+      });
     },
 
     // 스터디 참가자 수 조회
@@ -262,10 +265,12 @@ const studyStore = {
         commit("PUSH_CURRENT_LIST", data.data);
       });
     },
+
     // 스터디 참가 신청하기
     async applyStudyConfirm({ commit }, studyId) {
-      await applyStudy(studyId, () => {
-        console.log("참가신청 완료");
+      await applyStudy(studyId, ({ data }) => {
+        console.log("참가신청 완료" + data.data);
+        console.log("참가신청 완료" + data.message);
         commit("SET_APPLY_SUCCESS", true);
       });
     },
@@ -275,6 +280,19 @@ const studyStore = {
       await cancleStudy(studyId, () => {
         console.log("참가신청 취소 완료");
         commit("SET_APPLY_SUCCESS", false);
+      });
+    },
+
+    // 신청한 스터디 목록 불러오기
+    async getMyApplied({ commit }) {
+      await getMyStudy(({ data }) => {
+        console.log("내가 신청한 스터디는? store");
+        console.log(data.data);
+        if (data.message == "SUCCESS") {
+          // console.log(data.message);
+          commit("SET_APPLY_SUCCESS", true);
+          commit("SET_MY_APPLIED", data.data);
+        }
       });
     },
 
