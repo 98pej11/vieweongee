@@ -30,12 +30,8 @@
     </div>
 
     <div class="chat-container">
-			<MeetingChatting
-				:session="session"
-				:myUserName="myUserName"
-			/>
-		</div>
-
+      <MeetingChatting :session="session" :myUserName="myUserName" />
+    </div>
   </div>
 </template>
 
@@ -45,7 +41,7 @@ import { OpenVidu } from "openvidu-browser";
 import { mapState, mapMutations, mapActions } from "vuex";
 import http from "../../api/http.js";
 import jwtDecode from "jwt-decode";
-import MeetingChatting from './MeetingChatting.vue';
+import MeetingChatting from "./MeetingChatting.vue";
 
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
@@ -54,7 +50,8 @@ const api = http;
 export default {
   name: "MeetingVideo",
   components: {
-    UserVideo,MeetingChatting,
+    UserVideo,
+    MeetingChatting,
   },
   data() {
     return {
@@ -67,7 +64,7 @@ export default {
 
       // Join form
       myStudyId: "2", //스터디 아이디로 사용
-      myUserName:'두리두두',
+      myUserName: "두리두두",
     };
   },
   computed: {
@@ -95,12 +92,12 @@ export default {
         this.shareInterviewOrder();
       }
     },
-    interviewOrder() {
+    async interviewOrder() {
       if (this.interviewOrder != null) {
         //채점표 불러오기
-        this.getScorecards(this.studyInfo.id);
+        await this.getScorecards(this.studyInfo.id);
         //면접 순서 리스트에 저장
-        this.setInterviewList(this.interviewOrder);
+        await this.setInterviewList(this.interviewOrder);
       }
     },
     // interviewOrderList() {
@@ -110,6 +107,8 @@ export default {
     nowTurn() {
       //회차가 바뀌는 것 감지하면 이 회차에서 면접관, 면접자 확인
       this.checkMyRole(this.nowTurn);
+      //내가 볼 면접자의 채점표 확인
+      this.setShowScoreList(this.nowTurn);
     },
     leaderTurn() {
       if (this.isLeader && this.leaderTurn > 0) {
@@ -128,7 +127,7 @@ export default {
       "SET_NOWTURN",
     ]),
     ...mapActions(studyStore, ["getInfo"]),
-    ...mapActions(meetingStore, ["setLeader", "setMyid", "setInterviewList", "getScorecards"]),
+    ...mapActions(meetingStore, ["setLeader", "setMyid", "setInterviewList", "getScorecards", "setShowScoreList"]),
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -281,10 +280,19 @@ export default {
       console.log("나의 아이디 >> " + this.myId);
     },
 
-    getStudyInfo() {
+    async getStudyInfo() {
       //나의 아이디 설정
       this.setMyIdState();
-      // await this.getInfo(this.myStudyId); //스터디 상세 정보 가져옴
+
+      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      const params = {
+        study_ID: this.myStudyId,
+        user_ID: this.myId,
+      };
+
+      await this.getInfo(params); //스터디 상세 정보 가져옴
+      console.log("지금 스터디 아이디 >> " + this.studyInfo.id);
       if (this.myId == this.studyInfo.user_id) {
         //나의 아이디와 스터디장이 같으면 리더로 설정
         this.setLeader(true);
