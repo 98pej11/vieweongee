@@ -60,17 +60,7 @@ const studyStore = {
       running_time: 1,
       content: "",
     },
-    commentList: [
-      {
-        depth: 1,
-        user_id: 0,
-        user_nickname: "",
-        comment_id: 0,
-        reply_id: 0,
-        content: "",
-        datetime: "",
-      },
-    ],
+    commentList: [],
   },
   getters: {},
   mutations: {
@@ -144,18 +134,22 @@ const studyStore = {
       state.studyInfo.study_datetime = dateFormat1;
       state.studyInfo.regist_datetime = dateFormat2;
     },
+    SET_MY_COMMENT: (state, info) => {
+      state.commentList.push(info);
+    },
     SET_ALL_COMMENT: (state, list) => {
-      list.forEach((el) => {
-        state.commentList.push({
-          depth: el.depth,
-          user_id: el.user_id,
-          user_nickname: el.user_nickname,
-          comment_id: el.comment_id,
-          reply_id: el.reply_id,
-          content: el.content,
-          datetime: el.datetime,
-        });
-      });
+      state.commentList = list;
+      // list.forEach((el) => {
+      // state.commentList.push({
+      // depth: el.depth,
+      // user_id: el.user_id,
+      // user_nickname: el.user_nickname,
+      // comment_id: el.comment_id,
+      // reply_id: el.reply_id,
+      // content: el.content,
+      // datetime: el.datetime,
+      // });
+      // });
     },
   },
   actions: {
@@ -247,11 +241,9 @@ const studyStore = {
     // 스터디 삭제
     async deleteConfirm({ commit }, study_ID) {
       await deleteStudy(study_ID, ({ data }) => {
-        console.log(data);
-        console.log(data.data);
-        console.log(data.message);
+        // 스터디 삭제 success message 리팩토링 필요
         commit("SET_IS_SUCCESS", true);
-        if (data.message == "SUCCESS") console.log("삭제성공이래");
+        if (data.message == "SUCCESS") console.log("삭제성공");
       });
     },
 
@@ -284,8 +276,6 @@ const studyStore = {
     // 신청한 스터디 목록 불러오기
     async getMyApplied({ commit }) {
       await getMyStudy(({ data }) => {
-        console.log("내가 신청한 스터디는? store");
-        console.log(data.data);
         if (data.message == "SUCCESS") {
           // console.log(data.message);
           commit("SET_APPLY_SUCCESS", true);
@@ -295,16 +285,19 @@ const studyStore = {
     },
 
     // 댓글 작성
-    async createCommentConfirm({ commit }, { studyId, myComment }) {
-      console.log("컨펌 in  : " + studyId + " / " + myComment);
+    async createCommentConfirm({ commit }, params) {
       await createComment(
-        studyId,
-        myComment,
+        params,
         // comment_id가 반환됨
         ({ data }) => {
-          console.log("작성성공  : " + myComment);
-          console.log("작성성공 : " + data);
-          commit("SET_STUDY_ID", studyId);
+          console.log(data.message);
+
+          if (data.message == "SUCCESS") {
+            commit("SET_STUDY_ID", data.data);
+            commit("SET_IS_SUCCESS", true);
+          } else {
+            commit("SET_IS_SUCCESS", false);
+          }
         }
         // async (error) => {
         //   // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
@@ -322,7 +315,7 @@ const studyStore = {
         comment_ID,
         info,
         (data) => {
-          console.log(data);
+          // console.log(data);
           commit("SET_STUDY_ID", data.body);
         },
         async (error) => {
@@ -358,8 +351,11 @@ const studyStore = {
       await getAllComment(
         study_ID,
         ({ data }) => {
-          if (data !== "") commit("SET_ALL_COMMENT", data);
-          else console.log("댓글 아직 없음");
+          if (data.message == "SUCCESS") {
+            commit("SET_ALL_COMMENT", data.data);
+            console.log(data.data);
+            // commit("SET_IS_SUCCESS", true);
+          } else console.log("댓글 아직 없음");
         },
         async (error) => {
           if (error.response.status === 401) {

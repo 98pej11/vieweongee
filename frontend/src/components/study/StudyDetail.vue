@@ -177,8 +177,6 @@ export default {
 
     // 스터디 글 정보 조회
     async init() {
-      console.log("미로그인? 로그인? : ");
-
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 

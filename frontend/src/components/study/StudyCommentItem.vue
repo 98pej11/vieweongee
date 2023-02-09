@@ -1,30 +1,24 @@
 <template>
-  <div class="comment-item">
-    <el-row
-      class="comment-content"
-      v-for="(data, index) in commentList"
-      :key="index"
-    >
+  <div class="comment-item" v-for="(data, index) in commentList" :key="index">
+    <el-row class="comment-content">
       <el-col :span="21" align-self="start" style="color: gray"
-        ><p>
-          {{ data.user_nickname }}higildong | {{ data.datetime }}2023.01.05
-        </p>
+        ><p>{{ data.user_nickname }} 님 | {{ data.datetime }}</p>
       </el-col>
       <el-col :span="3" align-self="end"
         ><p @click="showInput = true">답글 달기</p>
       </el-col>
-      <el-col :span="3" align-self="end"
+    </el-row>
+    <el-row>
+      <el-col :span="20"> {{ data.content }} </el-col>
+      <el-col :span="4" v-if="data.user_id == this.myId"
         ><p>수정&nbsp;&nbsp;</p>
         <p>삭제</p>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col> {{ data.content }}비전공자는 안되나요? </el-col>
-    </el-row>
-    <el-row>
+    <!-- <el-row>
       <el-col id="comment-field">
         <el-input
-          v-model="myComment.content"
+          v-model="myReply.content"
           label="댓글을 입력하세요..."
           type="text"
         ></el-input>
@@ -34,25 +28,48 @@
           >
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+import jwtDecode from "jwt-decode";
+// import { ElMessage } from "element-plus";
 
 const studyStore = "studyStore";
 
 export default {
   name: "StudyCommentItem",
-  mounted() {
+  created() {
     this.getAll();
   },
   computed: {
-    ...mapState(studyStore, ["studyID", "commentList"]),
+    ...mapState(studyStore, ["studyID", "isCreated", "commentList"]),
   },
   methods: {
-    ...mapActions(studyStore, ["getCommentList", "createCommentConfirm"]),
+    // TODO : 대댓글 등록 액션 등록하기
+    ...mapActions(studyStore, ["getCommentList"]),
+
+    async getAll() {
+      await this.getCommentList(this.studyID);
+      console.log(this.commentList[0].content);
+
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      // if (this.isCreated) {
+      //   ElMessage({
+      //     type: "success",
+      //     message: "댓글 작성 성공",
+      //   });
+      // } else {
+      //   ElMessage({
+      //     type: "error",
+      //     message: "댓글 작성 오류",
+      //   });
+      // }
+    },
 
     // 대댓글 등록하기
     // async CommentSubmit() {
@@ -65,11 +82,12 @@ export default {
     return {
       isAuthor: true,
       showInput: false,
+      myId: 0,
 
       // 새로 등록할 댓글
-      myComment: {
+      myReply: {
         // 깊이 구분해주어야 함
-        depth: 1,
+        depth: 2,
         comment_id: "",
         reply_id: "",
         user_id: "",

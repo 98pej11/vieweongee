@@ -75,11 +75,10 @@ async function getMyStudy(success, fail) {
 }
 
 // 댓글 CRUD
-async function createComment(study_ID, myComment, success, fail) {
+async function createComment(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  console.log("myComment : " + JSON.stringify(myComment));
   await api
-    .post(`/study/${study_ID}/comment`, JSON.stringify(myComment))
+    .post(`/study/${params.study_ID}/comment`, JSON.stringify(params.info))
     .then(success)
     .catch(fail);
 }

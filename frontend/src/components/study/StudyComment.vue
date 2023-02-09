@@ -24,13 +24,13 @@
           </div>
         </el-col>
       </el-row>
-      <!-- <StudyCommentItem></StudyCommentItem> -->
+      <StudyCommentItem></StudyCommentItem>
     </div>
   </div>
 </template>
 
 <script>
-// import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
+import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
 import { mapState, mapActions } from "vuex";
 
 const studyStore = "studyStore";
@@ -38,10 +38,10 @@ const studyStore = "studyStore";
 export default {
   name: "StudyComment",
   components: {
-    // StudyCommentItem,
+    StudyCommentItem,
   },
   computed: {
-    ...mapState(studyStore, ["isError", "studyID", "commentList"]),
+    ...mapState(studyStore, ["isError", "studyID"]),
   },
   data() {
     return {
@@ -53,17 +53,19 @@ export default {
         // reply_id: 0,
         content: "",
       },
+      params: {
+        study_ID: 0,
+        info: {},
+      },
     };
   },
   methods: {
     ...mapActions(studyStore, ["createCommentConfirm"]),
-
-    // 유저 닉네임 얻어와야함
-
     // 댓글 작성
     async CommentSubmit() {
-      console.log("vuecomponent : " + JSON.stringify(this.myComment));
-      await this.createCommentConfirm(this.studyID, this.myComment);
+      this.params.study_ID = this.studyID;
+      this.params.info = this.myComment;
+      await this.createCommentConfirm(this.params);
     },
   },
 };
