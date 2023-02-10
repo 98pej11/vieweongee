@@ -1,6 +1,8 @@
 <template>
   <MyHeader></MyHeader>
-  <router-view />
+  <transition name="moveInUp">
+    <router-view />
+  </transition>
   <MyFooter></MyFooter>
 </template>
 
@@ -18,6 +20,24 @@ export default defineComponent({
 </script>
 
 <style>
+.moveInUp-enter-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+.moveInUp-enter-active {
+  animation: fadeIn 1s ease-in;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @font-face {
   font-family: "nexon";
   src: url("@/assets/font/NEXONLv1GothicRegular.ttf") format("truetype");

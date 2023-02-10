@@ -22,12 +22,9 @@ async function getAllStudy(success, fail) {
 
 // 스터디 1개 상세정보 조회
 async function getStudy(params, success, fail) {
-  console.log(params);
+  // console.log(params);
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .get(`/study/detail/${params.study_ID}/${params.user_ID}`)
-    .then(success)
-    .catch(fail);
+  await api.get(`/study/detail/${params.study_ID}/${params.user_ID}`).then(success).catch(fail);
 }
 
 // 스터디 생성
@@ -40,10 +37,7 @@ async function createStudy(info, success, fail) {
 // 스터디 수정
 async function modifyStudy(study_ID, info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("accessToken");
-  await api
-    .put(`/study/${study_ID}`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
+  await api.put(`/study/${study_ID}`, JSON.stringify(info)).then(success).catch(fail);
 }
 
 // 스터디 삭제
@@ -79,25 +73,16 @@ async function getMyStudy(success, fail) {
 async function createComment(study_ID, myComment, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   console.log("myComment : " + JSON.stringify(myComment));
-  await api
-    .post(`/study/${study_ID}/comment`, JSON.stringify(myComment))
-    .then(success)
-    .catch(fail);
+  await api.post(`/study/${study_ID}/comment`, JSON.stringify(myComment)).then(success).catch(fail);
 }
 
 async function modifyComment(study_ID, comment_ID, info, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .put(`/study/${study_ID}/comment/${comment_ID}`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
+  await api.put(`/study/${study_ID}/comment/${comment_ID}`, JSON.stringify(info)).then(success).catch(fail);
 }
 async function deleteComment(study_ID, comment_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .delete(`/study/${study_ID}/comment/${comment_ID}`)
-    .then(success)
-    .catch(fail);
+  await api.delete(`/study/${study_ID}/comment/${comment_ID}`).then(success).catch(fail);
 }
 async function getAllComment(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");

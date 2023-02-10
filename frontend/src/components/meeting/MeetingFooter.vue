@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button round>채팅</el-button>
+    <el-button round @click="showChat">채팅</el-button>
 
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
     <el-button v-if="isLeader && nowTurn == null" type="success" round @click="startMeeting">미팅시작</el-button>
@@ -10,7 +10,7 @@
       type="success"
       round
       @click="nextTurn"
-      v-bind:disabled="nowTurn == totalTurn - 1"
+      v-bind:disabled="leaderTurn >= totalTurn"
       >면접종료</el-button
     >
     <el-button type="danger" round>나가기</el-button>
@@ -39,12 +39,13 @@ export default {
       "nowTurn",
       "totalTurn",
       "leaderTurn",
+      "isShowChat",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
   created() {},
   methods: {
-    ...mapMutations(meetingStore, ["SET_LEADER_ORDER", "SET_NOWTURN", "SET_LEADER_TURN"]),
+    ...mapMutations(meetingStore, ["SET_LEADER_ORDER", "SET_NOWTURN", "SET_LEADER_TURN", "SET_IS_CHAT"]),
     ...mapActions(meetingStore, ["makeScoreAndGetOrder", "makeScorecards"]),
     async startMeeting() {
       if (this.intervieweeRate == 0) {
@@ -73,8 +74,16 @@ export default {
       //받은 사용자들은 자신의 현재 회차 갱신
       //회차가 업데이트 되면 면접자, 면접관 확인
     },
+    async showChat() {
+      console.log("채팅을 보여드립니댜");
+      if (this.isShowChat) {
+        this.SET_IS_CHAT(false);
+      } else {
+        this.SET_IS_CHAT(true);
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped></style>

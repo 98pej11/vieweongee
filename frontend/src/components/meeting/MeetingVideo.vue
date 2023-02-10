@@ -1,37 +1,90 @@
 <template>
   <div>
     <!-- 화상 화면 -->
-    <div id="session" v-if="session">
-      <div id="session-header">
-        <h1 id="session-title">스터디명 >> {{ myStudyId }}</h1>
-        <h3>현재 회차 : {{ nowTurn }}</h3>
-        <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
-        />
-      </div>
-      <!-- <div id="main-video">
+    <transition name="moveInUp">
+      <div class="session" v-if="!isShowChat">
+        <div id="session-header">
+          <h1 id="session-title">스터디명 >> {{ myStudyId }}</h1>
+          <h3>현재 회차 : {{ nowTurn }}</h3>
+          <input
+            class="btn btn-large btn-danger"
+            type="button"
+            id="buttonLeaveSession"
+            @click="leaveSession"
+            value="Leave session"
+          />
+        </div>
+        <!-- <div id="main-video">
         <h3>스트림매니저</h3>
         <user-video :stream-manager="mainStreamManager" />
       </div> -->
-      <h2>--- 참가자 목록 ---</h2>
-      <div id="video-container">
-        <user-video :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)" />
-        <user-video
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
+        <h2>--- 참가자 목록 ---</h2>
+        <div id="video-container">
+          <el-row class="row-bg" justify="space-evenly">
+            <el-col>
+              <user-video
+                class="invideo"
+                :stream-manager="publisher"
+                @click="updateMainVideoStreamManager(publisher)"
+              />
+              <user-video
+                class="invideo"
+                v-for="sub in subscribers"
+                :key="sub.stream.connection.connectionId"
+                :stream-manager="sub"
+                @click="updateMainVideoStreamManager(sub)"
+              />
+            </el-col>
+          </el-row>
+        </div>
       </div>
-    </div>
+    </transition>
 
-    <div class="chat-container">
-      <MeetingChatting :session="session" :myUserName="myUserName" />
-    </div>
+    <!-- 화상 화면 -->
+    <transition name="moveInUp">
+      <div class="session" v-if="isShowChat" style="float: left; width: 50%">
+        <div id="session-header">
+          <h1 id="session-title">스터디명 >> {{ myStudyId }}</h1>
+          <h3>현재 회차 : {{ nowTurn }}</h3>
+          <input
+            class="btn btn-large btn-danger"
+            type="button"
+            id="buttonLeaveSession"
+            @click="leaveSession"
+            value="Leave session"
+          />
+        </div>
+        <!-- <div id="main-video">
+        <h3>스트림매니저</h3>
+        <user-video :stream-manager="mainStreamManager" />
+      </div> -->
+        <h2>--- 참가자 목록 ---</h2>
+        <div id="video-container">
+          <el-row class="row-bg" justify="space-evenly">
+            <el-col>
+              <user-video
+                class="invideo"
+                :stream-manager="publisher"
+                @click="updateMainVideoStreamManager(publisher)"
+              />
+              <user-video
+                class="invideo"
+                v-for="sub in subscribers"
+                :key="sub.stream.connection.connectionId"
+                :stream-manager="sub"
+                @click="updateMainVideoStreamManager(sub)"
+              />
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="moveInUp">
+      <div class="chat-container" v-if="isShowChat" style="float: left">
+        <MeetingChatting :session="session" :myUserName="myUserName" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -39,7 +92,7 @@
 import UserVideo from "../meeting/UserVideo.vue";
 import { OpenVidu } from "openvidu-browser";
 import { mapState, mapMutations, mapActions } from "vuex";
-import http from "../../api/http.js";
+import http from "@/api/http.js";
 import jwtDecode from "jwt-decode";
 import MeetingChatting from "./MeetingChatting.vue";
 
@@ -64,7 +117,7 @@ export default {
 
       // Join form
       myStudyId: "2", //스터디 아이디로 사용
-      myUserName: "두리두두",
+      myUserName: "",
     };
   },
   computed: {
@@ -80,6 +133,7 @@ export default {
       "leaderTurn",
       "nowScoreList",
       "totalTurn",
+      "isShowChat",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
@@ -121,17 +175,19 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(meetingStore, [
-      "SET_INTERVIEW_ORDER",
-      "SET_LEADER_ORDER",
-      "SET_IS_INTERVIEWEE",
-      "SET_IS_INTERVIEWER",
-      "SET_LEADER_TURN",
-      "SET_NOWTURN",
-    ]),
+    ...mapMutations(meetingStore, ["SET_INTERVIEW_ORDER", "SET_IS_INTERVIEWEE", "SET_IS_INTERVIEWER", "SET_NOWTURN"]),
     ...mapActions(studyStore, ["getInfo"]),
-    ...mapActions(meetingStore, ["setLeader", "setMyid", "setInterviewList", "getScorecards", "setShowScoreList"]),
+    ...mapActions(meetingStore, [
+      "setLeader",
+      "setMyid",
+      "setInterviewList",
+      "getScorecards",
+      "setShowScoreList",
+      "saveScore",
+    ]),
     joinSession() {
+      this.myUserName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
+      console.log("내이름!!!!!!!!!1" + this.myUserName);
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
 
@@ -143,7 +199,7 @@ export default {
       // On every new Stream received...
       this.session.on("streamCreated", ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
-        // console.log(stream);
+        console.log(stream);
         this.subscribers.push(subscriber);
       });
 
@@ -192,10 +248,28 @@ export default {
           //면접 종료 버튼을 누르면 +1 회차가 전송됨
 
           // let turn = this.nowTurn;
+          if (this.nowTurn < this.totalTurn - 1) {
+            alert("3초 뒤 다음 회차 진행. 채점표는 자동 갱신 됩니다");
+            setTimeout(async () => {
+              //채점표 PUT
+              if (this.isInterviewer) {
+                //면접관이라면 채점표 저장 요청
+                await this.saveScore(this.myStudyId);
+              }
+              this.SET_NOWTURN(event.data);
+            }, 3000); //지금은 5초
+          }
           // this.showOrderAlert(turn + 1);
-          setTimeout(() => {
-            this.SET_NOWTURN(event.data);
-          }, 3000); //지금은 5초
+          else {
+            alert("면접이 모두 종료됐습니다. 수고하셨습니다.");
+            setTimeout(async () => {
+              //채점표 PUT
+              if (this.isInterviewer) {
+                //면접관이라면 채점표 저장 요청
+                await this.saveScore(this.myStudyId);
+              }
+            }, 3000); //지금은 3초
+          }
           //회차 변경 재알람
           // alert("회차가 변경되었습니다\n현재회차는 " + event.data + "입니다");
         });
@@ -365,17 +439,34 @@ export default {
           str += el.id + " ";
         });
         str += "님이 면접자 입니다.\n\n곧 면접이 시작됩니다.";
-      } else {
-        str += "3분 후에 채점이 종료됩니다.\n면접관은 채점 내용 기입 후 저장을 눌러주세요.\n\n다음 회차는 ";
-        this.interviewOrderList[turn].forEach((el) => {
-          str += el + " ";
-        });
-        str += "님이 면접자 입니다.";
       }
+      // else {
+      //   str += "3분 후에 채점이 종료됩니다.\n면접관은 채점 내용 기입 후 저장을 눌러주세요.\n\n다음 회차는 ";
+      //   this.interviewOrderList[turn].forEach((el) => {
+      //     str += el + " ";
+      //   });
+      //   str += "님이 면접자 입니다.";
+      // }
       alert(str);
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.session {
+  text-align: center;
+  padding: 1%;
+  /* overflow-y: scroll; */
+  border: 1px solid #acaeff;
+  border-radius: 15px;
+  align-items: center;
+  height: 75vh;
+  width: 80%;
+  height: auto;
+  color: black;
+}
+.invideo {
+  margin-right: 3%;
+}
+</style>
