@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from "element-plus";
 import { Message, Lock, User } from "@element-plus/icons-vue";
 import { mapActions, mapState } from "vuex";
 
@@ -134,6 +135,9 @@ export default {
     async join() {
       console.log("vuecomponent : " + JSON.stringify(this.user))
       await this.userJoin(this.user);
+      ElMessageBox.alert("로그인이 완료되었습니다. 환영합니다.", "알림", {
+        confirmButtonText: "확인",
+        });
       this.$router.push({ name: "login" });
     },
 

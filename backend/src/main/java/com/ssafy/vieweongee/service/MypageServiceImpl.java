@@ -82,7 +82,7 @@ public class MypageServiceImpl implements MypageService{
 
     @Override
     public Summary getAbilitySummary(Long userId) {
-        Summary summary = summaryRepository.findById(userId).get();
+        Summary summary = summaryRepository.findById(userId);
         return summary;
     }
 

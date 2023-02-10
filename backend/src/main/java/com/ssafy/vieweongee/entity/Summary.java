@@ -17,6 +17,7 @@ public class Summary implements Serializable {
     @Id
     @Column(name="user_id")
     private Long id;
+
     //회원 외래키
     @OneToOne
     @MapsId
@@ -73,6 +74,11 @@ public class Summary implements Serializable {
         this.loyalty_count = loyalty_count;
         this.loyalty_total = loyalty_total;
         this.loyalty_average = loyalty_average;
+    }
+
+    @Builder
+    public Summary(User user){
+        this.user=user;
     }
 }
 

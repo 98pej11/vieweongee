@@ -4,7 +4,9 @@ import com.ssafy.vieweongee.dto.user.request.*;
 import com.ssafy.vieweongee.dto.user.response.UserInfoResponse;
 import com.ssafy.vieweongee.dto.user.response.UserLoginResponse;
 import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.repository.UserRepository;
 import com.ssafy.vieweongee.service.EmailService;
+import com.ssafy.vieweongee.service.SummaryService;
 import com.ssafy.vieweongee.service.TokenService;
 import com.ssafy.vieweongee.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +26,14 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     UserService userService;
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    SummaryService summaryService;
     @Autowired
     EmailService emailService;
 
@@ -85,9 +91,16 @@ public class UserController {
 
             //회원 가입
             userService.createUser(user);
-
+            user.setProvider("global");
+            log.info("디비 저장 후 유저 : {}",user.getName());
+            User dbUser=userRepository.getUserByEmailandSocial(user.getEmail(), "global");
+            log.info("------------------------회원가입!!!=------------ {}", dbUser.getId());
+            // 역량별 점수 초기화 테이블 생성
+            summaryService.createSummary(user);
             System.out.println(user.getEmail());
             System.out.println(user.getName());
+            log.info("-----------역량강화 됏니이--------------");
+
             Map<String, Object> result = new HashMap<>();
             result.put("data", null);
             result.put("message","SUCCESS");

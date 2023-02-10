@@ -80,7 +80,6 @@
                 <el-dropdown-item @click="goboard"
                   >스터디 게시판</el-dropdown-item
                 >
-
                 <el-dropdown-item divided>공지사항</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -140,17 +139,26 @@ export default defineComponent({
       // this.userLogout(this.data.email); // state에 저장된 유저 정보
       sessionStorage.removeItem("ACCESS"); //저장된 토큰 없애기
       sessionStorage.removeItem("REFRESH"); //저장된 토큰 없애기
+
+      ElMessageBox.alert("로그아웃이 완료되었습니다. 감사합니다.", "알림", {
+        confirmButtonText: "확인",
+      });
+
       this.$router.go({ name: "main" });
     },
+
     gologin() {
       this.$router.push({ name: "login" });
     },
+    
     gomypage() {
       this.$router.push({ name: "mypage" });
     },
+
     goboard() {
       this.$router.push({ name: "studylist" });
     },
+    
     open() {
       ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
         confirmButtonText: "확인",

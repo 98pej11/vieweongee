@@ -3,7 +3,7 @@
     <h3 class="text-h6 mb-3">참여예정 스터디 목록</h3>
     <div class="block text-center" style="margin-bottom: 10%">
       <el-carousel height="300px">
-        <el-carousel-item v-for="upcoming in this.upcomings" :key="upcoming">
+        <el-carousel-item v-for="upcoming in upcomings" :key="upcoming">
           <!-- 클릭시 미팅이동 해야함 -->
           <!-- 일정시간을 벗어날 경우는 아직 미팅화면이 안열리게함 -->
           <h3 class="small justify-center" text="2xl">{{ upcoming.title }}</h3>

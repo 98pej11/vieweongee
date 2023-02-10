@@ -1,8 +1,4 @@
-import {
-  getInterviewOrder,
-  postScorecards,
-  getAllScorecards,
-} from "../api/meeting";
+import { getInterviewOrder, postScorecards, getAllScorecards } from "../api/meeting";
 
 const meetingStore = {
   namespaced: true,
@@ -19,6 +15,7 @@ const meetingStore = {
     // nowTurn: 0, //현재 면접 회차
 
     scoreList: [], //스터디원의 채점표 리스트 (추후 자기소개서도)
+    nowScoreList: [], //현재 면접자의 채점표만 보기 위한 리스트
 
     intervieweeRate: 0, //스터디장이 설정한 면접자의 수
     // intervieweeCount: 0, //나가기를 누른 면접자의 수
@@ -70,27 +67,48 @@ const meetingStore = {
     SET_SCORE_LIST(state, list) {
       state.scoreList = list;
     },
+    SET_NOW_SCORE_LIST(state, list) {
+      state.nowScoreList = list;
+    },
   },
   actions: {
-    async getOrder({ commit, dispatch }, params) {
-      await getInterviewOrder(
-        params,
+    async makeScoreAndGetOrder({ commit, state }, params) {
+      // console.log("1!!!!! 액션진입");
+      //채점표를 생성한다
+      await postScorecards(
+        params.study_ID,
         ({ data }) => {
+          // console.log("방장님 채점표가 어떻게 됐을까요");
+          // console.log(data);
           if (data.message == "SUCCESS") {
-            //정상적으로 받아왔을 때 채점표 생성부터 처리
-            console.log("방장님 면접 순서 잘 받아왔는데 채점표부터 생성할게요");
-            dispatch("makeScorecards", params.study_ID);
-            //면접 순서 저장 처리
-            // commit("SET_INTERVIEW_ORDER", data.data);
-            commit("SET_LEADER_ORDER", data.data);
-            // console.log(data.data);
-            // console.log("리더의 순서 지정 성공 >> " + state.leaderOrder);
+            console.log("방장님 채점표가 생성됐어요");
           }
         },
         (error) => {
           console.log(error);
         }
       );
+      // console.log("2!!!!! 채점표생성완료");
+      //면접 순서를 받아온다
+      await getInterviewOrder(
+        params,
+        ({ data }) => {
+          if (data.message == "SUCCESS") {
+            //정상적으로 받아왔을 때 채점표 생성부터 처리
+            // console.log("방장님 면접 순서 잘 받아왔는데 채점표부터 생성할게요");
+            // dispatch("makeScorecards", params.study_ID);
+            //면접 순서 저장 처리
+            // commit("SET_INTERVIEW_ORDER", data.data);
+            commit("SET_LEADER_ORDER", data.data);
+            // console.log(data.data);
+            console.log("리더의 순서 지정 성공 했어요 >> " + state.leaderOrder);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      // console.log("3!!!!! 면접 순서 불러오고 저장 완료");
     },
     async makeScorecards(study_ID) {
       //채점표 생성하기
@@ -108,15 +126,19 @@ const meetingStore = {
         }
       );
     },
-    async getScorecards({ commit }, study_ID) {
+    async getScorecards({ commit, state }, study_ID) {
       //채점표 전부 가져오기
       await getAllScorecards(
         study_ID,
         ({ data }) => {
+          // console.log("채점표가 잘 가져와졌을까요");
+          // console.log(data);
           if (data.message == "SUCCESS") {
-            console.log("채점표 전부 가져왔어요");
-            console.log(data.data);
+            // console.log("채점표 전부 가져왔어요");
+            //   console.log(data.data);
             commit("SET_SCORE_LIST", data.data);
+            console.log("스코어리스트 보여드릴게요");
+            console.log(state.scoreList);
           }
         },
         (error) => {
@@ -135,13 +157,9 @@ const meetingStore = {
       //방장이 설정한 면접자 인원 설정
       commit("SET_INTERVIEWEERATE", cnt);
     },
-    setInterviewList({ commit }, order) {
+    setInterviewList({ commit, state }, order) {
       //총 회차 설정
       commit("SET_TOTALTURN", order.split("!")[0]);
-      //현재 회차에 처음 회차 설정
-      commit("SET_NOWTURN", 0);
-      //리더의 회차도 처음으로 초기화
-      commit("SET_LEADER_TURN", 0);
 
       // & 로 분리
       let turnList = order.split("!")[1].split("&");
@@ -165,8 +183,37 @@ const meetingStore = {
 
       //면접자의 아이디 리스트 저장
       commit("SET_INTERVIEW_ORDER_LIST", resultList);
-      // console.log("면접 리스트 >> ");
-      // console.log(resultList);
+      console.log("면접 리스트 >> ");
+      console.log(state.interviewOrderList);
+
+      //현재 회차에 처음 회차 설정
+      commit("SET_NOWTURN", 0);
+      //리더의 회차도 처음으로 초기화
+      commit("SET_LEADER_TURN", 0);
+    },
+    setShowScoreList({ commit, state }, turn) {
+      //면접관이라면 채점표 저장
+      if (state.isInterviewer) {
+        let list = [];
+        //현재 회차의 면접자 아이디, 채점표의 아이디 비교하여 해당하는 것만 보여줌
+        for (let i = 0; i < state.interviewOrderList[turn].length; i++) {
+          //현재 회차의 면접자수만큼
+          for (let j = 0; j < state.scoreList.length; j++) {
+            //스터디 참가자 수만큼
+            if (state.interviewOrderList[turn][i] == state.scoreList[j].id) {
+              //현재회차아이디와 채점표 아이디가 같으면
+              list.push(state.scoreList[j]);
+              break;
+            }
+          }
+        }
+        commit("SET_NOW_SCORE_LIST", list);
+        console.log("보여줄 채점표 보여줄게요");
+        console.log(state.nowScoreList);
+      } else {
+        //면접관이 아니라면
+        console.log("채점표를 볼 수 없어요");
+      }
     },
   },
 };

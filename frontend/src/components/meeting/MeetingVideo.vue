@@ -19,10 +19,7 @@
       </div> -->
       <h2>--- 참가자 목록 ---</h2>
       <div id="video-container">
-        <user-video
-          :stream-manager="publisher"
-          @click="updateMainVideoStreamManager(publisher)"
-        />
+        <user-video :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)" />
         <user-video
           v-for="sub in subscribers"
           :key="sub.stream.connection.connectionId"
@@ -30,6 +27,10 @@
           @click="updateMainVideoStreamManager(sub)"
         />
       </div>
+    </div>
+
+    <div class="chat-container">
+      <MeetingChatting :session="session" :myUserName="myUserName" />
     </div>
   </div>
 </template>
@@ -40,6 +41,7 @@ import { OpenVidu } from "openvidu-browser";
 import { mapState, mapMutations, mapActions } from "vuex";
 import http from "../../api/http.js";
 import jwtDecode from "jwt-decode";
+import MeetingChatting from "./MeetingChatting.vue";
 
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
@@ -49,6 +51,7 @@ export default {
   name: "MeetingVideo",
   components: {
     UserVideo,
+    MeetingChatting,
   },
   data() {
     return {
@@ -61,6 +64,7 @@ export default {
 
       // Join form
       myStudyId: "2", //스터디 아이디로 사용
+      myUserName: "두리두두",
     };
   },
   computed: {
@@ -88,19 +92,23 @@ export default {
         this.shareInterviewOrder();
       }
     },
-    interviewOrder() {
+    async interviewOrder() {
       if (this.interviewOrder != null) {
+        //채점표 불러오기
+        await this.getScorecards(this.studyInfo.id);
         //면접 순서 리스트에 저장
-        this.setInterviewList(this.interviewOrder);
+        await this.setInterviewList(this.interviewOrder);
       }
     },
-    interviewOrderList() {
-      //리스트가 담기면 현재 회차에서 면접관, 면접자 확인
-      this.checkMyRole(this.nowTurn);
-    },
+    // interviewOrderList() {
+    //   //리스트가 담기면 현재 회차에서 면접관, 면접자 확인
+    //   this.checkMyRole(this.nowTurn);
+    // },
     nowTurn() {
       //회차가 바뀌는 것 감지하면 이 회차에서 면접관, 면접자 확인
       this.checkMyRole(this.nowTurn);
+      //내가 볼 면접자의 채점표 확인
+      this.setShowScoreList(this.nowTurn);
     },
     leaderTurn() {
       if (this.isLeader && this.leaderTurn > 0) {
@@ -119,12 +127,7 @@ export default {
       "SET_NOWTURN",
     ]),
     ...mapActions(studyStore, ["getInfo"]),
-    ...mapActions(meetingStore, [
-      "setLeader",
-      "setMyid",
-      "setInterviewList",
-      "getScorecards",
-    ]),
+    ...mapActions(meetingStore, ["setLeader", "setMyid", "setInterviewList", "getScorecards", "setShowScoreList"]),
     joinSession() {
       // --- 1) Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -137,7 +140,7 @@ export default {
       // On every new Stream received...
       this.session.on("streamCreated", ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
-        console.log(stream);
+        // console.log(stream);
         this.subscribers.push(subscriber);
       });
 
@@ -163,18 +166,18 @@ export default {
           console.log("시그널로 받은 면접 순서 >>>>>>>>> ");
           console.log(event.data);
           this.SET_INTERVIEW_ORDER(event.data);
-          //채점표 불러오기
-          console.log("저 채점표 주세요");
-          this.getScorecards(this.myStudyId);
+          // //채점표 불러오기
+          // console.log("저 채점표 주세요");
+          // this.getScorecards(this.myStudyId);
 
-          //면접 강제 종료 설정
-          let endTime;
-          //종료초 = 러닝시간 - (현재시각 - 스터디시간)
+          // //면접 강제 종료 설정
+          // let endTime;
+          // //종료초 = 러닝시간 - (현재시각 - 스터디시간)
 
-          setTimeout(() => {
-            //채점표 PUT 처리
-            //연결 강제 종료
-          }, endTime);
+          // setTimeout(() => {
+          //   //채점표 PUT 처리
+          //   //연결 강제 종료
+          // }, endTime);
         });
 
         //현재 회차 시그널 처리
@@ -196,7 +199,7 @@ export default {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         this.session
-          .connect(token, { clientData: this.myId })
+          .connect(token, { clientData: this.myId, myNickname: this.myUserName })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
 
@@ -222,11 +225,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+            console.log("There was an error connecting to the session:", error.code, error.message);
           });
       });
 
@@ -284,7 +283,16 @@ export default {
     async getStudyInfo() {
       //나의 아이디 설정
       this.setMyIdState();
-      await this.getInfo(this.myStudyId); //스터디 상세 정보 가져옴
+
+      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      const params = {
+        study_ID: this.myStudyId,
+        user_ID: this.myId,
+      };
+
+      await this.getInfo(params); //스터디 상세 정보 가져옴
+      console.log("지금 스터디 아이디 >> " + this.studyInfo.id);
       if (this.myId == this.studyInfo.user_id) {
         //나의 아이디와 스터디장이 같으면 리더로 설정
         this.setLeader(true);
@@ -326,12 +334,7 @@ export default {
         this.SET_IS_INTERVIEWER(true); //면접관 true
       }
 
-      console.log(
-        "내 역할은 면접자 >> " +
-          this.isInterviewee +
-          " | 면접관 >> " +
-          this.isInterviewer
-      );
+      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
