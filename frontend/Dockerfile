@@ -1,13 +1,12 @@
-FROM node:alpine as builder
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app/package.json
+FROM node:18 as build-stage
+WORKDIR /app
+ADD . .
 RUN npm install
-COPY . /usr/src/app
 RUN npm run build
 
-FROM nginx
+FROM nginx:stable-alpine as production-stage
 EXPOSE 3000
-COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /usr/src/app/dist  /usr/share/nginx/html
+COPY  ./nginx/nginx.conf /etc/nginx/conf.d/default.conf 
+
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]
