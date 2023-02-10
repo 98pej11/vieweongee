@@ -158,5 +158,11 @@ public class UserServiceImpl implements UserService{
         return email;
     }
 
+    @Override
+    public String getNameById(Long id) {
+        String name=userRepository.getUserById(id).getName();
+        return name;
+    }
+
 }
 

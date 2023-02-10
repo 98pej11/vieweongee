@@ -6,6 +6,8 @@ import com.ssafy.vieweongee.dto.user.request.UserInfo;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
 import com.ssafy.vieweongee.entity.User;
 
+import java.util.Date;
+
 public interface UserService {
     User login(User user);
     User createUser(UserCreateRequest registInfo);
@@ -26,4 +28,6 @@ public interface UserService {
 
     void logout(Long id, String accessToken);
     String getEmail(Long id);
+
+    String getNameById(Long id);
 }

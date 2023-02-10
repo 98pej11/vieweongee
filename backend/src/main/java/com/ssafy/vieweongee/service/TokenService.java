@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,8 +23,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenService {
     private static String secretKey="c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK";
+    @Autowired
     private final UserRepository userRepository;
 
+    private static UserService userService;
 //    public TokenService(UserRepository userRepository) {
 //        this.userRepository = userRepository;
 //    }
@@ -39,7 +42,7 @@ public class TokenService {
                 .withSubject(JwtProperties.ACCESS_TOKEN)
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
                 .withClaim("Id",id.toString())
-//                .withClaim(JwtProperties.USERNAME,username)
+                .withClaim("Name",userService.getNameById(id))
                 .sign(Algorithm.HMAC512(secretKey));
         JWTVerifier verifier =
                 JWT.require(Algorithm.HMAC512(secretKey))
