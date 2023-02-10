@@ -68,6 +68,15 @@ async function getCurrent(study_ID, success, fail) {
   await api.get(`/study/${study_ID}/current-people`).then(success).catch(fail);
 }
 
+// 자기소개서 첨부
+async function applyImage(params, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api
+    .post(`/study/${params.study_ID}/resume`, params.file)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   createStudy,
   getTopStudy,
@@ -79,4 +88,5 @@ export {
   applyStudy,
   cancleStudy,
   getCurrent,
+  applyImage,
 };

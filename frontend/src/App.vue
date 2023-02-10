@@ -96,7 +96,7 @@ a {
 }
 
 /* 그림자 버튼 */
-button:not(#search-btn) {
+button:not(#search-btn, .el-dialog__headerbtn) {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 

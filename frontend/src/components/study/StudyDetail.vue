@@ -50,9 +50,45 @@
             ><p>{{ studyInfo.running_time }} 시간</p>
           </el-col>
         </el-row>
-
+        <el-dialog
+          class="el-dialog"
+          v-model="dialogVisible"
+          width="600px"
+          style="border-radius: 5%"
+        >
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              이미지를 끌어오거나 <em>클릭해서 업로드하기</em>
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                500kb이하의 JPG/PNG 이미지를 업로드해주세요
+              </div>
+            </template>
+          </el-upload>
+          <el-button
+            block
+            color="#9DADD8"
+            size="large"
+            style="display: block; margin: auto; width: 25%"
+            @click="submitImage"
+          >
+            완료
+          </el-button>
+        </el-dialog>
         <el-row justify="end">
-          <el-button v-if="isApplied" round color="#E1E6FF" class="me-2">
+          <el-button
+            v-if="isApplied || isAuthor"
+            @click="showDialog"
+            round
+            color="#E1E6FF"
+            class="me-2"
+          >
             자기소개서 업로드
           </el-button>
           <div v-if="!isAuthor">
@@ -133,7 +169,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { User } from "@element-plus/icons-vue";
+import { User, UploadFilled } from "@element-plus/icons-vue";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import StudyComment from "@/components/study/StudyComment.vue";
@@ -143,7 +179,7 @@ const commentStore = "commentStore";
 
 export default {
   name: "StudyDetail",
-  components: { StudyComment, User },
+  components: { StudyComment, User, UploadFilled },
   computed: {
     ...mapState(studyStore, [
       "isCreated",
@@ -163,6 +199,7 @@ export default {
       isPossible: false,
       isAuthor: false,
       isDone: false,
+      dialogVisible: false,
       myId: 0,
     };
   },
@@ -191,6 +228,7 @@ export default {
         study_ID: this.studyID,
         user_ID: this.myId,
       };
+      console.log(this.isAuthor);
 
       // this.SET_APPLY_SUCCESS(false);
       // await this.getInfo(this.studyID);
@@ -259,6 +297,13 @@ export default {
       await this.cancleStudyConfirm(this.studyID);
       await this.getPersonnel(this.studyID);
     },
+
+    showDialog() {
+      this.dialogVisible = true;
+    },
+
+    // 자기소개서 첨부
+    submitImage() {},
 
     // 스터디 삭제
     async deleteOpen() {

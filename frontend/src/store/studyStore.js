@@ -11,6 +11,7 @@ import {
   applyStudy,
   cancleStudy,
   getCurrent,
+  applyImage,
 } from "@/api/study";
 
 const studyStore = {
@@ -243,6 +244,13 @@ const studyStore = {
       await cancleStudy(studyId, () => {
         console.log("참가신청 취소 완료");
         commit("SET_APPLY_SUCCESS", false);
+      });
+    },
+
+    async uploagConfirm(params) {
+      await applyImage(params, ({ data }) => {
+        console.log("업로드중");
+        console.log(data.message);
       });
     },
   },
