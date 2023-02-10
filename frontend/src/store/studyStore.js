@@ -8,14 +8,9 @@ import {
   getStudy,
   modifyStudy,
   deleteStudy,
-  createComment,
-  modifyComment,
-  deleteComment,
-  getAllComment,
   applyStudy,
   cancleStudy,
   getCurrent,
-  getMyStudy,
 } from "@/api/study";
 
 const studyStore = {
@@ -23,9 +18,6 @@ const studyStore = {
   state: {
     isCreated: false,
     isApplied: false, // 신청 여부
-
-    appliedList: [], // 내가 신청한 리스트
-
     studyID: 0, // 검색 결과
     noResult: false, // 신청자 수
     current: 0,
@@ -60,7 +52,6 @@ const studyStore = {
       running_time: 1,
       content: "",
     },
-    commentList: [],
   },
   getters: {},
   mutations: {
@@ -70,7 +61,6 @@ const studyStore = {
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
-      state.currentList = [];
       state.isCreated = false;
       state.noResult = false;
       state.isApplied = false;
@@ -133,23 +123,6 @@ const studyStore = {
 
       state.studyInfo.study_datetime = dateFormat1;
       state.studyInfo.regist_datetime = dateFormat2;
-    },
-    SET_MY_COMMENT: (state, info) => {
-      state.commentList.push(info);
-    },
-    SET_ALL_COMMENT: (state, list) => {
-      state.commentList = list;
-      // list.forEach((el) => {
-      // state.commentList.push({
-      // depth: el.depth,
-      // user_id: el.user_id,
-      // user_nickname: el.user_nickname,
-      // comment_id: el.comment_id,
-      // reply_id: el.reply_id,
-      // content: el.content,
-      // datetime: el.datetime,
-      // });
-      // });
     },
   },
   actions: {
@@ -271,99 +244,6 @@ const studyStore = {
         console.log("참가신청 취소 완료");
         commit("SET_APPLY_SUCCESS", false);
       });
-    },
-
-    // 신청한 스터디 목록 불러오기
-    async getMyApplied({ commit }) {
-      await getMyStudy(({ data }) => {
-        if (data.message == "SUCCESS") {
-          // console.log(data.message);
-          commit("SET_APPLY_SUCCESS", true);
-          commit("SET_MY_APPLIED", data.data);
-        }
-      });
-    },
-
-    // 댓글 작성
-    async createCommentConfirm({ commit }, params) {
-      await createComment(
-        params,
-        // comment_id가 반환됨
-        ({ data }) => {
-          console.log(data.message);
-
-          if (data.message == "SUCCESS") {
-            commit("SET_STUDY_ID", data.data);
-            commit("SET_IS_SUCCESS", true);
-          } else {
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-        // async (error) => {
-        //   // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-        //   if (error.response.status === 401) {
-        //     console.log("401에러");
-        //     commit("SET_IS_SUCCESS", false);
-        //   }
-        // }
-      );
-    },
-    // 댓글 수정
-    async modifyCommentConfirm({ commit }, study_ID, comment_ID, info) {
-      await modifyComment(
-        study_ID,
-        comment_ID,
-        info,
-        (data) => {
-          // console.log(data);
-          commit("SET_STUDY_ID", data.body);
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-      );
-    },
-    // 댓글 삭제
-    async deleteCommentConfirm({ commit }, study_ID, comment_ID, info) {
-      await deleteComment(
-        study_ID,
-        comment_ID,
-        info,
-        (data) => {
-          console.log(data);
-          commit("SET_STUDY_ID", data.body);
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-      );
-    },
-    // 전체 댓글 조회
-    async getCommentList({ commit }, study_ID) {
-      await getAllComment(
-        study_ID,
-        ({ data }) => {
-          if (data.message == "SUCCESS") {
-            commit("SET_ALL_COMMENT", data.data);
-            console.log(data.data);
-            // commit("SET_IS_SUCCESS", true);
-          } else console.log("댓글 아직 없음");
-        },
-        async (error) => {
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-      );
     },
   },
 };

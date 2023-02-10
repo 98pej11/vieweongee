@@ -8,11 +8,7 @@
       </el-row>
       <el-row>
         <el-col id="comment-field">
-          <el-input
-            v-model="myComment.content"
-            label="댓글을 입력하세요..."
-            type="text"
-          ></el-input>
+          <el-input v-model="myComment.content" type="text"></el-input>
           <div id="comment-button">
             <el-button
               round
@@ -30,10 +26,12 @@
 </template>
 
 <script>
-import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
 import { mapState, mapActions } from "vuex";
+import { ElMessage } from "element-plus";
+import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
 
 const studyStore = "studyStore";
+const commentStore = "commentStore";
 
 export default {
   name: "StudyComment",
@@ -41,16 +39,11 @@ export default {
     StudyCommentItem,
   },
   computed: {
-    ...mapState(studyStore, ["isError", "studyID"]),
+    ...mapState(studyStore, ["isCreated", "studyID"]),
   },
   data() {
     return {
       myComment: {
-        // depth: 1,
-        // user_id: 0,
-        // user_nickname: "",
-        // comment_id: 0,
-        // reply_id: 0,
         content: "",
       },
       params: {
@@ -60,12 +53,28 @@ export default {
     };
   },
   methods: {
-    ...mapActions(studyStore, ["createCommentConfirm"]),
-    // 댓글 작성
+    ...mapActions(commentStore, ["createCommentConfirm"]),
+
+    // 댓글 등록
     async CommentSubmit() {
-      this.params.study_ID = this.studyID;
-      this.params.info = this.myComment;
-      await this.createCommentConfirm(this.params);
+      if (this.myComment.content == "") {
+        ElMessage({
+          type: "warning",
+          message: "댓글 내용을 입력해주세요",
+        });
+      } else {
+        this.params.study_ID = this.studyID;
+        this.params.info = this.myComment;
+        await this.createCommentConfirm(this.params);
+
+        // if (!this.isCreated) {
+        //   ElMessage({
+        //     type: "error",
+        //     message: "로그인 후 이용해주세요",
+        //   });
+        //   this.$router.push({ name: "login" });
+        // }
+      }
     },
   },
 };

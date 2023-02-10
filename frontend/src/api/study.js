@@ -68,40 +68,6 @@ async function getCurrent(study_ID, success, fail) {
   await api.get(`/study/${study_ID}/current-people`).then(success).catch(fail);
 }
 
-// 내가 신청한 스터디 조회
-async function getMyStudy(success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/users/mystudy/upcoming`).then(success).catch(fail);
-}
-
-// 댓글 CRUD
-async function createComment(params, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .post(`/study/${params.study_ID}/comment`, JSON.stringify(params.info))
-    .then(success)
-    .catch(fail);
-}
-
-async function modifyComment(study_ID, comment_ID, info, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .put(`/study/${study_ID}/comment/${comment_ID}`, JSON.stringify(info))
-    .then(success)
-    .catch(fail);
-}
-async function deleteComment(study_ID, comment_ID, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api
-    .delete(`/study/${study_ID}/comment/${comment_ID}`)
-    .then(success)
-    .catch(fail);
-}
-async function getAllComment(study_ID, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/${study_ID}/comment`).then(success).catch(fail);
-}
-
 export {
   createStudy,
   getTopStudy,
@@ -109,13 +75,8 @@ export {
   getStudy,
   modifyStudy,
   deleteStudy,
-  createComment,
-  modifyComment,
-  deleteComment,
-  getAllComment,
   getSearch,
   applyStudy,
   cancleStudy,
   getCurrent,
-  getMyStudy,
 };
