@@ -55,25 +55,27 @@
           <el-button v-if="isApplied" round color="#E1E6FF" class="me-2">
             자기소개서 업로드
           </el-button>
-          <el-button
-            v-if="!isApplied && isPossible && !isAuthor"
-            @click="applyStudy"
-            round
-            color="#9DADD8"
-            class="me-2"
-            style="color: white"
-          >
-            신청
-          </el-button>
-          <el-button
-            v-if="isApplied && !isOpened && !isAuthor"
-            @click="cancleStudy"
-            round
-            color="#FFCD9F"
-            class="me-2"
-          >
-            신청취소
-          </el-button>
+          <div v-if="!isAuthor">
+            <el-button
+              v-if="!isApplied && isPossible"
+              @click="applyStudy"
+              round
+              color="#9DADD8"
+              class="me-2"
+              style="color: white"
+            >
+              신청
+            </el-button>
+            <el-button
+              v-if="isApplied && !isOpened"
+              @click="cancleStudy"
+              round
+              color="#FFCD9F"
+              class="me-2"
+            >
+              신청취소
+            </el-button>
+          </div>
           <el-button
             v-if="!isPossible"
             round
@@ -130,25 +132,25 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { User } from "@element-plus/icons-vue";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import StudyComment from "@/components/study/StudyComment.vue";
 
 const studyStore = "studyStore";
+const commentStore = "commentStore";
 
 export default {
   name: "StudyDetail",
   components: { StudyComment, User },
   computed: {
     ...mapState(studyStore, [
-      "isError",
+      "isCreated",
       "isApplied",
       "studyID",
       "current",
       "studyInfo",
-      "commentList",
       "appliedList",
     ]),
   },
@@ -165,23 +167,26 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(studyStore, ["SET_APPLY_SUCCESS"]),
     ...mapActions(studyStore, [
       "getInfo",
-      "getCommentList",
       "applyStudyConfirm",
       "cancleStudyConfirm",
       "getPersonnel",
       "deleteConfirm",
     ]),
-    ...mapMutations(studyStore, ["SET_APPLY_SUCCESS"]),
+    ...mapActions(commentStore, ["getCommentList"]),
 
     // 스터디 글 정보 조회
     async init() {
-      console.log("미로그인? 로그인? : ");
-
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
+      // 로그인 유저 == 글 작성자
+      if (this.myId == 0) this.isAuthor = false;
+      else if (this.myId == this.studyInfo.user_id) {
+        this.isAuthor = true;
+      }
       const params = {
         study_ID: this.studyID,
         user_ID: this.myId,
@@ -194,12 +199,6 @@ export default {
       await this.getCommentList(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
-
-      // 로그인 유저 == 글 작성자
-      if (this.myId == 0) this.isAuthor = false;
-      else if (this.myId == this.studyInfo.user_id) {
-        this.isAuthor = true;
-      }
     },
 
     // 신청 가능 여부
@@ -244,9 +243,11 @@ export default {
     // 스터디 참가 신청하기
     async applyStudy() {
       if (this.myId == 0) {
-        ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
-          confirmButtonText: "확인",
+        ElMessage({
+          type: "error",
+          message: "로그인 후 이용 부탁드립니다",
         });
+        this.$router.push({ name: "login" });
       } else {
         await this.applyStudyConfirm(this.studyID);
         await this.getPersonnel(this.studyID);
@@ -262,7 +263,30 @@ export default {
     // 스터디 삭제
     async deleteOpen() {
       await this.deleteConfirm(this.studyID);
-      this.$router.push({ name: "studylist" });
+      if (this.isCreated) {
+        this.showAlert();
+      }
+    },
+    showAlert() {
+      ElMessageBox.confirm("스터디를 삭제하시겠습니까?", "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+        draggable: true,
+      })
+        .then(() => {
+          ElMessage({
+            type: "success",
+            message: "스터디 삭제 성공",
+          });
+          this.$router.push({ name: "studylist" });
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "삭제 중 오류 발생",
+          });
+        });
     },
   },
 };
