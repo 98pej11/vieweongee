@@ -6,7 +6,7 @@ FROM openjdk:11-jdk
 # COPY src src
 # RUN chmod +x ./gradlew
 # RUN ./gradlew clean build
-CMD ["java", "-jar", "build/libs/vieweongee.jar"]
+CMD ["./gradlew", "clean", "build"]
 ARG JAR_FILE=build/libs/vieweongee.jar
 COPY ${JAR_FILE} app.jar
 EXPOSE 8080
