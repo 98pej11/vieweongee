@@ -4,10 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,13 +19,16 @@ import java.util.Date;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class TokenService {
     private static String secretKey="c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK";
-    @Autowired
     private final UserRepository userRepository;
 
-    private static UserService userService;
+
+    public TokenService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+//        this.userService = userService;
+    }
 //    public TokenService(UserRepository userRepository) {
 //        this.userRepository = userRepository;
 //    }
@@ -36,18 +38,21 @@ public class TokenService {
         secretKey= Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public static String createAccessToken(Long id){
+    public String createAccessToken(Long id){
         log.info("id : {}",id);
+        User dbUser=userRepository.getUserById(id);
+        log.info("name : {}", dbUser.getName());
         String token=JWT.create()
                 .withSubject(JwtProperties.ACCESS_TOKEN)
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
                 .withClaim("Id",id.toString())
-                .withClaim("Name",userService.getNameById(id))
+                .withClaim("Name",dbUser.getName())
                 .sign(Algorithm.HMAC512(secretKey));
         JWTVerifier verifier =
                 JWT.require(Algorithm.HMAC512(secretKey))
                         .build();
         String nowId = verifier.verify(token).getClaim("Id").toString();
+        String nowName=verifier.verify(token).getClaim("Name").toString();
         log.info(nowId);
         return token;
     }

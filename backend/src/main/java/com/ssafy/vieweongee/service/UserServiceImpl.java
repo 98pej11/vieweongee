@@ -14,13 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService{
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private TokenService tokenService;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+
+    }
+
     @Override
     public User login(User user) {
         log.info("여긴 서비스임플, 유저 아이디눈 {} / {}", user.getEmail(), "global");
@@ -42,11 +47,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Long getUserId(User user) {
-        log.info("getUserID in service, user : {} / {}", user.getId(), user.getProvider());
+//        log.info("getUserID in service, user : {} / {}", user.getId(), user.getProvider());
         User dbUser = userRepository.getUserByEmailandSocial(user.getEmail(), "global");
         return dbUser.getId();
     }
-
 
     @Override
     public User getUserByEmail(String email) {
@@ -58,6 +62,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserById(Long id){
+        log.info("GET USER BY ID : {}", id);
         User dbUser=userRepository.getUserById(id);
         return dbUser;
     }
@@ -161,6 +166,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String getNameById(Long id) {
         String name=userRepository.getUserById(id).getName();
+        log.info("userService impl!!!!, user name is {}", userRepository.getUserById(id).getName());
         return name;
     }
 
