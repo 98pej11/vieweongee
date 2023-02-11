@@ -3,6 +3,7 @@
     <div class="container">
       <div class="main main-box">
         <h2 class="text-h6 mb-3">{{ studyInfo.title }}</h2>
+        <!-- 스터디 정보 -->
         <el-row justify="space-between">
           <el-col :span="20">
             <div>
@@ -50,16 +51,27 @@
             ><p>{{ studyInfo.running_time }} 시간</p>
           </el-col>
         </el-row>
+        <!-- 자기소개서 업로드 모달창 -->
         <el-dialog
           class="el-dialog"
           v-model="dialogVisible"
           width="600px"
           style="border-radius: 5%"
         >
-          <el-upload class="upload-demo" drag :file-list="fileList">
+          <el-upload
+            drag
+            class="upload-demo"
+            accept=".jpg,.jpeg,.png"
+            :multiple="false"
+            :limit="1"
+            :auto-upload="false"
+            :file-list="fileList"
+            ref="upload"
+            :on-change="submitImage"
+          >
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
-              이미지를 끌어오거나 <em>클릭해서 업로드하기</em>
+              이미지를 끌어오거나 <em>클릭해서 업로드</em>
             </div>
             <template #tip>
               <div class="el-upload__tip">
@@ -67,7 +79,7 @@
               </div>
             </template>
           </el-upload>
-          <el-button
+          <!-- <el-button
             block
             color="#9DADD8"
             size="large"
@@ -75,8 +87,10 @@
             @click="submitImage"
           >
             완료
-          </el-button>
+          </el-button> -->
         </el-dialog>
+
+        <!-- 스터디 신청, 취소, 입장-->
         <el-row justify="end">
           <el-button
             v-if="isApplied || isAuthor"
@@ -136,6 +150,7 @@
             종료
           </el-button>
         </el-row>
+        <!-- 스터디 수정 및 삭제 -->
         <el-row justify="end" style="margin-top: 10px">
           <div v-if="isAuthor && isPossible">
             <el-button @click="modifyStudy" round color="#9DADD8" class="me-2">
@@ -176,7 +191,11 @@ const commentStore = "commentStore";
 
 export default {
   name: "StudyDetail",
-  components: { StudyComment, User, UploadFilled },
+  components: {
+    StudyComment,
+    User,
+    UploadFilled,
+  },
   computed: {
     ...mapState(studyStore, [
       "isCreated",
@@ -187,21 +206,19 @@ export default {
       "appliedList",
     ]),
   },
-  created() {
+  mounted() {
     this.init();
   },
   data() {
     return {
-      formInline: {
-        method: "",
-        flag: "",
-      },
       fileList: [],
+      myImage: "",
       isOpened: false,
       isPossible: false,
       isAuthor: false,
       isDone: false,
       dialogVisible: false,
+      dialogImageUrl: "",
       myId: 0,
     };
   },
@@ -231,11 +248,8 @@ export default {
         study_ID: this.studyID,
         user_ID: this.myId,
       };
-      console.log(this.isAuthor);
 
-      // this.SET_APPLY_SUCCESS(false);
-      // await this.getInfo(this.studyID);
-      await this.getInfo(params); // 객체를 줘야함
+      await this.getInfo(params);
       await this.getPersonnel(this.studyID);
       await this.getCommentList(this.studyID);
       await this.checkPossible();
@@ -306,25 +320,39 @@ export default {
     },
 
     // 자기소개서 첨부
-    submitImage() {
+    submitImage(file) {
+      // 기본 input 태그 방식
+      // this.myImage = this.$refs.myimage.files[0];
+      // let formData = new FormData();
+      // formData.append("file", this.myImage);
+
       let formData = new FormData();
+      this.myImage = file.raw;
+      formData.append("file", this.myImage);
 
-      formData.append("file", this.fileList[0]);
-      formData.append("flag", this.formInline.flag);
-      formData.append("method", this.formInline.method);
-
-      const params = {
-        study_ID: this.studyID,ㅁ
-        file: formData,
-      };
-
-      axios.defaults.headers['Content-Type'] = 'multipart/form-data';
-      axios({method:'post',url:'', data:params,}).then((res) => {
-        console.log("ㅋㅋ");
-        console.log(res);
-      }).catch((error) => { console.log("zz error");})
-
-
+      axios.defaults.headers.put["Content-Type"] = "multipart/form-data";
+      axios.defaults.headers.put["ACCESS"] = sessionStorage.getItem("ACCESS");
+      axios({
+        method: "put",
+        url: `http://localhost:8080/api/study/${this.studyID}/resume`,
+        data: formData,
+      })
+        .then((data) => {
+          if (data.data.message == "SUCCESS") {
+            this.dialogVisible = false;
+            ElMessage({
+              type: "success",
+              message: "자기소개서 업로드 완료",
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          ElMessage({
+            type: "warning",
+            message: "이미지 용량 초과",
+          });
+        });
 
       console.log(this.studyID + " 번에 자기소개서 첨부하기");
     },
