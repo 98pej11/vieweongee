@@ -40,8 +40,6 @@ public class StudyController {
     private final FileUploadService fileUploadService;
 
 
-
-
     /** 스터디 모집 게시글 생성
      * @param createStudyRequest
      * @return study_id
@@ -54,11 +52,11 @@ public class StudyController {
         User user = userService.getUserById(user_id);
         log.info("user in study : {}",user.getName());
 
-            // 스터디 생성
-            Study study = studyService.createStudy(user, createStudyRequest);
+        // 스터디 생성
+        Study study = studyService.createStudy(user, createStudyRequest);
 
-            // 참가 명단에 추가
-            studyService.registParticipant(user, study);
+        // 참가 명단에 추가
+        studyService.registParticipant(user, study);
 
         // 참가 이력 생성
         studyService.createProgress(user, study);
