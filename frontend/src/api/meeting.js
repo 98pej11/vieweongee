@@ -20,5 +20,14 @@ async function getAllScorecards(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/meeting/${study_ID}/score`).then(success).catch(fail);
 }
+//채점표 갱신하기
+async function putScore(params, success, fail) {
+  await api.put(`/meeting/${params.study_ID}/score`, params.data).then(success).catch(fail);
+}
+//자기소개서 가져오기
+async function getAllResume(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`meeting/${study_ID}/resume`).then(success).catch(fail);
+}
 
-export { getInterviewOrder, postScorecards, getAllScorecards };
+export { getInterviewOrder, postScorecards, getAllScorecards, putScore, getAllResume };
