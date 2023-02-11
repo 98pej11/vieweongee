@@ -2,7 +2,7 @@
   <div class="userVideo" v-if="streamManager">
     <div>
       <ov-video :stream-manager="streamManager" />
-      <div>내 닉네임 좀 넣어주세요</div>
+      <!-- <div>내 닉네임 좀 넣어주세요</div> -->
     </div>
   </div>
 </template>
