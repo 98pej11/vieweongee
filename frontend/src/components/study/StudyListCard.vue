@@ -33,7 +33,13 @@ import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
 
 export default {
   name: "StudyListCard",
-  components: { SearchBar, CirclePlus, MainCardList, Calendar, Picture },
+  components: {
+    SearchBar,
+    MainCardList,
+    CirclePlus,
+    Calendar,
+    Picture,
+  },
 
   methods: {
     onClick() {
