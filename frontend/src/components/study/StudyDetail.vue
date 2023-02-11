@@ -56,11 +56,7 @@
           width="600px"
           style="border-radius: 5%"
         >
-          <el-upload
-            class="upload-demo"
-            drag
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-          >
+          <el-upload class="upload-demo" drag :file-list="fileList">
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
               이미지를 끌어오거나 <em>클릭해서 업로드하기</em>
@@ -190,11 +186,16 @@ export default {
       "appliedList",
     ]),
   },
-  mounted() {
+  created() {
     this.init();
   },
   data() {
     return {
+      formInline: {
+        method: "",
+        flag: "",
+      },
+      fileList: [],
       isOpened: false,
       isPossible: false,
       isAuthor: false,
@@ -211,6 +212,7 @@ export default {
       "cancleStudyConfirm",
       "getPersonnel",
       "deleteConfirm",
+      "uploagConfirm",
     ]),
     ...mapActions(commentStore, ["getCommentList"]),
 
@@ -303,7 +305,20 @@ export default {
     },
 
     // 자기소개서 첨부
-    submitImage() {},
+    async submitImage() {
+      let formData = new FormData();
+
+      formData.append("file", this.fileList[0]);
+      formData.append("flag", this.formInline.flag);
+      formData.append("method", this.formInline.method);
+
+      const params = {
+        study_ID: this.studyID,
+        file: formData,
+      };
+
+      await this.uploagConfirm(params);
+    },
 
     // 스터디 삭제
     async deleteOpen() {

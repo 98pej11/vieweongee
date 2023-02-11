@@ -247,6 +247,7 @@ const studyStore = {
       });
     },
 
+    // 자기소개서 업로드
     async uploagConfirm(params) {
       await applyImage(params, ({ data }) => {
         console.log("업로드중");
