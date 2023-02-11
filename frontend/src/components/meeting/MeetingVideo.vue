@@ -236,9 +236,6 @@ export default {
           console.log("시그널로 받은 면접 순서 >>>>>>>>> ");
           console.log(event.data);
           this.SET_INTERVIEW_ORDER(event.data);
-          // //채점표 불러오기
-          // console.log("저 채점표 주세요");
-          // this.getScorecards(this.myStudyId);
 
           this.setEndTime(); //종료 시간 설정
         });
@@ -251,7 +248,6 @@ export default {
           //미팅 시작 버튼 누르면 0회차가 전송됨
           //면접 종료 버튼을 누르면 +1 회차가 전송됨
 
-          // let turn = this.nowTurn;
           if (this.nowTurn < this.totalTurn - 1) {
             alert("3초 뒤 다음 회차 진행. 채점표는 자동 갱신 됩니다");
             setTimeout(async () => {
