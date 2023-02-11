@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="footer">
     <el-button round @click="showChat">채팅</el-button>
 
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
@@ -86,4 +86,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.footer{
+  margin: 3%;
+  float: left;
+}
+</style>
