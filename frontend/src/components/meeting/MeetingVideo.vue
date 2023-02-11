@@ -1,6 +1,9 @@
 <template>
   <div>
     <!-- 화상 화면 -->
+    <div id="timer-display">
+      <h3>남은 시간</h3>
+    </div>
     <div class="notchat">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
@@ -44,11 +47,7 @@
     <div class="gochat">
       <!-- 화상 화면 -->
       <transition name="moveInUp">
-        <div
-          class="session"
-          v-if="isShowChat"
-          style="float: left; width: 50%; margin-left: 3%"
-        >
+        <div class="session" v-if="isShowChat" style="float: left; width: 50%; margin-left: 3%">
           <div id="session-header">
             <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
@@ -125,6 +124,8 @@ export default {
       // Join form
       myStudyId: "2", //스터디 아이디로 사용
       myUserName: "",
+
+      setTime: 0, //종료시간
     };
   },
   computed: {
@@ -147,6 +148,9 @@ export default {
   created() {
     this.joinSession(); //세션 참여
     this.getStudyInfo(); //스터디장 설정
+  },
+  mounted() {
+    this.calcRemainTime(); //타이머 설정
   },
   watch: {
     leaderOrder() {
@@ -182,12 +186,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(meetingStore, [
-      "SET_INTERVIEW_ORDER",
-      "SET_IS_INTERVIEWEE",
-      "SET_IS_INTERVIEWER",
-      "SET_NOWTURN",
-    ]),
+    ...mapMutations(meetingStore, ["SET_INTERVIEW_ORDER", "SET_IS_INTERVIEWEE", "SET_IS_INTERVIEWER", "SET_NOWTURN"]),
     ...mapActions(studyStore, ["getInfo"]),
     ...mapActions(meetingStore, [
       "setLeader",
@@ -241,14 +240,7 @@ export default {
           // console.log("저 채점표 주세요");
           // this.getScorecards(this.myStudyId);
 
-          // //면접 강제 종료 설정
-          // let endTime;
-          // //종료초 = 러닝시간 - (현재시각 - 스터디시간)
-
-          // setTimeout(() => {
-          //   //채점표 PUT 처리
-          //   //연결 강제 종료
-          // }, endTime);
+          this.setEndTime(); //종료 시간 설정
         });
 
         //현재 회차 시그널 처리
@@ -318,11 +310,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+            console.log("There was an error connecting to the session:", error.code, error.message);
           });
       });
 
@@ -381,8 +369,7 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null)
-        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -432,12 +419,7 @@ export default {
         this.SET_IS_INTERVIEWER(true); //면접관 true
       }
 
-      console.log(
-        "내 역할은 면접자 >> " +
-          this.isInterviewee +
-          " | 면접관 >> " +
-          this.isInterviewer
-      );
+      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -473,6 +455,49 @@ export default {
       //   str += "님이 면접자 입니다.";
       // }
       alert(str);
+    },
+    calcRemainTime() {
+      const remainTime = document.getElementById("timer-display");
+
+      const diffDay = () => {
+        // const study_datetime = this.studyInfo.study_datetime; //스터디 시작 시간
+        const datetime = new Date(this.studyInfo.study_datetime);
+        // const datetime = new Date("2023-02-11 23:47");
+        // console.log("스터디시간 >> " + datetime);
+        //Wed Feb 08 2023 05:14:00 GMT+0900 (한국 표준시)
+
+        const running_time = this.studyInfo.running_time;
+        // console.log("진행 시간 >> " + running_time);
+
+        const endtime = new Date(datetime.getTime() + running_time * 60 * 60 * 1000);
+        // console.log("종료 시간 >> " + endtime);
+
+        //설정해야할 시간 = 종료 시간 - 실제 시작 시간
+        const now = new Date();
+        // console.log("지금 시간 >> " + now);
+        this.setTime = endtime.getTime() - now.getTime();
+        // console.log("초기 종료시간이에요 >> " + this.setTime);
+
+        const diffHour = String(Math.floor((this.setTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
+        const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
+        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
+
+        remainTime.innerHTML = `<h3>남은 시간 ${diffHour}:${diffMin}:${diffSec}</h3>`;
+      };
+
+      setInterval(diffDay, 1000);
+    },
+    setEndTime() {
+      console.log("종료시간은 뭔가요 >> " + this.setTime);
+
+      //setTimeout으로 강제 세션 종료 설정
+      setTimeout(async () => {
+        //채점표 PUT 처리
+        await this.saveScore(this.myStudyId);
+        //연결 강제 종료
+        this.leaveSession();
+        alert("진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다.");
+      }, this.setTime);
     },
   },
 };
