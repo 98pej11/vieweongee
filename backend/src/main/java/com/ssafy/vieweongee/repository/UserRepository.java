@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.repository;
 
 import com.ssafy.vieweongee.entity.User;
+import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,7 +35,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.email=:email")
     User getUserByEmailUser(@Param("email") String email);
 
-    User getUserById(Long id);
+    @Query("SELECT u FROM User u WHERE u.id=:id")
+    User getUserById(@Param("id") Long id);
 
     @Modifying
     @Query("UPDATE User u SET u.jwt_token=null WHERE u.id=:id")
@@ -46,4 +48,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query("DELETE u FROM User u WHERE u.email=:email and u.social_login=:social")
 //    void deleteByJwtToken(String refreshToken);
 }
+
 
