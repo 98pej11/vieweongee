@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from "element-plus";
 import { Message, Lock } from "@element-plus/icons-vue";
 import { mapState, mapActions } from "vuex";
 // import { ValidationObserver, ValidationProvider } from 'vee-validate';
@@ -132,6 +133,9 @@ export default {
       // let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
         // await this.getUserInfo(token);
+        ElMessageBox.alert("로그인이 완료되었습니다. 환영합니다.", "알림", {
+        confirmButtonText: "확인",
+        });
         this.$router.push({ name: "main" });
       }
     },

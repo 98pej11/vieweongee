@@ -202,6 +202,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from "element-plus";
 import { mapState, mapActions } from "vuex";
 import { ref } from "vue";
 import moment from "moment";
@@ -214,7 +215,7 @@ const multipleSelection = ref([]);
 export default {
   name: "StudyCreate",
   computed: {
-    ...mapState(studyStore, ["isError", "studyId"]),
+    ...mapState(studyStore, ["isError", "studyID", "isCreated"]),
   },
 
   methods: {
@@ -222,18 +223,52 @@ export default {
 
     async confirm() {
       await this.createConfirm(this.studyFormInfo);
+      if (this.isCreated) {
+        console.log(this.studyID + " 로 이동할꾸야");
+        this.$router.push({ name: "studyview" });
+      } else {
+        console.log("생성 실패");
+        ElMessageBox.confirm("스터디 생성 중 오류 발생", {
+          confirmButtonText: "OK",
+          type: "warning",
+        });
+      }
     },
 
     // 스터디 생성 폼 submit
     async submitForm() {
       console.log(this.studyFormInfo);
-      if (this.checkDate(this.studyFormInfo.study_datetime)) this.confirm();
-      else {
+      if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
+        this.studyFormInfo.study_datetime =
+          this.studyFormInfo.study_datetime.replace(" ", "T");
+
+        console.log("바궜단다" + this.studyFormInfo.study_datetime);
+        this.studyFormInfo.job = "default";
+        this.studyFormInfo.type = "eng";
+        this.confirm();
+      } else {
+        console.log("빈칸이 있단다 ");
         this.isError = true;
         await this.sleep(3000).then(() => {
           this.isError = false;
         });
       }
+    },
+    // 유효성 검사
+    isEmpty() {
+      if (
+        this.studyFormInfo.title == "" ||
+        this.studyFormInfo.company == "" ||
+        this.studyFormInfo.job == "" ||
+        this.studyFormInfo.study_datetime == "" ||
+        this.studyFormInfo.type == "" ||
+        this.studyFormInfo.running_time == 0 ||
+        this.studyFormInfo.personnel == 0
+      ) {
+        return false;
+      }
+
+      return true;
     },
 
     // 날짜 선택 제한
@@ -310,16 +345,17 @@ export default {
       dialogVisible: false, // 모달창 이벤트 변수
       // alertMsg: "24시간 이후로 선택해주세요",
       isChecked: false,
+      isErorr: false,
       // 스터디 생성 정보
       studyFormInfo: {
         id: 0, // 꼭 넘겨주어야 한다 !!
         title: "",
         company: "",
         job: "",
-        personnel: 1,
+        personnel: 0,
         type: "",
         study_datetime: "",
-        running_time: 1,
+        running_time: 0,
         content: "",
         attitude: 0,
         ability: 0,

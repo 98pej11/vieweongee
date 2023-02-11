@@ -6,10 +6,10 @@
         <el-table
           class="el-table"
           :data="mystudys"
-          style="width: 100%; font-size: medium;"
+          style="width: 100%; font-size: medium"
           :class="tableRowClasscompany"
         >
-          <el-table-column prop="study_datetime" label="날짜" width="150%" />
+          <el-table-column prop="study_datetime" label="날짜" width="120%" />
           <el-table-column prop="company" label="기업명" width="200%" />
           <el-table-column prop="title" label="항목" width="350%" />
           <el-table-column label="버튼" width="150%">
@@ -81,7 +81,12 @@
                     score-template="{value} points"
                   />
                 </el-table-column> -->
-                <el-table-column border prop="score" label="점수" width="300%"></el-table-column>
+                <el-table-column
+                  border
+                  prop="score"
+                  label="점수"
+                  width="300%"
+                ></el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane>
@@ -245,6 +250,10 @@ export default {
       console.log("전체 글 받아옵니다");
       console.log(data.data);
       this.mystudys = data.data;
+
+      this.mystudys.forEach((el) => {
+        el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
+      });
     });
     if (this.global_isShow) {
       this.CLEAN_GLOBAL_ISSHOW();
@@ -261,7 +270,6 @@ export default {
 
       console.log(row);
       http.get(`/users/mystudy/${row.id}`, config).then(({ data }) => {
-
         // if(data.message==="SUCCESS")
         // console.log("글 1개 조회 성공" + this.dialogVisible);
         console.log(data.data);
@@ -349,7 +357,7 @@ p {
   width: 100%;
   table-layout: fixed;
 }
-.el-table .el-table-column{
+.el-table .el-table-column {
   width: 100%;
 }
 .confirm-btn {

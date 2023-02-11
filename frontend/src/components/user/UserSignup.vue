@@ -35,7 +35,7 @@
         <!-- 이메일 인증번호 어떻게 받아요? -->
         <el-row :gutter="20" style="margin-top: 3%">
           <el-col :span="18">
-            <el-input placeholder="이메일 인증번호"  v-model="emailCheck"/>
+            <el-input placeholder="이메일 인증번호" v-model="emailCheck" />
           </el-col>
           <el-col :span="6">
             <el-button
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { ElMessageBox } from "element-plus";
 import { Message, Lock, User } from "@element-plus/icons-vue";
 import { mapActions, mapState } from "vuex";
 
@@ -132,8 +133,11 @@ export default {
     ...mapActions(memberStore, ["userJoin", "checkEmail"]),
 
     async join() {
-      console.log("vuecomponent : " + JSON.stringify(this.user))
+      console.log("vuecomponent : " + JSON.stringify(this.user));
       await this.userJoin(this.user);
+      ElMessageBox.alert("회원가입이 완료되었습니다. 환영합니다.", "알림", {
+        confirmButtonText: "확인",
+      });
       this.$router.push({ name: "login" });
     },
 
@@ -141,14 +145,13 @@ export default {
       await this.checkEmail(this.user);
     },
 
-    codeCheck(){
-      if(this.code === this.emailCheck){
+    codeCheck() {
+      if (this.code === this.emailCheck) {
         console.log("인증코드 확인");
-      }
-      else{
+      } else {
         console.log("인증 재확인 요망");
       }
-    }
+    },
   },
 };
 </script>
