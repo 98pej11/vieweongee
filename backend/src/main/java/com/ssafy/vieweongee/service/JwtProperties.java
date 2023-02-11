@@ -11,3 +11,4 @@ public interface JwtProperties {
     long REFRESH_EXPIRATION_TIME = 60*1000*60*365;
     long EXPIRATION_TIME = 60*1000*60;
 }
+
