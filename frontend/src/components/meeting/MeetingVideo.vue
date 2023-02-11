@@ -1,90 +1,97 @@
 <template>
   <div>
     <!-- 화상 화면 -->
-    <transition name="moveInUp">
-      <div class="session" v-if="!isShowChat">
-        <div id="session-header">
-          <h1 id="session-title">스터디명 >> {{ myStudyId }}</h1>
-          <h3>현재 회차 : {{ nowTurn }}</h3>
-          <input
-            class="btn btn-large btn-danger"
-            type="button"
-            id="buttonLeaveSession"
-            @click="leaveSession"
-            value="Leave session"
-          />
-        </div>
-        <!-- <div id="main-video">
+    <div class="notchat">
+      <transition name="moveInUp">
+        <div class="session" v-if="!isShowChat">
+          <div id="session-header">
+            <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
+            <h3>현재 회차 : {{ nowTurn }}</h3>
+            <input
+              class="btn btn-large btn-danger"
+              type="button"
+              id="buttonLeaveSession"
+              @click="leaveSession"
+              value="Leave session"
+            />
+          </div>
+          <!-- <div id="main-video">
         <h3>스트림매니저</h3>
         <user-video :stream-manager="mainStreamManager" />
       </div> -->
-        <h2>--- 참가자 목록 ---</h2>
-        <div id="video-container">
-          <el-row class="row-bg" justify="space-evenly">
-            <el-col>
-              <user-video
-                class="invideo"
-                :stream-manager="publisher"
-                @click="updateMainVideoStreamManager(publisher)"
-              />
-              <user-video
-                class="invideo"
-                v-for="sub in subscribers"
-                :key="sub.stream.connection.connectionId"
-                :stream-manager="sub"
-                @click="updateMainVideoStreamManager(sub)"
-              />
-            </el-col>
-          </el-row>
+          <h2>--- 참가자 목록 ---</h2>
+          <div id="video-container" style="width: 100%">
+            <el-row class="row-bg" justify="space-evenly">
+              <el-col>
+                <user-video
+                  class="invideo"
+                  :stream-manager="publisher"
+                  @click="updateMainVideoStreamManager(publisher)"
+                />
+                <user-video
+                  class="invideo"
+                  v-for="sub in subscribers"
+                  :key="sub.stream.connection.connectionId"
+                  :stream-manager="sub"
+                  @click="updateMainVideoStreamManager(sub)"
+                />
+              </el-col>
+            </el-row>
+          </div>
         </div>
-      </div>
-    </transition>
-
-    <!-- 화상 화면 -->
-    <transition name="moveInUp">
-      <div class="session" v-if="isShowChat" style="float: left; width: 50%">
-        <div id="session-header">
-          <h1 id="session-title">스터디명 >> {{ myStudyId }}</h1>
-          <h3>현재 회차 : {{ nowTurn }}</h3>
-          <input
-            class="btn btn-large btn-danger"
-            type="button"
-            id="buttonLeaveSession"
-            @click="leaveSession"
-            value="Leave session"
-          />
-        </div>
-        <!-- <div id="main-video">
+      </transition>
+    </div>
+    <div class="gochat">
+      <!-- 화상 화면 -->
+      <transition name="moveInUp">
+        <div
+          class="session"
+          v-if="isShowChat"
+          style="float: left; width: 50%; margin-left: 3%"
+        >
+          <div id="session-header">
+            <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
+            <h3>현재 회차 : {{ nowTurn }}</h3>
+            <input
+              class="btn btn-large btn-danger"
+              type="button"
+              id="buttonLeaveSession"
+              @click="leaveSession"
+              value="Leave session"
+            />
+          </div>
+          <!-- <div id="main-video">
         <h3>스트림매니저</h3>
         <user-video :stream-manager="mainStreamManager" />
       </div> -->
-        <h2>--- 참가자 목록 ---</h2>
-        <div id="video-container">
-          <el-row class="row-bg" justify="space-evenly">
-            <el-col>
-              <user-video
-                class="invideo"
-                :stream-manager="publisher"
-                @click="updateMainVideoStreamManager(publisher)"
-              />
-              <user-video
-                class="invideo"
-                v-for="sub in subscribers"
-                :key="sub.stream.connection.connectionId"
-                :stream-manager="sub"
-                @click="updateMainVideoStreamManager(sub)"
-              />
-            </el-col>
-          </el-row>
+          <h2>--- 참가자 목록 ---</h2>
+          <div id="video-container">
+            <el-row class="row-bg" justify="space-evenly">
+              <el-col>
+                <user-video
+                  class="invideo"
+                  :stream-manager="publisher"
+                  @click="updateMainVideoStreamManager(publisher)"
+                />
+                <user-video
+                  class="invideo"
+                  v-for="sub in subscribers"
+                  :key="sub.stream.connection.connectionId"
+                  :stream-manager="sub"
+                  @click="updateMainVideoStreamManager(sub)"
+                />
+              </el-col>
+            </el-row>
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
 
-    <transition name="moveInUp">
-      <div class="chat-container" v-if="isShowChat" style="float: left">
-        <MeetingChatting :session="session" :myUserName="myUserName" />
-      </div>
-    </transition>
+      <transition name="moveInUp">
+        <div class="chat-container" v-if="isShowChat" style="float: left">
+          <MeetingChatting :session="session" :myUserName="myUserName" />
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -175,7 +182,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(meetingStore, ["SET_INTERVIEW_ORDER", "SET_IS_INTERVIEWEE", "SET_IS_INTERVIEWER", "SET_NOWTURN"]),
+    ...mapMutations(meetingStore, [
+      "SET_INTERVIEW_ORDER",
+      "SET_IS_INTERVIEWEE",
+      "SET_IS_INTERVIEWER",
+      "SET_NOWTURN",
+    ]),
     ...mapActions(studyStore, ["getInfo"]),
     ...mapActions(meetingStore, [
       "setLeader",
@@ -277,7 +289,10 @@ export default {
         // First param is the token. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         this.session
-          .connect(token, { clientData: this.myId, myNickname: this.myUserName })
+          .connect(token, {
+            clientData: this.myId,
+            myNickname: this.myUserName,
+          })
           .then(() => {
             // --- 5) Get your own camera stream with the desired properties ---
 
@@ -303,7 +318,11 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
           });
       });
 
@@ -362,7 +381,8 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -412,7 +432,12 @@ export default {
         this.SET_IS_INTERVIEWER(true); //면접관 true
       }
 
-      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
+      console.log(
+        "내 역할은 면접자 >> " +
+          this.isInterviewee +
+          " | 면접관 >> " +
+          this.isInterviewer
+      );
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -462,11 +487,25 @@ export default {
   border-radius: 15px;
   align-items: center;
   height: 75vh;
-  width: 80%;
+  width: 100%;
   height: auto;
+  margin: 0 auto;
   color: black;
 }
 .invideo {
+  margin-right: 3%;
+}
+.notchat {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.gochat {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-container {
   margin-right: 3%;
 }
 </style>
