@@ -22,7 +22,6 @@ async function getAllStudy(success, fail) {
 
 // 스터디 1개 상세정보 조회
 async function getStudy(params, success, fail) {
-  console.log(params);
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
     .get(`/study/detail/${params.study_ID}/${params.user_ID}`)

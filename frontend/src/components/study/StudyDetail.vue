@@ -166,6 +166,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { User, UploadFilled } from "@element-plus/icons-vue";
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import StudyComment from "@/components/study/StudyComment.vue";
@@ -305,7 +306,7 @@ export default {
     },
 
     // 자기소개서 첨부
-    async submitImage() {
+    submitImage() {
       let formData = new FormData();
 
       formData.append("file", this.fileList[0]);
@@ -313,11 +314,19 @@ export default {
       formData.append("method", this.formInline.method);
 
       const params = {
-        study_ID: this.studyID,
+        study_ID: this.studyID,ㅁ
         file: formData,
       };
 
-      await this.uploagConfirm(params);
+      axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+      axios({method:'post',url:'', data:params,}).then((res) => {
+        console.log("ㅋㅋ");
+        console.log(res);
+      }).catch((error) => { console.log("zz error");})
+
+
+
+      console.log(this.studyID + " 번에 자기소개서 첨부하기");
     },
 
     // 스터디 삭제
