@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.entity;
 
+import com.ssafy.vieweongee.dto.study.CreateStudyRequest;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -125,7 +126,20 @@ public class Study {
         this.comments = comments;
     }
 
-    public void updateConfrim(boolean confirm){
-        this.confirm = confirm;
+    // 0212 추가
+    @Builder
+    public Study(CreateStudyRequest createStudyRequest){
+        this.title=createStudyRequest.getTitle();
+        this.content= createStudyRequest.getContent();
+        this.company=createStudyRequest.getCompany();
+    }
+
+    // 테스트 코드 용
+    public void setId(long l) {
+        this.id=l;
+    }
+
+    public void updateConfrim(boolean b) {
+        this.confirm=b;
     }
 }
