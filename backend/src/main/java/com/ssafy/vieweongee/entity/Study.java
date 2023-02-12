@@ -124,4 +124,8 @@ public class Study {
         this.scorecards = scorecards;
         this.comments = comments;
     }
+
+    public void updateConfrim(boolean confirm){
+        this.confirm = confirm;
+    }
 }

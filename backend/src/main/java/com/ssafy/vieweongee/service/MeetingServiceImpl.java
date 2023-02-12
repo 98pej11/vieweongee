@@ -96,6 +96,27 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     /**
+     *  study confirm true로 변경
+     *  progress userId, studyId에 해당하는 status true로 변경
+     *
+     * @param userId
+     * @param studyId
+     *
+     */
+    @Override
+    public void updateConfirmAndStatus(Long studyId, Long userId) {
+        Study study = studyRepository.findById(studyId).get();
+        study.updateConfrim(true);
+        studyRepository.save(study);
+
+        User user = userRepository.getUserById(userId);
+        ProgressId progressId = new ProgressId(user, study);
+        Progress progress = progressRepository.findById(progressId).get();
+        progress.changeStatusToTrue();
+        progressRepository.save(progress);
+    }
+
+    /**
      * 스터디의 면접자 1명의 채점표의 점수를 갱신
      *
      * @param studyId
