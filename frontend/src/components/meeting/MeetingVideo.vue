@@ -122,11 +122,14 @@ export default {
       subscribers: [],
 
       // Join form
-      myStudyId: "2", //스터디 아이디로 사용
+      // myStudyId: "2", //스터디 아이디로 사용
       myUserName: "",
 
       setTime: 0, //종료시간
     };
+  },
+  props: {
+    myStudyId: String,
   },
   computed: {
     ...mapState(meetingStore, [
