@@ -363,6 +363,7 @@ export default {
         .then((data) => {
           if (data.data.message == "SUCCESS") {
             this.dialogVisible = false;
+            this.myImage = "";
             ElMessage({
               type: "success",
               message: "자기소개서 업로드 완료",
