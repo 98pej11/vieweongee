@@ -75,7 +75,7 @@
             </div>
             <template #tip>
               <div class="el-upload__tip">
-                500kb이하의 JPG/PNG 이미지를 업로드해주세요
+                20MB이하의 JPG/PNG 이미지를 업로드해주세요
               </div>
             </template>
           </el-upload>
@@ -340,6 +340,7 @@ export default {
         .then((data) => {
           if (data.data.message == "SUCCESS") {
             this.dialogVisible = false;
+            this.myImage = "";
             ElMessage({
               type: "success",
               message: "자기소개서 업로드 완료",
