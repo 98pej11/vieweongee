@@ -29,5 +29,10 @@ async function getAllResume(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`meeting/${study_ID}/resume`).then(success).catch(fail);
 }
+//스터디 확정 & 미팅 완료 변경
+async function putConfirmStatus(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.put(`meeting/${study_ID}/status`).then(success).catch(fail);
+}
 
-export { getInterviewOrder, postScorecards, getAllScorecards, putScore, getAllResume };
+export { getInterviewOrder, postScorecards, getAllScorecards, putScore, getAllResume, putConfirmStatus };

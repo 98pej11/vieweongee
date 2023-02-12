@@ -67,10 +67,10 @@ const routes = [
     component: MypageView,
   },
   {
-    path: "/meeting",
+    path: "/meeting/:studyid",
     name: "meeting",
     component: MeetingRoom,
-  }, //나중에 스터디 상세&곧참스에서 /:studyId 붙이는 방식으로 수정 필요
+  },
 ];
 
 const router = createRouter({

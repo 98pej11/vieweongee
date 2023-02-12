@@ -122,11 +122,14 @@ export default {
       subscribers: [],
 
       // Join form
-      myStudyId: "2", //스터디 아이디로 사용
+      // myStudyId: "2", //스터디 아이디로 사용
       myUserName: "",
 
       setTime: 0, //종료시간
     };
+  },
+  props: {
+    myStudyId: String,
   },
   computed: {
     ...mapState(meetingStore, [
@@ -142,6 +145,7 @@ export default {
       "nowScoreList",
       "totalTurn",
       "isShowChat",
+      "isLeaveSession",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
@@ -184,9 +188,34 @@ export default {
         this.shareNowTurn(this.leaderTurn);
       }
     },
+    async isLeaveSession() {
+      console.log("나가기 버튼 눌렀다!!!");
+      if (this.isLeaveSession) {
+        //나가기 버튼이 true일때
+        let isLeave = confirm("면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?");
+        if (isLeave) {
+          //yes
+          //나가기 버튼이 눌렸으면
+          //채점표 갱신
+          await this.saveScore(this.myStudyId);
+          //confirm, status 변경 요청
+          await this.changeConfirmAndStatus(this.myStudyId);
+          //세션 연결 종료
+          this.leaveSession();
+        } else {
+          this.SET_IS_LEAVE_SESSION(false); //나가기 버튼 false로 변경
+        }
+      }
+    },
   },
   methods: {
-    ...mapMutations(meetingStore, ["SET_INTERVIEW_ORDER", "SET_IS_INTERVIEWEE", "SET_IS_INTERVIEWER", "SET_NOWTURN"]),
+    ...mapMutations(meetingStore, [
+      "SET_INTERVIEW_ORDER",
+      "SET_IS_INTERVIEWEE",
+      "SET_IS_INTERVIEWER",
+      "SET_NOWTURN",
+      "SET_IS_LEAVE_SESSION",
+    ]),
     ...mapActions(studyStore, ["getInfo"]),
     ...mapActions(meetingStore, [
       "setLeader",
@@ -195,6 +224,7 @@ export default {
       "getScorecards",
       "setShowScoreList",
       "saveScore",
+      "changeConfirmAndStatus",
     ]),
     joinSession() {
       this.myUserName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
@@ -490,6 +520,8 @@ export default {
       setTimeout(async () => {
         //채점표 PUT 처리
         await this.saveScore(this.myStudyId);
+        //confirm, status 변경 요청
+        await this.changeConfirmAndStatus(this.myStudyId);
         //연결 강제 종료
         this.leaveSession();
         alert("진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다.");
