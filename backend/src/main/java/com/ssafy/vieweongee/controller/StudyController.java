@@ -427,7 +427,7 @@ public class StudyController {
      */
     @PutMapping("/{study_id}/resume")
     public ResponseEntity<?> uploadResume(@PathVariable("study_id") Long study_id,
-                                          @RequestBody MultipartFile resume,@RequestHeader("ACCESS") String access) throws IOException {
+                                          @RequestPart(value="file") MultipartFile resume,@RequestHeader("ACCESS") String access) throws IOException {
 
 
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));

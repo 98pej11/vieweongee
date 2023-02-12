@@ -1,8 +1,9 @@
 <template>
   <div>
+    <h1>지금 스터디 id : {{ $route.params.studyid }}</h1>
     <meeting-rate v-if="isLeader && leaderOrder == null"></meeting-rate>
     <div class="area">
-      <meeting-video></meeting-video>
+      <meeting-video :myStudyId="myStudyId"></meeting-video>
       <meeting-score v-if="isInterviewer"></meeting-score>
     </div>
     <meeting-footer></meeting-footer>
@@ -27,7 +28,12 @@ export default {
     MeetingScore,
   },
   data() {
-    return {};
+    return {
+      myStudyId: null,
+    };
+  },
+  created() {
+    this.myStudyId = this.$route.params.studyid;
   },
   computed: {
     ...mapState(meetingStore, ["isLeader", "isInterviewer", "leaderOrder"]),

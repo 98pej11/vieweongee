@@ -23,6 +23,7 @@ public interface MeetingService {
     String makeStudyOrder(String studyId, MeetingRatioRequest meetingRatioRequest);
 
     // 스터디 참가자의 자기소개서 불러오기
-
     List<MeetingResumeRequest> getAllResume(Long studyId);
+
+    void updateConfirmAndStatus(Long studyId, Long userId);
 }
