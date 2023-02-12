@@ -1,4 +1,11 @@
-import { getInterviewOrder, postScorecards, getAllScorecards, putScore, getAllResume } from "../api/meeting";
+import {
+  getInterviewOrder,
+  postScorecards,
+  getAllScorecards,
+  putScore,
+  getAllResume,
+  putConfirmStatus,
+} from "../api/meeting";
 
 const meetingStore = {
   namespaced: true,
@@ -289,6 +296,20 @@ const meetingStore = {
         );
         //저장이 성공하면 로컬 스토리지 클리어
       }
+    },
+    async changeConfirmAndStatus(study_ID) {
+      await putConfirmStatus(
+        study_ID,
+        ({ data }) => {
+          console.log("스터디 confirm, 진행상황 status 잘 처리 됐을까요");
+          if (data.message == "SUCCESS") {
+            console.log("진행상황 처리가 잘 됐어요");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
   },
 };
