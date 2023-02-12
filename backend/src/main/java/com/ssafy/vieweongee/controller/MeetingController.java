@@ -94,8 +94,17 @@ public class MeetingController {
      * @return List<MeetingScoreRequest>
      */
     @GetMapping("{study_ID}/resume")
-    public ResponseEntity<List<MeetingResumeRequest>> showAllResume(@PathVariable("study_ID") Long study_ID, @RequestHeader("ACCESS") String access){
-        return new ResponseEntity<>(meetingService.getAllResume(study_ID), HttpStatus.OK);
+    public ResponseEntity<?> showAllResume(@PathVariable("study_ID") Long study_ID, @RequestHeader("ACCESS") String access){
+        Map<String, Object> result = new HashMap<>();
+        List<MeetingResumeRequest> list = meetingService.getAllResume(study_ID);
+        if(list.size() > 0){
+            result.put("data", list);
+            result.put("message", "SUCCESS");
+            return ResponseEntity.ok().body(result);
+        }
+        result.put("message", "FAIL");
+        result.put("data", "몰라요");
+        return ResponseEntity.status(400).body(result);
     }
     /**
      * 면접자 1명의 채점표 갱신

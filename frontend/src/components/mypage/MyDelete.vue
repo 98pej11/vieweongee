@@ -46,6 +46,7 @@ import { defineComponent } from "vue";
 import { mapState, mapActions } from "vuex";
 import { Lock } from "@element-plus/icons-vue";
 import { User } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 
 const memberStore = "memberStore";
 
@@ -55,13 +56,13 @@ export default defineComponent({
     Lock,
     User,
   },
-  data(){
-    return{
+  data() {
+    return {
       user: {
         id: "",
         password: "",
-      }
-    }
+      },
+    };
   },
   computed: {
     ...mapState(memberStore, ["data", "isLogin"]),
@@ -71,7 +72,10 @@ export default defineComponent({
 
     async withdraw() {
       await this.userDelete(this.user);
-      alert("회원탈퇴 완료");
+      ElMessage({
+        type: "success",
+        message: "회원 탈퇴 완료",
+      });
       this.$router.push({ name: "main" });
     },
   },

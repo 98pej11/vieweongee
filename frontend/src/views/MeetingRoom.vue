@@ -1,7 +1,7 @@
 <template>
   <div>
-    <meeting-rate v-if="isLeader"></meeting-rate>
-    <div id="area">
+    <meeting-rate v-if="isLeader && leaderOrder == null"></meeting-rate>
+    <div class="area">
       <meeting-video></meeting-video>
       <meeting-score v-if="isInterviewer"></meeting-score>
     </div>
@@ -30,13 +30,16 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(meetingStore, ["isLeader", "isInterviewer"]),
+    ...mapState(meetingStore, ["isLeader", "isInterviewer", "leaderOrder"]),
   },
 };
 </script>
 
 <style scoped>
-#area {
+.area {
+  margin-top: 3%;
   display: flex;
+  align-content: center;
+  justify-content: space-between;
 }
 </style>

@@ -152,6 +152,13 @@ public class MeetingServiceImpl implements MeetingService {
 
             Scorecard scorecard = Scorecard.builder()
                     .score_id(scorecardId)
+                    .attitude(3)
+                    .ability(3)
+                    .solving(3)
+                    .teamwork(3)
+                    .loyalty(3)
+                    .feedback("")
+                    .interviewer(0)
                     .build();
 
             meetingScoreRepository.save(scorecard);

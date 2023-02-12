@@ -15,7 +15,10 @@
         </el-row>
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="비밀번호 재확인"  v-model="user.passwordCheck"/>
+            <el-input
+              placeholder="비밀번호 재확인"
+              v-model="user.passwordCheck"
+            />
           </el-col>
         </el-row>
         <el-row class="text"
@@ -23,7 +26,7 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 닉네임 입력"  v-model="user.name"/>
+            <el-input placeholder="변경할 닉네임 입력" v-model="user.name" />
           </el-col>
         </el-row>
         <el-row :gutter="20" style="text-align: center">
@@ -48,6 +51,7 @@
 import { defineComponent } from "vue";
 import { Lock } from "@element-plus/icons-vue";
 import { User } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { mapState, mapActions } from "vuex";
 
 const memberStore = "memberStore";
@@ -58,14 +62,14 @@ export default defineComponent({
     Lock,
     User,
   },
-  data(){
-    return{
+  data() {
+    return {
       user: {
         password: "",
         passwordCheck: "",
         name: "",
       },
-    }
+    };
   },
   computed: {
     ...mapState(memberStore, ["data", "isLogin"]),
@@ -79,7 +83,10 @@ export default defineComponent({
       // let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
         // await this.getUserInfo(token);
-        alert("회원 정보 수정완료");
+        ElMessage({
+          type: "success",
+          message: "회원 정보 수정완료",
+        });
         this.$router.push({ name: "main" });
       }
     },

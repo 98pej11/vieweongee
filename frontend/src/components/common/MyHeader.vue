@@ -112,7 +112,6 @@ export default defineComponent({
     const count = 5;
     // const start = true;
 
-
     function load() {
       this.count += 1;
       // console.log(this.count);
@@ -129,7 +128,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "data"]),
-    ...mapGetters(["checkUserInfo","checkIsLogin"]),
+    ...mapGetters(["checkUserInfo", "checkIsLogin"]),
   },
   methods: {
     ...mapActions(memberStore, ["userLogout"]),
@@ -150,7 +149,7 @@ export default defineComponent({
     gologin() {
       this.$router.push({ name: "login" });
     },
-    
+
     gomypage() {
       this.$router.push({ name: "mypage" });
     },
@@ -158,7 +157,7 @@ export default defineComponent({
     goboard() {
       this.$router.push({ name: "studylist" });
     },
-    
+
     open() {
       ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
         confirmButtonText: "확인",
