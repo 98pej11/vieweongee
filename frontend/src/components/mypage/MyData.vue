@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-container>
-      <el-main class="outline-box">
+    <el-container class="outcontainer">
+      <el-main>
         <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
         <el-table
           class="el-table"
@@ -9,10 +9,10 @@
           style="width: 100%; font-size: medium"
           :class="tableRowClasscompany"
         >
-          <el-table-column prop="study_datetime" label="날짜" width="120%" />
-          <el-table-column prop="company" label="기업명" width="200%" />
-          <el-table-column prop="title" label="항목" width="350%" />
-          <el-table-column label="버튼" width="150%">
+          <el-table-column prop="study_datetime" label="날짜" />
+          <el-table-column prop="company" label="기업명" />
+          <el-table-column prop="title" label="제목" />
+          <el-table-column label="버튼">
             <template v-slot="scope">
               <el-button
                 block
@@ -375,5 +375,13 @@ p {
 
 .el-table .warning-row {
   --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+.outcontainer {
+  height: 300px;
+  border: 3px solid #d3daff;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 35px;
+  height: 300px;
 }
 </style>

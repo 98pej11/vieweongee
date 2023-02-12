@@ -4,19 +4,19 @@
     <transition name="moveInUp">
       <router-view />
     </transition>
-    <!-- <MyFooter></MyFooter> -->
+    <MyFooter></MyFooter>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import MyHeader from "./components/common/MyHeader.vue";
-// import MyFooter from "./components/common/MyFooter.vue";
+import MyHeader from "./components/common/MyHeader";
+import MyFooter from "./components/common/MyFooter";
 export default defineComponent({
   name: "App",
   components: {
     MyHeader,
-    // MyFooter,
+    MyFooter,
   },
 });
 </script>
@@ -106,5 +106,10 @@ button:not(#search-btn, .el-dialog__headerbtn) {
 form {
   width: 80%;
   margin: 0 auto;
+}
+
+.app {
+  background-color: #f4f4f4;
+  font-size: large;
 }
 </style>

@@ -9,6 +9,7 @@
           ><p @click="replyBtn()">답글 달기</p>
         </el-col>
       </el-row>
+
       <el-row>
         <el-col v-if="this.modifying" :span="20" style="color: black">
           <el-input
@@ -192,6 +193,9 @@ export default {
 </script>
 
 <style scoped>
+.comment-item {
+  font-size: large;
+}
 .comment-content {
   margin-top: 20px;
 }
