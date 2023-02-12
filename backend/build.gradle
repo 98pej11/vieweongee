@@ -46,7 +46,8 @@ dependencies {
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+    // implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.7.8'
 
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.25.0'
 
