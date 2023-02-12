@@ -1,13 +1,17 @@
 <template>
-  <MyHeader></MyHeader>
-  <router-view />
-  <MyFooter></MyFooter>
+  <div class="app">
+    <MyHeader></MyHeader>
+    <transition name="moveInUp">
+      <router-view />
+    </transition>
+    <MyFooter></MyFooter>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import MyHeader from "./components/common/MyHeader.vue";
-import MyFooter from "./components/common/MyFooter.vue";
+import MyHeader from "./components/common/MyHeader";
+import MyFooter from "./components/common/MyFooter";
 export default defineComponent({
   name: "App",
   components: {
@@ -18,6 +22,24 @@ export default defineComponent({
 </script>
 
 <style>
+.moveInUp-enter-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+.moveInUp-enter-active {
+  animation: fadeIn 1s ease-in;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @font-face {
   font-family: "nexon";
   src: url("@/assets/font/NEXONLv1GothicRegular.ttf") format("truetype");
@@ -76,7 +98,7 @@ a {
 }
 
 /* 그림자 버튼 */
-button {
+button:not(#search-btn, .el-dialog__headerbtn) {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -84,5 +106,10 @@ button {
 form {
   width: 80%;
   margin: 0 auto;
+}
+
+.app {
+  background-color: #f4f4f4;
+  font-size: large;
 }
 </style>

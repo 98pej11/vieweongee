@@ -7,12 +7,18 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 비밀번호 입력" />
+            <el-input
+              placeholder="변경할 비밀번호 입력"
+              v-model="user.password"
+            />
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="비밀번호 재확인" />
+            <el-input
+              placeholder="비밀번호 재확인"
+              v-model="user.passwordCheck"
+            />
           </el-col>
         </el-row>
         <el-row class="text"
@@ -20,7 +26,7 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="변경할 닉네임 입력" />
+            <el-input placeholder="변경할 닉네임 입력" v-model="user.name" />
           </el-col>
         </el-row>
         <el-row :gutter="20" style="text-align: center">
@@ -30,6 +36,7 @@
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 30%"
+              @click="confirm"
             >
               수정 완료
             </el-button>
@@ -44,11 +51,45 @@
 import { defineComponent } from "vue";
 import { Lock } from "@element-plus/icons-vue";
 import { User } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+import { mapState, mapActions } from "vuex";
+
+const memberStore = "memberStore";
+
 export default defineComponent({
   name: "MyModify",
   components: {
     Lock,
     User,
+  },
+  data() {
+    return {
+      user: {
+        password: "",
+        passwordCheck: "",
+        name: "",
+      },
+    };
+  },
+  computed: {
+    ...mapState(memberStore, ["data", "isLogin"]),
+  },
+  methods: {
+    ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
+
+    async confirm() {
+      // alert("confirm");
+      await this.userUpdate(this.user);
+      // let token = sessionStorage.getItem("ACCESS");
+      if (this.isLogin) {
+        // await this.getUserInfo(token);
+        ElMessage({
+          type: "success",
+          message: "회원 정보 수정완료",
+        });
+        this.$router.push({ name: "main" });
+      }
+    },
   },
 });
 </script>

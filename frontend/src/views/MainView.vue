@@ -1,8 +1,14 @@
 <template>
   <div class="main">
+    <div class="background-image">
+      <!-- <img src="@/assets/image/google.png" alt="your image" /> -->
+    </div>
     <MainCenter />
+    <h3>♥ 면접 걱정을 덜어주는 모의면접 플랫폼 ♥</h3>
     <SearchBar></SearchBar>
-    <MainCardList></MainCardList>
+
+    <h3 style="margin-top: 5%">~ 최근 스터디 바로가기 ~</h3>
+    <MainCardList compType="main"></MainCardList>
   </div>
 </template>
 
@@ -24,8 +30,26 @@ export default defineComponent({
 <style scoped>
 .main {
   text-align: center;
+  /* background-color: rgb(238, 233, 251); */
 }
-.search-bar {
-  margin: 2% 25% 2% 25%;
+.background-image {
+  position: relative;
+}
+
+.background-image::before {
+  content: "";
+  /* background: url(your-image-path.jpg) no-repeat center center/cover; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.9;
+  z-index: -1;
+}
+
+.background-image img {
+  position: relative;
+  z-index: 1;
 }
 </style>

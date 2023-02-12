@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -49,5 +50,9 @@ public class Alarm {
         this.content = content;
         this.see = see;
         this.datetime = datetime;
+    }
+
+    public void updateSee(boolean see){
+        this.see = see;
     }
 }

@@ -78,7 +78,9 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public Study getStudyDetail(Long study_id) {
-        return studyRepository.findById(study_id).orElseThrow(() -> new StudyNotFoundException());
+//        return studyRepository.findById(study_id).orElseThrow(() -> new StudyNotFoundException());
+        Study result = studyRepository.findById(study_id).orElse(null);
+        return result;
     }
 
     @Override
@@ -137,18 +139,27 @@ public class StudyServiceImpl implements StudyService {
         progressRepository.deleteById(progressId);
     }
 
+
     @Override
     @Transactional
-    public void updateResume(User user, Study study, MultipartFile resume) {
+    public void updateResume(User user, Study study, MultipartFile resume, String url) {
         ParticipantId participantId = ParticipantId.builder()
                 .user(user)
                 .study(study)
                 .build();
 
         Participant origin = participantRepository.findById(participantId).orElseThrow(() -> new ParticipantNotFoundException());
+//        RequestFileUpload dbResume=new RequestFileUpload();
+//        dbResume.setFilename(resume.getOriginalFilename());
+//        dbResume.setSava(url);
+//        dbResume.setStudy_id(participantId.getStudy().getId());
+//        dbResume.setUser_id(participantId.getUser().getId());
+
+        Participant participant=new Participant(participantId, resume.getOriginalFilename(), url);
 
         // 파일 저장 경로
         Resource save = resourceLoader.getResource("resources/upload");
+        participantRepository.save(participant);
     }
 
 //    //Beedly 참고

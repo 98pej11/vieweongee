@@ -10,7 +10,6 @@ import com.ssafy.vieweongee.entity.Study;
 import com.ssafy.vieweongee.entity.User;
 import com.ssafy.vieweongee.exception.CommentNotFoundException;
 import com.ssafy.vieweongee.exception.ReplyNotFoundException;
-import com.ssafy.vieweongee.exception.StudyNotFoundException;
 import com.ssafy.vieweongee.repository.CommentRepository;
 import com.ssafy.vieweongee.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,6 @@ public class CommentServiceImpl implements CommentService {
                 .study(origin.getStudy())
                 .user(origin.getUser())
                 .build();
-
         commentRepository.save(result);
 
         return result;

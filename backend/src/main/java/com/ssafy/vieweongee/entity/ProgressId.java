@@ -29,3 +29,4 @@ public class ProgressId implements Serializable {
         this.study = study;
     }
 }
+

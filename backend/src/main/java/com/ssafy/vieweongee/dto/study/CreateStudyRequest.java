@@ -5,11 +5,13 @@ import com.ssafy.vieweongee.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class CreateStudyRequest {
     private int running_time;
     private int personnel;

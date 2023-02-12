@@ -1,60 +1,109 @@
 <template>
   <div class="card-list">
-    <div v-for="(data, index) in cardData" :key="index" class="card-div">
-      <div>(인원수)</div>
-      <div class="title">{{ data.title }}</div>
-      <div class="card-contents">
-        <div>기업</div>
-        <div>{{ data.ent }}</div>
-      </div>
-      <div class="card-contents">
-        <div>직무</div>
-        <div>{{ data.dept }}</div>
-      </div>
-      <div class="card-contents">
-        <div>기업</div>
-        <div>{{ data.date }}</div>
-      </div>
-    </div>
+    <el-row justify="space-evenly">
+      <el-col
+        :xs="24"
+        :md="6"
+        :lg="6"
+        v-for="(data, index) in studyList"
+        :key="index"
+        class="card-div"
+      >
+        <transition name="moveInUp">
+          <div @click="move(data.id)">
+            <div class="person-div">
+              &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
+                this.currentList[index]
+              }}
+              /
+              {{ data.personnel }}&nbsp;
+            </div>
+            <div class="title">{{ data.title }}</div>
+            <div class="card-contents">
+              <div>기업</div>
+              <div>{{ data.company }}</div>
+            </div>
+            <div class="card-contents">
+              <div>직무</div>
+              <div>{{ data.job }}</div>
+            </div>
+            <div class="card-contents">
+              <div>날짜</div>
+              <div>{{ data.study_datetime }}</div>
+            </div>
+          </div>
+        </transition>
+      </el-col>
+    </el-row>
   </div>
 </template>
-<script  >
-import { defineComponent } from "vue";
-// import MainCardItem from "@/components/mainpage/MainCardItem.vue";
-export default defineComponent({
+<script>
+// import http from "@/api/http";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { User } from "@element-plus/icons-vue";
+const studyStore = "studyStore";
+
+export default {
   name: "MainCardList",
   components: {
-    // MainCardItem,
+    User,
   },
-  setup() {
-    const cardData = [
-      {
-        title: "싸피 비전공자 면접스터디 구해요",
-        ent: "SSAFY",
-        dept: "프론트엔드",
-        date: "2023.01.12 10:00",
-      },
-      {
-        title: "신한은행 면접스터디",
-        ent: "신한은행",
-        dept: "백엔드",
-        date: "2023.01.11 19:00",
-      },
-      {
-        title: "유플러스 백엔드 면접",
-        ent: "유플러스",
-        dept: "백엔드",
-        date: "2023.01.10 11:00",
-      },
-    ];
-    return { cardData };
+  props: {
+    compType: String,
   },
-});
+  computed: {
+    ...mapState(studyStore, [
+      "studyList",
+      "studyID",
+      "currentList",
+      "getCurrentPerson",
+    ]),
+  },
+  created() {
+    if (this.$route.params.type !== "search") {
+      if (this.compType == "main") {
+        this.CLEAR_LIST();
+        this.maininit();
+      } else if (this.compType == "study") {
+        this.CLEAR_LIST();
+        this.studyinit();
+      }
+    }
+  },
+  methods: {
+    ...mapActions(studyStore, ["getTopList", "getAllList", "getPersonnel"]),
+    ...mapMutations(studyStore, ["CLEAR_LIST", "SET_STUDY_ID"]),
+
+    async maininit() {
+      await this.getTopList();
+      // 현재 참가자 수 받아오기
+      for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
+        await this.getPersonnel(this.studyList[idx].id);
+      }
+    },
+    async studyinit() {
+      await this.getAllList();
+
+      // 현재 참가자 수 받아오기
+      for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
+        await this.getPersonnel(this.studyList[idx].id);
+      }
+    },
+
+    // 세부 페이지로 이동
+    move(id) {
+      this.SET_STUDY_ID(id);
+      this.$router.push({ name: "studyview" });
+    },
+  },
+};
 </script>
 <style scoped>
 .card-list {
-  display: flex;
-  justify-content: center;
+  max-width: 70%;
+  margin: 0 auto;
   padding: 20px;
 }
 .card-contents {
@@ -64,9 +113,10 @@ export default defineComponent({
 }
 .card-div {
   font-family: "nexonlv1";
-  min-width: 280px;
-  margin: 30px;
+  /* min-width: 280px; */
   padding: 20px;
+  background-color: white;
+  margin: 10px 10px 50px 10px;
   border: 4px solid rgba(227, 232, 252, 0.5);
   border-radius: 10px;
   box-shadow: 1px 10px 15px 1px rgb(221, 221, 221);
@@ -77,6 +127,7 @@ export default defineComponent({
   transition: all 200ms 0s ease-in;
   transform: scale(1.04);
   border: 4px solid rgba(227, 232, 252, 0.2);
+  cursor: pointer;
 }
 .card-contents :nth-child(1) {
   color: #555454;
@@ -87,5 +138,14 @@ export default defineComponent({
   font-size: large;
   text-align: center;
   margin: 3% 0 10% 0;
+}
+.person-div {
+  /* padding: 5px; */
+  margin-right: auto;
+  width: 80px;
+  display: flex;
+  padding: 5px 0 5px 5px;
+  border-radius: 30px;
+  background-color: #d3daff;
 }
 </style>

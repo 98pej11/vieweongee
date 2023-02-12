@@ -17,15 +17,12 @@ public class Summary implements Serializable {
     @Id
     @Column(name="user_id")
     private Long id;
+
     //회원 외래키
     @OneToOne
     @MapsId
     @JoinColumn(name="user_id")
     private User user;
-//    @Id
-//    @OneToOne
-//    @JoinColumn(name="user_id",referencedColumnName="id")
-//    private User user_id;
 
     @ColumnDefault("0")
     private int attitude_count;
@@ -78,4 +75,10 @@ public class Summary implements Serializable {
         this.loyalty_total = loyalty_total;
         this.loyalty_average = loyalty_average;
     }
+
+    @Builder
+    public Summary(User user){
+        this.user=user;
+    }
 }
+

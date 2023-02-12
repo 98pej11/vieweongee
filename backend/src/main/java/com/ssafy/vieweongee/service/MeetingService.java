@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public interface MeetingService {
 
     //면접 순서 지정
     String makeStudyOrder(String studyId, MeetingRatioRequest meetingRatioRequest);
+
+    // 스터디 참가자의 자기소개서 불러오기
+    List<MeetingResumeRequest> getAllResume(Long studyId);
+
+    void updateConfirmAndStatus(Long studyId, Long userId);
 }

@@ -16,7 +16,10 @@
         >
         <el-row :gutter="20">
           <el-col>
-            <el-input placeholder="본인 비밀번호 확인" />
+            <el-input
+              placeholder="본인 비밀번호 확인"
+              v-model="user.password"
+            />
           </el-col>
         </el-row>
 
@@ -27,6 +30,7 @@
               class="mt-10 mb-10"
               size="large"
               style="margin: 10% auto; width: 30%"
+              @click="withdraw"
             >
               회원 탈퇴
             </el-button>
@@ -39,14 +43,41 @@
 
 <script>
 import { defineComponent } from "vue";
+import { mapState, mapActions } from "vuex";
 import { Lock } from "@element-plus/icons-vue";
 import { User } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+
+const memberStore = "memberStore";
 
 export default defineComponent({
   name: "MyDelete",
   components: {
     Lock,
     User,
+  },
+  data() {
+    return {
+      user: {
+        id: "",
+        password: "",
+      },
+    };
+  },
+  computed: {
+    ...mapState(memberStore, ["data", "isLogin"]),
+  },
+  methods: {
+    ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
+
+    async withdraw() {
+      await this.userDelete(this.user);
+      ElMessage({
+        type: "success",
+        message: "회원 탈퇴 완료",
+      });
+      this.$router.push({ name: "main" });
+    },
   },
 });
 </script>

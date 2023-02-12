@@ -1,6 +1,7 @@
 package com.ssafy.vieweongee.service;
 
 import com.ssafy.vieweongee.dto.meeting.MeetingRatioRequest;
+import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.*;
@@ -71,8 +72,48 @@ public class MeetingServiceImpl implements MeetingService {
             );
             result.add(temp);
         }
-
         return result;
+    }
+
+    /**
+     * 스터디의 참가자들의 자기소개서 불러옴
+     *
+     * @param studyId
+     */
+    @Override
+    public List<MeetingResumeRequest> getAllResume(Long studyId) {
+        List<Participant> resumes = participantRepository.findAllByStudyId(studyId);
+        List<MeetingResumeRequest> result=new ArrayList<>();
+
+        for (Participant participant : resumes){
+            MeetingResumeRequest temp=new MeetingResumeRequest(
+                    participant.getParticipant_id().getUser().getId()
+                    , participant.getSave()
+            );
+            result.add(temp);
+        }
+        return result;
+    }
+
+    /**
+     *  study confirm true로 변경
+     *  progress userId, studyId에 해당하는 status true로 변경
+     *
+     * @param userId
+     * @param studyId
+     *
+     */
+    @Override
+    public void updateConfirmAndStatus(Long studyId, Long userId) {
+        Study study = studyRepository.findById(studyId).get();
+        study.updateConfrim(true);
+        studyRepository.save(study);
+
+        User user = userRepository.getUserById(userId);
+        ProgressId progressId = new ProgressId(user, study);
+        Progress progress = progressRepository.findById(progressId).get();
+        progress.changeStatusToTrue();
+        progressRepository.save(progress);
     }
 
     /**
@@ -86,10 +127,10 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateScore(String studyId, MeetingScoreRequest score) {
         //스터디 아이디와 회원 아이디로 ScorecardId 만들어줌
         User user = userRepository.findById(score.getId())
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no user data"));
 
         Study study = studyRepository.findById(Long.parseLong(studyId))
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no study data"));
 
         ScorecardId scorecardId = ScorecardId.builder()
                 .user(user)
@@ -98,7 +139,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         //얘로 채점표를 찾음
         Scorecard scorecard = meetingScoreRepository.findById(scorecardId)
-                .orElseThrow(() -> new IllegalArgumentException("no such data"));
+                .orElseThrow(() -> new IllegalArgumentException("no score data"));
 
         //엔티티의 점수 변경 메서드 실행해줌
         scorecard.changeScore(score);
@@ -132,6 +173,13 @@ public class MeetingServiceImpl implements MeetingService {
 
             Scorecard scorecard = Scorecard.builder()
                     .score_id(scorecardId)
+                    .attitude(3)
+                    .ability(3)
+                    .solving(3)
+                    .teamwork(3)
+                    .loyalty(3)
+                    .feedback("")
+                    .interviewer(0)
                     .build();
 
             meetingScoreRepository.save(scorecard);
@@ -158,6 +206,10 @@ public class MeetingServiceImpl implements MeetingService {
         //스터디 아이디로 참가자 리스트 가져옴
         List<Participant> participants = participantRepository.findAllByStudyId(Long.parseLong(studyId));
 
+        for(Participant p : participants){
+            System.out.println("참자가 아이디 >> " + p.getParticipant_id().getUser().getId());
+        }
+
         //스터디 참가자 수 확인
         int totalCnt = participants.size();
 
@@ -167,7 +219,9 @@ public class MeetingServiceImpl implements MeetingService {
 //        System.out.println("전체수, 면접자" + totalCnt + " " + intervieweeCnt);
 
         //면접 회차 저장
-        result.append(totalCnt).append("!");
+        int turn = totalCnt % intervieweeCnt == 0 ? totalCnt / intervieweeCnt : totalCnt / intervieweeCnt + 1;
+        result.append(turn).append("!");
+
 
         //비율 확인
         if (intervieweeCnt == 1) { //1:1, 1:N
@@ -230,6 +284,7 @@ public class MeetingServiceImpl implements MeetingService {
             }
             return result.toString();
         }
+
         //5 | 1:4 | 2:3 3:2
         if (totalCnt == 5) {
             if (intervieweeCnt == 2) {
@@ -273,4 +328,5 @@ public class MeetingServiceImpl implements MeetingService {
 
         return null;
     }
+
 }
