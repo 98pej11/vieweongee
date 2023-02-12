@@ -9,28 +9,30 @@
         :key="index"
         class="card-div"
       >
-        <div @click="move(data.id)">
-          <div class="person-div">
-            &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
-              this.currentList[index]
-            }}
-            /
-            {{ data.personnel }}&nbsp;
+        <transition name="moveInUp">
+          <div @click="move(data.id)">
+            <div class="person-div">
+              &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
+                this.currentList[index]
+              }}
+              /
+              {{ data.personnel }}&nbsp;
+            </div>
+            <div class="title">{{ data.title }}</div>
+            <div class="card-contents">
+              <div>기업</div>
+              <div>{{ data.company }}</div>
+            </div>
+            <div class="card-contents">
+              <div>직무</div>
+              <div>{{ data.job }}</div>
+            </div>
+            <div class="card-contents">
+              <div>날짜</div>
+              <div>{{ data.study_datetime }}</div>
+            </div>
           </div>
-          <div class="title">{{ data.title }}</div>
-          <div class="card-contents">
-            <div>기업</div>
-            <div>{{ data.company }}</div>
-          </div>
-          <div class="card-contents">
-            <div>직무</div>
-            <div>{{ data.job }}</div>
-          </div>
-          <div class="card-contents">
-            <div>날짜</div>
-            <div>{{ data.study_datetime }}</div>
-          </div>
-        </div>
+        </transition>
       </el-col>
     </el-row>
   </div>
@@ -113,6 +115,7 @@ export default {
   font-family: "nexonlv1";
   /* min-width: 280px; */
   padding: 20px;
+  background-color: white;
   margin: 10px 10px 50px 10px;
   border: 4px solid rgba(227, 232, 252, 0.5);
   border-radius: 10px;
@@ -124,6 +127,7 @@ export default {
   transition: all 200ms 0s ease-in;
   transform: scale(1.04);
   border: 4px solid rgba(227, 232, 252, 0.2);
+  cursor: pointer;
 }
 .card-contents :nth-child(1) {
   color: #555454;
