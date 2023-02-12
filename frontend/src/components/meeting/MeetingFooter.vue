@@ -13,7 +13,7 @@
       v-bind:disabled="leaderTurn >= totalTurn"
       >면접종료</el-button
     >
-    <el-button type="danger" round>나가기</el-button>
+    <el-button type="danger" round @click="goLeaveSession">나가기</el-button>
   </div>
 </template>
 
@@ -40,12 +40,19 @@ export default {
       "totalTurn",
       "leaderTurn",
       "isShowChat",
+      "isLeaveSession",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
   created() {},
   methods: {
-    ...mapMutations(meetingStore, ["SET_LEADER_ORDER", "SET_NOWTURN", "SET_LEADER_TURN", "SET_IS_CHAT"]),
+    ...mapMutations(meetingStore, [
+      "SET_LEADER_ORDER",
+      "SET_NOWTURN",
+      "SET_LEADER_TURN",
+      "SET_IS_CHAT",
+      "SET_IS_LEAVE_SESSION",
+    ]),
     ...mapActions(meetingStore, ["makeScoreAndGetOrder", "makeScorecards"]),
     async startMeeting() {
       if (this.intervieweeRate == 0) {
@@ -82,12 +89,15 @@ export default {
         this.SET_IS_CHAT(true);
       }
     },
+    goLeaveSession() {
+      this.SET_IS_LEAVE_SESSION(true);
+    },
   },
 };
 </script>
 
 <style scoped>
-.footer{
+.footer {
   margin: 3%;
   float: left;
 }

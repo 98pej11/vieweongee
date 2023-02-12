@@ -9,6 +9,7 @@ const meetingStore = {
     isLeader: false, //방장
     isInterviewee: false, //면접자
     isInterviewer: false, //면접관
+    isLeaveSession: false, //세션 나갔는지 확인
 
     leaderOrder: null,
     interviewOrder: null, //면접 순서 시그널
@@ -87,6 +88,10 @@ const meetingStore = {
     },
     SET_NOW_RESUME_LIST(state, list) {
       state.nowResumeList = list;
+    },
+    SET_IS_LEAVE_SESSION(state, flag) {
+      //세션 나가기 버튼
+      state.isLeaveSession = flag;
     },
   },
   actions: {
