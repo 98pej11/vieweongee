@@ -86,22 +86,22 @@ const memberStore = {
         }
       );
     },
-    async socialConfirm({commit}){
-      await signin(
-        
-      ({response})=>{
-        console.log(response);
-        let ACCESS=response.ACCESS;
-        let REFRESH=response.REFRESH;
-        commit("SET_IS_LOGIN", true);
-        commit("SET_IS_LOGIN_ERROR", false);
-        commit("SET_IS_VALID_TOKEN", true);
-        sessionStorage.setItem("ACCESS", ACCESS);
-        sessionStorage.setItem("REFRESH", REFRESH);
+    async socialConfirm({commit},tokens){
+      console.log("socialconfirm이야")
+      console.log("토큰들은??!!",tokens);
+      
+      let ACCESS=tokens[0];
+      let REFRESH=tokens[1];
+
+      console.log("액세스는????",tokens[0])
+      commit("SET_IS_LOGIN", true);
+      commit("SET_IS_LOGIN_ERROR", false);
+      commit("SET_IS_VALID_TOKEN", true);
+      sessionStorage.setItem("ACCESS", ACCESS);
+      sessionStorage.setItem("REFRESH", REFRESH);
         
       }
-      )
-
+    
     },
    
     // 이메일 중복검사
@@ -289,7 +289,6 @@ const memberStore = {
           console.log(error);
         };
     },
-  },
 };
 
 export default memberStore;

@@ -306,14 +306,15 @@ public class UserController {
 
     @PostMapping("/signout")
     public ResponseEntity logout(@RequestHeader(value = "ACCESS") String token){
-        boolean check=tokenService.checkTokenValid(token);
-        if (check==true){
+        log.info("로그아웃하러 왔당~");
+//        boolean check=tokenService.checkTokenValid(token);
+//        if (check==true){
             Long id = Long.parseLong(tokenService.getUid(token).replaceAll("\"",""));
-            System.out.println(id);
+            log.info("----------id is {}----------", id);
             userService.logout(id, token);
             return ResponseEntity.status(200).body("SUCCESS");
-        }
-        return ResponseEntity.status(409).body("FAIL:TOKEN");
+//        }
+//        return ResponseEntity.status(409).body("FAIL:TOKEN");
     }
 
 

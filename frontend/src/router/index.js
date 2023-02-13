@@ -48,7 +48,7 @@ const routes = [
     ],
   },
   {
-    path: '/redirect/:ACCESS', 
+    path: '/redirect', 
     component: LoginRedirect
   },
   {

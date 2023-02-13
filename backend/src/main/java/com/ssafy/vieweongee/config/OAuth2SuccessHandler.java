@@ -81,12 +81,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader("ACCESS", AccessJwt);
         response.addHeader("REFRESH", RefreshToken);
 //        String targetUrl="http:///localhost:3000/";
-        String simple="http:///localhost:3000/redirect/";
-        String targetUrl= UriComponentsBuilder.fromPath(simple)
-                .queryParam("ACCESS", AccessJwt)
-                    .build().toString();
-        log.info("타겟 uri는!!! {}", targetUrl);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        String simple=String.format("http:///localhost:3000/redirect?ACCESS=%s&REFRESH=%s", AccessJwt,RefreshToken);
+//        String targetUrl= UriComponentsBuilder.fromPath(simple)
+//                .queryParam("ACCESS", AccessJwt)
+//                    .build().toString();
+//        log.info("타겟 uri는!!! {}", targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, simple);
 //        return ResponseEntity.ok().body(tokens);
     }
 

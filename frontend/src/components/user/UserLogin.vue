@@ -146,12 +146,12 @@ export default {
       // var url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id='+client_id+'&redirect_uri='+callbackUrl+'&state=1234';
       var url="http://localhost:8080/api/oauth2/authorization/naver"
       window.location.href=url;
-      await this.socailConfirm(url);
+      
     },
     async kakaologin(){
       var url="http://localhost:8080/api/oauth2/authorization/kakao"
       window.location.href=url;
-      await this.socailConfirm(url);
+      // await this.socailConfirm(url);
     },
     // async naverlogin(){
     //   // window.location.href="https://localhost:8080/api/oauth2/authorization/naver"

@@ -34,6 +34,7 @@ async function tokenRegeneration(user, success, fail) {
 async function signout(obj, success, fail) {
   // 로그아웃은 포스트 방식입니닷~~!~~!
   // token을 어떻게 넘겨줘야 제대로 넘어가는거지...?
+  console.log("로그아우우웃",sessionStorage.getItem("ACCESS"));
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   // 헤더에 넣어줌
   await api.post(`/users/signout`, obj).then(success).catch(fail);
