@@ -64,25 +64,11 @@
       <el-col :span="12">
         <div class="demo-progress" v-if="abilScore != null">
           <h4>역량별 통계자료</h4>
-          <el-progress
-            :percentage="this.abilScore.attitude_average * 20"
-          ></el-progress>
-          <el-progress
-            :percentage="this.abilScore.ability_average * 20"
-            :format="format"
-          />
-          <el-progress
-            :percentage="this.abilScore.teamwork_average * 20"
-            status="success"
-          />
-          <el-progress
-            :percentage="this.abilScore.solving_average * 20"
-            status="warning"
-          />
-          <el-progress
-            :percentage="this.abilScore.loyalty_average * 20"
-            status="exception"
-          />
+          <el-progress :percentage="this.abilScore.attitude_average * 20"></el-progress>
+          <el-progress :percentage="this.abilScore.ability_average * 20" :format="format" />
+          <el-progress :percentage="this.abilScore.teamwork_average * 20" status="success" />
+          <el-progress :percentage="this.abilScore.solving_average * 20" status="warning" />
+          <el-progress :percentage="this.abilScore.loyalty_average * 20" status="exception" />
         </div>
 
         <div class="demo-progress" style="" v-else>

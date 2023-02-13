@@ -24,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'junit:junit:4.13.1'
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
 //    implementation 'org.springframework.security:spring-security-core:4.1.4.release'
 
@@ -44,7 +46,8 @@ dependencies {
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+    // implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.7.8'
 
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.25.0'
 

@@ -40,8 +40,6 @@ public class StudyController {
     private final FileUploadService fileUploadService;
 
 
-
-
     /** 스터디 모집 게시글 생성
      * @param createStudyRequest
      * @return study_id
@@ -54,11 +52,11 @@ public class StudyController {
         User user = userService.getUserById(user_id);
         log.info("user in study : {}",user.getName());
 
-            // 스터디 생성
-            Study study = studyService.createStudy(user, createStudyRequest);
+        // 스터디 생성
+        Study study = studyService.createStudy(user, createStudyRequest);
 
-            // 참가 명단에 추가
-            studyService.registParticipant(user, study);
+        // 참가 명단에 추가
+        studyService.registParticipant(user, study);
 
         // 참가 이력 생성
         studyService.createProgress(user, study);
@@ -429,7 +427,7 @@ public class StudyController {
      */
     @PutMapping("/{study_id}/resume")
     public ResponseEntity<?> uploadResume(@PathVariable("study_id") Long study_id,
-                                          @RequestBody MultipartFile resume,@RequestHeader("ACCESS") String access) throws IOException {
+                                          @RequestPart(value="file") MultipartFile resume,@RequestHeader("ACCESS") String access) throws IOException {
 
 
         Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));

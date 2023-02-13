@@ -78,8 +78,8 @@ public class TokenService {
     public boolean checkTokenValid(String token){
         log.info("token is {}", token);
         JWTVerifier verifier =
-            JWT.require(Algorithm.HMAC512(secretKey))
-                .build();
+                JWT.require(Algorithm.HMAC512(secretKey))
+                        .build();
         log.info("체크토큰의 verifier는...{}",verifier);
         // 만료됐으면 에러남
         String id= verifier.verify(token).getClaim("Id").toString();
@@ -152,3 +152,4 @@ public class TokenService {
         return id;
     }
 }
+

@@ -11,6 +11,7 @@ import {
   applyStudy,
   cancleStudy,
   getCurrent,
+  getAppliyID,
 } from "@/api/study";
 
 const studyStore = {
@@ -73,8 +74,8 @@ const studyStore = {
       state.isApplied = isApplied;
     },
     // 스터디 신청 여부
-    SET_MY_APPLIED: (state, list) => {
-      state.appliedList = list;
+    SET_MY_APPLIED: (state, isApplied) => {
+      state.isApplied = isApplied;
     },
 
     // 검색 결과
@@ -95,8 +96,9 @@ const studyStore = {
     SET_STUDY_LIST: (state, list) => {
       list.forEach((el) => {
         // DateTime 포맷
-        var dateFormat = el.study_datetime.substr(0, 16);
-        dateFormat = dateFormat.replace("T", " ");
+        console.log(new Date(el.study_datetime));
+        var newDate = moment(new Date(el.study_datetime)).format("YYYY-MM-DD HH:mm");
+        newDate = newDate.substr(0, 16).replace("T", " ");
 
         state.studyList.push({
           id: el.id,
@@ -116,10 +118,11 @@ const studyStore = {
     },
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
-      var dateFormat1 = studyInfo.study_datetime.substr(0, 16);
-      var dateFormat2 = studyInfo.regist_datetime.substr(0, 16);
-      dateFormat1 = dateFormat1.replace("T", " ");
-      dateFormat2 = dateFormat2.replace("T", " ");
+      var moment = require("moment");
+      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format("YYYY-MM-DD HH:mm");
+      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format("YYYY-MM-DD HH:mm");
+      newRegistDate = newRegistDate.replace("T", " ");
+      newStudyDate = newStudyDate.replace("T", " ");
 
       state.studyInfo.study_datetime = dateFormat1;
       state.studyInfo.regist_datetime = dateFormat2;
@@ -141,7 +144,11 @@ const studyStore = {
     // 스터디 전체 글 조회 (메인페이지)
     async getTopList({ commit }) {
       await getTopStudy(({ data }) => {
-        commit("SET_STUDY_LIST", data.data);
+        if (data.data.length == null) {
+          console.log("스터디 목록 없음");
+        } else {
+          commit("SET_STUDY_LIST", data.data);
+        }
       }, {});
     },
     // 스터디 전체 글 조회 (스터디게시판)
@@ -154,6 +161,9 @@ const studyStore = {
 
     // 스터디 생성
     async createConfirm({ commit }, studyInfo) {
+      console.log("스터디 스토어에서 찍었어요");
+      console.log(studyInfo.study_datetime);
+
       await createStudy(
         studyInfo,
         ({ data }) => {
@@ -217,6 +227,30 @@ const studyStore = {
         // 스터디 삭제 success message 리팩토링 필요
         commit("SET_IS_SUCCESS", true);
         if (data.message == "SUCCESS") console.log("삭제성공");
+      });
+    },
+
+    // 스터디 신청 여부 확인
+    async getAppliy({ commit }, study_id) {
+      await getAppliyID(({ data }) => {
+        console.log("신청했나?");
+
+        console.log(data.data);
+
+        var result = false;
+
+        data.data.forEach((el) => {
+          if (el.id == study_id) result = true;
+        });
+        console.log(result);
+        // 내가 참여한 스터디일 때
+        if (result == true) {
+          commit("SET_MY_APPLIED", true);
+        }
+        // 내가 참여한 스터디가 아닐 때
+        else {
+          commit("SET_MY_APPLIED", false);
+        }
       });
     },
 

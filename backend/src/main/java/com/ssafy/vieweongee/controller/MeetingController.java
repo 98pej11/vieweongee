@@ -94,8 +94,17 @@ public class MeetingController {
      * @return List<MeetingScoreRequest>
      */
     @GetMapping("{study_ID}/resume")
-    public ResponseEntity<List<MeetingResumeRequest>> showAllResume(@PathVariable("study_ID") Long study_ID, @RequestHeader("ACCESS") String access){
-        return new ResponseEntity<>(meetingService.getAllResume(study_ID), HttpStatus.OK);
+    public ResponseEntity<?> showAllResume(@PathVariable("study_ID") Long study_ID, @RequestHeader("ACCESS") String access){
+        Map<String, Object> result = new HashMap<>();
+        List<MeetingResumeRequest> list = meetingService.getAllResume(study_ID);
+        if(list.size() > 0){
+            result.put("data", list);
+            result.put("message", "SUCCESS");
+            return ResponseEntity.ok().body(result);
+        }
+        result.put("message", "FAIL");
+        result.put("data", "몰라요");
+        return ResponseEntity.status(400).body(result);
     }
     /**
      * 면접자 1명의 채점표 갱신
@@ -151,6 +160,23 @@ public class MeetingController {
             return ResponseEntity.status(400).body(result);
         }
         result.put("data", order);
+        result.put("message", "SUCCESS");
+        return ResponseEntity.ok().body(result);
+    }
+
+
+    /**
+     * sutdy 확정(confirm) 변경, progress status 변경
+     *
+     * @param study_ID
+     * @return
+     */
+    @PutMapping("/{study_ID}/status")
+    ResponseEntity<?> modifyConfirmAndStatus(@PathVariable("study_ID") String study_ID, @RequestHeader("ACCESS") String access){
+        Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        meetingService.updateConfirmAndStatus(Long.parseLong(study_ID), userId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", "변경 완료");
         result.put("message", "SUCCESS");
         return ResponseEntity.ok().body(result);
     }

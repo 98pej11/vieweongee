@@ -1,8 +1,8 @@
 <template>
-  <div v-if="streamManager">
-    <ov-video :stream-manager="streamManager" />
+  <div class="userVideo" v-if="streamManager">
     <div>
-      <p>{{ clientData }}</p>
+      <ov-video :stream-manager="streamManager" />
+      <!-- <div>내 닉네임 좀 넣어주세요</div> -->
     </div>
   </div>
 </template>
@@ -36,3 +36,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.userVideo {
+  display: inline-flex;
+}
+</style>

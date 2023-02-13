@@ -1,15 +1,17 @@
 <template>
-  <MyHeader></MyHeader>
-  <transition name="moveInUp">
-    <router-view />
-  </transition>
-  <MyFooter></MyFooter>
+  <div class="app">
+    <MyHeader></MyHeader>
+    <transition name="moveInUp">
+      <router-view />
+    </transition>
+    <MyFooter></MyFooter>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import MyHeader from "./components/common/MyHeader.vue";
-import MyFooter from "./components/common/MyFooter.vue";
+import MyHeader from "./components/common/MyHeader";
+import MyFooter from "./components/common/MyFooter";
 export default defineComponent({
   name: "App",
   components: {
@@ -80,6 +82,7 @@ a {
 /* 아웃라인 box */
 .outline-box {
   border: 3px solid #d3daff;
+  background-color: white;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 35px;
 }
@@ -96,7 +99,7 @@ a {
 }
 
 /* 그림자 버튼 */
-button:not(#search-btn) {
+button:not(#search-btn, .el-dialog__headerbtn) {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -104,5 +107,10 @@ button:not(#search-btn) {
 form {
   width: 80%;
   margin: 0 auto;
+}
+
+.app {
+  background-color: #f4f4f4;
+  font-size: large;
 }
 </style>

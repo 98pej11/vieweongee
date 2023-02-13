@@ -22,7 +22,7 @@ async function getAllStudy(success, fail) {
 
 // 스터디 1개 상세정보 조회
 async function getStudy(params, success, fail) {
-  console.log(params);
+  // console.log(params);
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
     .get(`/study/detail/${params.study_ID}/${params.user_ID}`)
@@ -51,6 +51,12 @@ async function deleteStudy(study_ID, success, fail) {
   await api.delete(`/study/${study_ID}`).then(success).catch(fail);
 }
 
+// 스터디 참가 여부 확인
+async function getAppliyID(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/users/mystudy`).then(success).catch(fail);
+}
+
 // 스터디 참가 신청하기
 async function applyStudy(study_id, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
@@ -68,6 +74,15 @@ async function getCurrent(study_ID, success, fail) {
   await api.get(`/study/${study_ID}/current-people`).then(success).catch(fail);
 }
 
+// 자기소개서 첨부
+async function applyImage(params, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api
+    .post(`/study/${params.study_ID}/resume`, params.file)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   createStudy,
   getTopStudy,
@@ -79,4 +94,6 @@ export {
   applyStudy,
   cancleStudy,
   getCurrent,
+  applyImage,
+  getAppliyID,
 };

@@ -1,9 +1,12 @@
 <template>
   <div>
-    <meeting-rate v-if="isLeader"></meeting-rate>
-    <div id="area">
-      <meeting-video></meeting-video>
-      <meeting-score v-if="isInterviewer"></meeting-score>
+    <!-- <h1>지금 스터디 id : {{ $route.params.studyid }}</h1> -->
+    <div class="rate">
+      <meeting-rate v-if="isLeader && leaderOrder == null"></meeting-rate>
+    </div>
+    <div class="area">
+      <meeting-video :myStudyId="myStudyId"></meeting-video>
+      <meeting-score v-if="isInterviewer" :width="30"></meeting-score>
     </div>
     <meeting-footer></meeting-footer>
   </div>
@@ -27,16 +30,28 @@ export default {
     MeetingScore,
   },
   data() {
-    return {};
+    return {
+      myStudyId: null,
+    };
+  },
+  created() {
+    this.myStudyId = this.$route.params.studyid;
   },
   computed: {
-    ...mapState(meetingStore, ["isLeader", "isInterviewer"]),
+    ...mapState(meetingStore, ["isLeader", "isInterviewer", "leaderOrder"]),
   },
 };
 </script>
 
 <style scoped>
-#area {
+.rate {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 </style>

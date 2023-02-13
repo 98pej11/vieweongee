@@ -1,13 +1,22 @@
-import { getInterviewOrder, postScorecards, getAllScorecards } from "../api/meeting";
+import {
+  getInterviewOrder,
+  postScorecards,
+  getAllScorecards,
+  putScore,
+  getAllResume,
+  putConfirmStatus,
+} from "../api/meeting";
 
 const meetingStore = {
   namespaced: true,
   state: {
+    storesession: undefined,
     myId: null, //나의 아이디
 
     isLeader: false, //방장
     isInterviewee: false, //면접자
     isInterviewer: false, //면접관
+    isLeaveSession: false, //세션 나갔는지 확인
 
     leaderOrder: null,
     interviewOrder: null, //면접 순서 시그널
@@ -16,18 +25,29 @@ const meetingStore = {
 
     scoreList: [], //스터디원의 채점표 리스트 (추후 자기소개서도)
     nowScoreList: [], //현재 면접자의 채점표만 보기 위한 리스트
+    resumeList: [],
+    nowResumeList: [],
 
     intervieweeRate: 0, //스터디장이 설정한 면접자의 수
     // intervieweeCount: 0, //나가기를 누른 면접자의 수
     totalTurn: null, //면접의 총 회차
     nowTurn: null, //현재 면접의 회차
     leaderTurn: null,
+
+    isShowChat: false, // 채탕 보여줄래 말래
   },
   getters: {},
   mutations: {
+    SET_SESSION(state, session) {
+      state.session = session;
+    },
     SET_MYID(state, id) {
       //나의 아이디 설정
       state.myId = id;
+    },
+    SET_IS_CHAT(state, flag) {
+      //면접자로 설정/해제
+      state.isShowChat = flag;
     },
     SET_IS_LEADER(state, flag) {
       //방장으로 설정/해체
@@ -69,6 +89,16 @@ const meetingStore = {
     },
     SET_NOW_SCORE_LIST(state, list) {
       state.nowScoreList = list;
+    },
+    SET_RESUME_LIST(state, list) {
+      state.resumeList = list;
+    },
+    SET_NOW_RESUME_LIST(state, list) {
+      state.nowResumeList = list;
+    },
+    SET_IS_LEAVE_SESSION(state, flag) {
+      //세션 나가기 버튼
+      state.isLeaveSession = flag;
     },
   },
   actions: {
@@ -145,6 +175,18 @@ const meetingStore = {
           console.log(error);
         }
       );
+
+      await getAllResume(
+        study_ID,
+        ({ data }) => {
+          console.log("자기소개서 가져왔나요");
+          console.log(data);
+          commit("SET_RESUME_LIST", data.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     setLeader({ commit }, flag) {
       //아이디가 맞으면 리더로 설정
@@ -193,27 +235,81 @@ const meetingStore = {
     },
     setShowScoreList({ commit, state }, turn) {
       //면접관이라면 채점표 저장
-      if (state.isInterviewer) {
-        let list = [];
-        //현재 회차의 면접자 아이디, 채점표의 아이디 비교하여 해당하는 것만 보여줌
-        for (let i = 0; i < state.interviewOrderList[turn].length; i++) {
-          //현재 회차의 면접자수만큼
-          for (let j = 0; j < state.scoreList.length; j++) {
-            //스터디 참가자 수만큼
-            if (state.interviewOrderList[turn][i] == state.scoreList[j].id) {
-              //현재회차아이디와 채점표 아이디가 같으면
-              list.push(state.scoreList[j]);
-              break;
-            }
+      // if (state.isInterviewer) {
+      let list = [];
+      let rlist = [];
+      //현재 회차의 면접자 아이디, 채점표의 아이디 비교하여 해당하는 것만 보여줌
+      for (let i = 0; i < state.interviewOrderList[turn].length; i++) {
+        //현재 회차의 면접자수만큼
+        for (let j = 0; j < state.scoreList.length; j++) {
+          //스터디 참가자 수만큼
+          if (state.interviewOrderList[turn][i] == state.scoreList[j].id) {
+            //현재회차아이디와 채점표 아이디가 같으면
+            list.push(state.scoreList[j]);
+            rlist.push(state.resumeList[j]);
+            break;
           }
         }
-        commit("SET_NOW_SCORE_LIST", list);
-        console.log("보여줄 채점표 보여줄게요");
-        console.log(state.nowScoreList);
-      } else {
-        //면접관이 아니라면
-        console.log("채점표를 볼 수 없어요");
       }
+      commit("SET_NOW_SCORE_LIST", list);
+      console.log("보여줄 채점표 보여줄게요");
+      console.log(state.nowScoreList);
+      commit("SET_NOW_RESUME_LIST", rlist);
+      console.log("자소서 이미지도 보여줄게요");
+      console.log(state.nowResumeList);
+      // } else {
+      //면접관이 아니라면
+      // console.log("채점표를 볼 수 없어요");
+      // }
+    },
+    async saveScore({ state }, study_ID) {
+      //로컬 스토리지에 있는 지금 면접자꺼 다 가져옴
+      console.log("총 면접자");
+      console.log(state.nowScoreList);
+      for (let i = 0; i < state.nowScoreList.length; i++) {
+        console.log("현재 면접자 아이디 >> " + state.nowScoreList[i].id);
+        // let id = state.nowScoreList[i].id;
+        // let saveData = JSON.parse(localStorage.getItem(`save#${id}`));
+
+        //put 요청
+        // const params = {
+        //   study_ID: study_ID,
+        //   data: saveData,
+        // };
+        const params = {
+          study_ID: study_ID,
+          data: state.nowScoreList[i],
+        };
+
+        await putScore(
+          params,
+          ({ data }) => {
+            console.log("채점표 저장이 됐을까요");
+            console.log(data);
+            if (data.message == "SUCCESS") {
+              console.log("저장이 완료됐어요");
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        //저장이 성공하면 로컬 스토리지 클리어
+      }
+    },
+    async changeConfirmAndStatus(study_ID) {
+      await putConfirmStatus(
+        study_ID,
+        ({ data }) => {
+          console.log("스터디 confirm, 진행상황 status 잘 처리 됐을까요");
+          if (data.message == "SUCCESS") {
+            console.log("진행상황 처리가 잘 됐어요");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
   },
 };
