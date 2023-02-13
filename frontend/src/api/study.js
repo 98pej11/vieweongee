@@ -52,7 +52,7 @@ async function deleteStudy(study_ID, success, fail) {
 }
 
 // 스터디 참가 여부 확인
-async function getAppliyID(study_ID, success, fail) {
+async function getAppliyID(success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/users/mystudy`).then(success).catch(fail);
 }

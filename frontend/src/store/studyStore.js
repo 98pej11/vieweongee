@@ -242,16 +242,10 @@ const studyStore = {
     // 스터디 신청 여부 확인
     async getAppliy({ commit }, study_id) {
       await getAppliyID(({ data }) => {
-        console.log("신청했나?");
-
-        console.log(data.data);
-
         var result = false;
-
         data.data.forEach((el) => {
           if (el.id == study_id) result = true;
         });
-        console.log(result);
         // 내가 참여한 스터디일 때
         if (result == true) {
           commit("SET_MY_APPLIED", true);

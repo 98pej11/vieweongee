@@ -7,13 +7,23 @@
       </el-row>
       <el-row>
         <el-col id="comment-field">
-          <el-input v-model="myComment.content" type="text"></el-input>
+          <el-input
+            v-model="myComment.content"
+            type="text"
+            @keyup.enter="CommentSubmit"
+          >
+          </el-input>
           <div id="comment-button">
             <el-button class="subbtn" @click="CommentSubmit()">등록</el-button>
           </div>
         </el-col>
       </el-row>
-      <StudyCommentItem></StudyCommentItem>
+      <div v-for="(data, index) in comments" :key="index">
+        <StudyCommentItem
+          :commentItem="data"
+          :key="isUpdate"
+        ></StudyCommentItem>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +32,7 @@
 import { mapState, mapActions } from "vuex";
 import { ElMessage } from "element-plus";
 import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
+import jwtDecode from "jwt-decode";
 
 const studyStore = "studyStore";
 const commentStore = "commentStore";
@@ -32,10 +43,20 @@ export default {
     StudyCommentItem,
   },
   computed: {
-    ...mapState(studyStore, ["isCreated", "studyID"]),
+    ...mapState(studyStore, ["studyID"]),
+    ...mapState(commentStore, ["isComment", "commentList"]),
+  },
+  created() {
+    this.getAll();
+  },
+  props: {
+    commentId: Number,
   },
   data() {
     return {
+      isUpdate: false,
+      listLen: 0,
+      comments: [],
       myComment: {
         content: "",
       },
@@ -46,7 +67,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(commentStore, ["createCommentConfirm"]),
+    ...mapActions(commentStore, ["getCommentList", "createCommentConfirm"]),
+
+    async getAll() {
+      await this.getCommentList(this.studyID);
+
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+
+      //댓글 목록이 있을 때
+      if (this.isComment) {
+        this.comments = [...this.commentList];
+      }
+    },
 
     // 댓글 등록
     async CommentSubmit() {
@@ -55,18 +88,19 @@ export default {
           type: "warning",
           message: " 입력해주세요",
         });
-      } else {
+      }
+      // 로그인 유저만 댓글 작성 가능
+      else if (sessionStorage.getItem("ACCESS") == null) {
+        ElMessage({
+          type: "warning",
+          message: " 로그인 후 이용해주세요",
+        });
+        this.$router.push({ name: "login" });
+      } else if (this.isComment) {
         this.params.study_ID = this.studyID;
         this.params.info = this.myComment;
         await this.createCommentConfirm(this.params);
-
-        // if (!this.isCreated) {
-        //   ElMessage({
-        //     type: "error",
-        //     message: "로그인 후 이용해주세요",
-        //   });
-        //   this.$router.push({ name: "login" });
-        // }
+        await this.getAll();
       }
     },
   },

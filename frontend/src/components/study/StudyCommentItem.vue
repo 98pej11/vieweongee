@@ -1,80 +1,79 @@
 <template>
   <div class="comment-item">
-    <div v-for="(data, index) in comments" :key="index">
-      <el-row class="comment-content">
-        <el-col :span="20" align-self="start" style="color: gray"
-          ><p>{{ data.user_nickname }} 님 | {{ data.datetime }}</p>
-        </el-col>
-        <el-col :span="4" align-self="end"
-          ><p @click="replyBtn()">답글 달기</p>
-        </el-col>
-      </el-row>
+    <!-- <div v-for="(data, index) in comments" :key="index"> -->
+    <el-row class="comment-content">
+      <el-col :span="20" align-self="start" style="color: gray"
+        ><p>{{ commentItem.user_nickname }} 님 | {{ commentItem.datetime }}</p>
+      </el-col>
+      <el-col :span="4" align-self="end"
+        ><p @click="replyBtn()">답글 달기</p>
+      </el-col>
+    </el-row>
 
-      <el-row>
-        <el-col v-if="this.modifying" :span="20" style="color: black">
-          <el-input
-            v-model="data.content"
-            label="댓글을 입력하세요..."
-            type="text"
-          ></el-input>
-        </el-col>
-        <el-col v-if="this.modifying" :span="4">
+    <el-row>
+      <el-col v-if="this.modifying" :span="20" style="color: black">
+        <el-input label="댓글을 입력하세요..." type="text"></el-input>
+      </el-col>
+      <el-col v-if="this.modifying" :span="4">
+        <el-button
+          round
+          color="#9DADD8"
+          class="mt-1"
+          @click="modifyComment(commentItem.comment_id)"
+          >완료</el-button
+        ></el-col
+      >
+
+      <el-col
+        v-if="!this.modifying"
+        :span="20"
+        style="color: black"
+        v-model="modifyCotent"
+      >
+        {{ commentItem.content }}
+      </el-col>
+      <el-col
+        :span="4"
+        style="color: gray"
+        v-if="!this.modifying && commentItem.user_id == this.myId"
+        ><p @click="modifyShow(commentItem.content)">수정&nbsp;&nbsp;</p>
+        <p @click="deleteComment(commentItem.comment_id, commentItem.content)">
+          삭제
+        </p>
+      </el-col>
+    </el-row>
+
+    <el-row v-if="this.showInput" justify="end">
+      <el-col :span="2" style="color: black">
+        <img src="@/assets/image/reply_icon.png"
+      /></el-col>
+      <el-col :span="22" class="reply-field">
+        <el-input
+          v-model="myReply.content"
+          label="댓글을 입력하세요..."
+          type="text"
+        ></el-input>
+        <div class="reply-button">
           <el-button
             round
             color="#9DADD8"
             class="mt-1"
-            @click="modifyComment(data.comment_id)"
-            >완료</el-button
-          ></el-col
-        >
-
-        <el-col
-          v-if="!this.modifying"
-          :span="20"
-          style="color: black"
-          v-model="modifyCotent"
-        >
-          {{ data.content }}
-        </el-col>
-        <el-col
-          :span="4"
-          style="color: gray"
-          v-if="!this.modifying && data.user_id == this.myId"
-          ><p @click="modifyShow(data.content)">수정&nbsp;&nbsp;</p>
-          <p @click="deleteComment(data.comment_id, data.content)">삭제</p>
-        </el-col>
-      </el-row>
-
-      <el-row v-if="this.showInput" justify="end">
-        <el-col :span="2" style="color: black">
-          <img src="@/assets/image/reply_icon.png"
-        /></el-col>
-        <el-col :span="22" class="reply-field">
-          <el-input
-            v-model="myReply.content"
-            label="댓글을 입력하세요..."
-            type="text"
-          ></el-input>
-          <div class="reply-button">
-            <el-button
-              round
-              color="#9DADD8"
-              class="mt-1"
-              @click="replySubmit(data.comment_id, myReply.content)"
-              @keypress.enter="replySubmit(data.comment_id, myReply.content)"
-              >등록</el-button
-            >
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+            @click="replySubmit(commentItem.comment_id, myReply.content)"
+            @keypress.enter="
+              replySubmit(commentItem.comment_id, myReply.content)
+            "
+            >등록</el-button
+          >
+        </div>
+      </el-col>
+    </el-row>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
 import jwtDecode from "jwt-decode";
 import { mapState, mapActions } from "vuex";
-// import jwtDecode from "jwt-decode";
 // import { ElMessage } from "element-plus";
 
 const studyStore = "studyStore";
@@ -83,22 +82,24 @@ const commentStore = "commentStore";
 export default {
   name: "StudyCommentItem",
   computed: {
-    ...mapState(studyStore, ["studyID", "isCreated"]),
-    ...mapState(commentStore, ["commentList", "isComment", "listLen"]),
+    ...mapState(studyStore, ["studyID"]),
+    ...mapState(commentStore, ["isComment"]),
+  },
+  props: {
+    commentItem: Object,
+    reload: Function,
   },
   created() {
-    this.getAll();
+    this.myComment = this.commentItem;
+    this.getMyId();
   },
-
-  // 렌더링 하고 시퍼
   watch: {
-    listLen: {
-      handler() {
-        console.log("변겨오댓다");
-        this.getAll();
-      },
+    isUpdate() {
+      console.log("바껐떠`");
+      this.isUpdate = false;
     },
   },
+
   methods: {
     // TODO : 대댓글 등록 액션 등록하기
     ...mapActions(commentStore, [
@@ -107,16 +108,10 @@ export default {
       "deleteCommentConfirm",
       "createReplyConfrim",
     ]),
-
-    async getAll() {
-      await this.getCommentList(this.studyID);
-
-      this.comments = this.commentList;
-
+    getMyId() {
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
     },
-
     // 댓글 수정
     modifyShow(content) {
       this.modifyCotent = content;
@@ -132,6 +127,10 @@ export default {
       };
 
       this.modifyCommentConfirm(params);
+      if (this.isComment) {
+        console.log("수정 성공");
+        this.isUpdate = true;
+      }
     },
 
     // 댓글 삭제
@@ -142,6 +141,10 @@ export default {
         comment: { content: content },
       };
       await this.deleteCommentConfirm(params);
+      if (this.isComment) {
+        console.log("삭제 성공");
+        this.isUpdate = true;
+      }
     },
 
     replyBtn() {
@@ -157,7 +160,8 @@ export default {
         reply: { content: info },
       };
       await this.createReplyConfrim(params);
-      console.log(this.listLen);
+
+      this.isUpdate = true;
     },
 
     // 대댓글 등록하기
@@ -169,6 +173,7 @@ export default {
   },
   data() {
     return {
+      isUpdate: false,
       isAuthor: true,
       showInput: false,
       modifying: false,
@@ -176,6 +181,9 @@ export default {
       myId: 0,
 
       comments: [],
+
+      myComment: {},
+
       // 새로 등록할 댓글
       myReply: {
         // 깊이 구분해주어야 함
