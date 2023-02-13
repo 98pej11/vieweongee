@@ -92,7 +92,7 @@
 
         <!-- 스터디 신청, 취소, 입장-->
         <div style="margin-left: 70%">
-          <el-row justify="end">
+          <el-row>
             <el-button
               v-if="isApplied || isAuthor"
               @click="showDialog"
