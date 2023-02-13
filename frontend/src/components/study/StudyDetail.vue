@@ -132,8 +132,8 @@
             마감
           </el-button>
           <el-button
-            v-if="isOpened && isApplied"
-            @click="enterMeeting"
+            v-if="(isOpened && isApplied) || isAuthor"
+            @click="enterMeeting(this.studyID)"
             round
             color="#FFCD9F"
             class="me-2"
@@ -282,9 +282,10 @@ export default {
     },
 
     // 화상회의 참여
-    enterMeeting() {
+    enterMeeting(id) {
       // 화상회의 참여 !!!! 새 창으로 슈슉
-      // this.$router.push();
+      console.log(id + "화상미팅으로 참여합니다");
+      this.$router.push({ name: "meeting", params: { studyid: id } });
     },
 
     // 컴포넌트 전환
