@@ -546,18 +546,18 @@ export default {
     setEndTime() {
       console.log("종료시간은 뭔가요 >> " + this.setTime);
 
-      //setTimeout으로 강제 세션 종료 설정
-      // setTimeout(async () => {
-      //   //채점표 PUT 처리
-      //   await this.saveScore(this.myStudyId);
-      //   //confirm, status 변경 요청
-      //   await this.changeConfirmAndStatus(this.myStudyId);
-      //   //연결 강제 종료
-      //   this.leaveSession();
-      //   alert(
-      //     "진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다."
-      //   );
-      // }, this.setTime);
+      // setTimeout으로 강제 세션 종료 설정
+      setTimeout(async () => {
+        //채점표 PUT 처리
+        await this.saveScore(this.myStudyId);
+        //confirm, status 변경 요청
+        await this.changeConfirmAndStatus(this.myStudyId);
+        //연결 강제 종료
+        this.leaveSession();
+        alert(
+          "진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다."
+        );
+      }, this.setTime);
     },
   },
 };
