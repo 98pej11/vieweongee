@@ -5,10 +5,10 @@
       <el-col :span="6">
         <el-button-group class="ml-4 type-btn" size="large">
           <el-button>
-            <el-icon><Calendar /></el-icon>
+            <el-icon :size="25"><Calendar /></el-icon>
           </el-button>
           <el-button>
-            <el-icon><Picture /></el-icon>
+            <el-icon :size="25"><Picture /></el-icon>
           </el-button>
         </el-button-group>
       </el-col>
@@ -17,7 +17,7 @@
       </el-col>
       <el-col :span="6">
         <el-button @click="onClick" size="large" class="plus-btn">
-          <el-icon><CirclePlus /></el-icon>
+          <el-icon :size="25"><CirclePlus /></el-icon>
         </el-button>
       </el-col>
     </el-row>

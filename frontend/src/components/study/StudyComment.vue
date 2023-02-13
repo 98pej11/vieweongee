@@ -2,21 +2,14 @@
   <div class="container">
     <div class="main main-box">
       <el-row>
-        <el-col style="color: black; font-weight: bold; margin-bottom: 20px"
-          >댓글</el-col
-        >
+        <el-col :span="4"><p>댓글</p> </el-col>
+        <el-col :span="20"><p></p> </el-col>
       </el-row>
       <el-row>
         <el-col id="comment-field">
           <el-input v-model="myComment.content" type="text"></el-input>
           <div id="comment-button">
-            <el-button
-              round
-              color="#9DADD8"
-              class="mt-1"
-              @click="CommentSubmit()"
-              >등록</el-button
-            >
+            <el-button class="subbtn" @click="CommentSubmit()">등록</el-button>
           </div>
         </el-col>
       </el-row>
@@ -60,7 +53,7 @@ export default {
       if (this.myComment.content == "") {
         ElMessage({
           type: "warning",
-          message: "댓글 내용을 입력해주세요",
+          message: " 입력해주세요",
         });
       } else {
         this.params.study_ID = this.studyID;
@@ -84,15 +77,26 @@ export default {
 .container {
   margin: 0 auto;
   margin-top: 5%;
-  width: 45%;
+  width: 60%;
+}
+.el-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+}
+.el-row > :nth-child(1) {
+  color: gray;
 }
 .main {
-  padding: 10%;
+  padding: 7%;
   margin-bottom: 5%;
 }
 
 .el-input {
-  height: 40px;
+  height: 60px;
+  font-size: large;
+  border-radius: 10%;
 }
 
 #comment-field {
@@ -106,7 +110,15 @@ export default {
   top: 5px;
   right: 5px;
 }
-
+.subbtn {
+  width: 100%;
+  height: 40px;
+  border-radius: 10%;
+  font-size: large;
+  background-color: #d3daff;
+  color: gray;
+  margin-bottom: 3%;
+}
 button {
   color: white;
   z-index: 6;
