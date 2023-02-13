@@ -156,7 +156,11 @@ const studyStore = {
     // 스터디 전체 글 조회 (메인페이지)
     async getTopList({ commit }) {
       await getTopStudy(({ data }) => {
-        commit("SET_STUDY_LIST", data.data);
+        if (data.data.length == null) {
+          console.log("스터디 목록 없음");
+        } else {
+          commit("SET_STUDY_LIST", data.data);
+        }
       }, {});
     },
     // 스터디 전체 글 조회 (스터디게시판)
@@ -237,7 +241,7 @@ const studyStore = {
 
     // 스터디 신청 여부 확인
     async getAppliy({ commit }, study_id) {
-      await getAppliyID(study_id, ({ data }) => {
+      await getAppliyID(({ data }) => {
         console.log("신청했나?");
 
         console.log(data.data);
