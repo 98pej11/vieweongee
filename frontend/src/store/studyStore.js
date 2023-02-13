@@ -159,6 +159,9 @@ const studyStore = {
 
     // 스터디 생성
     async createConfirm({ commit }, studyInfo) {
+      console.log("스터디 스토어에서 찍었어요");
+      console.log(studyInfo.study_datetime);
+
       await createStudy(
         studyInfo,
         ({ data }) => {
