@@ -96,8 +96,8 @@
           </el-button> -->
           </el-dialog>
 
+          <!-- 스터디 신청, 취소, 입장-->
           <div style="margin-left: 70%">
-            <!-- 스터디 신청, 취소, 입장-->
             <el-row>
               <el-button
                 v-if="isApplied || isAuthor"
@@ -120,7 +120,7 @@
                   신청
                 </el-button>
                 <el-button
-                  v-if="isApplied && !isOpened"
+                  v-if="isApplied && !isAuthor && (!isOpened || isPossible)"
                   @click="cancleStudy"
                   round
                   color="#FFCD9F"
@@ -139,8 +139,8 @@
                 마감
               </el-button>
               <el-button
-                v-if="isOpened && isApplied"
-                @click="enterMeeting"
+                v-if="isOpened && (isApplied || isAuthor)"
+                @click="enterMeeting(this.studyID)"
                 round
                 color="#FFCD9F"
                 class="me-2"
@@ -178,10 +178,12 @@
               </div>
             </el-row>
           </div>
+
           <hr />
           <el-row>
-            <el-col :span="4"><p>소개</p> </el-col>
-            <el-col :span="20"><p></p> </el-col>
+            <el-col style="color: black; font-weight: bold; margin-bottom: 20px"
+              >소개</el-col
+            >
           </el-row>
           <el-row>
             <el-col style="color: black">{{ studyInfo.content }} </el-col>
@@ -254,6 +256,7 @@ export default {
       "getPersonnel",
       "deleteConfirm",
       "uploagConfirm",
+      "getAppliy",
     ]),
     ...mapActions(commentStore, ["getCommentList"]),
 
@@ -277,6 +280,7 @@ export default {
       await this.getCommentList(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
+      await this.getAppliy(this.studyID);
     },
 
     // 신청 가능 여부

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 화상 화면 -->
-    <div id="timer-display">
+    <div id="timer-display" class="time-box">
       <h3>남은 시간</h3>
     </div>
     <div class="notchat">
@@ -10,13 +10,13 @@
           <div id="session-header">
             <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
-            <input
+            <!-- <input
               class="btn btn-large btn-danger"
               type="button"
               id="buttonLeaveSession"
               @click="leaveSession"
               value="Leave session"
-            />
+            /> -->
           </div>
           <!-- <div id="main-video">
         <h3>스트림매니저</h3>
@@ -44,10 +44,15 @@
         </div>
       </transition>
     </div>
+
     <div class="gochat">
       <!-- 화상 화면 -->
       <transition name="moveInUp">
-        <div class="session" v-if="isShowChat" style="float: left; width: 50%; margin-left: 3%">
+        <div
+          class="session"
+          v-if="isShowChat"
+          style="float: left; width: 50%; margin-left: 3%"
+        >
           <div id="session-header">
             <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
@@ -86,7 +91,11 @@
       </transition>
 
       <transition name="moveInUp">
-        <div class="chat-container" v-if="isShowChat" style="float: left">
+        <div
+          class="chat-container"
+          v-if="isShowChat"
+          style="float: left; margin-left: 3%"
+        >
           <MeetingChatting :session="session" :myUserName="myUserName" />
         </div>
       </transition>
@@ -192,7 +201,9 @@ export default {
       console.log("나가기 버튼 눌렀다!!!");
       if (this.isLeaveSession) {
         //나가기 버튼이 true일때
-        let isLeave = confirm("면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?");
+        let isLeave = confirm(
+          "면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?"
+        );
         if (isLeave) {
           //yes
           //나가기 버튼이 눌렸으면
@@ -336,7 +347,11 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
           });
       });
 
@@ -395,7 +410,8 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -445,7 +461,12 @@ export default {
         this.SET_IS_INTERVIEWER(true); //면접관 true
       }
 
-      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
+      console.log(
+        "내 역할은 면접자 >> " +
+          this.isInterviewee +
+          " | 면접관 >> " +
+          this.isInterviewer
+      );
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -495,7 +516,9 @@ export default {
         const running_time = this.studyInfo.running_time;
         // console.log("진행 시간 >> " + running_time);
 
-        const endtime = new Date(datetime.getTime() + running_time * 60 * 60 * 1000);
+        const endtime = new Date(
+          datetime.getTime() + running_time * 60 * 60 * 1000
+        );
         // console.log("종료 시간 >> " + endtime);
 
         //설정해야할 시간 = 종료 시간 - 실제 시작 시간
@@ -504,11 +527,18 @@ export default {
         this.setTime = endtime.getTime() - now.getTime();
         // console.log("초기 종료시간이에요 >> " + this.setTime);
 
-        const diffHour = String(Math.floor((this.setTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
-        const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
-        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
+        const diffHour = String(
+          Math.floor((this.setTime / (1000 * 60 * 60)) % 24)
+        ).padStart(2, "0");
+        const diffMin = String(
+          Math.floor((this.setTime / (1000 * 60)) % 60)
+        ).padStart(2, "0");
+        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(
+          2,
+          "0"
+        );
 
-        remainTime.innerHTML = `<h3>남은 시간 ${diffHour}:${diffMin}:${diffSec}</h3>`;
+        remainTime.innerHTML = `<h3>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h3>`;
       };
 
       setInterval(diffDay, 1000);
@@ -516,7 +546,7 @@ export default {
     setEndTime() {
       console.log("종료시간은 뭔가요 >> " + this.setTime);
 
-      //setTimeout으로 강제 세션 종료 설정
+      // setTimeout으로 강제 세션 종료 설정
       setTimeout(async () => {
         //채점표 PUT 처리
         await this.saveScore(this.myStudyId);
@@ -524,7 +554,9 @@ export default {
         await this.changeConfirmAndStatus(this.myStudyId);
         //연결 강제 종료
         this.leaveSession();
-        alert("진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다.");
+        alert(
+          "진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다."
+        );
       }, this.setTime);
     },
   },
@@ -532,12 +564,24 @@ export default {
 </script>
 
 <style scoped>
+/* .time-box {
+  background-color: #e5e1f8;
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5%;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); */
+/* } */
 .session {
   text-align: center;
   padding: 1%;
   /* overflow-y: scroll; */
   border: 1px solid #acaeff;
   border-radius: 15px;
+  display: block;
+  justify-content: space-between;
   align-items: center;
   height: 75vh;
   width: 100%;
