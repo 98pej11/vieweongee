@@ -11,6 +11,7 @@ import {
   applyStudy,
   cancleStudy,
   getCurrent,
+  getAppliyID,
 } from "@/api/study";
 
 const studyStore = {
@@ -74,8 +75,8 @@ const studyStore = {
       state.isApplied = isApplied;
     },
     // 스터디 신청 여부
-    SET_MY_APPLIED: (state, list) => {
-      state.appliedList = list;
+    SET_MY_APPLIED: (state, isApplied) => {
+      state.isApplied = isApplied;
     },
 
     // 검색 결과
@@ -231,6 +232,30 @@ const studyStore = {
         // 스터디 삭제 success message 리팩토링 필요
         commit("SET_IS_SUCCESS", true);
         if (data.message == "SUCCESS") console.log("삭제성공");
+      });
+    },
+
+    // 스터디 신청 여부 확인
+    async getAppliy({ commit }, study_id) {
+      await getAppliyID(study_id, ({ data }) => {
+        console.log("신청했나?");
+
+        console.log(data.data);
+
+        var result = false;
+
+        data.data.forEach((el) => {
+          if (el.id == study_id) result = true;
+        });
+        console.log(result);
+        // 내가 참여한 스터디일 때
+        if (result == true) {
+          commit("SET_MY_APPLIED", true);
+        }
+        // 내가 참여한 스터디가 아닐 때
+        else {
+          commit("SET_MY_APPLIED", false);
+        }
       });
     },
 

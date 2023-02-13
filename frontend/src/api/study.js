@@ -24,7 +24,10 @@ async function getAllStudy(success, fail) {
 async function getStudy(params, success, fail) {
   // console.log(params);
   // api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/detail/${params.study_ID}/${params.user_ID}`).then(success).catch(fail);
+  await api
+    .get(`/study/detail/${params.study_ID}/${params.user_ID}`)
+    .then(success)
+    .catch(fail);
 }
 
 // 스터디 생성
@@ -46,6 +49,12 @@ async function modifyStudy(params, success, fail) {
 async function deleteStudy(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.delete(`/study/${study_ID}`).then(success).catch(fail);
+}
+
+// 스터디 참가 여부 확인
+async function getAppliyID(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/users/mystudy`).then(success).catch(fail);
 }
 
 // 스터디 참가 신청하기
@@ -86,4 +95,5 @@ export {
   cancleStudy,
   getCurrent,
   applyImage,
+  getAppliyID,
 };
