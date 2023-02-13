@@ -61,6 +61,7 @@ const studyStore = {
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
+      state.currentList = [];
       state.isCreated = false;
       state.noResult = false;
       state.isApplied = false;
@@ -93,10 +94,17 @@ const studyStore = {
       state.studyID = studyID;
     },
     SET_STUDY_LIST: (state, list) => {
+      var moment = require("moment");
+      require("moment-timezone");
+      moment.tz.setDefault("Asia/Seoul");
+
       list.forEach((el) => {
         // DateTime 포맷
-        var dateFormat = el.study_datetime.substr(0, 16);
-        dateFormat = dateFormat.replace("T", " ");
+        console.log(new Date(el.study_datetime));
+        var newDate = moment(new Date(el.study_datetime)).format(
+          "YYYY-MM-DD HH:mm"
+        );
+        newDate = newDate.substr(0, 16).replace("T", " ");
 
         state.studyList.push({
           id: el.id,
@@ -107,7 +115,8 @@ const studyStore = {
           type: el.type,
           user_id: el.user_id,
           user_nickname: el.user_nickname,
-          study_datetime: dateFormat,
+          // study_datetime: dateFormat,
+          study_datetime: newDate,
           regist_datetime: el.regist_datetime,
           running_time: el.running_time,
           content: el.content,
@@ -116,20 +125,25 @@ const studyStore = {
     },
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
-      var dateFormat1 = studyInfo.study_datetime.substr(0, 16);
-      var dateFormat2 = studyInfo.regist_datetime.substr(0, 16);
-      dateFormat1 = dateFormat1.replace("T", " ");
-      dateFormat2 = dateFormat2.replace("T", " ");
+      var moment = require("moment");
+      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format(
+        "YYYY-MM-DD HH:mm"
+      );
+      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format(
+        "YYYY-MM-DD HH:mm"
+      );
+      newRegistDate = newRegistDate.replace("T", " ");
+      newStudyDate = newStudyDate.replace("T", " ");
 
-      state.studyInfo.study_datetime = dateFormat1;
-      state.studyInfo.regist_datetime = dateFormat2;
+      state.studyInfo.regist_datetime = newRegistDate;
+      state.studyInfo.study_datetime = newStudyDate;
     },
   },
   actions: {
     // 스터디 검색
     async searchConfirm({ commit }, words) {
       await getSearch(words, ({ data }) => {
-        if (data.data.length == 0) {
+        if (data.data == null) {
           console.log("검색결과가 없습니다");
           commit("SET_SEARCH_RESULT", true);
         } else {
