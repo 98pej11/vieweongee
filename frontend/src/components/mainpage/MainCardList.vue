@@ -48,6 +48,9 @@ export default {
   components: {
     User,
   },
+  props: {
+    compType: String,
+  },
   computed: {
     ...mapState(studyStore, [
       "studyList",
@@ -58,7 +61,8 @@ export default {
   },
   watch: {
     currentList() {
-      this.getSearchList();
+      console.log(this.studyList);
+      // this.getSearchList();
     },
   },
   created() {
