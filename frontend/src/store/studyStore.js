@@ -62,6 +62,7 @@ const studyStore = {
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
+      state.currentList = [];
       state.isCreated = false;
       state.noResult = false;
       state.isApplied = false;
@@ -94,6 +95,10 @@ const studyStore = {
       state.studyID = studyID;
     },
     SET_STUDY_LIST: (state, list) => {
+      var moment = require("moment");
+      require("moment-timezone");
+      moment.tz.setDefault("Asia/Seoul");
+
       list.forEach((el) => {
         // DateTime 포맷
         console.log(new Date(el.study_datetime));
@@ -109,7 +114,8 @@ const studyStore = {
           type: el.type,
           user_id: el.user_id,
           user_nickname: el.user_nickname,
-          study_datetime: dateFormat,
+          // study_datetime: dateFormat,
+          study_datetime: newDate,
           regist_datetime: el.regist_datetime,
           running_time: el.running_time,
           content: el.content,
@@ -124,15 +130,15 @@ const studyStore = {
       newRegistDate = newRegistDate.replace("T", " ");
       newStudyDate = newStudyDate.replace("T", " ");
 
-      state.studyInfo.study_datetime = dateFormat1;
-      state.studyInfo.regist_datetime = dateFormat2;
+      state.studyInfo.regist_datetime = newRegistDate;
+      state.studyInfo.study_datetime = newStudyDate;
     },
   },
   actions: {
     // 스터디 검색
     async searchConfirm({ commit }, words) {
       await getSearch(words, ({ data }) => {
-        if (data.data.length == 0) {
+        if (data.data == null) {
           console.log("검색결과가 없습니다");
           commit("SET_SEARCH_RESULT", true);
         } else {
@@ -161,9 +167,6 @@ const studyStore = {
 
     // 스터디 생성
     async createConfirm({ commit }, studyInfo) {
-      console.log("스터디 스토어에서 찍었어요");
-      console.log(studyInfo.study_datetime);
-
       await createStudy(
         studyInfo,
         ({ data }) => {
