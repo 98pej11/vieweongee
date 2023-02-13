@@ -3,13 +3,7 @@
     <el-button round @click="showChat">채팅</el-button>
 
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
-    <el-button
-      v-if="isLeader && nowTurn == null"
-      type="success"
-      round
-      @click="startMeeting"
-      >미팅시작</el-button
-    >
+    <el-button v-if="isLeader && nowTurn == null" type="success" round @click="startMeeting">미팅시작</el-button>
     <el-button
       id="endBtn"
       v-if="isLeader && nowTurn != null"

@@ -3,10 +3,8 @@
     <div class="background-image">
       <MainCenter />
     </div>
-    <div class="vieweong">
-      <!-- <img src="@/assets/image/logo_mascot.png" alt="your image" /> -->
-      <h3>취업을 낚아채주마 !</h3>
-    </div>
+
+    <h3 style="margin-bottom: 0">취업을 낚아채주마 !</h3>
     <h3>♥ 면접 걱정을 덜어주는 모의면접 플랫폼 ♥</h3>
 
     <SearchBar></SearchBar>

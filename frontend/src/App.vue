@@ -82,6 +82,7 @@ a {
 /* 아웃라인 box */
 .outline-box {
   border: 3px solid #d3daff;
+  background-color: white;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 35px;
 }
