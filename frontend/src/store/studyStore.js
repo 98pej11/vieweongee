@@ -61,6 +61,7 @@ const studyStore = {
     CLEAR_LIST: (state) => {
       state.studyList = [];
       state.commentList = [];
+      state.currentList = [];
       state.isCreated = false;
       state.noResult = false;
       state.isApplied = false;
@@ -87,7 +88,6 @@ const studyStore = {
     },
     // 현재 신청자 수 리스트
     PUSH_CURRENT_LIST: (state, person) => {
-      state.currentList = [];
       state.currentList.push(person);
     },
     SET_STUDY_ID: (state, studyID) => {
@@ -143,7 +143,7 @@ const studyStore = {
     // 스터디 검색
     async searchConfirm({ commit }, words) {
       await getSearch(words, ({ data }) => {
-        if (data.data.length == 0) {
+        if (data.data == null) {
           console.log("검색결과가 없습니다");
           commit("SET_SEARCH_RESULT", true);
         } else {
