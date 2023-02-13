@@ -3,11 +3,7 @@
     <h3 class="text-h6 mb-3">참여예정 스터디 목록</h3>
     <div class="block text-center" style="margin-bottom: 10%">
       <el-carousel :interval="4000" type="card" height="250px">
-        <el-carousel-item
-          v-for="item in myStudyCards"
-          :key="item"
-          @click="itemClick(item.id)"
-        >
+        <el-carousel-item v-for="item in myStudyCards" :key="item" @click="itemClick(item.id)">
           <!-- <img src="@/assets/image/logo_mascot.png" /> -->
           <h2 text="2xl" justify="center">{{ item.title }}</h2>
         </el-carousel-item>
@@ -101,7 +97,7 @@ export default defineComponent({
   },
   created() {
     api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-    api.get(`/users/mystudy/upcoming`).then(({ data }) => {
+    api.get(`/users/mystudy`).then(({ data }) => {
       if (data.message === "SUCCESS") {
         console.log("곧 참 스 ~");
         console.log(data.data);
