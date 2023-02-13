@@ -120,7 +120,7 @@
                   신청
                 </el-button>
                 <el-button
-                  v-if="isApplied && !isOpened"
+                  v-if="isApplied && !isAuthor && (!isOpened || isPossible)"
                   @click="cancleStudy"
                   round
                   color="#FFCD9F"
@@ -139,7 +139,7 @@
                 마감
               </el-button>
               <el-button
-                v-if="(isOpened && isApplied) || isAuthor"
+                v-if="isOpened && (isApplied || isAuthor)"
                 @click="enterMeeting(this.studyID)"
                 round
                 color="#FFCD9F"
@@ -256,6 +256,7 @@ export default {
       "getPersonnel",
       "deleteConfirm",
       "uploagConfirm",
+      "getAppliy",
     ]),
     ...mapActions(commentStore, ["getCommentList"]),
 
@@ -279,6 +280,7 @@ export default {
       await this.getCommentList(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
+      await this.getAppliy(this.studyID);
     },
 
     // 신청 가능 여부
