@@ -48,6 +48,9 @@ export default {
   components: {
     User,
   },
+  props: {
+    compType: String,
+  },
   computed: {
     ...mapState(studyStore, [
       "studyList",
@@ -56,13 +59,8 @@ export default {
       "getCurrentPerson",
     ]),
   },
-  watch: {
-    currentList() {
-      this.getSearchList();
-    },
-  },
   created() {
-    if (this.$route.params.type !== "result") {
+    if (this.$route.params.type !== "search") {
       if (this.compType == "main") {
         this.CLEAR_LIST();
         this.maininit();
@@ -80,25 +78,18 @@ export default {
       await this.getTopList();
       // 현재 참가자 수 받아오기
       for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
         await this.getPersonnel(this.studyList[idx].id);
       }
-      console.log(this.currentList);
     },
     async studyinit() {
       await this.getAllList();
 
       // 현재 참가자 수 받아오기
       for (let idx = 0; idx < this.studyList.length; idx++) {
+        console.log(this.studyList[idx].id);
         await this.getPersonnel(this.studyList[idx].id);
       }
-      console.log(this.currentList);
-    },
-    async getSearchList() {
-      // 현재 참가자 수 받아오기
-      for (let idx = 0; idx < this.studyList.length; idx++) {
-        await this.getPersonnel(this.studyList[idx].id);
-      }
-      console.log(this.currentList);
     },
 
     // 세부 페이지로 이동

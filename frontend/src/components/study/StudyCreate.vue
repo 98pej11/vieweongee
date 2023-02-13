@@ -224,6 +224,7 @@ export default {
     async confirm() {
       await this.createConfirm(this.studyFormInfo);
       if (this.isCreated) {
+        console.log(this.studyID + " 로 이동할꾸야");
         this.$router.push({ name: "studyview" });
       } else {
         console.log("생성 실패");
@@ -240,6 +241,10 @@ export default {
       if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
         this.studyFormInfo.study_datetime =
           this.studyFormInfo.study_datetime.replace(" ", "T");
+
+        console.log("바궜단다" + this.studyFormInfo.study_datetime);
+        this.studyFormInfo.job = "default";
+        this.studyFormInfo.type = "eng";
         this.confirm();
       } else {
         console.log("빈칸이 있단다 ");

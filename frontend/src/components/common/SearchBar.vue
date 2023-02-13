@@ -1,10 +1,6 @@
 <template>
   <div id="search-field">
-    <el-input
-      style="max-width: 700px; height: 50px"
-      v-model="words"
-      @keyup.enter="goToSearchResult"
-    >
+    <el-input style="max-width: 700px; height: 50px" v-model="words">
     </el-input>
     <div id="search-button">
       <div @click="goToSearchResult">
@@ -62,7 +58,7 @@ export default {
           console.log("검색 결과 없음");
         } else {
           this.SET_SEARCH_RESULT(false);
-          this.$router.push({ name: "search", params: { type: "result" } });
+          this.$router.push({ name: "search", params: { type: "search" } });
         }
       }
     },
