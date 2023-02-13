@@ -1,6 +1,6 @@
 <template>
   <div class="MainCenter">
-    <div class="blurred-background slide-in-component">
+    <div class="button-component">
       <img src="@/assets/image/interview2.png" :width="800" />
       <!-- <img
         src="@/assets/image/logo_mascot.png"
@@ -22,7 +22,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@keyframes slideInFromSide {
+/* @keyframes slideInFromSide {
   from {
     transform: translateX(-100%);
   }
@@ -37,6 +37,20 @@ export default defineComponent({
   background-size: cover;
   background-blend-mode: multiply;
   opacity: 0.7;
+} */
+/* @keyframes animateComponent {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(50%) translateX(100%) rotate(45deg);
+  }
+  100% {
+    transform: translateY(0%) translateX(200%) rotate(90deg);
+  }
+}
+.button-component {
+  animation: animateComponent 3s ease-in-out infinite;
 } */
 .MainCenter {
   margin-top: 3%;

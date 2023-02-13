@@ -3,21 +3,11 @@
     <el-main class="main-box">
       <h2>로그인</h2>
       <ValidationObserver>
-        <el-form
-          style="font-size: large"
-          @submit.prevent="formSubmit"
-          method="post"
-        >
+        <el-form style="font-size: large" @submit.prevent="formSubmit" method="post">
           <el-row>
             <a><img src="@/assets/image/kakao.png" :width="80" /></a>
             <a><img src="@/assets/image/naver.png" :width="90" /></a>
-            <a
-              ><img
-                src="@/assets/image/google.png"
-                :width="70"
-                :height="70"
-                style="margin-top: 8%"
-            /></a>
+            <a><img src="@/assets/image/google.png" :width="70" :height="70" style="margin-top: 8%" /></a>
           </el-row>
           <p class="hr-sect" style="margin-top: 10%">OR</p>
 
@@ -31,12 +21,7 @@
             >
           </el-row>
           <el-row :gutter="20">
-            <el-col
-              ><el-input
-                placeholder="이메일 입력"
-                v-model="user.email"
-                @keyup.enter="confirm"
-            /></el-col>
+            <el-col><el-input placeholder="이메일 입력" v-model="user.email" @keyup.enter="confirm" /></el-col>
           </el-row>
           <!-- </ValidationProvider> -->
 
@@ -51,11 +36,7 @@
           </el-row>
           <el-row :gutter="20">
             <el-col
-              ><el-input
-                type="password"
-                placeholder="비밀번호 입력"
-                v-model="user.password"
-                @keyup.enter="confirm"
+              ><el-input type="password" placeholder="비밀번호 입력" v-model="user.password" @keyup.enter="confirm"
             /></el-col>
           </el-row>
           <!-- </ValidationProvider> -->
@@ -78,9 +59,7 @@
 
           <el-row :gutter="20" style="font-size: medium; text-align: center">
             <el-col>
-              <router-link to="/findpwd"
-                ><p style="margin: 0%">비밀번호 찾기</p></router-link
-              >
+              <router-link to="/findpwd"><p style="margin: 0%">비밀번호 찾기</p></router-link>
             </el-col>
           </el-row>
 
@@ -134,10 +113,20 @@ export default {
       let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
         await this.getUserInfo(token);
-        ElMessageBox.alert("로그인이 완료되었습니다. 환영합니다.", "알림", {
-          confirmButtonText: "확인",
+        ElMessageBox.confirm("로그인이 완료되었습니다. 환영합니다.", "알림", {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+          draggable: true,
         });
         this.$router.push({ name: "main" });
+      } else {
+        ElMessageBox.confirm("로그인 정보가 잘못되었습니다. 다시 확인해주세요.", "알림", {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+          draggable: true,
+        });
       }
     },
   },

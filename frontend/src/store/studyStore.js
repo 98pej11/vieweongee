@@ -96,8 +96,9 @@ const studyStore = {
     SET_STUDY_LIST: (state, list) => {
       list.forEach((el) => {
         // DateTime 포맷
-        var dateFormat = el.study_datetime.substr(0, 16);
-        dateFormat = dateFormat.replace("T", " ");
+        console.log(new Date(el.study_datetime));
+        var newDate = moment(new Date(el.study_datetime)).format("YYYY-MM-DD HH:mm");
+        newDate = newDate.substr(0, 16).replace("T", " ");
 
         state.studyList.push({
           id: el.id,
@@ -117,10 +118,11 @@ const studyStore = {
     },
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
-      var dateFormat1 = studyInfo.study_datetime.substr(0, 16);
-      var dateFormat2 = studyInfo.regist_datetime.substr(0, 16);
-      dateFormat1 = dateFormat1.replace("T", " ");
-      dateFormat2 = dateFormat2.replace("T", " ");
+      var moment = require("moment");
+      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format("YYYY-MM-DD HH:mm");
+      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format("YYYY-MM-DD HH:mm");
+      newRegistDate = newRegistDate.replace("T", " ");
+      newStudyDate = newStudyDate.replace("T", " ");
 
       state.studyInfo.study_datetime = dateFormat1;
       state.studyInfo.regist_datetime = dateFormat2;
@@ -159,6 +161,9 @@ const studyStore = {
 
     // 스터디 생성
     async createConfirm({ commit }, studyInfo) {
+      console.log("스터디 스토어에서 찍었어요");
+      console.log(studyInfo.study_datetime);
+
       await createStudy(
         studyInfo,
         ({ data }) => {
