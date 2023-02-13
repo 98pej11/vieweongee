@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProgressRepository extends JpaRepository<Progress, ProgressId> {
     @Query(value = "select p from Progress p where p.progress_id.study.id = ?1")
-            List<Progress> findAllByStudyId(Long studyId);
+    List<Progress> findAllByStudyId(Long studyId);
     @Query("select p from Progress p where p.progress_id.user.id = :id")
     List<Progress> findByUser_id(@Param("id") Long user_id);
     @Query("select p from Progress p where p.progress_id.user.id = :id and p.status = :status")

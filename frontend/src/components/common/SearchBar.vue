@@ -8,7 +8,7 @@
     </el-input>
     <div id="search-button">
       <div @click="goToSearchResult">
-        <el-icon size="30"><Search /></el-icon>
+        <el-icon size="30" style="cursor: pointer"><Search /></el-icon>
       </div>
       <!-- <el-button @click="goToSearchResult"></el-butto> -->
     </div>
