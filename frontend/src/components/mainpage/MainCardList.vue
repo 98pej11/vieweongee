@@ -46,9 +46,6 @@ export default {
   components: {
     User,
   },
-  props: {
-    compType: String,
-  },
   computed: {
     ...mapState(studyStore, [
       "studyList",
@@ -56,6 +53,11 @@ export default {
       "currentList",
       "getCurrentPerson",
     ]),
+  },
+  watch: {
+    currentList() {
+      this.getSearchList();
+    },
   },
   created() {
     if (this.$route.params.type !== "result") {
@@ -83,6 +85,13 @@ export default {
     async studyinit() {
       await this.getAllList();
 
+      // 현재 참가자 수 받아오기
+      for (let idx = 0; idx < this.studyList.length; idx++) {
+        await this.getPersonnel(this.studyList[idx].id);
+      }
+      console.log(this.currentList);
+    },
+    async getSearchList() {
       // 현재 참가자 수 받아오기
       for (let idx = 0; idx < this.studyList.length; idx++) {
         await this.getPersonnel(this.studyList[idx].id);
