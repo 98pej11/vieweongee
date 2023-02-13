@@ -181,6 +181,7 @@ export default {
     async confirm() {
       await this.createConfirm(this.studyFormInfo);
       if (this.isCreated) {
+        console.log(this.studyID + " 로 이동할꾸야");
         this.$router.push({ name: "studyview" });
       } else {
         console.log("생성 실패");

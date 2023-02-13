@@ -309,10 +309,9 @@ export default {
     },
 
     // 화상회의 참여
-    enterMeeting(id) {
+    enterMeeting() {
       // 화상회의 참여 !!!! 새 창으로 슈슉
-      console.log(id + "화상미팅으로 참여합니다");
-      this.$router.push({ name: "meeting", params: { studyid: id } });
+      // this.$router.push();
     },
 
     // 컴포넌트 전환

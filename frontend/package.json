@@ -16,7 +16,6 @@
     "element-plus": "^2.2.28",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
-    "moment-timezone": "^0.5.40",
     "openvidu-browser": "^2.25.0",
     "v-infinite-scroll": "^1.0.4",
     "vee-validate": "^4.7.3",
