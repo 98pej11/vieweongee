@@ -9,10 +9,12 @@
 import {defineComponent} from 'vue';
 import UserLogin from '@/components/user/UserLogin.vue';
 
+
 export default defineComponent({
   components: {
     UserLogin
   },
+  
   
 }) 
 </script>

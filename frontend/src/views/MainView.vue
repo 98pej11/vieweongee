@@ -17,6 +17,7 @@ import { defineComponent } from "vue";
 import MainCenter from "@/components/mainpage/MainCenter.vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
 import SearchBar from "@/components/common/SearchBar.vue";
+import VueCookies from 'vue-cookies';
 
 export default defineComponent({
   name: "MainView",
@@ -25,6 +26,15 @@ export default defineComponent({
     MainCardList,
     SearchBar,
   },
+  created(){
+    this.isSocialLogin();
+  },
+  methods:{
+    isSocialLogin(){  
+      const cookie = VueCookies.get("isSuccess");
+      console.log("메인쿠키");
+      console.log(cookie);}
+  }
 });
 </script>
 <style scoped>

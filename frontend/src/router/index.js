@@ -6,6 +6,7 @@ import SignupView from "../views/SignupView.vue";
 import FindpwdView from "../views/FindpwdView.vue";
 import MypageView from "../views/MypageView.vue";
 import MeetingRoom from "../views/MeetingRoom.vue";
+import LoginRedirect from "../views/LoginRedirect.vue";
 
 const routes = [
   {
@@ -45,6 +46,10 @@ const routes = [
         component: () => import("@/components/study/StudyModify.vue"),
       },
     ],
+  },
+  {
+    path: '/redirect/:ACCESS', 
+    component: LoginRedirect
   },
   {
     path: "/login",

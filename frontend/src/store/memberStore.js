@@ -86,6 +86,23 @@ const memberStore = {
         }
       );
     },
+    async socialConfirm({commit}){
+      await signin(
+        
+      ({response})=>{
+        console.log(response);
+        let ACCESS=response.ACCESS;
+        let REFRESH=response.REFRESH;
+        commit("SET_IS_LOGIN", true);
+        commit("SET_IS_LOGIN_ERROR", false);
+        commit("SET_IS_VALID_TOKEN", true);
+        sessionStorage.setItem("ACCESS", ACCESS);
+        sessionStorage.setItem("REFRESH", REFRESH);
+        
+      }
+      )
+
+    },
    
     // 이메일 중복검사
     async checkEmail({ commit, dispatch}, user) {

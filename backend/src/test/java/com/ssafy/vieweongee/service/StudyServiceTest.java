@@ -96,7 +96,6 @@ class StudyServiceTest {
         createStudyRequest.setSolving(true);
         createStudyRequest.setTeamwork(true);
         createStudyRequest.setType("일대다");
-
     }
 
 

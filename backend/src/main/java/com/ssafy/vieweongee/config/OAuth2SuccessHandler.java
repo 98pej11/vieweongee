@@ -9,10 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +24,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final TokenService tokenService;
 
@@ -31,7 +35,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.info("oAuth2User : {}", oAuth2User.getAttributes());
 //        User userDto=userRequestMapper.toDto(oAuth2User);
@@ -61,17 +65,44 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         login.setName(user.getName());
         login.setEmail(user.getEmail());
 
-        result.put("data",login);
-        result.put("access", AccessJwt);
-        result.put("refresh", RefreshToken);
-        result.put("massage","SUCCESS");
-//        response.addHeader("ACCESS", AccessJwt);
+//        result.put("data",login);
+//        result.put("ACCESS", AccessJwt);
+//        result.put("REFRESH", RefreshToken);
+//        result.put("massage","SUCCESS");
+////        response.addHeader("ACCESS", AccessJwt);
         log.info("ACCESS : {}",AccessJwt);
         log.info("REFRESH : {}", RefreshToken);
 //        response.addHeader("refresh",refreshToken);
         response.setContentType("application/json;charset=UTF-8");
+
+        Cookie newCookie = new Cookie("isSuccess","true");
+        log.info("newCookie : {}", newCookie);
+        response.addCookie(newCookie);
+        response.addHeader("ACCESS", AccessJwt);
+        response.addHeader("REFRESH", RefreshToken);
+//        String targetUrl="http:///localhost:3000/";
+        String simple="http:///localhost:3000/redirect/";
+        String targetUrl= UriComponentsBuilder.fromPath(simple)
+                .queryParam("ACCESS", AccessJwt)
+                    .build().toString();
+        log.info("타겟 uri는!!! {}", targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 //        return ResponseEntity.ok().body(tokens);
     }
+
+
+//    private String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+//        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+//                .map(Cookie::getValue);
+//
+//        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+//
+//        String token = tokenProvider.generateToken(authentication);
+//
+//        return UriComponentsBuilder.fromUriString(targetUrl)
+//                .queryParam("token", token)
+//                .build().toUriString();
+//    }
 
 //    private void writeTokenResponse(HttpServletResponse response, Token token) throws IOException{
 //        response.setContentType("text/html;charset=UTF-8");
