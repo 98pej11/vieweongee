@@ -52,6 +52,7 @@
           <el-row :gutter="20">
             <el-col
               ><el-input
+                type="password"
                 placeholder="비밀번호 입력"
                 v-model="user.password"
                 @keyup.enter="confirm"
@@ -130,11 +131,11 @@ export default {
 
     async confirm() {
       await this.userConfirm(this.user);
-      // let token = sessionStorage.getItem("ACCESS");
+      let token = sessionStorage.getItem("ACCESS");
       if (this.isLogin) {
-        // await this.getUserInfo(token);
+        await this.getUserInfo(token);
         ElMessageBox.alert("로그인이 완료되었습니다. 환영합니다.", "알림", {
-        confirmButtonText: "확인",
+          confirmButtonText: "확인",
         });
         this.$router.push({ name: "main" });
       }

@@ -24,7 +24,7 @@
 
     <nav v-else>
       <ul>
-        <li @click.prevent="onClickLogout">
+        <li @click="onClickLogout">
           <el-icon color="#5f5a83" :size="25"><Avatar /></el-icon
           ><b>로그아웃</b>
         </li>

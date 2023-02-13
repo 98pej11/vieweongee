@@ -383,5 +383,6 @@ p {
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 35px;
   height: 300px;
+  background-color: white;
 }
 </style>
