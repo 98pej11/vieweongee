@@ -102,29 +102,20 @@ const memberStore = {
         
       },
 
-    // 이메일 중복검사
-    async checkEmail({ commit, dispatch }, user) {
+    async checkEmail({ dispatch }, user) {
       console.log(user.email);
       await findByEmail(
         user.email,
         ({ data }) => {
           if (data.message === "SUCCESS") {
             console.log("회원가입 가능함! :  ");
-            // console.log("들어왓다. ");
-            // 백엔드에서 받아오는 userInfo가 없음
-            // commit("SET_USER_INFO", this.state.data);
-            // console.log("유저정3. getUserInfo data >> ", data);
             dispatch("getEmailCode", user.email);
-          } else {
-            console.log("이메일 중복!");
           }
         },
-        async (error) => {
-          console.log(
-            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
-          commit("SET_IS_VALID_TOKEN", false);
+        (error) => {
+          if (error.response.status == 409) {
+            alert("이메일이 중복됐습니다");
+          }
         }
       );
     },
@@ -142,33 +133,33 @@ const memberStore = {
       });
     },
 
-    async getUserInfo({ commit, dispatch }, token) {
-      // async getUserInfo({ commit, dispatch }, myemail) {
-      let decodeToken = jwtDecode(token);
-      console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-      await findByEmail(
-        decodeToken.Id,
-        ({ data }) => {
-          if (data.message === "SUCCESS") {
-            console.log("findById 안으로 들어왓다. ");
-            // 백엔드에서 받아오는 userInfo가 없음
-            // commit("SET_USER_INFO", this.state.data);
-            // console.log("유저정보 바다와서 state에 올렸따 :  "  + data.userinfo);
-            // console.log("3. getUserInfo data >> ", data);
-          } else {
-            console.log("유저 정보 없음!!!!");
-          }
-        },
-        async (error) => {
-          console.log(
-            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
-          commit("SET_IS_VALID_TOKEN", false);
-          await dispatch("tokenRegeneration");
-        }
-      );
-    },
+    // async getUserInfo({ commit, dispatch }, token) {
+    //   // async getUserInfo({ commit, dispatch }, myemail) {
+    //   let decodeToken = jwtDecode(token);
+    //   // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+    //   await findByEmail(
+    //     decodeToken.Id,
+    //     ({ data }) => {
+    //       if (data.message === "SUCCESS") {
+    //         console.log("findById 안으로 들어왓다. ");
+    //         // 백엔드에서 받아오는 userInfo가 없음
+    //         // commit("SET_USER_INFO", this.state.data);
+    //         // console.log("유저정보 바다와서 state에 올렸따 :  "  + data.userinfo);
+    //         // console.log("3. getUserInfo data >> ", data);
+    //       } else {
+    //         console.log("유저 정보 없음!!!!");
+    //       }
+    //     },
+    //     async (error) => {
+    //       console.log(
+    //         "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
+    //         error.response.status
+    //       );
+    //       commit("SET_IS_VALID_TOKEN", false);
+    //       await dispatch("tokenRegeneration");
+    //     }
+    //   );
+    // },
     async tokenRegeneration({ commit, state }) {
       console.log(
         "토큰 재발급 >> 기존 토큰 정보 : {}",
@@ -245,14 +236,18 @@ const memberStore = {
       );
     },
 
-    async userJoin({ commit }, user) {
-      console.log("memberstor : " + JSON.stringify(user));
+    async userJoin({ dispatch }, user) {
+      // console.log("memberstor : " + JSON.stringify(user));
       await signup(
         user,
         ({ data }) => {
           console.log(data);
-          commit("SET_IS_LOGIN", this.isLogin);
-          console.log("회원가입 성공");
+          dispatch("getEmailCode", user.email);
+          if (data.message === "SUCCESS") {
+            console.log("회원가입 성공");
+          } else {
+            console.log("유저 정보 없음!!!!");
+          }
         },
         (error) => {
           console.log(error);

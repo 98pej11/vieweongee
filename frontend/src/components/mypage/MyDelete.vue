@@ -68,7 +68,7 @@ export default defineComponent({
     ...mapState(memberStore, ["data", "isLogin"]),
   },
   methods: {
-    ...mapActions(memberStore, ["userUpdate", "userDelete", "getUserInfo"]),
+    ...mapActions(memberStore, ["userUpdate", "userDelete"]),
 
     async withdraw() {
       await this.userDelete(this.user);
