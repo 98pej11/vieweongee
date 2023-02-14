@@ -176,7 +176,6 @@ public class MeetingController {
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
         //status, confirm 변경
         meetingService.updateConfirmAndStatus(Long.parseLong(study_ID), userId);
-
         // summary 변경
         meetingService.updateSummary(Long.parseLong(study_ID), userId);
 
