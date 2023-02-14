@@ -47,6 +47,7 @@
         </p>
       </el-col>
     </el-row>
+
     <!-- 대댓글 등록 -->
     <el-row v-if="this.showInput" justify="end">
       <el-col :span="2" style="color: black">
