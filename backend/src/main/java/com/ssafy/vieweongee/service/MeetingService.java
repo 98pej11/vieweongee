@@ -25,5 +25,8 @@ public interface MeetingService {
     // 스터디 참가자의 자기소개서 불러오기
     List<MeetingResumeRequest> getAllResume(Long studyId);
 
+    // study confirm, progress status 변경
     void updateConfirmAndStatus(Long studyId, Long userId);
+
+    void updateSummary(Long studyId, Long userId);
 }

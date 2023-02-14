@@ -80,5 +80,29 @@ public class Summary implements Serializable {
     public Summary(User user){
         this.user=user;
     }
+
+    public void updateCount(int ability, int attitude, int teamwork, int solving, int loyalty){
+        this.ability_count += ability;
+        this.attitude_count += attitude;
+        this.teamwork_count += teamwork;
+        this.solving_count += solving;
+        this.loyalty_count += loyalty;
+    }
+
+    public void updateTotal(int ability, int attitude, int teamwork, int solving, int loyalty){
+        this.ability_total += ability;
+        this.attitude_total += attitude;
+        this.teamwork_total += teamwork;
+        this.solving_total += solving;
+        this.loyalty_total += loyalty;
+    }
+
+    public void updateAverage(float ability, float attitude, float teamwork, float solving, float loyalty){
+        this.ability_average += ability;
+        this.attitude_average += attitude;
+        this.teamwork_average += teamwork;
+        this.solving_average += solving;
+        this.loyalty_average += loyalty;
+    }
 }
 
