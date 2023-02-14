@@ -28,6 +28,7 @@ async function deleteComment(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+// 댓글 전체 조회
 async function getAllComment(study_ID, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api.get(`/study/${study_ID}/comment`).then(success).catch(fail);
