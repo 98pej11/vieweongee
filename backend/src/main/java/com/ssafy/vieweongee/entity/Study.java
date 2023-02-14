@@ -84,7 +84,7 @@ public class Study {
 
     // 스터디 모집글 등록 날짜 및 시간
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date regist_datetime;
+    private LocalDateTime regist_datetime;
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
     private List<Alarm> alarms = new ArrayList<>();
@@ -102,7 +102,7 @@ public class Study {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Study(Long id, User user, int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, LocalDateTime study_datetime, Date regist_datetime, List<Alarm> alarms, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments) {
+    public Study(Long id, User user, int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, LocalDateTime study_datetime, LocalDateTime regist_datetime, List<Alarm> alarms, List<Participant> participants, List<Progress> progresses, List<Scorecard> scorecards, List<Comment> comments) {
         this.id = id;
         this.user = user;
         this.running_time = running_time;

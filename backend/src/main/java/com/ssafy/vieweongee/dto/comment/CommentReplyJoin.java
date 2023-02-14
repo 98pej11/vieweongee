@@ -1,5 +1,6 @@
 package com.ssafy.vieweongee.dto.comment;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface CommentReplyJoin {
@@ -9,7 +10,7 @@ public interface CommentReplyJoin {
     Long getReply_id();
     String getComment_content();
     String getReply_content();
-    Date getComment_datetime();
-    Date getReply_datetime();
+    LocalDateTime getComment_datetime();
+    LocalDateTime getReply_datetime();
     String getUser_name();
 }

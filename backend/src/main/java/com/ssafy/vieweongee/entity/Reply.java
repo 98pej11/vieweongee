@@ -38,10 +38,10 @@ public class Reply {
 
     // 대댓글 등록 날짜 및 시간
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date datetime;
+    private LocalDateTime datetime;
 
     @Builder
-    public Reply(Long id, Comment comment, User user, String content, Date datetime) {
+    public Reply(Long id, Comment comment, User user, String content, LocalDateTime datetime) {
         this.id = id;
         this.comment = comment;
         this.user = user;
