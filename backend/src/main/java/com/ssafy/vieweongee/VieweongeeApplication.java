@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class VieweongeeApplication {
     public static void main(String[] args) {
         SpringApplication.run(VieweongeeApplication.class, args);
-        System.out.println("jenkins test");
     }
 
     // amazon s3 설정

@@ -10,18 +10,12 @@
           <!-- <el-button>Main <Document style="width: 1em; height: 1em; margin-right: 5px" /></el-button> -->
           <el-button size="large" @click="changeComp('MyMain')">Main</el-button>
           <el-button size="large" @click="changeComp('MyData')">Data</el-button>
-          <el-button size="large" @click="changeComp('MyModify')"
-            >Modify Info</el-button
-          >
-          <el-button size="large" @click="changeComp('MyDelete')"
-            >Delete User</el-button
-          >
+          <el-button size="large" @click="changeComp('MyModify')">Modify Info</el-button>
+          <el-button size="large" @click="changeComp('MyDelete')">Delete User</el-button>
         </div>
       </el-aside>
       <!-- <el-main><MyMain></MyMain></el-main> -->
-      <el-main class="main"
-        ><component v-bind:is="currentTab"></component
-      ></el-main>
+      <el-main class="main"><component v-bind:is="currentTab"></component></el-main>
     </el-container>
   </div>
 </template>
@@ -55,8 +49,7 @@ export default defineComponent({
       console.log(this.currentTab);
     },
     getMyId() {
-      if (sessionStorage.getItem("ACCESS") != null)
-        this.myName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
+      if (sessionStorage.getItem("ACCESS") != null) this.myName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
     },
   },
 });

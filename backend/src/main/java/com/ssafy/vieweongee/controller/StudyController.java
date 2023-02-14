@@ -89,11 +89,21 @@ public class StudyController {
      */
     @DeleteMapping("/{study_id}")
     public ResponseEntity<?> deleteStudy(@PathVariable("study_id") Long study_id,@RequestHeader("ACCESS") String access) {
+        Long user_id = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        Study study = studyService.getStudyDetail(study_id);
         Map<String, Object> result = new HashMap<>();
-        result.put("data",null);
-        result.put("message", "SUCCESS");
-        studyService.deleteStudy(study_id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+
+        if (user_id != study.getUser().getId()) {
+            result.put("data", null);
+            result.put("message", "FAIL");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        } else {
+            result.put("data",null);
+            result.put("message", "SUCCESS");
+            studyService.deleteStudy(study_id);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -450,3 +460,4 @@ public class StudyController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
+
