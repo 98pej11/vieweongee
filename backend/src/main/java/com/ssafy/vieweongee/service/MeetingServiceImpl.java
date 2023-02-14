@@ -144,7 +144,8 @@ public class MeetingServiceImpl implements MeetingService {
         if(study.isAttitude())
             attitude = 1;
 
-        summary.updateCount(ability, attitude, teamwork, solving, loyalty);
+        summary.updateCount(ability*scorecard.getInterviewer(), attitude*scorecard.getInterviewer(),
+                teamwork*scorecard.getInterviewer(), solving*scorecard.getInterviewer(), loyalty*scorecard.getInterviewer());
 
         //total update
         summary.updateTotal(scorecard.getAbility(), scorecard.getAttitude(),
