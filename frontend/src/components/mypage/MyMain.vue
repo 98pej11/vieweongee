@@ -3,18 +3,17 @@
     <h3 class="text-h6 mb-3">참여예정 스터디 목록</h3>
     <div class="block text-center" style="margin-bottom: 10%">
       <el-carousel :interval="4000" type="card" height="250px">
-        <el-carousel-item v-for="item in myStudyCards" :key="item" @click="itemClick(item.id)">
-          <!-- <img src="@/assets/image/logo_mascot.png" /> -->
-          <h2 text="2xl" justify="center">{{ item.title }}</h2>
+        <el-carousel-item
+          class="carousel-item"
+          v-for="item in myStudyCards"
+          :key="item"
+          @click="itemClick(item.id)"
+        >
+          <!-- <img src="@/assets/image/interview2.png" /> -->
+          <h2>{{ item.title }}</h2>
+          <!-- <h4 text="2xl">{{ item.study_datetime }}</h4> -->
         </el-carousel-item>
       </el-carousel>
-      <!-- <el-carousel height="300px"> -->
-      <!-- <el-carousel-item v-for="upcoming in upcomings" :key="upcoming"> -->
-      <!-- 클릭시 미팅이동 해야함 -->
-      <!-- 일정시간을 벗어날 경우는 아직 미팅화면이 안열리게함 -->
-      <!-- <h3 class="small justify-center" text="2xl">{{ upcoming.title }}</h3> -->
-      <!-- </el-carousel-item> -->
-      <!-- </el-carousel> -->
     </div>
     <h3 class="text-h6 mb-3">나의 스터디 전체 통계</h3>
     <el-row>
@@ -60,11 +59,25 @@
       <el-col :span="12">
         <div class="demo-progress" v-if="abilScore != null">
           <h4>역량별 통계자료</h4>
-          <el-progress :percentage="this.abilScore.attitude_average * 20"></el-progress>
-          <el-progress :percentage="this.abilScore.ability_average * 20" :format="format" />
-          <el-progress :percentage="this.abilScore.teamwork_average * 20" status="success" />
-          <el-progress :percentage="this.abilScore.solving_average * 20" status="warning" />
-          <el-progress :percentage="this.abilScore.loyalty_average * 20" status="exception" />
+          <el-progress
+            :percentage="this.abilScore.attitude_average * 20"
+          ></el-progress>
+          <el-progress
+            :percentage="this.abilScore.ability_average * 20"
+            :format="format"
+          />
+          <el-progress
+            :percentage="this.abilScore.teamwork_average * 20"
+            status="success"
+          />
+          <el-progress
+            :percentage="this.abilScore.solving_average * 20"
+            status="warning"
+          />
+          <el-progress
+            :percentage="this.abilScore.loyalty_average * 20"
+            status="exception"
+          />
         </div>
 
         <div class="demo-progress" style="" v-else>
@@ -162,13 +175,23 @@ h3 {
   margin-bottom: 15px;
   width: 90%;
 }
-
+.carousel-item {
+  background-image: url("https://newsimg.sedaily.com/2020/09/10/1Z7SVDHXBZ_1.jpg");
+  background-size: cover;
+  opacity: 0.7;
+  /* width: 100%; */
+  height: 100%; /* adjust to your preferred height */
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+}
 .el-carousel__item h2 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 100px;
-  margin-left: 100px;
-  text-align: start;
+  background-color: #cadffb;
+  border-radius: 10%;
+  color: black;
+  opacity: 1;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .el-carousel__item:nth-child(2n) {
@@ -178,6 +201,7 @@ h3 {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
+
 /* .el-carousel__item h3 {
   color: #475669;
   opacity: 0.75;

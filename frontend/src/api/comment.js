@@ -24,10 +24,7 @@ async function modifyComment(params, success, fail) {
 async function deleteComment(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
-    .delete(
-      `/study/${params.study_ID}/comment/${params.comment_ID}`,
-      params.comment
-    )
+    .delete(`/study/${params.study_ID}/comment/${params.comment_ID}`)
     .then(success)
     .catch(fail);
 }
@@ -41,8 +38,27 @@ async function createReply(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
     .post(
-      `/${params.study_ID}/comment/${params.comment_ID}/reply`,
+      `/study/${params.study_ID}/comment/${params.comment_ID}/reply`,
       JSON.stringify(params.reply)
+    )
+    .then(success)
+    .catch(fail);
+}
+async function modifyReply(params, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api
+    .put(
+      `/study/${params.study_id}/comment/${params.comment_id}/${params.reply_id}`,
+      JSON.stringify(params.info)
+    )
+    .then(success)
+    .catch(fail);
+}
+async function deleteReply(params, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api
+    .delete(
+      `/study/${params.study_id}/comment/${params.comment_id}/${params.reply_id}`
     )
     .then(success)
     .catch(fail);
@@ -53,4 +69,6 @@ export {
   deleteComment,
   getAllComment,
   createReply,
+  modifyReply,
+  deleteReply,
 };
