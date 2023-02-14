@@ -9,15 +9,9 @@
           method="post"
         >
           <el-row>
-            <a><img src="@/assets/image/kakao.png" :width="80" /></a>
-            <a><img src="@/assets/image/naver.png" :width="90" /></a>
-            <a
-              ><img
-                src="@/assets/image/google.png"
-                :width="70"
-                :height="70"
-                style="margin-top: 8%"
-            /></a>
+            <a><img src="@/assets/image/kakao.png" :width="80" @click="kakaologin()"/></a>
+            <a><img src="@/assets/image/naver.png" :width="90" @click="naverlogin()"/></a>
+            <a><img src="@/assets/image/google.png" :width="70" :height="70" style="margin-top: 8%" /></a>
           </el-row>
           <p class="hr-sect" style="margin-top: 10%">OR</p>
 
@@ -154,6 +148,20 @@ export default {
         );
       }
     },
+    async naverlogin(){
+      // const client_id='hCg3zNttO1i50cUABPON'
+      // const callbackUrl='http://localhost:3000/'
+      // var url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id='+client_id+'&redirect_uri='+callbackUrl+'&state=1234';
+      var url="http://localhost:8080/api/oauth2/authorization/naver"
+      window.location.href=url;
+      
+    },
+    async kakaologin(){
+      var url="http://localhost:8080/api/oauth2/authorization/kakao"
+      window.location.href=url;
+      // await this.socailConfirm(url);
+    },
+
   },
 };
 </script>
