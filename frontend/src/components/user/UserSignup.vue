@@ -58,10 +58,15 @@
             </p>
           </el-col>
           <el-col>
-            <el-input placeholder="비밀번호 규칙" v-model="user.password" />
+            <el-input
+              placeholder="비밀번호 규칙"
+              v-model="user.password"
+              type="password"
+            />
           </el-col>
           <el-col style="margin-top: 3%">
             <el-input
+              type="password"
               placeholder="비밀번호 재확인"
               v-model="user.passwordCheck"
             />

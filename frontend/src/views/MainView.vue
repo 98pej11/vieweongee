@@ -1,10 +1,12 @@
 <template>
   <div class="main">
     <div class="background-image">
-      <!-- <img src="@/assets/image/google.png" alt="your image" /> -->
+      <MainCenter />
     </div>
-    <MainCenter />
+
+    <h3 style="margin-bottom: 0">취업을 낚아채주마 !</h3>
     <h3>♥ 면접 걱정을 덜어주는 모의면접 플랫폼 ♥</h3>
+
     <SearchBar></SearchBar>
 
     <h3 style="margin-top: 5%">~ 최근 스터디 바로가기 ~</h3>
@@ -35,7 +37,11 @@ export default defineComponent({
 .background-image {
   position: relative;
 }
-
+.vieweong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .background-image::before {
   content: "";
   /* background: url(your-image-path.jpg) no-repeat center center/cover; */

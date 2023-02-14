@@ -27,7 +27,7 @@
 
 | Application | Domain | Language | Front | Back | DB |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-| Desktop Web | WebRTC | JavaScript, Java | React | Spring | 미정ㄷㄷ |
+| Desktop Web | WebRTC | JavaScript, Java | React | Spring | MySql |
 
 ### **Frontend**
 - Language : JavaScript, HTML, CSS
@@ -39,15 +39,15 @@
 - Framework : Spring
 - DB : MySQL
 - Server : AWS EC2, Nginx
-- Media Server : Kurento
+- WebRTC : openvidu
 - CI/CD : Docker, Jenkins
 
 
 ### **주요 기술**
   - WebRTC
-  - WebSocket
   - JWT Authentication
   - REST API
+  - 
 
 ### **참조 리소스**
   * Vuetify: 디자인 전반 적용
@@ -58,8 +58,8 @@
   * Animation.css: CSS 애니메이션 지원 라이브러리. 메인 페이지 진입 애니메이션에 활용
 
 * 배포 환경
-  - URL: // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정: // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
+  - URL: https://vieweongee.kro.kr:
+  - 테스트 계정: ID-test / PW-test, 소셜 로그인 (네이버, 카카오)
 
 
 <!-- 자유 양식 -->
@@ -92,5 +92,6 @@
 ## 컨벤션
 - [코드 컨벤션](./산출물/코드컨벤션.md)
 - [Git 컨벤션](./산출물/깃컨벤션.md)
+
 
 

@@ -45,6 +45,7 @@ public class User{
     @Column(length = 10)
     private String provider;
 
+    @Column()
     private String jwt_token;
 
 //    @ColumnDefault("false")

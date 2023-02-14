@@ -102,9 +102,7 @@ const studyStore = {
       list.forEach((el) => {
         // DateTime 포맷
         console.log(new Date(el.study_datetime));
-        var newDate = moment(new Date(el.study_datetime)).format(
-          "YYYY-MM-DD HH:mm"
-        );
+        var newDate = moment(new Date(el.study_datetime)).format("YYYY-MM-DD HH:mm");
         newDate = newDate.substr(0, 16).replace("T", " ");
 
         state.studyList.push({
@@ -127,12 +125,8 @@ const studyStore = {
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
       var moment = require("moment");
-      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format(
-        "YYYY-MM-DD HH:mm"
-      );
-      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format(
-        "YYYY-MM-DD HH:mm"
-      );
+      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format("YYYY-MM-DD HH:mm");
+      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format("YYYY-MM-DD HH:mm");
       newRegistDate = newRegistDate.replace("T", " ");
       newStudyDate = newStudyDate.replace("T", " ");
 

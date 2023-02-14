@@ -1,105 +1,104 @@
 <template>
-  <div class="score-box" style="text-align: center">
+  <div class="score-box" style="text-align: center; margin-left: 2%">
     <h3>당신은 면접관입니다.</h3>
-
+    <!-- <div v-for="(li, i) in nowScoreList" :key="i"> -->
     <el-tabs type="border-card" class="demo-tabs">
-      <el-tab-pane>
+      <el-tab-pane v-for="(li, i) in nowScoreList" :key="i">
         <template #label>
           <span class="custom-tabs-label">
-            <span>자기소개서</span>
-          </span>
-        </template>
-        <!-- 자기소개서 파일업로드 -->
-        <meeting-resume></meeting-resume>
-      </el-tab-pane>
+            <span>면접자: {{ li.id }}</span>
+          </span> </template
+        ><el-tabs type="border-card" class="demo-tabs">
+          <el-tab-pane>
+            <template #label>
+              <span class="custom-tabs-label">
+                <span>자기소개서</span>
+              </span>
+            </template>
+            <!-- 자기소개서 파일업로드 -->
+            <!-- 자기소개서 파일
+            <img :src="li.imgURL" alt="자기소개서 파일" /> -->
+            <meeting-resume :i="i"></meeting-resume>
+          </el-tab-pane>
 
-      <el-tab-pane>
-        <template #label>
-          <span class="custom-tabs-label">
-            <span>채점표</span>
-          </span>
-        </template>
-        <div v-for="(li, i) in nowScoreList" :key="i">
-          <h3>면접자: {{ li.id }}</h3>
-          <hr />
-          <div>
-            <div class="templete">
-              <h4>{{ scoreData[0].type }}</h4>
-              <li>
-                {{ scoreData[0].question }}
-              </li>
-              <li>
-                {{ scoreData[1].question }}
-              </li>
-            </div>
-            <el-rate v-model="li.ability"> ability: {{ li.ability }} </el-rate>
+          <el-tab-pane>
+            <template #label>
+              <span class="custom-tabs-label">
+                <span>채점표</span>
+              </span>
+            </template>
+
             <hr />
-            <div class="templete">
-              <h4>{{ scoreData[2].type }}</h4>
-              <li>
-                {{ scoreData[2].question }}
-              </li>
-              <li>
-                {{ scoreData[3].question }}
-              </li>
+            <div>
+              <div class="templete">
+                <h4>{{ scoreData[0].type }}</h4>
+                <li>
+                  {{ scoreData[0].question }}
+                </li>
+                <li>
+                  {{ scoreData[1].question }}
+                </li>
+              </div>
+              <el-rate v-model="li.ability"> ability: {{ li.ability }} </el-rate>
+              <hr />
+              <div class="templete">
+                <h4>{{ scoreData[2].type }}</h4>
+                <li>
+                  {{ scoreData[2].question }}
+                </li>
+                <li>
+                  {{ scoreData[3].question }}
+                </li>
+              </div>
+              <el-rate v-model="li.attitude"> attitude: {{ li.attitude }} </el-rate>
+              <hr />
+              <div class="templete">
+                <h4>{{ scoreData[4].type }}</h4>
+                <li>
+                  {{ scoreData[4].question }}
+                </li>
+                <li>
+                  {{ scoreData[5].question }}
+                </li>
+              </div>
+              <el-rate v-model="li.loyalty"> loyalty: {{ li.loyalty }} </el-rate>
+              <hr />
+              <div class="templete">
+                <h4>{{ scoreData[6].type }}</h4>
+                <li>
+                  {{ scoreData[6].question }}
+                </li>
+                <li>
+                  {{ scoreData[7].question }}
+                </li>
+              </div>
+              <el-rate v-model="li.solving"> solving: {{ li.solving }} </el-rate>
+              <hr />
+              <div class="templete">
+                <h4>{{ scoreData[8].type }}</h4>
+                <li>
+                  {{ scoreData[8].question }}
+                </li>
+                <li>
+                  {{ scoreData[9].question }}
+                </li>
+              </div>
+              <el-rate v-model="li.teamwork"> teamwork: {{ li.teamwork }} </el-rate>
+              <hr />
+              <div style="margin-top: 10%; text-align: left">
+                <h4>피드백:</h4>
+                <el-input type="textarea" :rows="7" placeholder="피드백을 입력해주세요..." v-model="li.feedback">
+                </el-input>
+              </div>
             </div>
-            <el-rate v-model="li.attitude">
-              attitude: {{ li.attitude }}
-            </el-rate>
-            <hr />
-            <div class="templete">
-              <h4>{{ scoreData[4].type }}</h4>
-              <li>
-                {{ scoreData[4].question }}
-              </li>
-              <li>
-                {{ scoreData[5].question }}
-              </li>
-            </div>
-            <el-rate v-model="li.loyalty"> loyalty: {{ li.loyalty }} </el-rate>
-            <hr />
-            <div class="templete">
-              <h4>{{ scoreData[6].type }}</h4>
-              <li>
-                {{ scoreData[6].question }}
-              </li>
-              <li>
-                {{ scoreData[7].question }}
-              </li>
-            </div>
-            <el-rate v-model="li.solving"> solving: {{ li.solving }} </el-rate>
-            <hr />
-            <div class="templete">
-              <h4>{{ scoreData[8].type }}</h4>
-              <li>
-                {{ scoreData[8].question }}
-              </li>
-              <li>
-                {{ scoreData[9].question }}
-              </li>
-            </div>
-            <el-rate v-model="li.teamwork">
-              teamwork: {{ li.teamwork }}
-            </el-rate>
-            <hr />
-            <div style="margin-top: 10%; text-align: left">
-              <h4>피드백:</h4>
-              <el-input
-                type="textarea"
-                :rows="7"
-                placeholder="피드백을 입력해주세요..."
-                v-model="li.feedback"
-              >
-              </el-input>
-            </div>
-          </div>
-          <el-button @click="saveToLocal(li)" class="subbutton" round
-            >저장</el-button
-          >
-        </div>
+            <el-button @click="saveToLocal(li)" class="subbutton" round>저장</el-button>
+          </el-tab-pane>
+        </el-tabs>
       </el-tab-pane>
     </el-tabs>
+    <!-- <h3>면접자: {{ li.id }}</h3> -->
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -114,7 +113,7 @@ export default {
     MeetingResume,
   },
   computed: {
-    ...mapState(meetingStore, ["nowScoreList"]),
+    ...mapState(meetingStore, ["nowScoreList", "nowResumeList"]),
   },
   data() {
     return {
@@ -210,7 +209,10 @@ export default {
 <style scoped>
 /* 연보라색 배경 box */
 .score-box {
+  width: 30%;
+  height: 1100px;
   background-color: #eeecf8;
+  overflow-y: scroll;
   border-radius: 5%;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }

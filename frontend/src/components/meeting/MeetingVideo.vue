@@ -1,28 +1,28 @@
 <template>
   <div>
     <!-- 화상 화면 -->
-    <div id="timer-display">
+    <div id="timer-display" class="time-box">
       <h3>남은 시간</h3>
     </div>
     <div class="notchat">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
           <div id="session-header">
-            <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
+            <h2 id="session-title">[{{ studyInfo.title }}] {{ myStudyId }}</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
-            <input
+            <!-- <input
               class="btn btn-large btn-danger"
               type="button"
               id="buttonLeaveSession"
               @click="leaveSession"
               value="Leave session"
-            />
+            /> -->
           </div>
           <!-- <div id="main-video">
         <h3>스트림매니저</h3>
         <user-video :stream-manager="mainStreamManager" />
       </div> -->
-          <h2>--- 참가자 목록 ---</h2>
+          <h3>--- 참가자 목록 ---</h3>
           <div id="video-container" style="width: 100%">
             <el-row class="row-bg" justify="space-evenly">
               <el-col>
@@ -44,12 +44,13 @@
         </div>
       </transition>
     </div>
+
     <div class="gochat">
       <!-- 화상 화면 -->
       <transition name="moveInUp">
         <div class="session" v-if="isShowChat" style="float: left; width: 50%; margin-left: 3%">
           <div id="session-header">
-            <h2 id="session-title">스터디제목으로 바꺼 {{ myStudyId }}</h2>
+            <h2 id="session-title">[{{ studyInfo.title }}] {{ myStudyId }}</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
             <input
               class="btn btn-large btn-danger"
@@ -86,7 +87,7 @@
       </transition>
 
       <transition name="moveInUp">
-        <div class="chat-container" v-if="isShowChat" style="float: left">
+        <div class="chat-container" v-if="isShowChat" style="float: left; margin-left: 3%">
           <MeetingChatting :session="session" :myUserName="myUserName" />
         </div>
       </transition>
@@ -508,7 +509,7 @@ export default {
         const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
         const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
 
-        remainTime.innerHTML = `<h3>남은 시간 ${diffHour}:${diffMin}:${diffSec}</h3>`;
+        remainTime.innerHTML = `<h3>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h3>`;
       };
 
       setInterval(diffDay, 1000);
@@ -516,7 +517,7 @@ export default {
     setEndTime() {
       console.log("종료시간은 뭔가요 >> " + this.setTime);
 
-      //setTimeout으로 강제 세션 종료 설정
+      // setTimeout으로 강제 세션 종료 설정
       setTimeout(async () => {
         //채점표 PUT 처리
         await this.saveScore(this.myStudyId);
@@ -532,12 +533,24 @@ export default {
 </script>
 
 <style scoped>
+/* .time-box {
+  background-color: #e5e1f8;
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5%;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); */
+/* } */
 .session {
   text-align: center;
   padding: 1%;
   /* overflow-y: scroll; */
   border: 1px solid #acaeff;
   border-radius: 15px;
+  display: block;
+  justify-content: space-between;
   align-items: center;
   height: 75vh;
   width: 100%;
@@ -560,5 +573,16 @@ export default {
 
 .chat-container {
   margin-right: 3%;
+}
+.box {
+  margin: 2%;
+  width: 30%;
+  height: 100px;
+  background-color: #e5e1f8;
+  border-radius: 5%;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 </style>
