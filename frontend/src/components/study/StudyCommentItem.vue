@@ -4,12 +4,19 @@
       <el-col :span="20" align-self="start" style="color: gray"
         ><p>{{ this.myName }} 님 | {{ commentItem.datetime }}</p>
       </el-col>
-      <el-col :span="4" align-self="end"><p @click="replyBtn()" style="cursor: pointer">답글 달기</p> </el-col>
+      <el-col :span="4" align-self="end"
+        ><p @click="replyBtn()" style="cursor: pointer">답글 달기</p>
+      </el-col>
     </el-row>
     <!-- 댓글 수정 -->
     <el-row>
       <el-col v-if="this.modifying" :span="20" style="color: black">
-        <el-input label="댓글을 입력하세요..." type="text" size="large" v-model="myComment"></el-input>
+        <el-input
+          label="댓글을 입력하세요..."
+          type="text"
+          size="large"
+          v-model="myComment"
+        ></el-input>
       </el-col>
       <el-col v-if="this.modifying" :span="4">
         <el-button
@@ -25,16 +32,32 @@
       <el-col v-if="!this.modifying" :span="20" style="color: black">
         {{ commentItem.content }}
       </el-col>
-      <el-col :span="4" style="color: gray" v-if="!this.modifying && commentItem.user_id == this.myId"
-        ><p @click="modifyShow(commentItem.content)" style="cursor: pointer">수정&nbsp;&nbsp;</p>
-        <p @click="deleteComment(commentItem.comment_id, commentItem.content)" style="cursor: pointer">삭제</p>
+      <el-col
+        :span="4"
+        style="color: gray"
+        v-if="!this.modifying && commentItem.user_id == this.myId"
+        ><p @click="modifyShow(commentItem.content)" style="cursor: pointer">
+          수정&nbsp;&nbsp;
+        </p>
+        <p
+          @click="deleteComment(commentItem.comment_id, commentItem.content)"
+          style="cursor: pointer"
+        >
+          삭제
+        </p>
       </el-col>
     </el-row>
     <!-- 대댓글 등록 -->
     <el-row v-if="this.showInput" justify="end">
-      <el-col :span="2" style="color: black"> <img src="@/assets/image/reply_icon.png" /></el-col>
+      <el-col :span="2" style="color: black">
+        <img src="@/assets/image/reply_icon.png"
+      /></el-col>
       <el-col :span="22" class="reply-field">
-        <el-input v-model="myReply" label="댓글을 입력하세요..." type="text"></el-input>
+        <el-input
+          v-model="myReply"
+          label="댓글을 입력하세요..."
+          type="text"
+        ></el-input>
         <div class="reply-button">
           <el-button
             round
@@ -89,7 +112,8 @@ export default {
     ]),
     // 유저 아이디
     getMyId() {
-      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
       this.myName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
     },
     // 댓글 수정 input 태그

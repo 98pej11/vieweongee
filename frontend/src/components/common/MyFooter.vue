@@ -6,7 +6,11 @@
       <img src="@/assets/image/notion.png" :width="60" @click="gonotion" />
     </p>
     <div class="line">
-      <img src="@/assets/image/logo.png" :width="150" style="margin-right: 1%" />
+      <img
+        src="@/assets/image/logo.png"
+        :width="150"
+        style="margin-right: 1%"
+      />
       <p>@ 2023. 컴공쥬들 all rights reserved.</p>
     </div>
   </div>
@@ -18,13 +22,15 @@ export default {
 
   methods: {
     gogithub() {
-      window.location.href = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A701";
+      window.location.href =
+        "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A701";
     },
     goyoutube() {
       window.location.href = "http://youtube.com";
     },
     gonotion() {
-      window.location.href = "https://www.notion.so/8-bc1706d276dd48fc84e8aea67b82594a";
+      window.location.href =
+        "https://www.notion.so/8-bc1706d276dd48fc84e8aea67b82594a";
     },
   },
 };
