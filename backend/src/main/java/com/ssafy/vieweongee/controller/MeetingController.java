@@ -166,7 +166,7 @@ public class MeetingController {
 
 
     /**
-     * sutdy 확정(confirm) 변경, progress status 변경
+     * study 확정(confirm) 변경, progress status 변경
      *
      * @param study_ID
      * @return
