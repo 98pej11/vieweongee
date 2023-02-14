@@ -122,7 +122,7 @@ export default defineComponent({
       }
     });
 
-    // this.getTurns();
+    this.getTurns();
     this.getAbil();
   },
   methods: {
@@ -131,6 +131,7 @@ export default defineComponent({
       api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
 
       await api.get(`/users/turn`).then(({ data }) => {
+        console.log("회차별");
         if (data.message === "SUCCESS") {
           this.turnScore = data.data;
           // console.log(this.turnScore[0].total_average);
