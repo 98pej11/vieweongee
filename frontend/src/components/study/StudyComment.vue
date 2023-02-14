@@ -22,6 +22,7 @@
         <StudyCommentItem
           :commentItem="data"
           :key="isUpdate"
+          @getAll="getAll"
         ></StudyCommentItem>
       </div>
     </div>
@@ -47,6 +48,7 @@ export default {
     ...mapState(commentStore, ["isComment", "commentList"]),
   },
   created() {
+    // this.init();
     this.getAll();
   },
   props: {
@@ -69,15 +71,20 @@ export default {
   methods: {
     ...mapActions(commentStore, ["getCommentList", "createCommentConfirm"]),
 
+    init() {
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+    },
     async getAll() {
       await this.getCommentList(this.studyID);
 
-      if (sessionStorage.getItem("ACCESS") != null)
-        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
-
-      //댓글 목록이 있을 때
+      // 댓글 목록이 있을 때
       if (this.isComment) {
         this.comments = [...this.commentList];
+      }
+      // 마지막 댓글 삭제 후 리렌더링
+      else if (!this.isComment && this.commentList.length == 1) {
+        this.comments = [];
       }
     },
 
@@ -96,11 +103,15 @@ export default {
           message: " 로그인 후 이용해주세요",
         });
         this.$router.push({ name: "login" });
-      } else if (this.isComment) {
+      } else {
         this.params.study_ID = this.studyID;
         this.params.info = this.myComment;
         await this.createCommentConfirm(this.params);
-        await this.getAll();
+
+        if (this.isComment) {
+          await this.getAll();
+          this.myComment.content = "";
+        }
       }
     },
   },

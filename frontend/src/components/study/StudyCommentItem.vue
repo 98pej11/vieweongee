@@ -96,6 +96,7 @@ export default {
   watch: {
     isUpdate() {
       console.log("바껐떠`");
+      this.$emit("getAll");
       this.isUpdate = false;
     },
   },
@@ -142,7 +143,6 @@ export default {
       };
       await this.deleteCommentConfirm(params);
       if (this.isComment) {
-        console.log("삭제 성공");
         this.isUpdate = true;
       }
     },

@@ -37,9 +37,6 @@ const commentStore = {
         ({ data }) => {
           if (data.message == "SUCCESS") {
             commit("SET_ALL_COMMENT", data.data);
-            console.log(study_ID + "의 댓글들입니다");
-            console.log(data.data);
-            console.log(data.data.length);
             commit("SET_IS_SUCCESS", true);
           }
           // 댓글이 없을 때
@@ -65,6 +62,9 @@ const commentStore = {
 
           if (data.message == "SUCCESS") {
             commit("SET_STUDY_ID", data.data);
+            commit("SET_IS_SUCCESS", true);
+          } else if (data.data == "null") {
+            console.log("이젠 댓글X");
             commit("SET_IS_SUCCESS", true);
           }
         },
@@ -102,8 +102,8 @@ const commentStore = {
         params,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            console.log("댓글 삭제 성공");
             commit("SET_STUDY_ID", data.data);
+            commit("SET_IS_SUCCESS", true);
           }
         },
         async (error) => {
