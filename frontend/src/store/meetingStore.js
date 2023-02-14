@@ -297,7 +297,8 @@ const meetingStore = {
         //저장이 성공하면 로컬 스토리지 클리어
       }
     },
-    async changeConfirmAndStatus(study_ID) {
+    async changeConfirmAndStatus({ state }, study_ID) {
+      console.log(state.nowTurn);
       await putConfirmStatus(
         study_ID,
         ({ data }) => {
