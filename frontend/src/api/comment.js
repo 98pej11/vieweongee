@@ -2,7 +2,14 @@ import http from "./http.js";
 
 const api = http;
 
+// 댓글 전체 조회
+async function getAllComment(study_ID, success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/study/${study_ID}/comment`).then(success).catch(fail);
+}
+
 // 댓글 CRUD
+// 댓글 생성
 async function createComment(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -11,6 +18,7 @@ async function createComment(params, success, fail) {
     .catch(fail);
 }
 
+// 댓글 수정
 async function modifyComment(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -21,6 +29,8 @@ async function modifyComment(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+
+// 댓글 삭제
 async function deleteComment(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -28,13 +38,9 @@ async function deleteComment(params, success, fail) {
     .then(success)
     .catch(fail);
 }
-// 댓글 전체 조회
-async function getAllComment(study_ID, success, fail) {
-  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
-  await api.get(`/study/${study_ID}/comment`).then(success).catch(fail);
-}
 
 // 대댓글 CRUD
+// 대댓글 생성
 async function createReply(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -45,6 +51,8 @@ async function createReply(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+
+// 대댓글 수정
 async function modifyReply(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
@@ -55,6 +63,8 @@ async function modifyReply(params, success, fail) {
     .then(success)
     .catch(fail);
 }
+
+// 대댓글 삭제
 async function deleteReply(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api

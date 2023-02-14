@@ -38,6 +38,7 @@ const commentStore = {
         study_ID,
         ({ data }) => {
           if (data.message == "SUCCESS") {
+            console.log("전체 댓글조회");
             console.log(data.data);
             commit("SET_ALL_COMMENT", data.data);
             commit("SET_IS_SUCCESS", true);

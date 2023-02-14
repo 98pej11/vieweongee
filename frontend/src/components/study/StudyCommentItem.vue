@@ -2,7 +2,7 @@
   <div class="comment-item">
     <el-row class="comment-content">
       <el-col :span="20" align-self="start" style="color: gray"
-        ><p>{{ this.myName }} 님 | {{ commentItem.datetime }}</p>
+        ><p>{{ commentItem.user_name }} 님 | {{ commentItem.datetime }}</p>
       </el-col>
       <el-col :span="4" align-self="end"
         ><p @click="replyBtn()" style="cursor: pointer">답글 달기</p>
@@ -115,7 +115,6 @@ export default {
     getMyId() {
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
-      this.myName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
     },
     // 댓글 수정 input 태그
     modifyShow(content) {
@@ -200,7 +199,6 @@ export default {
       showInput: false,
       modifying: false,
       myId: 0,
-      myName: "",
       myComment: "", // 수정할 댓글 내용
       comments: [],
 
