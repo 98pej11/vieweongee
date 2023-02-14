@@ -38,7 +38,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.info("oAuth2User : {}", oAuth2User.getAttributes());
-//        User userDto=userRequestMapper.toDto(oAuth2User);
 
         var attributes = oAuth2User.getAttributes();
         String email=(String)attributes.get("email");

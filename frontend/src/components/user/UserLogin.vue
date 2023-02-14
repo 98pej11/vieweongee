@@ -113,6 +113,7 @@ import { ElMessageBox } from "element-plus";
 import { Message, Lock } from "@element-plus/icons-vue";
 import { mapState, mapActions } from "vuex";
 // import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import http from "../../api/http";
 
 const memberStore = "memberStore";
 
@@ -168,8 +169,9 @@ export default {
       // const client_id='hCg3zNttO1i50cUABPON'
       // const callbackUrl='http://localhost:3000/'
       // var url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id='+client_id+'&redirect_uri='+callbackUrl+'&state=1234';
-      var url = "http://localhost:8080/api/oauth2/authorization/naver";
-      window.location.href = url;
+      var url="http://localhost:8080/api/oauth2/authorization/naver"
+      window.location.href=url;
+      
     },
     async kakaologin() {
       var url = "http://localhost:8080/api/oauth2/authorization/kakao";

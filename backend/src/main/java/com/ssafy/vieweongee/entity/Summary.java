@@ -1,6 +1,8 @@
 package com.ssafy.vieweongee.entity;
 
+import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import lombok.*;
+import org.apache.catalina.realm.UserDatabaseRealm;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -80,6 +82,7 @@ public class Summary implements Serializable {
     public Summary(User user){
         this.user=user;
     }
+
 
     public void updateCount(int ability, int attitude, int teamwork, int solving, int loyalty){
         this.ability_count += ability;

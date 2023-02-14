@@ -6,12 +6,14 @@ import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.exception.StudyNotFoundException;
 import com.ssafy.vieweongee.exception.UserNotFoundException;
 import com.ssafy.vieweongee.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Slf4j
 public class MypageServiceImpl implements MypageService{
     @Autowired
     private UserRepository userRepository;
@@ -89,6 +91,7 @@ public class MypageServiceImpl implements MypageService{
     @Override
     public List<Progress> findStudiedList(Long userId) {
         List<Progress> studiedList = progressRepository.findByUser_idAndStatus(userId, true);
+        log.info("진행된 스터디 나오니?? {}", studiedList.get(0));
         return studiedList;
     }
 
