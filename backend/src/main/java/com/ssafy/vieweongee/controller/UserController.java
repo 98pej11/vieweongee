@@ -197,12 +197,12 @@ public class UserController {
     }
 
     //비밀번호 확인
-//    @PostMapping("/password")
-//    public ResponseEntity<?> verifyPassword(@RequestBody PasswordCheckRequest pwCheck){
-//        if(userService.checkPassword(pwCheck))
-//            return ResponseEntity.status(200).body("SUCCESS");
-//        return ResponseEntity.status(409).body("FAIL");
-//    }
+    @PostMapping("/password")
+    public ResponseEntity<?> verifyPassword(@RequestBody PasswordCheckRequest pwCheck){
+        if(userService.checkPassword(pwCheck))
+            return ResponseEntity.status(200).body("SUCCESS");
+        return ResponseEntity.status(409).body("FAIL");
+    }
 
     //회원 정보 조회
     @GetMapping("/")

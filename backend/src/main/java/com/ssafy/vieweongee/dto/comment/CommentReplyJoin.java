@@ -11,5 +11,4 @@ public interface CommentReplyJoin {
     String getReply_content();
     Date getComment_datetime();
     Date getReply_datetime();
-    String getUser_name();
 }

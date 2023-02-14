@@ -99,36 +99,24 @@ public class CommentServiceImpl implements CommentService {
         List<CommentResponse> result = new ArrayList<>();
         Long comment_id = 0L;
         for (int i = 0; i < commentList.size(); i++){
-            CommentReplyJoin now = commentList.get(i);
-            if (comment_id != now.getComment_id()) {
-                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getUser_name(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
+            if (comment_id != commentList.get(i).getComment_id()){
+                CommentReplyJoin now = commentList.get(i);
+                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
                 result.add(comment);
-                comment_id = now.getComment_id();
                 System.out.println(comment);
-            } else if (comment_id == now.getComment_id()) {
-                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
-                result.add(reply);
-                System.out.println(reply);
-            }
 
-//            if (comment_id != commentList.get(i).getComment_id()){
-//                CommentReplyJoin now = commentList.get(i);
-//                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getUser_name(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
-//                result.add(comment);
-//                System.out.println(comment);
-//
-//                if (now.getReply_id() != null) {
-//                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
-//                    result.add(reply);
-//                    System.out.println(reply);
-//                }
-//
-//                comment_id = now.getComment_id();
-//            } else {
-//                CommentReplyJoin now = commentList.get(i);
-//                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
-//                result.add(reply);
-//            }
+                if (now.getReply_id() != null) {
+                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
+                    result.add(reply);
+                    System.out.println(reply);
+                }
+
+                comment_id = now.getComment_id();
+            } else {
+                CommentReplyJoin now = commentList.get(i);
+                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
+                result.add(reply);
+            }
         }
 
         return result;

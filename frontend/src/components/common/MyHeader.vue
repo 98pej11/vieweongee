@@ -5,7 +5,6 @@
         <img alt="logo" src="@/assets/image/logo.png" class="Header-logo" />
       </div>
     </router-link>
-
     <nav v-if="!isLogin">
       <ul>
         <li @click="gologin">
@@ -13,12 +12,10 @@
           <b>로그인</b>
         </li>
         <li @click="open">
-          <el-icon color="#5f5a83" :size="25"><Histogram /></el-icon
-          ><b>마이페이지</b>
+          <el-icon color="#5f5a83" :size="25"><Histogram /></el-icon><b>마이페이지</b>
         </li>
         <li @click="goboard">
-          <el-icon color="#5f5a83" :size="25"><List /></el-icon
-          ><b>모집게시판</b>
+          <el-icon color="#5f5a83" :size="25"><List /></el-icon><b>모집게시판</b>
         </li>
       </ul>
     </nav>
@@ -26,16 +23,13 @@
     <nav v-else>
       <ul>
         <li @click="onClickLogout">
-          <el-icon color="#5f5a83" :size="25"><Avatar /></el-icon
-          ><b>로그아웃</b>
+          <el-icon color="#5f5a83" :size="25"><Avatar /></el-icon><b>로그아웃</b>
         </li>
         <li @click="gomypage">
-          <el-icon color="#5f5a83" :size="25"><Histogram /></el-icon
-          ><b>마이페이지</b>
+          <el-icon color="#5f5a83" :size="25"><Histogram /></el-icon><b>마이페이지</b>
         </li>
         <li @click="goboard">
-          <el-icon color="#5f5a83" :size="25"><List /></el-icon
-          ><b>스터디게시판</b>
+          <el-icon color="#5f5a83" :size="25"><List /></el-icon><b>스터디게시판</b>
         </li>
       </ul>
     </nav>
@@ -114,9 +108,13 @@ export default defineComponent({
     },
 
     open() {
-      ElMessageBox.alert("로그인 후 이용 부탁드립니다.", "알림", {
-        confirmButtonText: "확인",
+      ElMessageBox.confirm("로그인 후 이용 부탁드립니다.", "알림", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+        draggable: true,
       });
+
       this.gologin();
     },
   },

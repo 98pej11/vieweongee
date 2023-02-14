@@ -1,107 +1,123 @@
 <template>
   <div>
-    <!-- <el-container class="outcontainer"> -->
-    <el-main style="height: 1000px">
-      <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
-      <el-table
-        class="el-table"
-        :data="mystudys"
-        style="width: 100%; font-size: medium"
-        :class="tableRowClasscompany"
-      >
-        <el-table-column prop="study_datetime" label="날짜" />
-        <el-table-column prop="company" label="기업명" />
-        <el-table-column prop="title" label="제목" />
-        <el-table-column label="버튼">
-          <template v-slot="scope">
-            <el-button
-              block
-              color="#9DADD8"
-              size="larger"
-              style="margin: 2%; width: 70%"
-              @click="viewStudy(scope.row)"
-            >
-              상세보기
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-dialog
-        class="el-dialog"
-        v-model="dialogVisible"
-        :data="mystudy"
-        width="900px"
-        style="border-radius: 5%; background-color: #eeecf8"
-      >
-        <h2 class="text-h6 mb-3" style="margin-bottom: 0%">
-          {{ mystudy.title }}
-        </h2>
-        <h2
-          class="text-h6 mb-3"
-          style="margin-bottom: 2%; text-align: right; margin-right: 3%"
+    <el-container class="outcontainer">
+      <el-main>
+        <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
+        <el-table
+          class="el-table"
+          :data="mystudys"
+          style="width: 100%; font-size: medium"
+          :class="tableRowClasscompany"
         >
-          {{ mystudy.study_datetime }}
-        </h2>
-        <el-tabs type="border-card" class="demo-tabs">
-          <el-tab-pane>
-            <template #label>
-              <span class="custom-tabs-label">
-                <span>채점표</span>
-              </span>
+          <el-table-column prop="study_datetime" label="날짜" />
+          <el-table-column prop="company" label="기업명" />
+          <el-table-column prop="title" label="제목" />
+          <el-table-column label="버튼">
+            <template v-slot="scope">
+              <el-button
+                block
+                color="#9DADD8"
+                size="larger"
+                style="margin: 2%; width: 70%"
+                @click="viewStudy(scope.row)"
+              >
+                상세보기
+              </el-button>
             </template>
-            <el-table
-              border
-              class="el-table"
-              :span-method="objectSpanMethod"
-              style="width: 100%"
-              @selection-change="handleSelectionChange"
-              :class="tableRowClasscompany"
-              :data="scoreData"
-            >
-              <el-table-column border prop="type" label="대분류" width="150%" />
-              <el-table-column
+          </el-table-column>
+        </el-table>
+        <el-dialog
+          class="el-dialog"
+          v-model="dialogVisible"
+          :data="mystudy"
+          width="900px"
+          style="border-radius: 5%; background-color: #eeecf8"
+        >
+          <h2 class="text-h6 mb-3" style="margin-bottom: 0%">
+            {{ mystudy.title }}
+          </h2>
+          <h2
+            class="text-h6 mb-3"
+            style="margin-bottom: 2%; text-align: right; margin-right: 3%"
+          >
+            {{ mystudy.study_datetime }}
+          </h2>
+          <el-tabs type="border-card" class="demo-tabs">
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <span>채점표</span>
+                </span>
+              </template>
+              <el-table
                 border
-                prop="question"
-                label="항목"
-                width="400%"
-              />
-              <el-table-column
-                border
-                prop="score"
-                label="점수"
-                width="300%"
-              ></el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane>
-            <template #label>
-              <span class="custom-tabs-label">
-                <span>피드백</span>
-              </span>
-            </template>
-            <ul style="font-size: large">
-              {{
-                this.scorecard.feedback
-              }}
-            </ul>
-          </el-tab-pane>
-        </el-tabs>
-      </el-dialog>
-    </el-main>
-    <!-- </el-container> -->
+                class="el-table"
+                :span-method="objectSpanMethod"
+                style="width: 100%"
+                @selection-change="handleSelectionChange"
+                :class="tableRowClasscompany"
+                :data="scoreData"
+              >
+                <el-table-column
+                  border
+                  prop="type"
+                  label="대분류"
+                  width="150%"
+                />
+                <el-table-column
+                  border
+                  prop="question"
+                  label="항목"
+                  width="400%"
+                />
+
+                <!-- 여기를 어떻게 해야할까 -->
+                <!-- <el-table-column border prop="score" v-model=score label="점수" width="300%">
+                  <el-rate
+                    v-model = score
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value} points"
+                  />
+                </el-table-column> -->
+                <el-table-column
+                  border
+                  prop="score"
+                  label="점수"
+                  width="300%"
+                ></el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <span>피드백</span>
+                </span>
+              </template>
+              <ul style="font-size: large">
+                {{
+                  this.scorecard.feedback
+                }}
+              </ul>
+            </el-tab-pane>
+          </el-tabs>
+        </el-dialog>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
 import http from "@/api/http";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 const config = {
   headers: {
     ACCESS: sessionStorage.getItem("ACCESS"),
   },
 };
-const studyStore = "studyStore";
+
 export default {
   name: "MyData",
   data() {
@@ -248,49 +264,32 @@ export default {
     ...mapState(["global_article", "global_isShow"]),
   },
   methods: {
-    ...mapMutations(studyStore, ["SET_STUDY_ID"]),
     // 나의 스터디 1개 조회
-    async viewStudy(row) {
+    viewStudy(row) {
       console.log("검색하려는 스터디 데이터 >> ");
 
       console.log(row);
-      await http.get(`/users/mystudy/${row.id}`, config).then(({ data }) => {
+      http.get(`/users/mystudy/${row.id}`, config).then(({ data }) => {
         // if(data.message==="SUCCESS")
         // console.log("글 1개 조회 성공" + this.dialogVisible);
         console.log(data.data);
-
-        if (data.data === null) {
-          console.log("null이란다");
-          this.move(row.id);
-          // ElMessageBox.confirm("아직 완료가 되지않은 스터디 입니다.", "알림", {
-          //   confirmButtonText: "OK",
-          //   cancelButtonText: "Cancel",
-          //   type: "warning",
-          //   draggable: true,
-          // });
-        } else {
-          this.scorecard = data.data;
-          console.log(this.scorecard.attitude_average);
-          this.scoreData[0].score = this.scorecard.attitude_average;
-          this.scoreData[1].score = this.scorecard.attitude_average;
-          this.scoreData[2].score = this.scorecard.ability_average;
-          this.scoreData[3].score = this.scorecard.ability_average;
-          this.scoreData[4].score = this.scorecard.teamwork_average;
-          this.scoreData[5].score = this.scorecard.teamwork_average;
-          this.scoreData[6].score = this.scorecard.solving_average;
-          this.scoreData[7].score = this.scorecard.solving_average;
-          this.scoreData[8].score = this.scorecard.loyalty_average;
-          this.scoreData[9].score = this.scorecard.loyalty_average;
-          this.mystudy = row;
-          this.dialogVisible = true;
-        }
+        this.scorecard = data.data;
+        console.log(this.scorecard.attitude_average);
+        this.scoreData[0].score = this.scorecard.attitude_average;
+        this.scoreData[1].score = this.scorecard.attitude_average;
+        this.scoreData[2].score = this.scorecard.ability_average;
+        this.scoreData[3].score = this.scorecard.ability_average;
+        this.scoreData[4].score = this.scorecard.teamwork_average;
+        this.scoreData[5].score = this.scorecard.teamwork_average;
+        this.scoreData[6].score = this.scorecard.solving_average;
+        this.scoreData[7].score = this.scorecard.solving_average;
+        this.scoreData[8].score = this.scorecard.loyalty_average;
+        this.scoreData[9].score = this.scorecard.loyalty_average;
+        this.mystudy = row;
+        this.dialogVisible = true;
       });
     },
-    // 세부 페이지로 이동
-    move(id) {
-      this.SET_STUDY_ID(id);
-      this.$router.push({ name: "studyview" });
-    },
+
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0 || columnIndex === 2) {
@@ -355,10 +354,8 @@ p {
 }
 .el-table {
   display: flex;
-  padding: 4%;
   width: 100%;
   table-layout: fixed;
-  border-radius: 5%;
 }
 .el-table .el-table-column {
   width: 100%;
@@ -381,10 +378,11 @@ p {
 }
 
 .outcontainer {
-  height: 700px;
+  height: 300px;
   border: 3px solid #d3daff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 35px;
-  /* background-color: white; */
+  height: 300px;
+  background-color: white;
 }
 </style>

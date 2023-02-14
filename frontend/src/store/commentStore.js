@@ -4,8 +4,6 @@ import {
   deleteComment,
   getAllComment,
   createReply,
-  modifyReply,
-  deleteReply,
 } from "@/api/comment";
 
 const commentStore = {
@@ -118,47 +116,10 @@ const commentStore = {
 
     // 대댓글 작성
     async createReplyConfrim({ commit }, params) {
-      console.log(params);
       await createReply(params, ({ data }) => {
         console.log(data.data);
         commit("SET_IS_SUCCESS", true);
       });
-    },
-    // 대댓글 수정
-    async modifyReplyConfirm({ commit }, params) {
-      await modifyReply(
-        params,
-        ({ data }) => {
-          if (data.message == "SUCCESS") {
-            commit("SET_IS_SUCCESS", true);
-          }
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
-        }
-      );
-    },
-    // 대댓글 삭제
-    async deleteReplyConfirm({ commit }, params) {
-      console.log(params.comment_ID);
-      await deleteReply(
-        params,
-        ({ data }) => {
-          if (data.message == "SUCCESS") {
-            commit("SET_STUDY_ID", data.data);
-            commit("SET_IS_SUCCESS", true);
-          }
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          commit("SET_IS_SUCCESS", false);
-          console.log(error);
-        }
-      );
     },
   },
 };
