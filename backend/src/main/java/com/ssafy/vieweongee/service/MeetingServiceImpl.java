@@ -5,6 +5,7 @@ import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MeetingServiceImpl implements MeetingService {
 
     private final ScoreRepository meetingScoreRepository;
@@ -44,10 +46,11 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateStudyProgress(String studyId) {
         //스터디 아이디로 스터디 참가 이력 가져옴
         List<Progress> list = progressRepository.findAllByStudyId(Long.parseLong(studyId));
-
+        log.info("업데이트 들어왔다아아악, 참가 이력은 {}",list.get(0));
         //스터디 참가 상태 변경 (예정 >> 완료)
         for (Progress progress : list) {
             progress.changeStatusToTrue();
+            progressRepository.save(progress);
         }
     }
 
