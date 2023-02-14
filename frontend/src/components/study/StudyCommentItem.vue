@@ -5,7 +5,7 @@
         ><p>{{ this.myName }} 님 | {{ commentItem.datetime }}</p>
       </el-col>
       <el-col :span="4" align-self="end"
-        ><p @click="replyBtn()">답글 달기</p>
+        ><p @click="replyBtn()" style="cursor: pointer">답글 달기</p>
       </el-col>
     </el-row>
     <!-- 댓글 수정 -->
@@ -36,8 +36,13 @@
         :span="4"
         style="color: gray"
         v-if="!this.modifying && commentItem.user_id == this.myId"
-        ><p @click="modifyShow(commentItem.content)">수정&nbsp;&nbsp;</p>
-        <p @click="deleteComment(commentItem.comment_id, commentItem.content)">
+        ><p @click="modifyShow(commentItem.content)" style="cursor: pointer">
+          수정&nbsp;&nbsp;
+        </p>
+        <p
+          @click="deleteComment(commentItem.comment_id, commentItem.content)"
+          style="cursor: pointer"
+        >
           삭제
         </p>
       </el-col>
