@@ -6,6 +6,10 @@ build/
 !**/src/test/**/build/
 ### AWS ###
 application-aws.properties
+### application ##
+application.properties
+### email ###
+email.properties
 ### STS ###
 .apt_generated
 .classpath
