@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Comment {
     private String content;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date datetime;
+    private LocalDateTime datetime;
 
     //스터디 모집 게시글 번호. study id. 외래키
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +43,7 @@ public class Comment {
     private List<Reply> replies = new ArrayList<>();
 
     @Builder
-    public Comment(Long id, String content, Date datetime, Study study, User user, List<Reply> replies) {
+    public Comment(Long id, String content, LocalDateTime datetime, Study study, User user, List<Reply> replies) {
         this.id = id;
         this.content = content;
         this.datetime = datetime;
