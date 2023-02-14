@@ -101,12 +101,12 @@ public class CommentServiceImpl implements CommentService {
         for (int i = 0; i < commentList.size(); i++){
             if (comment_id != commentList.get(i).getComment_id()){
                 CommentReplyJoin now = commentList.get(i);
-                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
+                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getUser_name(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
                 result.add(comment);
                 System.out.println(comment);
 
                 if (now.getReply_id() != null) {
-                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
+                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
                     result.add(reply);
                     System.out.println(reply);
                 }
@@ -114,7 +114,7 @@ public class CommentServiceImpl implements CommentService {
                 comment_id = now.getComment_id();
             } else {
                 CommentReplyJoin now = commentList.get(i);
-                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
+                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
                 result.add(reply);
             }
         }
