@@ -51,7 +51,7 @@ export default {
 }
 .area {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 </style>

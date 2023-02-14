@@ -8,7 +8,7 @@ import {
 
 const commentStore = {
   namespaced: true,
-  state: { studyID: 0, isComment: false, listLen: 0, commentList: [] },
+  state: { studyID: 0, isComment: false, commentList: [] },
   getters: {},
   mutations: {
     SET_IS_SUCCESS: (state, isComment) => {
@@ -21,14 +21,12 @@ const commentStore = {
       state.commentList.push(info);
     },
     SET_ALL_COMMENT: (state, list) => {
+      state.commentList = [];
       state.commentList = list;
 
       state.commentList.forEach((el) => {
         el.datetime = el.datetime.substr(0, 16).replace("T", " ");
       });
-    },
-    SET_COMMENT_LEN: (state, len) => {
-      state.listLen = len;
     },
   },
   actions: {
@@ -38,12 +36,14 @@ const commentStore = {
         study_ID,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            commit("SET_ALL_COMMENT", data.data);
             console.log(data.data);
-            console.log(data.data.length);
+            commit("SET_ALL_COMMENT", data.data);
             commit("SET_IS_SUCCESS", true);
-            commit("SET_COMMENT_LEN", data.data.length);
-          } else console.log("댓글 아직 없음");
+          }
+          // 댓글이 없을 때
+          else {
+            commit("SET_IS_SUCCESS", false);
+          }
         },
         async (error) => {
           if (error.response.status === 401) {
@@ -64,6 +64,9 @@ const commentStore = {
           if (data.message == "SUCCESS") {
             commit("SET_STUDY_ID", data.data);
             commit("SET_IS_SUCCESS", true);
+          } else if (data.data == "null") {
+            console.log("이젠 댓글X");
+            commit("SET_IS_SUCCESS", true);
           }
         },
         async (error) => {
@@ -79,7 +82,9 @@ const commentStore = {
       await modifyComment(
         params,
         ({ data }) => {
-          console.log(data.message);
+          if (data.message == "SUCCESS") {
+            commit("SET_IS_SUCCESS", true);
+          }
         },
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
@@ -97,8 +102,8 @@ const commentStore = {
         params,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            console.log("댓글 삭제 성공");
             commit("SET_STUDY_ID", data.data);
+            commit("SET_IS_SUCCESS", true);
           }
         },
         async (error) => {
@@ -113,7 +118,7 @@ const commentStore = {
     async createReplyConfrim({ commit }, params) {
       await createReply(params, ({ data }) => {
         console.log(data.data);
-        commit("SET_COMMENT_LEN");
+        commit("SET_IS_SUCCESS", true);
       });
     },
   },

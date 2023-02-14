@@ -19,9 +19,7 @@
             </el-col>
             <el-col :span="4">
               <div class="person-div">
-                &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
-                  this.current
-                }}&nbsp;/
+                &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{ this.current }}&nbsp;/
                 {{ studyInfo.personnel }}
               </div>
             </el-col>
@@ -58,12 +56,7 @@
             </el-col>
           </el-row>
           <!-- 자기소개서 업로드 모달창 -->
-          <el-dialog
-            class="el-dialog"
-            v-model="dialogVisible"
-            width="600px"
-            style="border-radius: 5%"
-          >
+          <el-dialog class="el-dialog" v-model="dialogVisible" width="600px" style="border-radius: 5%">
             <el-upload
               drag
               class="upload-demo"
@@ -76,13 +69,9 @@
               :on-change="submitImage"
             >
               <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-              <div class="el-upload__text">
-                이미지를 끌어오거나 <em>클릭해서 업로드</em>
-              </div>
+              <div class="el-upload__text">이미지를 끌어오거나 <em>클릭해서 업로드</em></div>
               <template #tip>
-                <div class="el-upload__tip">
-                  500kb이하의 JPG/PNG 이미지를 업로드해주세요
-                </div>
+                <div class="el-upload__tip">500kb이하의 JPG/PNG 이미지를 업로드해주세요</div>
               </template>
             </el-upload>
             <!-- <el-button
@@ -99,13 +88,7 @@
           <!-- 스터디 신청, 취소, 입장-->
           <div style="margin-left: 70%">
             <el-row>
-              <el-button
-                v-if="isApplied || isAuthor"
-                @click="showDialog"
-                round
-                color="#E1E6FF"
-                class="me-2"
-              >
+              <el-button v-if="isApplied || isAuthor" @click="showDialog" round color="#E1E6FF" class="me-2">
                 자기소개서 업로드
               </el-button>
               <div v-if="!isAuthor">
@@ -129,15 +112,7 @@
                   신청취소
                 </el-button>
               </div>
-              <el-button
-                v-if="!isPossible"
-                round
-                disabled
-                color="#555454"
-                class="me-2 done"
-              >
-                마감
-              </el-button>
+              <el-button v-if="!isPossible" round disabled color="#555454" class="me-2 done"> 마감 </el-button>
               <el-button
                 v-if="isOpened && (isApplied || isAuthor)"
                 @click="enterMeeting(this.studyID)"
@@ -147,43 +122,20 @@
               >
                 입장
               </el-button>
-              <el-button
-                v-if="isDone"
-                round
-                disabled
-                color="#555454"
-                class="me-2 done"
-              >
-                종료
-              </el-button>
+              <el-button v-if="isDone" round disabled color="#555454" class="me-2 done"> 종료 </el-button>
             </el-row>
             <!-- 스터디 수정 및 삭제 -->
             <el-row justify="end" style="margin-top: 10px">
               <div v-if="isAuthor && isPossible">
-                <el-button
-                  @click="modifyStudy"
-                  round
-                  color="#9DADD8"
-                  class="me-2"
-                >
-                  수정
-                </el-button>
-                <el-button
-                  @click="deleteOpen"
-                  round
-                  color="#FF5151"
-                  class="me-3"
-                  >삭제
-                </el-button>
+                <el-button @click="modifyStudy" round color="#9DADD8" class="me-2"> 수정 </el-button>
+                <el-button @click="deleteOpen" round color="#FF5151" class="me-3">삭제 </el-button>
               </div>
             </el-row>
           </div>
 
           <hr />
           <el-row>
-            <el-col style="color: black; font-weight: bold; margin-bottom: 20px"
-              >소개</el-col
-            >
+            <el-col style="color: black; font-weight: bold; margin-bottom: 20px">소개</el-col>
           </el-row>
           <el-row>
             <el-col style="color: black">{{ studyInfo.content }} </el-col>
@@ -222,14 +174,7 @@ export default {
     DocumentCopy,
   },
   computed: {
-    ...mapState(studyStore, [
-      "isCreated",
-      "isApplied",
-      "studyID",
-      "current",
-      "studyInfo",
-      "appliedList",
-    ]),
+    ...mapState(studyStore, ["isCreated", "isApplied", "studyID", "current", "studyInfo", "appliedList"]),
   },
   mounted() {
     this.init();
@@ -262,8 +207,7 @@ export default {
 
     // 스터디 글 정보 조회
     async init() {
-      if (sessionStorage.getItem("ACCESS") != null)
-        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       // 로그인 유저 == 글 작성자
       if (this.myId == 0) this.isAuthor = false;
@@ -309,9 +253,10 @@ export default {
     },
 
     // 화상회의 참여
-    enterMeeting() {
+    enterMeeting(id) {
       // 화상회의 참여 !!!! 새 창으로 슈슉
-      // this.$router.push();
+      console.log(id + "화상미팅으로 참여합니다");
+      this.$router.push({ name: "meeting", params: { studyid: id } });
     },
 
     // 컴포넌트 전환

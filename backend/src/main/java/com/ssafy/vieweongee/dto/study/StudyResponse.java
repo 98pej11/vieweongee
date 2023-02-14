@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -29,7 +30,7 @@ public class StudyResponse {
     private boolean solving;
     private boolean loyalty;
     private boolean confirm;
-    private Date study_datetime;
+    private LocalDateTime study_datetime;
     private Date regist_datetime;
 
     public StudyResponse(Study study) {
