@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -26,10 +27,10 @@ public class CreateStudyRequest {
     private boolean solving;
     private boolean loyalty;
     private boolean confirm;
-    private Date study_datetime;
+    private LocalDateTime study_datetime;
 
     @Builder
-    public CreateStudyRequest(int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, Date study_datetime) {
+    public CreateStudyRequest(int running_time, int personnel, String title, String company, String job, String type, String content, boolean attitude, boolean ability, boolean teamwork, boolean solving, boolean loyalty, boolean confirm, LocalDateTime study_datetime) {
         this.running_time = running_time;
         this.personnel = personnel;
         this.title = title;

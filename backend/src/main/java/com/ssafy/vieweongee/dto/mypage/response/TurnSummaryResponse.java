@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,11 +13,11 @@ import java.util.Date;
 public class TurnSummaryResponse {
     private Long id;
     private String title;
-    private Date study_datetime;
+    private LocalDateTime study_datetime;
     private float total_average;
 
     @Builder
-    public TurnSummaryResponse(Long id, String title, Date study_datetime, float total_average) {
+    public TurnSummaryResponse(Long id, String title, LocalDateTime study_datetime, float total_average) {
         this.id = id;
         this.title = title;
         this.study_datetime = study_datetime;

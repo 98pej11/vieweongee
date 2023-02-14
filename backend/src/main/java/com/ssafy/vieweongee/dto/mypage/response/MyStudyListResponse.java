@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -14,12 +15,12 @@ public class MyStudyListResponse {
     private String title;
     private String company;
     private String job;
-    private Date study_datetime;
+    private LocalDateTime study_datetime;
     private int running_time;
     private boolean status;
 
     @Builder
-    public MyStudyListResponse(Long id, String title, String company, String job, Date study_datetime, int running_time, boolean status) {
+    public MyStudyListResponse(Long id, String title, String company, String job, LocalDateTime study_datetime, int running_time, boolean status) {
         this.id = id;
         this.title = title;
         this.company = company;
