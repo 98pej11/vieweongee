@@ -1,7 +1,7 @@
 <template>
   <div class="comment-item">
     <el-row class="comment-content" justify="end">
-      <el-col :span="4" style="color: black">
+      <el-col :span="4" style="color: black; float: right">
         <img src="@/assets/image/reply_icon.png"
       /></el-col>
       <el-col :span="20" align-self="start" style="color: gray"
@@ -10,13 +10,8 @@
     </el-row>
     <!-- 대댓글 수정 -->
     <el-row justify="end">
-      <el-col v-if="this.modifying" :span="20" style="color: black">
-        <el-input
-          label="댓글을 입력하세요..."
-          type="text"
-          size="large"
-          v-model="myReply"
-        ></el-input>
+      <el-col v-if="this.modifying" :span="16" style="color: black">
+        <el-input type="text" size="large" v-model="myReply"></el-input>
       </el-col>
       <el-col v-if="this.modifying" :span="4">
         <el-button
@@ -125,6 +120,7 @@ export default {
       await this.deleteReplyConfirm(params);
       if (this.isComment) {
         this.isUpdate = true;
+        this.myReply = "";
       }
     },
   },

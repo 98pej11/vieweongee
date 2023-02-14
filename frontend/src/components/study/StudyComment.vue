@@ -124,6 +124,10 @@ export default {
         if (this.isComment) {
           await this.getAll();
           this.myComment.content = "";
+          ElMessage({
+            type: "success",
+            message: "댓글 등록 성공",
+          });
         }
       }
     },
@@ -152,7 +156,7 @@ export default {
 }
 
 .el-input {
-  height: 55px;
+  height: 50px;
   font-size: large;
   border-radius: 10%;
 }

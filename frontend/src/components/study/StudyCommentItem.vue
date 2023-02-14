@@ -71,7 +71,7 @@
 <script>
 import jwtDecode from "jwt-decode";
 import { mapState, mapActions } from "vuex";
-// import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 
 const studyStore = "studyStore";
 const commentStore = "commentStore";
@@ -91,9 +91,9 @@ export default {
   },
   watch: {
     isUpdate() {
-      console.log("바껐떠`");
       this.$emit("getAll");
       this.isUpdate = false;
+      this.myReply = "";
     },
   },
 
@@ -112,6 +112,7 @@ export default {
     },
     // 댓글 수정 input 태그
     modifyShow(content) {
+      this.myReply = "";
       this.myComment = content;
       this.modifying = true;
     },
@@ -126,8 +127,11 @@ export default {
       };
       this.modifyCommentConfirm(params);
       if (this.isComment) {
-        console.log(this.isUpdate);
         this.isUpdate = true;
+        this.myReply = "";
+        this.showSuccess("수정");
+      } else {
+        this.showFail("수정");
       }
     },
 
@@ -141,6 +145,9 @@ export default {
       await this.deleteCommentConfirm(params);
       if (this.isComment) {
         this.isUpdate = true;
+        this.showSuccess("삭제");
+      } else {
+        this.showFail("삭제");
       }
     },
 
@@ -160,7 +167,23 @@ export default {
       if (this.isComment) {
         this.showInput = false;
         this.isUpdate = true;
+        this.showSuccess("등록");
+      } else {
+        this.showFail("등록");
       }
+    },
+
+    showSuccess(val) {
+      ElMessage({
+        type: "success",
+        message: "댓글 " + val + " 성공",
+      });
+    },
+    showFail(val) {
+      ElMessage({
+        type: "warning",
+        message: "댓글 " + val + " 성공",
+      });
     },
   },
   data() {

@@ -48,7 +48,7 @@ async function modifyReply(params, success, fail) {
   api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
   await api
     .put(
-      `/study/${params.study_ID}/${params.comment_ID}/${params.reply_ID}`,
+      `/study/${params.study_id}/comment/${params.comment_id}/${params.reply_id}`,
       JSON.stringify(params.info)
     )
     .then(success)
