@@ -229,7 +229,7 @@ export default {
     };
   },
   // 마이페이지 전체 글 받아오기
-  created() {
+  mounted() {
     http.get(`/users/mystudy`, config).then(({ data }) => {
       console.log("전체 글 받아옵니다");
       console.log(data.data);
