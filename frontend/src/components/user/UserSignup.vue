@@ -2,11 +2,7 @@
   <el-container>
     <el-main class="main-box">
       <h2>회원가입</h2>
-      <el-form
-        style="font-size: large"
-        @submit.prevent="formSubmit"
-        method="post"
-      >
+      <el-form style="font-size: large" @submit.prevent="formSubmit" method="post">
         <!-- 이메일 -->
         <el-row :gutter="20">
           <el-col
@@ -21,12 +17,7 @@
             <el-input placeholder="이메일 규칙" v-model="user.email" />
           </el-col>
           <el-col :span="6">
-            <el-button
-              color="#9DADD8"
-              size="large"
-              style="margin: 3% auto; width: 100%"
-              @click="emailcheck"
-            >
+            <el-button color="#9DADD8" size="large" style="margin: 3% auto; width: 100%" @click="emailcheck">
               중복확인
             </el-button>
           </el-col>
@@ -58,18 +49,10 @@
             </p>
           </el-col>
           <el-col>
-            <el-input
-              placeholder="비밀번호 규칙"
-              v-model="user.password"
-              type="password"
-            />
+            <el-input placeholder="비밀번호 규칙" v-model="user.password" type="password" />
           </el-col>
           <el-col style="margin-top: 3%">
-            <el-input
-              type="password"
-              placeholder="비밀번호 재확인"
-              v-model="user.passwordCheck"
-            />
+            <el-input type="password" placeholder="비밀번호 재확인" v-model="user.passwordCheck" />
           </el-col>
         </el-row>
 
@@ -79,9 +62,7 @@
               <el-icon :size="20"><User /></el-icon>닉네임
             </p></el-col
           >
-          <el-col
-            ><el-input placeholder="닉네임 규칙" v-model="user.name"
-          /></el-col>
+          <el-col><el-input placeholder="닉네임 규칙" v-model="user.name" /></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -106,7 +87,7 @@
 <script>
 import { ElMessageBox } from "element-plus";
 import { Message, Lock, User } from "@element-plus/icons-vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 const memberStore = "memberStore";
 
@@ -131,19 +112,26 @@ export default {
     // ValidationProvider,
   },
   computed: {
-    ...mapState(memberStore, ["isLogin", "isLoginError", "code"]),
+    ...mapState(memberStore, ["isLogin", "isLoginError", "code", "isValidEmail"]),
   },
 
   methods: {
     ...mapActions(memberStore, ["userJoin", "checkEmail"]),
+    ...mapMutations(memberStore, ["SET_IS_VALID_EMAIL"]),
 
     async join() {
       console.log("vuecomponent : " + JSON.stringify(this.user));
-      await this.userJoin(this.user);
-      ElMessageBox.alert("회원가입이 완료되었습니다. 환영합니다.", "알림", {
-        confirmButtonText: "확인",
-      });
-      this.$router.push({ name: "login" });
+      // console.log("가입버튼 눌렀는데 이메일 인증 확인 >> " + this.isValidEmail);
+      if (!this.isValidEmail) {
+        alert("이메일 중복 확인을 해주세요.");
+        // this.$router.go(0);
+      } else {
+        await this.userJoin(this.user);
+        ElMessageBox.alert("회원가입이 완료되었습니다. 환영합니다.", "알림", {
+          confirmButtonText: "확인",
+        });
+        this.$router.push({ name: "login" });
+      }
     },
 
     async emailcheck() {
@@ -153,8 +141,14 @@ export default {
     codeCheck() {
       if (this.code === this.emailCheck) {
         console.log("인증코드 확인");
+        alert("확인되었습니다.");
+        //이메일 확인 완료 처리
+        this.SET_IS_VALID_EMAIL(true);
+
+        // console.log("이메일 인증 확인 >> " + this.isValidEmail);
       } else {
         console.log("인증 재확인 요망");
+        alert("인증번호가 일치하지 않습니다.");
       }
     },
   },

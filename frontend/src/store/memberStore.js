@@ -1,16 +1,7 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 
-import {
-  signin,
-  findByEmail,
-  getCode,
-  tokenRegeneration,
-  signout,
-  update,
-  signup,
-  deleteUser,
-} from "@/api/users";
+import { signin, findByEmail, getCode, tokenRegeneration, signout, update, signup, deleteUser } from "@/api/users";
 // import http from "@/api/http";
 
 const memberStore = {
@@ -21,6 +12,7 @@ const memberStore = {
     data: null,
     code: null,
     isValidToken: false,
+    isValidEmail: false,
   },
   getters: {
     checkIsLogin: function (state) {
@@ -56,6 +48,9 @@ const memberStore = {
     SET_EMAIL_CODE: (state, data) => {
       state.code = data;
     },
+    SET_IS_VALID_EMAIL(state, flag) {
+      state.isValidEmail = flag;
+    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -85,22 +80,21 @@ const memberStore = {
         }
       );
     },
-    
-    async socialConfirm({commit},tokens){
-      console.log("socialconfirm이야")
-      console.log("토큰들은??!!",tokens);
-      
-      let ACCESS=tokens[0];
-      let REFRESH=tokens[1];
 
-      console.log("액세스는????",tokens[0])
+    async socialConfirm({ commit }, tokens) {
+      console.log("socialconfirm이야");
+      console.log("토큰들은??!!", tokens);
+
+      let ACCESS = tokens[0];
+      let REFRESH = tokens[1];
+
+      console.log("액세스는????", tokens[0]);
       commit("SET_IS_LOGIN", true);
       commit("SET_IS_LOGIN_ERROR", false);
       commit("SET_IS_VALID_TOKEN", true);
       sessionStorage.setItem("ACCESS", ACCESS);
       sessionStorage.setItem("REFRESH", REFRESH);
-        
-      },
+    },
 
     async checkEmail({ dispatch }, user) {
       console.log(user.email);
@@ -109,6 +103,7 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "SUCCESS") {
             console.log("회원가입 가능함! :  ");
+            alert("사용 가능한 이메일 입니다.\n작성하신 이메일로 인증번호를 전송했습니다.");
             dispatch("getEmailCode", user.email);
           }
         },
@@ -161,10 +156,7 @@ const memberStore = {
     //   );
     // },
     async tokenRegeneration({ commit, state }) {
-      console.log(
-        "토큰 재발급 >> 기존 토큰 정보 : {}",
-        sessionStorage.getItem("accessToken")
-      );
+      console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("accessToken"));
       await tokenRegeneration(
         JSON.stringify(state.data),
         ({ data }) => {
@@ -268,8 +260,8 @@ const memberStore = {
         };
     },
     async userDelete({ commit }, user) {
-      let token = sessionStorage.getItem("ACCESS");
-      await deleteUser(user.password, token, ({ data }) => {
+      // let token = sessionStorage.getItem("ACCESS");
+      await deleteUser(user.password, ({ data }) => {
         console.log(data);
         // console.log(data);
         if (data.message === "SUCCESS") {
