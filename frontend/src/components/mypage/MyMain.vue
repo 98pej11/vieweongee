@@ -20,28 +20,33 @@
       <el-col :span="12">
         <div class="demo-progress" style="" v-if="turnScore != null">
           <h4>회차별 통계자료</h4>
+          <h5>1회차</h5>
           <el-progress
             v-if="this.turnScore[0] != null"
             :percentage="this.turnScore[0].total_average * 20"
             :format="format"
           ></el-progress>
+          <h5>2회차</h5>
           <el-progress
             v-if="this.turnScore[1] != null"
             :percentage="this.turnScore[1].total_average * 20"
             :format="format"
           ></el-progress>
+          <h5>3회차</h5>
           <el-progress
             v-if="this.turnScore[2] != null"
             :percentage="this.turnScore[2].total_average * 20"
             :format="format"
             status="success"
           ></el-progress>
+          <h5>4회차</h5>
           <el-progress
             v-if="this.turnScore[3] != null"
             :percentage="this.turnScore[3].total_average * 20"
             :format="format"
             status="warning"
           ></el-progress>
+          <h5>5회차</h5>
           <el-progress
             v-if="this.turnScore[4] != null"
             :percentage="this.turnScore[4].total_average * 20"
@@ -59,21 +64,26 @@
       <el-col :span="12">
         <div class="demo-progress" v-if="abilScore != null">
           <h4>역량별 통계자료</h4>
+          <h5>태도</h5>
           <el-progress
             :percentage="this.abilScore.attitude_average * 20"
           ></el-progress>
+          <h5>직무역량</h5>
           <el-progress
             :percentage="this.abilScore.ability_average * 20"
             :format="format"
           />
+          <h5>팀워크</h5>
           <el-progress
             :percentage="this.abilScore.teamwork_average * 20"
             status="success"
           />
+          <h5>문제해결</h5>
           <el-progress
             :percentage="this.abilScore.solving_average * 20"
             status="warning"
           />
+          <h5>기업이해도</h5>
           <el-progress
             :percentage="this.abilScore.loyalty_average * 20"
             status="exception"
