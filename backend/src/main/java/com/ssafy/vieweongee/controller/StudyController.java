@@ -259,7 +259,7 @@ public class StudyController {
 
         result.put("data",null);
         result.put("message", "SUCCESS");
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
@@ -278,7 +278,7 @@ public class StudyController {
         studyService.cancelStudy(user, study);
         result.put("data",null);
         result.put("message","SUCCESS");
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
