@@ -19,11 +19,22 @@
         </el-col>
       </el-row>
       <div v-for="(data, index) in comments" :key="index">
-        <StudyCommentItem
-          :commentItem="data"
-          :key="isUpdate"
-          @getAll="getAll"
-        ></StudyCommentItem>
+        <!-- 댓글 -->
+        <div v-if="data.depth == 1">
+          <StudyCommentItem
+            :commentItem="data"
+            :key="isUpdate"
+            @getAll="getAll"
+          ></StudyCommentItem>
+        </div>
+        <!-- 대댓글 -->
+        <div v-if="data.depth == 2">
+          <StudyReplyItem
+            :commentItem="data"
+            :key="isUpdate"
+            @getAll="getAll"
+          ></StudyReplyItem>
+        </div>
       </div>
     </div>
   </div>
@@ -33,6 +44,7 @@
 import { mapState, mapActions } from "vuex";
 import { ElMessage } from "element-plus";
 import StudyCommentItem from "@/components/study/StudyCommentItem.vue";
+import StudyReplyItem from "@/components/study/StudyReplyItem.vue";
 import jwtDecode from "jwt-decode";
 
 const studyStore = "studyStore";
@@ -42,13 +54,14 @@ export default {
   name: "StudyComment",
   components: {
     StudyCommentItem,
+    StudyReplyItem,
   },
   computed: {
     ...mapState(studyStore, ["studyID"]),
     ...mapState(commentStore, ["isComment", "commentList"]),
   },
   created() {
-    // this.init();
+    this.init();
     this.getAll();
   },
   props: {

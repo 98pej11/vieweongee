@@ -1,6 +1,5 @@
 <template>
   <div class="comment-item">
-    <!-- <div v-for="(data, index) in comments" :key="index"> -->
     <el-row class="comment-content">
       <el-col :span="20" align-self="start" style="color: gray"
         ><p>{{ commentItem.user_nickname }} 님 | {{ commentItem.datetime }}</p>
@@ -9,7 +8,7 @@
         ><p @click="replyBtn()">답글 달기</p>
       </el-col>
     </el-row>
-
+    <!-- 댓글 수정 -->
     <el-row>
       <el-col v-if="this.modifying" :span="20" style="color: black">
         <el-input
@@ -43,14 +42,14 @@
         </p>
       </el-col>
     </el-row>
-
+    <!-- 대댓글 등록 -->
     <el-row v-if="this.showInput" justify="end">
       <el-col :span="2" style="color: black">
         <img src="@/assets/image/reply_icon.png"
       /></el-col>
       <el-col :span="22" class="reply-field">
         <el-input
-          v-model="myReply.content"
+          v-model="myReply"
           label="댓글을 입력하세요..."
           type="text"
         ></el-input>
@@ -59,17 +58,14 @@
             round
             color="#9DADD8"
             class="mt-1"
-            @click="replySubmit(commentItem.comment_id, myReply.content)"
-            @keypress.enter="
-              replySubmit(commentItem.comment_id, myReply.content)
-            "
+            @click="replySubmit(commentItem.comment_id, myReply)"
+            @keypress.enter="replySubmit(commentItem.comment_id, myReply)"
             >등록</el-button
           >
         </div>
       </el-col>
     </el-row>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -109,6 +105,7 @@ export default {
       "deleteCommentConfirm",
       "createReplyConfrim",
     ]),
+    // 유저 아이디
     getMyId() {
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
@@ -149,7 +146,7 @@ export default {
 
     replyBtn() {
       if (this.showInput == false) this.showInput = true;
-      else this.showInput = true;
+      else this.showInput = false;
     },
 
     // 대댓글 등록
@@ -160,16 +157,11 @@ export default {
         reply: { content: info },
       };
       await this.createReplyConfrim(params);
-
-      this.isUpdate = true;
+      if (this.isComment) {
+        this.showInput = false;
+        this.isUpdate = true;
+      }
     },
-
-    // 대댓글 등록하기
-    // async CommentSubmit() {
-    //   console.log("브이모델?" + this.myComment.content);
-    //   await this.createCommentConfirm(this.myComment.content);
-    //   // 댓글이냐, 대댓글이냐, 판단 -> depth
-    // },
   },
   data() {
     return {
@@ -181,17 +173,8 @@ export default {
       myComment: "", // 수정할 댓글 내용
       comments: [],
 
-      // 새로 등록할 댓글
-      myReply: {
-        // 깊이 구분해주어야 함
-        depth: 2,
-        comment_id: "",
-        reply_id: "",
-        user_id: "",
-        user_nickname: "",
-        content: "예시댓글",
-        datetime: "",
-      },
+      // 대댓글 등록 내용
+      myReply: "",
     };
   },
 };
