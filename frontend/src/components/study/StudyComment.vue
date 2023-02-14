@@ -14,7 +14,7 @@
           >
           </el-input>
           <div id="comment-button">
-            <el-button class="subbtn" @click="CommentSubmit()">등록</el-button>
+            <el-button class="sub-btn" @click="CommentSubmit()">등록</el-button>
           </div>
         </el-col>
       </el-row>
@@ -139,7 +139,7 @@ export default {
 }
 
 .el-input {
-  height: 60px;
+  height: 55px;
   font-size: large;
   border-radius: 10%;
 }
@@ -155,7 +155,7 @@ export default {
   top: 5px;
   right: 5px;
 }
-.subbtn {
+.sub-btn {
   width: 100%;
   height: 40px;
   border-radius: 10%;
@@ -167,6 +167,5 @@ export default {
 button {
   color: white;
   z-index: 6;
-  /* width: 100%; */
 }
 </style>

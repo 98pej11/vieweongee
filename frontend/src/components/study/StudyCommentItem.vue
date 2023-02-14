@@ -12,7 +12,12 @@
 
     <el-row>
       <el-col v-if="this.modifying" :span="20" style="color: black">
-        <el-input label="댓글을 입력하세요..." type="text"></el-input>
+        <el-input
+          label="댓글을 입력하세요..."
+          type="text"
+          size="large"
+          v-model="myComment"
+        ></el-input>
       </el-col>
       <el-col v-if="this.modifying" :span="4">
         <el-button
@@ -20,16 +25,12 @@
           color="#9DADD8"
           class="mt-1"
           @click="modifyComment(commentItem.comment_id)"
+          @keyup.enter="modifyComment(commentItem.comment_id)"
           >완료</el-button
         ></el-col
       >
 
-      <el-col
-        v-if="!this.modifying"
-        :span="20"
-        style="color: black"
-        v-model="modifyCotent"
-      >
+      <el-col v-if="!this.modifying" :span="20" style="color: black">
         {{ commentItem.content }}
       </el-col>
       <el-col
@@ -90,7 +91,6 @@ export default {
     reload: Function,
   },
   created() {
-    this.myComment = this.commentItem;
     this.getMyId();
   },
   watch: {
@@ -113,23 +113,23 @@ export default {
       if (sessionStorage.getItem("ACCESS") != null)
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
     },
-    // 댓글 수정
+    // 댓글 수정 input 태그
     modifyShow(content) {
-      this.modifyCotent = content;
+      this.myComment = content;
       this.modifying = true;
     },
+    // 댓글 수정 axios
     modifyComment(idx) {
       this.modifying = false;
 
       const params = {
         study_ID: this.studyID,
         comment_ID: idx,
-        info: { content: this.modifyCotent },
+        info: { content: this.myComment },
       };
-
       this.modifyCommentConfirm(params);
       if (this.isComment) {
-        console.log("수정 성공");
+        console.log(this.isUpdate);
         this.isUpdate = true;
       }
     },
@@ -177,12 +177,9 @@ export default {
       isAuthor: true,
       showInput: false,
       modifying: false,
-      modifyCotent: "", // 수정한 댓글 내용
       myId: 0,
-
+      myComment: "", // 수정할 댓글 내용
       comments: [],
-
-      myComment: {},
 
       // 새로 등록할 댓글
       myReply: {

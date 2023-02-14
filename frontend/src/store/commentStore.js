@@ -36,6 +36,7 @@ const commentStore = {
         study_ID,
         ({ data }) => {
           if (data.message == "SUCCESS") {
+            console.log(data.data);
             commit("SET_ALL_COMMENT", data.data);
             commit("SET_IS_SUCCESS", true);
           }
@@ -81,9 +82,8 @@ const commentStore = {
       await modifyComment(
         params,
         ({ data }) => {
-          console.log(data.message);
           if (data.message == "SUCCESS") {
-            console.log("수정 성공");
+            commit("SET_IS_SUCCESS", true);
           }
         },
         async (error) => {
