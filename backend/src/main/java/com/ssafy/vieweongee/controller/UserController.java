@@ -266,43 +266,43 @@ public class UserController {
         return ResponseEntity.status(409).body(result);
     }
     // 액세스 토큰 확인
-    @PostMapping("/check-access")
-    public ResponseEntity checkAccess(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
-//        Map<String, Object> resultMap=new HashMap<>();
-        // access 토큰을 확인
-        boolean check=tokenService.checkTokenValid(userToken.getAccessToken());
-        if (check==true){
-            // 성공 응답
-//            return ResponseEntity.status(200).body("access token이 만료돼지 않았습니당 패쓰!");
-            return ResponseEntity.status(200).body("접근 허가");
-        }
-        // else라면 토큰 만료된거
-        // refresh 토큰 달라고 요청 보내야함!!!
-        return ResponseEntity.status(409).body("FAIL");
-        // 원래 리프레쉬 토큰도 검증해야...ㄷㄷ
-    }
+//    @PostMapping("/check-access")
+//    public ResponseEntity checkAccess(@RequestBody UserCheckRequest userToken, HttpServletResponse response){
+////        Map<String, Object> resultMap=new HashMap<>();
+//        // access 토큰을 확인
+//        boolean check=tokenService.checkTokenValid(userToken.getAccessToken());
+//        if (check==true){
+//            // 성공 응답
+////            return ResponseEntity.status(200).body("access token이 만료돼지 않았습니당 패쓰!");
+//            return ResponseEntity.status(200).body("접근 허가");
+//        }
+//        // else라면 토큰 만료된거
+//        // refresh 토큰 달라고 요청 보내야함!!!
+//        return ResponseEntity.status(409).body("FAIL");
+//        // 원래 리프레쉬 토큰도 검증해야...ㄷㄷ
+//    }
 
-    @PostMapping("/check-refresh")
-    public ResponseEntity checkRefresh(@RequestBody UserCheckRequest userToken, HttpServletRequest response){
-        log.info("리프레쉬 오긴 하나 ---> {}", userToken.getRefreshToken());
-        log.info("DB의 리프레쉬 : {}", userService.getJwtToken(userToken.getId()));
-        if (userToken.getRefreshToken().equals(userService.getJwtToken(userToken.getId()))){
-            // 리프레쉬 토큰이 db와 일치하면 access 토큰 재발급해줄거야
-            log.info("access 재발급 : {}, {}", userToken.getRefreshToken(), userToken.getId());
-            String newAccessJwt=tokenService.createAccessToken(userToken.getId());
-            HttpHeaders headers=new HttpHeaders();
-            headers.add("ACCESS",newAccessJwt);
-
-
-            return ResponseEntity.ok().headers(headers).body("NEW ACCESS TOKEN");
-//            return ResponseEntity.status(200).body("new access token 발급");
-        }
-        else {
-            // 리프레쉬 토큰이 db와 일치하지 않으면 요청 종료
-            return ResponseEntity.status(409).body("요청 실패 - 로그인 검증 실패");
+//    @PostMapping("/check-refresh")
+//    public ResponseEntity checkRefresh(@RequestBody UserCheckRequest userToken, HttpServletRequest response){
+//        log.info("리프레쉬 오긴 하나 ---> {}", userToken.getRefreshToken());
+//        log.info("DB의 리프레쉬 : {}", userService.getJwtToken(userToken.getId()));
+//        if (userToken.getRefreshToken().equals(userService.getJwtToken(userToken.getId()))){
+//            // 리프레쉬 토큰이 db와 일치하면 access 토큰 재발급해줄거야
+//            log.info("access 재발급 : {}, {}", userToken.getRefreshToken(), userToken.getId());
+//            String newAccessJwt=tokenService.createAccessToken(userToken.getId());
+//            HttpHeaders headers=new HttpHeaders();
+//            headers.add("ACCESS",newAccessJwt);
+//
+//
+//            return ResponseEntity.ok().headers(headers).body("NEW ACCESS TOKEN");
+////            return ResponseEntity.status(200).body("new access token 발급");
+//        }
+//        else {
+//            // 리프레쉬 토큰이 db와 일치하지 않으면 요청 종료
 //            return ResponseEntity.status(409).body("요청 실패 - 로그인 검증 실패");
-        }
-    }
+////            return ResponseEntity.status(409).body("요청 실패 - 로그인 검증 실패");
+//        }
+//    }
 
     @PostMapping("/signout")
     public ResponseEntity logout(@RequestHeader(value = "ACCESS") String token){

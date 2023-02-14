@@ -1,9 +1,9 @@
 <template>
   <div class="footer">
     <p class="hr-sect" style="display: flex; justify-content: space-between">
-      <img src="@/assets/image/github.png" :width="60" />
-      <img src="@/assets/image/youtube.png" :width="60" />
-      <img src="@/assets/image/notion.png" :width="60" />
+      <img src="@/assets/image/github.png" :width="60" @click="gogithub" />
+      <img src="@/assets/image/youtube.png" :width="60" @click="goyoutube" />
+      <img src="@/assets/image/notion.png" :width="60" @click="gonotion" />
     </p>
     <div class="line">
       <img
@@ -19,6 +19,20 @@
 <script>
 export default {
   name: "MyFooter",
+
+  methods: {
+    gogithub() {
+      window.location.href =
+        "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12A701";
+    },
+    goyoutube() {
+      window.location.href = "http://youtube.com";
+    },
+    gonotion() {
+      window.location.href =
+        "https://www.notion.so/8-bc1706d276dd48fc84e8aea67b82594a";
+    },
+  },
 };
 </script>
 
@@ -36,6 +50,7 @@ export default {
 }
 p img {
   margin: 1%;
+  cursor: pointer;
 }
 .hr-sect {
   display: flex;

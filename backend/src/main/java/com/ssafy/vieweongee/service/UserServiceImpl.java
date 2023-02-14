@@ -3,7 +3,9 @@ package com.ssafy.vieweongee.service;
 import com.ssafy.vieweongee.dto.user.request.PasswordCheckRequest;
 import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.dto.user.request.UserModifyRequest;
+import com.ssafy.vieweongee.entity.Summary;
 import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.repository.SummaryRepository;
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final SummaryRepository summaryRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, SummaryRepository summaryRepository) {
         this.userRepository = userRepository;
-
+        this.summaryRepository = summaryRepository;
     }
 
     @Override
@@ -103,6 +106,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(Long id){
+        Summary summary = summaryRepository.findById(id);
+        summaryRepository.delete(summary);
         User user = userRepository.getUserById(id);
         userRepository.delete(user);
     }
@@ -171,5 +176,4 @@ public class UserServiceImpl implements UserService{
     }
 
 }
-
 
