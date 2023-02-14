@@ -168,6 +168,7 @@ public class MypageController {
     @GetMapping("/graph")
     public ResponseEntity<?> abilityStatistics(@RequestHeader("ACCESS") String access){
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        // 가져와서 보여주기
         Summary summary = mypageService.getAbilitySummary(userId);
         Map<String, Object> result = new HashMap<>();
         if(summary.getSolving_average()==0 && summary.getTeamwork_average()==0 && summary.getAbility_average()==0 && summary.getAttitude_average()==0 && summary.getLoyalty_average()==0){

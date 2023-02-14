@@ -174,7 +174,12 @@ public class MeetingController {
     @PutMapping("/{study_ID}/status")
     ResponseEntity<?> modifyConfirmAndStatus(@PathVariable("study_ID") String study_ID, @RequestHeader("ACCESS") String access){
         Long userId = Long.parseLong(tokenService.getUid(access).replaceAll("\"",""));
+        //status, confirm 변경
         meetingService.updateConfirmAndStatus(Long.parseLong(study_ID), userId);
+
+        // summary 변경
+        meetingService.updateSummary(Long.parseLong(study_ID), userId);
+
         Map<String, Object> result = new HashMap<>();
         result.put("data", "변경 완료");
         result.put("message", "SUCCESS");
