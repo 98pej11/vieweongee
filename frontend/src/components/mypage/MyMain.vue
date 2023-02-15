@@ -24,31 +24,31 @@
           <el-progress
             v-if="this.turnScore[0] != null"
             :percentage="this.turnScore[0].total_average * 20"
-            :format="format"
+            :color="this.first"
           ></el-progress>
           <h5>2회차</h5>
           <el-progress
             v-if="this.turnScore[1] != null"
             :percentage="this.turnScore[1].total_average * 20"
-            :format="format"
+            :color="this.second"
           ></el-progress>
           <h5>3회차</h5>
           <el-progress
             v-if="this.turnScore[2] != null"
             :percentage="this.turnScore[2].total_average * 20"
-            :format="format"
+            :color="this.third"
           ></el-progress>
           <h5>4회차</h5>
           <el-progress
             v-if="this.turnScore[3] != null"
             :percentage="this.turnScore[3].total_average * 20"
-            :format="format"
+            :color="this.fourth"
           ></el-progress>
           <h5>5회차</h5>
           <el-progress
             v-if="this.turnScore[4] != null"
             :percentage="this.turnScore[4].total_average * 20"
-            :format="format"
+            :color="this.fifth"
           ></el-progress>
         </div>
 
@@ -64,18 +64,29 @@
           <h5>태도</h5>
           <el-progress
             :percentage="this.abilScore.attitude_average * 20"
+            :color="this.first"
           ></el-progress>
           <h5>직무역량</h5>
           <el-progress
             :percentage="this.abilScore.ability_average * 20"
             :format="format"
+            :color="this.second"
           />
           <h5>팀워크</h5>
-          <el-progress :percentage="this.abilScore.teamwork_average * 20" />
+          <el-progress
+            :percentage="this.abilScore.teamwork_average * 20"
+            :color="this.third"
+          />
           <h5>문제해결</h5>
-          <el-progress :percentage="this.abilScore.solving_average * 20" />
+          <el-progress
+            :percentage="this.abilScore.solving_average * 20"
+            :color="this.fourth"
+          />
           <h5>기업이해도</h5>
-          <el-progress :percentage="this.abilScore.loyalty_average * 20" />
+          <el-progress
+            :percentage="this.abilScore.loyalty_average * 20"
+            :color="this.fifth"
+          />
         </div>
 
         <div class="demo-progress" style="" v-else>
@@ -104,6 +115,11 @@ export default defineComponent({
       turnScore: null,
       abilScore: null,
       myStudyCards: [],
+      first: "#7daae8",
+      second: "#409eff",
+      third: "#9cf85f",
+      fourth: "#f77fc7",
+      fifth: "#f34242",
     };
   },
   created() {
