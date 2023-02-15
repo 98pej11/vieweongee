@@ -57,11 +57,15 @@ export default {
   display: inline-flex;
 }
 #video-container {
+  max-width: 300px;
   background-color: white;
   border-radius: 10%;
   padding: 10px;
+  /* Drop Shadow */
+  filter: drop-shadow(0px 4px 40px rgba(128, 128, 128, 0.25));
 }
 #video {
+  max-width: 300px;
   border-radius: 10%;
 }
 </style>

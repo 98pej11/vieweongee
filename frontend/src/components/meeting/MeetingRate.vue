@@ -1,20 +1,25 @@
 <template>
   <div class="meetingrate">
-    <h3>면접자 : 면접관 비율 설정</h3>
     <div style="text-align: center">
       <div v-if="studyInfo.personnel == 6">
-        <input type="radio" v-model="rate" value="1" />1:5 <input type="radio" v-model="rate" value="2" />2:4
-        <input type="radio" v-model="rate" value="3" />3:3 <input type="radio" v-model="rate" value="4" />4:2
+        <input type="radio" v-model="rate" value="1" />1 : 5
+        <input type="radio" v-model="rate" value="2" />2 : 4
+        <input type="radio" v-model="rate" value="3" />3 : 3
+        <input type="radio" v-model="rate" value="4" />4 : 2
       </div>
       <div v-else-if="studyInfo.personnel == 5">
-        <input type="radio" v-model="rate" value="1" />1:4 <input type="radio" v-model="rate" value="2" />2:3
-        <input type="radio" v-model="rate" value="3" />3:2
+        <input type="radio" v-model="rate" value="1" />1 : 4
+        <input type="radio" v-model="rate" value="2" />2 : 3
+        <input type="radio" v-model="rate" value="3" />3 : 2
       </div>
       <div v-else-if="studyInfo.personnel == 4">
-        <input type="radio" v-model="rate" value="1" />1:3 <input type="radio" v-model="rate" value="2" />2:2
+        <input type="radio" v-model="rate" value="1" />1 : 3
+        <input type="radio" v-model="rate" value="2" />2 : 2
       </div>
-      <div v-else-if="studyInfo.personnel == 3"><input type="radio" v-model="rate" value="1" />1:2</div>
-      <div v-else><input type="radio" v-model="rate" value="1" />1:1</div>
+      <div v-else-if="studyInfo.personnel == 3">
+        <input type="radio" v-model="rate" value="1" />1 : 2
+      </div>
+      <div v-else><input type="radio" v-model="rate" value="1" />1 : 1</div>
     </div>
   </div>
 </template>
@@ -55,10 +60,8 @@ export default {
 .meetingrate {
   margin: 2%;
   width: 30%;
-  height: 100px;
-  background-color: #e5e1f8;
+  height: 50px;
   border-radius: 5%;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
 }
