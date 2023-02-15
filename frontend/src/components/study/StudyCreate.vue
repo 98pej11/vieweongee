@@ -238,7 +238,7 @@ export default {
     async submitForm() {
       console.log(this.studyFormInfo);
 
-      if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
+      if (this.checkDate(this.studyFormInfo.study_datetime)) {
         this.studyFormInfo.study_datetime =
           this.studyFormInfo.study_datetime.replace(" ", "T");
         this.confirm();
@@ -340,7 +340,7 @@ export default {
         personnel: 0,
         type: "",
         study_datetime: "",
-        running_time: 0,
+        running_time: 1,
         content: "",
         attitude: 1,
         ability: 1,
