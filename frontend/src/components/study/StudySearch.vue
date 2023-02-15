@@ -22,7 +22,7 @@
       </el-col>
     </el-row>
     <div>
-      <MainCardList compType="study"></MainCardList>
+      <MainCardList compType="search"></MainCardList>
     </div>
   </div>
 </template>
@@ -31,9 +31,11 @@ import SearchBar from "@/components/common/SearchBar.vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
 import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { mapState } from "vuex";
+const studyStore = "studyStore";
 
 export default {
-  name: "StudyListCard",
+  name: "StudySearch",
   components: {
     SearchBar,
     MainCardList,
@@ -41,7 +43,9 @@ export default {
     Calendar,
     Picture,
   },
-  create() {},
+  computed: {
+    ...mapState(studyStore, ["studyList"]),
+  },
 
   methods: {
     onClick() {

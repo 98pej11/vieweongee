@@ -60,34 +60,40 @@ export default {
     ]),
   },
   created() {
-    if (this.$route.params.type !== "search") {
-      if (this.compType == "main") {
-        this.CLEAR_LIST();
-        this.maininit();
-      } else if (this.compType == "study") {
-        this.CLEAR_LIST();
-        this.studyinit();
-      }
+    // if (this.$route.params.type !== "search") {
+    console.log(this.compType);
+    if (this.compType == "main") {
+      this.CLEAR_LIST();
+      this.maininit();
+    } else if (this.compType == "study") {
+      this.studyListCard();
+    } else if (this.compType == "search") {
+      this.studyinit();
     }
   },
   methods: {
     ...mapActions(studyStore, ["getTopList", "getAllList", "getPersonnel"]),
     ...mapMutations(studyStore, ["CLEAR_LIST", "SET_STUDY_ID"]),
 
+    async studyListCard() {
+      this.CLEAR_LIST();
+      await this.getAllList();
+      this.studyinit();
+    },
+
     async maininit() {
       await this.getTopList();
       // 현재 참가자 수 받아오기
+      console.log(this.studyList);
       for (let idx = 0; idx < this.studyList.length; idx++) {
-        console.log(this.studyList[idx].id);
         await this.getPersonnel(this.studyList[idx].id);
       }
     },
     async studyinit() {
-      await this.getAllList();
-
       // 현재 참가자 수 받아오기
+      console.log(this.studyList);
       for (let idx = 0; idx < this.studyList.length; idx++) {
-        console.log(this.studyList[idx].id);
+        // console.log(this.studyList[idx].id);
         await this.getPersonnel(this.studyList[idx].id);
       }
     },

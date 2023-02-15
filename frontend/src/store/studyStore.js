@@ -101,8 +101,9 @@ const studyStore = {
 
       list.forEach((el) => {
         // DateTime 포맷
-        console.log(new Date(el.study_datetime));
-        var newDate = moment(new Date(el.study_datetime)).format("YYYY-MM-DD HH:mm");
+        var newDate = moment(new Date(el.study_datetime)).format(
+          "YYYY-MM-DD HH:mm"
+        );
         newDate = newDate.substr(0, 16).replace("T", " ");
 
         state.studyList.push({
@@ -125,8 +126,12 @@ const studyStore = {
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
       var moment = require("moment");
-      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format("YYYY-MM-DD HH:mm");
-      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format("YYYY-MM-DD HH:mm");
+      var newStudyDate = moment(new Date(studyInfo.study_datetime)).format(
+        "YYYY-MM-DD HH:mm"
+      );
+      var newRegistDate = moment(new Date(studyInfo.regist_datetime)).format(
+        "YYYY-MM-DD HH:mm"
+      );
       newRegistDate = newRegistDate.replace("T", " ");
       newStudyDate = newStudyDate.replace("T", " ");
 
@@ -254,7 +259,6 @@ const studyStore = {
     // 스터디 참가자 수 조회
     async getPersonnel({ commit }, study_ID) {
       await getCurrent(study_ID, ({ data }) => {
-        console.log("현재 참가자 수 : " + data.data);
         commit("SET_NOW_PERSON", data.data);
         commit("PUSH_CURRENT_LIST", data.data);
       });
@@ -263,17 +267,18 @@ const studyStore = {
     // 스터디 참가 신청하기
     async applyStudyConfirm({ commit }, studyId) {
       await applyStudy(studyId, ({ data }) => {
-        console.log("참가신청 완료" + data.data);
-        console.log("참가신청 완료" + data.message);
-        commit("SET_APPLY_SUCCESS", true);
+        if (data.message == "SUCCESS") {
+          commit("SET_APPLY_SUCCESS", true);
+        }
       });
     },
 
     // 스터디 참가 신청 취소하기
     async cancleStudyConfirm({ commit }, studyId) {
-      await cancleStudy(studyId, () => {
-        console.log("참가신청 취소 완료");
-        commit("SET_APPLY_SUCCESS", false);
+      await cancleStudy(studyId, ({ data }) => {
+        if (data.message == "SUCCESS") {
+          commit("SET_APPLY_SUCCESS", false);
+        }
       });
     },
   },

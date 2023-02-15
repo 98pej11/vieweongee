@@ -48,11 +48,11 @@ const commentStore = {
             commit("SET_IS_SUCCESS", false);
           }
         },
-        async (error) => {
-          if (error.response.status === 401) {
-            console.log("401에러");
-            commit("SET_IS_SUCCESS", false);
-          }
+        async () => {
+          // if (error.response.status === 401) {
+          console.log("401에러");
+          commit("SET_IS_SUCCESS", false);
+          // }
         }
       );
     },
