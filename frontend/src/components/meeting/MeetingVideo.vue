@@ -8,7 +8,7 @@
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
           <div id="session-header">
-            <h2 id="session-title">[{{ studyInfo.title }}] {{ myStudyId }}</h2>
+            <h2 id="session-title">[{{ studyInfo.title }}]</h2>
             <h3>현재 회차 : {{ nowTurn }}</h3>
             <!-- <input
               class="btn btn-large btn-danger"
@@ -446,6 +446,14 @@ export default {
         this.SET_IS_INTERVIEWER(true); //면접관 true
       }
 
+      if (turn != 0) {
+        if (flag) {
+          alert("당신은 면접자 입니다.");
+        } else {
+          alert("당신은 면접관 입니다.");
+        }
+      }
+
       console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
     },
     shareNowTurn(turn) {
@@ -469,18 +477,13 @@ export default {
       let str = "🔔알림🔔\n\n";
       //현재 회차의 면접자, 면접관을 알려줌
       if (turn == 0) {
-        this.nowScoreList.forEach((el) => {
-          str += el.id + " ";
-        });
-        str += "님이 면접자 입니다.\n\n곧 면접이 시작됩니다.";
+        if (this.isInterviewee) {
+          str += "당신은 면접자 입니다.\n\n곧 면접이 시작됩니다.";
+        } else {
+          str += "당신은 면접관 입니다.\n\n곧 면접이 시작됩니다.";
+        }
       }
-      // else {
-      //   str += "3분 후에 채점이 종료됩니다.\n면접관은 채점 내용 기입 후 저장을 눌러주세요.\n\n다음 회차는 ";
-      //   this.interviewOrderList[turn].forEach((el) => {
-      //     str += el + " ";
-      //   });
-      //   str += "님이 면접자 입니다.";
-      // }
+
       alert(str);
     },
     calcRemainTime() {

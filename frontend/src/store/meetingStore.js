@@ -35,6 +35,7 @@ const meetingStore = {
     leaderTurn: null,
 
     isShowChat: false, // 채탕 보여줄래 말래
+    nicknameList: [],
   },
   getters: {},
   mutations: {
@@ -99,6 +100,9 @@ const meetingStore = {
     SET_IS_LEAVE_SESSION(state, flag) {
       //세션 나가기 버튼
       state.isLeaveSession = flag;
+    },
+    SET_NICKNAME_LIST(state, nickname) {
+      state.nicknameList.push(nickname);
     },
   },
   actions: {
@@ -252,15 +256,12 @@ const meetingStore = {
         }
       }
       commit("SET_NOW_SCORE_LIST", list);
+      commit("SET_NOW_RESUME_LIST", rlist);
+
       console.log("보여줄 채점표 보여줄게요");
       console.log(state.nowScoreList);
-      commit("SET_NOW_RESUME_LIST", rlist);
       console.log("자소서 이미지도 보여줄게요");
       console.log(state.nowResumeList);
-      // } else {
-      //면접관이 아니라면
-      // console.log("채점표를 볼 수 없어요");
-      // }
     },
     async saveScore({ state }, study_ID) {
       //로컬 스토리지에 있는 지금 면접자꺼 다 가져옴
