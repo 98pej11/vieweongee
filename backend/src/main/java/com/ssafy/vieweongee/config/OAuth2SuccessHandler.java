@@ -80,7 +80,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader("ACCESS", AccessJwt);
         response.addHeader("REFRESH", RefreshToken);
 //        String targetUrl="http:///localhost:3000/";
-        String simple=String.format("http:///vieweongee.kro.kr:3000/redirect?ACCESS=%s&REFRESH=%s", AccessJwt,RefreshToken);
+        String simple=String.format("http://vieweongee.kro.kr:3000/redirect?ACCESS=%s&REFRESH=%s", AccessJwt,RefreshToken);
 //        String targetUrl= UriComponentsBuilder.fromPath(simple)
 //                .queryParam("ACCESS", AccessJwt)
 //                    .build().toString();
