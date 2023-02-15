@@ -87,89 +87,95 @@
           </el-dialog>
 
           <!-- 스터디 신청, 취소, 입장-->
-          <div>
-            <el-row justify="end" class="row" style="margin-right: 10px">
-              <el-col :span="5">
-                <el-button
-                  v-if="isApplied || isAuthor"
-                  @click="showDialog"
-                  round
-                  color="#E1E6FF"
-                  class="me-2"
-                >
-                  자기소개서 업로드
-                </el-button>
-              </el-col>
-              <e-col v-if="!isAuthor" :span="2">
-                <el-button
-                  v-if="!isApplied && isPossible"
-                  @click="applyStudy"
-                  round
-                  color="#9DADD8"
-                  class="me-2"
-                  style="color: white"
-                >
-                  신청
-                </el-button>
-                <el-button
-                  v-if="isApplied && (!isOpened || isPossible)"
-                  @click="cancleStudy"
-                  round
-                  color="#FFCD9F"
-                  class="me-2"
-                >
-                  신청취소
-                </el-button>
-              </e-col>
-              <el-col :span="2">
-                <el-button
-                  v-if="!isPossible"
-                  round
-                  disabled
-                  color="#555454"
-                  class="me-2 done"
-                >
-                  마감
-                </el-button>
-              </el-col>
-              <el-col :span="2">
-                <el-button
-                  v-if="isOpened && (!isDone || isApplied || isAuthor)"
-                  @click="enterMeeting(this.studyID)"
-                  round
-                  color="#FFCD9F"
-                  class="me-2"
-                >
-                  입장
-                </el-button>
-              </el-col>
-              <el-col v-if="isDone" :span="2">
-                <el-button round disabled color="#555454" class="me-2 done">
-                  종료
-                </el-button>
-              </el-col>
-            </el-row>
-            <!-- 스터디 수정 및 삭제 -->
-            <el-row justify="end" style="margin-top: 10px">
-              <div v-if="isAuthor && isPossible">
-                <el-button
-                  @click="modifyStudy"
-                  round
-                  color="#9DADD8"
-                  class="me-2"
-                >
-                  수정
-                </el-button>
-                <el-button
-                  @click="deleteOpen"
-                  round
-                  color="#FF5151"
-                  class="me-3"
-                  >삭제
-                </el-button>
-              </div>
-            </el-row>
-          </div>
+          <el-row justify="end">
+            <el-col :span="4">
+              <el-button
+                v-if="!isDone && (isApplied || isAuthor)"
+                @click="showDialog"
+                round
+                color="#E1E6FF"
+                class="me-2"
+              >
+                자기소개서 업로드
+              </el-button>
+            </el-col>
+          </el-row>
+          <!-- 신청 / 신청취소 -->
+          <el-row justify="end" class="row">
+            <e-col :span="4" v-if="!isAuthor">
+              <el-button
+                v-if="!isApplied && isPossible"
+                @click="applyStudy"
+                round
+                color="#9DADD8"
+                class="me-2"
+                style="color: white"
+              >
+                신청
+              </el-button>
+              <el-button
+                v-if="isApplied && (!isOpened || isPossible)"
+                @click="cancleStudy"
+                round
+                color="#FFCD9F"
+                class="me-2"
+              >
+                신청취소
+              </el-button>
+            </e-col>
+          </el-row>
+
+          <!-- 마감 -->
+          <el-row justify="end">
+            <el-col :span="2">
+              <el-button
+                v-if="!isPossible"
+                round
+                disabled
+                color="#555454"
+                class="me-2 done"
+              >
+                마감
+              </el-button>
+            </el-col>
+          </el-row>
+          <!-- 입장 / 종료 -->
+          <el-row justify="end">
+            <el-col
+              :span="2"
+              v-if="(isApplied || isAuthor) && isOpened && !isDone"
+            >
+              <el-button
+                @click="enterMeeting(this.studyID)"
+                round
+                color="#FFCD9F"
+                class="me-2"
+              >
+                입장
+              </el-button>
+            </el-col>
+            <el-col v-if="isDone" :span="2">
+              <el-button round disabled color="#555454" class="me-2 done">
+                종료
+              </el-button>
+            </el-col>
+          </el-row>
+          <!-- 스터디 수정 및 삭제 -->
+          <el-row justify="end" style="margin-right: 10px">
+            <div v-if="isAuthor && isPossible">
+              <el-button
+                @click="modifyStudy"
+                round
+                color="#9DADD8"
+                class="me-2"
+              >
+                수정
+              </el-button>
+              <el-button @click="deleteOpen" round color="#FF5151" class="me-3"
+                >삭제
+              </el-button>
+            </div>
+          </el-row>
 
           <hr />
           <el-row>
@@ -223,7 +229,7 @@ export default {
       "appliedList",
     ]),
   },
-  mounted() {
+  created() {
     this.init();
   },
   data() {
@@ -254,8 +260,10 @@ export default {
 
     // 스터디 글 정보 조회
     async init() {
-      if (sessionStorage.getItem("ACCESS") != null)
+      if (sessionStorage.getItem("ACCESS") != null) {
         this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+        this.isApplied = false;
+      }
 
       const params = {
         study_ID: this.studyID,
@@ -263,16 +271,13 @@ export default {
       };
 
       await this.getInfo(params);
-      await this.setButton();
 
       await this.getPersonnel(this.studyID);
       await this.checkPossible();
       await this.checkOpened();
       await this.getAppliy(this.studyID);
       await this.getCommentList(this.studyID);
-
-      console.log(this.isPossible + " 수정 삭제 가능 ? ");
-      console.log(this.isAuthor + " 글작성자인가 ? ?");
+      await this.setButton();
     },
 
     // 버튼 활성화 여부
@@ -287,6 +292,9 @@ export default {
       }
       // console.log(this.myId + " : 토큰아이디");
       // console.log(this.studyInfo.user_id + " : 글작성자");
+      console.log(this.isPossible + " 수정 삭제/ 신청 가능 ? isPossbile");
+      console.log(this.isAuthor + " 글작성자인가 ? ? isAuthor");
+      console.log(this.isApplied + " 신청? ? isApolied");
     },
 
     // 신청 가능 여부
@@ -317,10 +325,10 @@ export default {
         this.studyInfo.running_time,
         "h"
       ); // 화상회의 종료 시간
+      let runtime = this.studyInfo.running_time; // 진행 시간
+
       let diff = moment.duration(startTime.diff(now)).asHours();
       let closed = moment.duration(endTime.diff(now)).asHours();
-
-      console.log("이미 화상미팅 종료됐나요? ? ? : " + closed);
 
       // 시작시간 24시간 전부터 화상회의 입장 가능
       if (diff >= 0 && diff < 24) {
@@ -331,10 +339,13 @@ export default {
         this.isOpened = false;
       }
       // 화상미팅 종료 이후
-      else if (closed + this.studyInfo.running_time <= 0) {
+      if (closed + runtime <= 0) {
+        console.log(closed + " / " + runtime);
         this.isDone = true;
+        this.isPossible = false;
+        this.isOpened = false;
       }
-      console.log(closed + " / " + this.studyInfo.running_time);
+      console.log("끝낫냐 ? " + this.isDone);
     },
 
     // 화상회의 참여
@@ -464,6 +475,7 @@ button {
   /* align-items: center; */
   /* justify-content: center; */
   font-size: larger;
+  margin-bottom: 5px;
 }
 .el-row > :nth-child(1) {
   color: gray;
@@ -478,7 +490,7 @@ hr {
 }
 
 .backbtn {
-  width: 10%;
+  width: 100px;
   height: 40px;
   border-radius: 30px;
   font-size: large;

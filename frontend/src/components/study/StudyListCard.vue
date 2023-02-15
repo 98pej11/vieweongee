@@ -30,6 +30,7 @@
 import SearchBar from "@/components/common/SearchBar.vue";
 import MainCardList from "@/components/mainpage/MainCardList.vue";
 import { CirclePlus, Calendar, Picture } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 
 export default {
   name: "StudyListCard",
@@ -43,8 +44,15 @@ export default {
 
   methods: {
     onClick() {
-      console.log("생성폼으로 이동");
-      this.$router.push({ name: "studycreate" });
+      if (sessionStorage.getItem("ACCESS") == null) {
+        ElMessage({
+          type: "error",
+          message: "로그인 후 이용해주세요",
+        });
+        this.$router.push({ name: "login" });
+      } else {
+        this.$router.push({ name: "studycreate" });
+      }
     },
   },
 };
