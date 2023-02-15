@@ -88,8 +88,9 @@
 
           <!-- 스터디 신청, 취소, 입장-->
           <el-row justify="end">
-            <el-col :span="4">
+            <el-col :span="5">
               <el-button
+                style="width: 200px"
                 v-if="!isDone && (isApplied || isAuthor)"
                 @click="showDialog"
                 round
@@ -101,8 +102,8 @@
             </el-col>
           </el-row>
           <!-- 신청 / 신청취소 -->
-          <el-row justify="end" class="row">
-            <e-col :span="4" v-if="!isAuthor">
+          <el-row justify="end">
+            <e-col :span="5" v-if="!isAuthor">
               <el-button
                 v-if="!isApplied && isPossible"
                 @click="applyStudy"
@@ -468,7 +469,7 @@ export default {
 }
 
 button {
-  color: white;
+  color: black;
 }
 .el-row {
   /* display: flex; */

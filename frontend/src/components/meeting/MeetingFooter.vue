@@ -1,23 +1,34 @@
 <template>
   <div class="footer">
-    <el-button round @click="showChat">채팅</el-button>
+    <el-button round @click="showChat" size="large">채팅</el-button>
 
     <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
-    <el-button v-if="isLeader && nowTurn == null" type="success" round @click="startMeeting">미팅시작</el-button>
+    <el-button
+      v-if="isLeader && nowTurn == null"
+      type="success"
+      size="large"
+      round
+      @click="startMeeting"
+      >미팅시작</el-button
+    >
     <el-button
       id="endBtn"
       v-if="isLeader && nowTurn != null"
       type="success"
+      size="large"
       round
       @click="nextTurn"
       v-bind:disabled="leaderTurn >= totalTurn"
       >면접종료</el-button
     >
-    <el-button type="danger" round @click="goLeaveSession">나가기</el-button>
+    <el-button type="danger" round @click="goLeaveSession" size="large"
+      >나가기</el-button
+    >
   </div>
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 import { mapState, mapActions, mapMutations } from "vuex";
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
@@ -56,7 +67,10 @@ export default {
     ...mapActions(meetingStore, ["makeScoreAndGetOrder", "makeScorecards"]),
     async startMeeting() {
       if (this.intervieweeRate == 0) {
-        alert("면접자 : 면접관 비율을 선택해주세요!");
+        ElMessage({
+          message: "면접 유형을 선택해주세요.",
+          type: "error",
+        });
       } else {
         console.log("면접자의 수 >> " + this.intervieweeRate);
         const params = {
@@ -98,6 +112,7 @@ export default {
 
 <style scoped>
 .footer {
+  background-color: white;
   margin: 3%;
   float: left;
 }

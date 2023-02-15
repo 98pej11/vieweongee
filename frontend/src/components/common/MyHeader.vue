@@ -110,7 +110,7 @@ export default defineComponent({
     },
 
     goboard() {
-      this.$router.push({ name: "studylist" });
+      this.$router.replace({ name: "studylist" });
     },
 
     open() {
@@ -151,6 +151,7 @@ export default defineComponent({
 
 .Header {
   /* position: fixed; */
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
