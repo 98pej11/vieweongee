@@ -68,6 +68,7 @@
                 ref="personnel"
                 class="m-2 select"
                 placeholder="인원 수를 선택하세요."
+                disabled
               >
                 <el-option
                   v-for="item in personnelOptions"
@@ -83,6 +84,7 @@
                 ref="type"
                 class="m-2"
                 placeholder="면접 유형을 선택하세요."
+                disabled
               >
                 <el-option
                   v-for="item in typeOptions"
