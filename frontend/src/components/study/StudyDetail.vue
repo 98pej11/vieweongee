@@ -389,7 +389,7 @@ export default {
       axios.defaults.headers.put["ACCESS"] = sessionStorage.getItem("ACCESS");
       axios({
         method: "put",
-        url: `http://localhost:8080/api/study/${this.studyID}/resume`,
+        url: `https://vieweongee.kro.kr:8080/api/study/${this.studyID}/resume`,
         data: formData,
       })
         .then((data) => {
