@@ -36,6 +36,7 @@ const meetingStore = {
 
     isShowChat: false, // 채탕 보여줄래 말래
     nicknameList: [],
+    totalNowList: [],
   },
   getters: {},
   mutations: {
@@ -103,6 +104,9 @@ const meetingStore = {
     },
     SET_NICKNAME_LIST(state, nickname) {
       state.nicknameList.push(nickname);
+    },
+    SET_TOTAL_NOW_LIST(state, obj) {
+      state.totalNowList.push(obj);
     },
   },
   actions: {
@@ -262,6 +266,21 @@ const meetingStore = {
       console.log(state.nowScoreList);
       console.log("자소서 이미지도 보여줄게요");
       console.log(state.nowResumeList);
+
+      //지금 면접자의 아이디와 닉네임 리스트에서 일치하는 닉네임을 total에 넣음
+      for (let i = 0; i < state.nowScoreList.length; i++) {
+        for (let j = 0; j < state.nicknameList.length; j++) {
+          if (state.nowScoreList[i].id == state.nicknameList[j].id) {
+            let obj = state.nowScoreList[i];
+            obj.nickname = state.nicknameList[j].nickname;
+            commit("SET_TOTAL_NOW_LIST", obj);
+            break;
+          }
+        }
+      }
+
+      console.log("총 리스트 보여주세여 >> ");
+      console.log(state.totalNowList);
     },
     async saveScore({ state }, study_ID) {
       //로컬 스토리지에 있는 지금 면접자꺼 다 가져옴
