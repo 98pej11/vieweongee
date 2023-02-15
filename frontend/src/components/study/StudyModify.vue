@@ -7,7 +7,7 @@
           <el-row :gutter="20">
             <el-col><p>제목</p></el-col>
             <el-col>
-              <el-input v-model="modifyInfo.title" ref="title" />
+              <el-input v-model="modifyInfo.title" ref="title" maxlength="25" />
             </el-col>
           </el-row>
 
@@ -67,7 +67,7 @@
                 v-model="modifyInfo.personnel"
                 ref="personnel"
                 class="m-2 select"
-                placeholder="인원 수를 선택하세요."
+                disabled
               >
                 <el-option
                   v-for="item in personnelOptions"
@@ -82,7 +82,7 @@
                 v-model="modifyInfo.type"
                 ref="type"
                 class="m-2"
-                placeholder="면접 유형을 선택하세요."
+                disabled
               >
                 <el-option
                   v-for="item in typeOptions"
