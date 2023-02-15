@@ -120,6 +120,9 @@ public class CommentServiceImpl implements CommentService {
                 result.add(reply);
                 reply_id = now.getReply_id();
                 System.out.println(reply);
+            } else {
+                result.get(result.size() - 1).setUser_id(now.getReply_user_id());
+                result.get(result.size() - 1).setUser_name(now.getUser_name());
             }
 
             if (i != commentList.size() - 1 && commentList.get(i + 1).getComment_id() != now.getComment_id()) {
