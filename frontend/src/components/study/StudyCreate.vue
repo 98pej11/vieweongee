@@ -143,7 +143,7 @@
                 </div>
               </div> -->
               <!-- <el-button
-                block
+                blockㄹㅇㄹ
                 color="#9DADD8"
                 size="large"
                 style="margin-top: 3%; text-align: center; width: 25%"
@@ -342,11 +342,11 @@ export default {
         study_datetime: "",
         running_time: 0,
         content: "",
-        attitude: 0,
-        ability: 0,
-        teamwork: 0,
-        solving: 0,
-        loyalty: 0,
+        attitude: 1,
+        ability: 1,
+        teamwork: 1,
+        solving: 1,
+        loyalty: 1,
       },
 
       typeOptions: [
