@@ -8,14 +8,15 @@
         ><p @click="replyBtn()" style="cursor: pointer">답글 달기</p>
       </el-col>
     </el-row>
-    <!-- 댓글 수정 -->
     <el-row>
+      <!-- 댓글 수정 -->
       <el-col v-if="this.modifying" :span="20" style="color: black">
         <el-input
           label="댓글을 입력하세요..."
           type="text"
           size="large"
           v-model="myComment"
+          maxlength="200"
         ></el-input>
       </el-col>
       <el-col v-if="this.modifying" :span="4">
@@ -28,8 +29,12 @@
           >완료</el-button
         ></el-col
       >
-
-      <el-col v-if="!this.modifying" :span="20" style="color: black">
+      <!-- 댓글 내용 -->
+      <el-col
+        v-if="!this.modifying"
+        :span="20"
+        style="color: black; width: 100%"
+      >
         {{ commentItem.content }}
       </el-col>
       <el-col
@@ -58,6 +63,7 @@
           v-model="myReply"
           label="댓글을 입력하세요..."
           type="text"
+          maxlength="200"
         ></el-input>
         <div class="reply-button">
           <el-button
