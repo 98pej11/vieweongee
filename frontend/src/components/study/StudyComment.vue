@@ -11,6 +11,7 @@
             v-model="myComment.content"
             type="text"
             @keyup.enter="CommentSubmit"
+            maxlength="200"
           >
           </el-input>
           <div id="comment-button">
@@ -20,7 +21,7 @@
       </el-row>
       <div v-for="(data, index) in comments" :key="index">
         <!-- 댓글 -->
-        <div v-if="data.depth == 1">
+        <div v-if="data.depth == 1" class="comment-div">
           <StudyCommentItem
             :commentItem="data"
             :key="isUpdate"
@@ -28,7 +29,7 @@
           ></StudyCommentItem>
         </div>
         <!-- 대댓글 -->
-        <div v-if="data.depth == 2">
+        <div v-if="data.depth == 2" class="comment-div">
           <StudyReplyItem
             :commentItem="data"
             :key="isUpdate"

@@ -160,7 +160,7 @@
           >
             <el-col><p>진행시간</p></el-col>
             <el-radio-group v-model="studyFormInfo.running_time">
-              <el-radio :label="1">1시간</el-radio>
+              <el-radio ref="runtime" :label="1">1시간</el-radio>
               <el-radio :label="2">2시간</el-radio>
               <el-radio :label="3">3시간</el-radio>
               <el-radio :label="4">4시간</el-radio>
@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { mapState, mapActions } from "vuex";
 import { ref } from "vue";
 import moment from "moment";
@@ -243,28 +243,17 @@ export default {
           this.studyFormInfo.study_datetime.replace(" ", "T");
         this.confirm();
       } else {
-        console.log("빈칸이 있단다 ");
-        this.isError = true;
-        await this.sleep(3000).then(() => {
-          this.isError = false;
-        });
+        this.studyFormInfo.study_datetime =
+          this.studyFormInfo.study_datetime.replace(" ", "T");
+        this.confirm();
       }
     },
-    // 유효성 검사
-    isEmpty() {
-      if (
-        this.studyFormInfo.title == "" ||
-        this.studyFormInfo.company == "" ||
-        this.studyFormInfo.job == "" ||
-        this.studyFormInfo.study_datetime == "" ||
-        this.studyFormInfo.type == "" ||
-        this.studyFormInfo.running_time == 0 ||
-        this.studyFormInfo.personnel == 0
-      ) {
-        return false;
-      }
-
-      return true;
+    // 유효성 alert
+    showAlert(msg) {
+      ElMessage({
+        type: "error",
+        message: msg + "해주세요",
+      });
     },
 
     // 날짜 선택 제한
