@@ -115,7 +115,7 @@ export default defineComponent({
       turnScore: null,
       abilScore: null,
       myStudyCards: [],
-      first: "#7daae8",
+      first: "yellow",
       second: "#409eff",
       third: "#9cf85f",
       fourth: "#f77fc7",
