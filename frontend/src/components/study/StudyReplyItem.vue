@@ -11,7 +11,12 @@
     <!-- 대댓글 수정 -->
     <el-row justify="end">
       <el-col v-if="this.modifying" :span="16" style="color: black">
-        <el-input type="text" size="large" v-model="myReply"></el-input>
+        <el-input
+          type="text"
+          size="large"
+          v-model="myReply"
+          maxlength="200"
+        ></el-input>
       </el-col>
       <el-col v-if="this.modifying" :span="4">
         <el-button
