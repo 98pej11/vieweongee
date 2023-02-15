@@ -1,7 +1,16 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 
-import { signin, findByEmail, getCode, tokenRegeneration, signout, update, signup, deleteUser } from "@/api/users";
+import {
+  signin,
+  findByEmail,
+  getCode,
+  tokenRegeneration,
+  signout,
+  update,
+  signup,
+  deleteUser,
+} from "@/api/users";
 // import http from "@/api/http";
 
 const memberStore = {
@@ -13,6 +22,7 @@ const memberStore = {
     code: null,
     isValidToken: false,
     isValidEmail: false,
+    isValidName: false,
   },
   getters: {
     checkIsLogin: function (state) {
@@ -50,6 +60,9 @@ const memberStore = {
     },
     SET_IS_VALID_EMAIL(state, flag) {
       state.isValidEmail = flag;
+    },
+    SET_IS_VALID_NAME(state, flag) {
+      state.isValidName = flag;
     },
   },
   actions: {
@@ -103,7 +116,9 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "SUCCESS") {
             console.log("회원가입 가능함! :  ");
-            alert("사용 가능한 이메일 입니다.\n작성하신 이메일로 인증번호를 전송했습니다.");
+            alert(
+              "사용 가능한 이메일 입니다.\n작성하신 이메일로 인증번호를 전송했습니다."
+            );
             dispatch("getEmailCode", user.email);
           }
         },
@@ -156,7 +171,10 @@ const memberStore = {
     //   );
     // },
     async tokenRegeneration({ commit, state }) {
-      console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("accessToken"));
+      console.log(
+        "토큰 재발급 >> 기존 토큰 정보 : {}",
+        sessionStorage.getItem("accessToken")
+      );
       await tokenRegeneration(
         JSON.stringify(state.data),
         ({ data }) => {

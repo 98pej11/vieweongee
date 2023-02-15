@@ -8,6 +8,7 @@
         <el-row :gutter="20">
           <el-col>
             <el-input
+              type="password"
               placeholder="변경할 비밀번호 입력"
               v-model="user.password"
             />
@@ -16,6 +17,7 @@
         <el-row :gutter="20">
           <el-col>
             <el-input
+              type="password"
               placeholder="비밀번호 재확인"
               v-model="user.passwordCheck"
             />

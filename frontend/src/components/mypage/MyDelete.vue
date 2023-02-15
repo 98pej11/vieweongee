@@ -17,6 +17,7 @@
         <el-row :gutter="20">
           <el-col>
             <el-input
+              type="password"
               placeholder="본인 비밀번호 확인"
               v-model="user.password"
             />
