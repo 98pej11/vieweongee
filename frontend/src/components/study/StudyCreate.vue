@@ -340,7 +340,7 @@ export default {
         personnel: 0,
         type: "",
         study_datetime: "",
-        running_time: 0,
+        running_time: 1,
         content: "",
         attitude: 1,
         ability: 1,
