@@ -162,7 +162,9 @@ public class StudyController {
     @GetMapping("/search/{words}")
     public ResponseEntity<?> searchStudy(@PathVariable String words) {
         // 콤마와 띄어쓰기로 구분하여 List로 바꾸기
-        String search = words.replace(",", "|").replace(" ", "|");
+//        String search = words.replace(",", "|").replace(" ", "|");
+        String search = words.replace(",", " ").replaceAll("\\s+", " ").replace(" ", "|");
+
         Map<String, Object> result = new HashMap<>();
         List<Study> studyList = studyService.searchStudy(search);
         if (studyList.isEmpty()) {
