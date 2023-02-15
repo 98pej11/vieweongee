@@ -7,7 +7,11 @@
           <el-row :gutter="20">
             <el-col><p>제목</p></el-col>
             <el-col>
-              <el-input v-model="studyFormInfo.title" ref="title" placeholder="제목을 입력하세요." />
+              <el-input
+                v-model="studyFormInfo.title"
+                ref="title"
+                placeholder="제목을 입력하세요."
+              />
             </el-col>
           </el-row>
 
@@ -22,12 +26,26 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-input v-model="studyFormInfo.company" ref="company" placeholder="기업을 입력하세요." />
+              <el-input
+                v-model="studyFormInfo.company"
+                ref="company"
+                placeholder="기업을 입력하세요."
+              />
             </el-col>
 
             <el-col :span="12">
-              <el-select v-model="studyFormInfo.job" class="m-2" ref="job" placeholder="직군을 선택하세요.">
-                <el-option v-for="item in jobOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-select
+                v-model="studyFormInfo.job"
+                class="m-2"
+                ref="job"
+                placeholder="직군을 선택하세요."
+              >
+                <el-option
+                  v-for="item in jobOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
           </el-row>
@@ -46,7 +64,9 @@
               />
             </el-col>
           </el-row>
-          <el-row v-show="isError"> <el-alert title="24시간 이후로 선택해주세요" type="error" /></el-row>
+          <el-row v-show="isError">
+            <el-alert title="24시간 이후로 선택해주세요" type="error"
+          /></el-row>
 
           <el-row :gutter="20">
             <el-col :span="12">
@@ -65,12 +85,27 @@
                 class="m-2 select"
                 placeholder="인원 수를 선택하세요."
               >
-                <el-option v-for="item in personnelOptions" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in personnelOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
             <el-col :span="12">
-              <el-select v-model="studyFormInfo.type" ref="type" class="m-2" placeholder="면접 유형을 선택하세요.">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-select
+                v-model="studyFormInfo.type"
+                ref="type"
+                class="m-2"
+                placeholder="면접 유형을 선택하세요."
+              >
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
           </el-row>
@@ -83,27 +118,31 @@
               style="margin: 0 auto; margin-top: 3%"
               @click="showDialog"
             >
-              채점 템플릿 선택
+              채점 템플릿 미리보기
             </el-button>
-            <el-dialog class="el-dialog" v-model="dialogVisible" width="600px" style="border-radius: 5%">
+            <el-dialog
+              class="el-dialog"
+              v-model="dialogVisible"
+              width="600px"
+              style="border-radius: 5%"
+            >
               <el-table
                 class="el-table"
                 :span-method="objectSpanMethod"
                 :data="tableData"
                 style="width: 100%"
-                @selection-change="handleSelectionChange"
                 :class="tableRowClassName"
               >
-                <el-table-column type="selection" width="35"></el-table-column>
+                <!-- <el-table-column type="selection" width="35"></el-table-column> -->
                 <el-table-column prop="type" label="대분류" width="120" />
                 <el-table-column prop="name1" label="항목" />
               </el-table>
-              <div v-if="isChecked">
+              <!-- <div v-if="isChecked">
                 <div style="margin-top: 3%; text-align: center; color: red">
                   * 최소 1개 이상의 대분류를 선택해주세요.
                 </div>
-              </div>
-              <el-button
+              </div> -->
+              <!-- <el-button
                 block
                 color="#9DADD8"
                 size="large"
@@ -111,11 +150,14 @@
                 @click="setScoringList"
               >
                 완료
-              </el-button>
+              </el-button> -->
             </el-dialog>
           </el-row>
 
-          <el-row :gutter="20" style="display: flex; justify-content: space-around">
+          <el-row
+            :gutter="20"
+            style="display: flex; justify-content: space-around"
+          >
             <el-col><p>진행시간</p></el-col>
             <el-radio-group v-model="studyFormInfo.running_time">
               <el-radio :label="1">1시간</el-radio>
@@ -197,7 +239,8 @@ export default {
       console.log(this.studyFormInfo);
 
       if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
-        this.studyFormInfo.study_datetime = this.studyFormInfo.study_datetime.replace(" ", "T");
+        this.studyFormInfo.study_datetime =
+          this.studyFormInfo.study_datetime.replace(" ", "T");
         this.confirm();
       } else {
         console.log("빈칸이 있단다 ");
@@ -244,24 +287,24 @@ export default {
       multipleSelection.value = []; // checked option 초기화
     },
     // 채점 템플릿 checked option
-    handleSelectionChange(val) {
-      multipleSelection.value = val;
-    },
+    // handleSelectionChange(val) {
+    //   multipleSelection.value = val;
+    // },
     // 채점 템플릿 선택 사항
-    setScoringList() {
-      if (multipleSelection.value.length == 0) this.isChecked = true;
-      else {
-        multipleSelection.value.forEach((el) => {
-          console.log(el.type);
-          if (el.type == "태도") this.studyFormInfo.attitude = 1;
-          if (el.type == "직무역량") this.studyFormInfo.ability = 1;
-          if (el.type == "팀워크") this.studyFormInfo.teamwork = 1;
-          if (el.type == "기업이해도") this.studyFormInfo.solving = 1;
-          if (el.type == "태도") this.studyFormInfo.loyalty = 1;
-        });
-        this.dialogVisible = false;
-      }
-    },
+    // setScoringList() {
+    //   if (multipleSelection.value.length == 0) this.isChecked = true;
+    //   else {
+    //     multipleSelection.value.forEach((el) => {
+    //       console.log(el.type);
+    //       if (el.type == "태도") this.studyFormInfo.attitude = 1;
+    //       if (el.type == "직무역량") this.studyFormInfo.ability = 1;
+    //       if (el.type == "팀워크") this.studyFormInfo.teamwork = 1;
+    //       if (el.type == "기업이해도") this.studyFormInfo.solving = 1;
+    //       if (el.type == "태도") this.studyFormInfo.loyalty = 1;
+    //     });
+    //     this.dialogVisible = false;
+    //   }
+    // },
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0 || columnIndex === 1) {
