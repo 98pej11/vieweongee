@@ -37,21 +37,18 @@
             v-if="this.turnScore[2] != null"
             :percentage="this.turnScore[2].total_average * 20"
             :format="format"
-            status="success"
           ></el-progress>
           <h5>4회차</h5>
           <el-progress
             v-if="this.turnScore[3] != null"
             :percentage="this.turnScore[3].total_average * 20"
             :format="format"
-            status="warning"
           ></el-progress>
           <h5>5회차</h5>
           <el-progress
             v-if="this.turnScore[4] != null"
             :percentage="this.turnScore[4].total_average * 20"
             :format="format"
-            status="exception"
           ></el-progress>
         </div>
 
@@ -74,20 +71,11 @@
             :format="format"
           />
           <h5>팀워크</h5>
-          <el-progress
-            :percentage="this.abilScore.teamwork_average * 20"
-            status="success"
-          />
+          <el-progress :percentage="this.abilScore.teamwork_average * 20" />
           <h5>문제해결</h5>
-          <el-progress
-            :percentage="this.abilScore.solving_average * 20"
-            status="warning"
-          />
+          <el-progress :percentage="this.abilScore.solving_average * 20" />
           <h5>기업이해도</h5>
-          <el-progress
-            :percentage="this.abilScore.loyalty_average * 20"
-            status="exception"
-          />
+          <el-progress :percentage="this.abilScore.loyalty_average * 20" />
         </div>
 
         <div class="demo-progress" style="" v-else>
