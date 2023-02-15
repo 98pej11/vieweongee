@@ -237,17 +237,35 @@ export default {
     // 스터디 생성 폼 submit
     async submitForm() {
       console.log(this.studyFormInfo);
-
-      if (this.checkDate(this.studyFormInfo.study_datetime)) {
-        this.studyFormInfo.study_datetime =
-          this.studyFormInfo.study_datetime.replace(" ", "T");
-        this.confirm();
+      if (!this.isEmpty()) {
+        alert("모든 항목을 작성해주시길 바랍니다.");
+      } else if (!this.checkDate(this.studyFormInfo.study_datetime)) {
+        this.isError = true;
+        await this.sleep(3000).then(() => {
+          this.isError = false;
+        });
       } else {
         this.studyFormInfo.study_datetime =
           this.studyFormInfo.study_datetime.replace(" ", "T");
         this.confirm();
       }
     },
+    // 유효성 검사
+    isEmpty() {
+      if (
+        this.studyFormInfo.title == "" ||
+        this.studyFormInfo.company == "" ||
+        this.studyFormInfo.job == "" ||
+        this.studyFormInfo.study_datetime == "" ||
+        this.studyFormInfo.type == "" ||
+        this.studyFormInfo.personnel == 0
+      ) {
+        return false;
+      }
+
+      return true;
+    },
+
     // 유효성 alert
     showAlert(msg) {
       ElMessage({
