@@ -202,8 +202,8 @@ export default {
         }
       }
     }
-    // console.log("총 리스트 보여주세요 >>");
-    // console.log(this.totalNowList);
+    console.log("총 리스트 보여주세요 >>");
+    console.log(this.totalNowList);
   },
 
   methods: {
