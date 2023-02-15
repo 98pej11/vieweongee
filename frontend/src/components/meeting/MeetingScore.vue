@@ -3,10 +3,13 @@
     <h3>당신은 면접관입니다.</h3>
     <!-- <div v-for="(li, i) in nowScoreList" :key="i"> -->
     <el-tabs type="border-card" class="demo-tabs">
-      <el-tab-pane v-for="(li, i) in nowScoreList" :key="i">
+      <el-tab-pane v-for="(li, i) in totalNowList" :key="i">
         <template #label>
           <span class="custom-tabs-label">
-            <span>면접자: {{ li.id }}</span>
+            <span
+              ><b>{{ li.nickname }}</b
+              >님</span
+            >
           </span> </template
         ><el-tabs type="border-card" class="demo-tabs">
           <el-tab-pane>
@@ -113,11 +116,11 @@ export default {
     MeetingResume,
   },
   computed: {
-    ...mapState(meetingStore, ["nowScoreList", "nowResumeList"]),
+    ...mapState(meetingStore, ["nowScoreList", "nowResumeList", "nicknameList"]),
   },
   data() {
     return {
-      saveName: "",
+      totalNowList: [],
       scoreData: [
         {
           type: "태도",
@@ -183,24 +186,30 @@ export default {
     };
   },
   created() {},
+  mounted() {
+    //지금 면접자의 아이디와 닉네임 리스트에서 일치하는 닉네임을 total에 넣음
+    for (let i = 0; i < this.nowScoreList.length; i++) {
+      // console.log("참가자 아이디 >>");
+      // console.log(this.nowScoreList[i].id);
+      for (let j = 0; j < this.nicknameList.length; j++) {
+        if (this.nowScoreList[i].id == this.nicknameList[j].id) {
+          // let obj = this.nicknameList[j].nickname;
+          // console.log("지금 면접자 닉네임 >> " + obj);
+          let obj = this.nowScoreList[i];
+          obj.nickname = this.nicknameList[j].nickname;
+          this.totalNowList.push(obj);
+          break;
+        }
+      }
+    }
+    // console.log("총 리스트 보여주세요 >>");
+    // console.log(this.totalNowList);
+  },
+
   methods: {
     saveToLocal(list) {
-      // console.log("저장 버튼 클릭!");
       console.log(list);
-      //로컬 스토리지에 저장
-      // const saveScore = {
-      //   id: list.id,
-      //   ability: list.ability,
-      //   attitude: list.attitude,
-      //   loyalty: list.loyalty,
-      //   solving: list.loyalty,
-      //   teamwork: list.teamwork,
-      //   feedback: list.feedback,
-      // };
-      // this.saveName = "save#" + list.id;
-      // localStorage.setItem(this.saveName, JSON.stringify(saveScore));
       console.log("저장 버튼 눌렀어요");
-      // console.log(JSON.parse(localStorage.getItem(this.saveName)));
     },
   },
 };
