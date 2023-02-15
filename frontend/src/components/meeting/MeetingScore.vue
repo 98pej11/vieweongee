@@ -116,11 +116,11 @@ export default {
     MeetingResume,
   },
   computed: {
-    ...mapState(meetingStore, ["nowScoreList", "nowResumeList", "nicknameList"]),
+    ...mapState(meetingStore, ["nowScoreList", "nowResumeList", "nicknameList", "totalNowList"]),
   },
   data() {
     return {
-      totalNowList: [],
+      // totalNowList: [],
       scoreData: [
         {
           type: "태도",
@@ -188,22 +188,22 @@ export default {
   created() {},
   mounted() {
     //지금 면접자의 아이디와 닉네임 리스트에서 일치하는 닉네임을 total에 넣음
-    for (let i = 0; i < this.nowScoreList.length; i++) {
-      // console.log("참가자 아이디 >>");
-      // console.log(this.nowScoreList[i].id);
-      for (let j = 0; j < this.nicknameList.length; j++) {
-        if (this.nowScoreList[i].id == this.nicknameList[j].id) {
-          // let obj = this.nicknameList[j].nickname;
-          // console.log("지금 면접자 닉네임 >> " + obj);
-          let obj = this.nowScoreList[i];
-          obj.nickname = this.nicknameList[j].nickname;
-          this.totalNowList.push(obj);
-          break;
-        }
-      }
-    }
-    console.log("총 리스트 보여주세요 >>");
-    console.log(this.totalNowList);
+    // for (let i = 0; i < this.nowScoreList.length; i++) {
+    //   // console.log("참가자 아이디 >>");
+    //   // console.log(this.nowScoreList[i].id);
+    //   for (let j = 0; j < this.nicknameList.length; j++) {
+    //     if (this.nowScoreList[i].id == this.nicknameList[j].id) {
+    //       // let obj = this.nicknameList[j].nickname;
+    //       // console.log("지금 면접자 닉네임 >> " + obj);
+    //       let obj = this.nowScoreList[i];
+    //       obj.nickname = this.nicknameList[j].nickname;
+    //       this.totalNowList.push(obj);
+    //       break;
+    //     }
+    //   }
+    // }
+    // console.log("총 리스트 보여주세요 >>");
+    // console.log(this.totalNowList);
   },
 
   methods: {
