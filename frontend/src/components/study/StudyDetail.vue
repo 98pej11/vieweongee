@@ -11,18 +11,17 @@
           <h1 class="text-h6 mb-3">{{ studyInfo.title }}</h1>
           <!-- 스터디 정보 -->
           <el-row>
-            <el-col :span="20">
-              <div style="float: right">
+            <el-col :span="20" :xs="24">
+              <div>
                 {{ studyInfo.user_nickname }} 님 |
                 {{ studyInfo.regist_datetime }}
               </div>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="4" :xs="24">
               <div class="person-div">
-                &nbsp; <el-icon :size="17"><User /></el-icon>&nbsp;{{
+                <el-icon :size="17"><User /></el-icon>&nbsp;{{
                   this.current
-                }}&nbsp;/
-                {{ studyInfo.personnel }}
+                }}&nbsp;/&nbsp;{{ studyInfo.personnel }}
               </div>
             </el-col>
           </el-row>
@@ -85,30 +84,23 @@
                 </div>
               </template>
             </el-upload>
-            <!-- <el-button
-            block
-            color="#9DADD8"
-            size="large"
-            style="display: block; margin: auto; width: 25%"
-            @click="submitImage"
-          >
-            완료
-          </el-button> -->
           </el-dialog>
 
           <!-- 스터디 신청, 취소, 입장-->
-          <div style="margin-left: 70%">
-            <el-row>
-              <el-button
-                v-if="isApplied || isAuthor"
-                @click="showDialog"
-                round
-                color="#E1E6FF"
-                class="me-2"
-              >
-                자기소개서 업로드
-              </el-button>
-              <div v-if="!isAuthor">
+          <div>
+            <el-row justify="end" class="row" style="margin-right: 10px">
+              <el-col :span="5">
+                <el-button
+                  v-if="isApplied || isAuthor"
+                  @click="showDialog"
+                  round
+                  color="#E1E6FF"
+                  class="me-2"
+                >
+                  자기소개서 업로드
+                </el-button>
+              </el-col>
+              <e-col v-if="!isAuthor" :span="2">
                 <el-button
                   v-if="!isApplied && isPossible"
                   @click="applyStudy"
@@ -128,34 +120,34 @@
                 >
                   신청취소
                 </el-button>
-              </div>
-              <el-button
-                v-if="!isPossible"
-                round
-                disabled
-                color="#555454"
-                class="me-2 done"
-              >
-                마감
-              </el-button>
-              <el-button
-                v-if="isOpened && (isApplied || isAuthor)"
-                @click="enterMeeting(this.studyID)"
-                round
-                color="#FFCD9F"
-                class="me-2"
-              >
-                입장
-              </el-button>
-              <el-button
-                v-if="isDone"
-                round
-                disabled
-                color="#555454"
-                class="me-2 done"
-              >
-                종료
-              </el-button>
+              </e-col>
+              <el-col :span="2">
+                <el-button
+                  v-if="!isPossible"
+                  round
+                  disabled
+                  color="#555454"
+                  class="me-2 done"
+                >
+                  마감
+                </el-button>
+              </el-col>
+              <el-col :span="2">
+                <el-button
+                  v-if="isOpened && (!isDone || isApplied || isAuthor)"
+                  @click="enterMeeting(this.studyID)"
+                  round
+                  color="#FFCD9F"
+                  class="me-2"
+                >
+                  입장
+                </el-button>
+              </el-col>
+              <el-col v-if="isDone" :span="2">
+                <el-button round disabled color="#555454" class="me-2 done">
+                  종료
+                </el-button>
+              </el-col>
             </el-row>
             <!-- 스터디 수정 및 삭제 -->
             <el-row justify="end" style="margin-top: 10px">
@@ -339,9 +331,10 @@ export default {
         this.isOpened = false;
       }
       // 화상미팅 종료 이후
-      else if (closed <= 0) {
+      else if (closed + this.studyInfo.running_time <= 0) {
         this.isDone = true;
       }
+      console.log(closed + " / " + this.studyInfo.running_time);
     },
 
     // 화상회의 참여
@@ -467,9 +460,9 @@ button {
   color: white;
 }
 .el-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
   font-size: larger;
 }
 .el-row > :nth-child(1) {
@@ -496,7 +489,7 @@ hr {
 
 .person-div {
   /* padding: 5px; */
-  width: 60%;
+  width: 110px;
   height: 40px;
   margin: 0 auto;
   border-radius: 30px;
