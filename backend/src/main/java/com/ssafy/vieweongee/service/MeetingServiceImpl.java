@@ -5,6 +5,7 @@ import com.ssafy.vieweongee.dto.meeting.MeetingResumeRequest;
 import com.ssafy.vieweongee.dto.meeting.MeetingScoreRequest;
 import com.ssafy.vieweongee.entity.*;
 import com.ssafy.vieweongee.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MeetingServiceImpl implements MeetingService {
 
     private final ScoreRepository meetingScoreRepository;
@@ -20,14 +22,18 @@ public class MeetingServiceImpl implements MeetingService {
     private final UserRepository userRepository;
     private final StudyRepository studyRepository;
     private final ProgressRepository progressRepository;
+    private final SummaryRepository summaryRepository;
+    private final ScorecardRepository scorecardRepository;
 
     @Autowired
-    public MeetingServiceImpl(ScoreRepository meetingScoreRepository, ParticipantRepository participantRepository, UserRepository userRepository, StudyRepository studyRepository, ProgressRepository progressRepository) {
+    public MeetingServiceImpl(ScoreRepository meetingScoreRepository, ParticipantRepository participantRepository, UserRepository userRepository, StudyRepository studyRepository, ProgressRepository progressRepository, SummaryRepository summaryRepository, ScorecardRepository scorecardRepository) {
         this.meetingScoreRepository = meetingScoreRepository;
         this.participantRepository = participantRepository;
         this.userRepository = userRepository;
         this.studyRepository = studyRepository;
         this.progressRepository = progressRepository;
+        this.summaryRepository = summaryRepository;
+        this.scorecardRepository = scorecardRepository;
     }
 
     /**
@@ -40,10 +46,11 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateStudyProgress(String studyId) {
         //스터디 아이디로 스터디 참가 이력 가져옴
         List<Progress> list = progressRepository.findAllByStudyId(Long.parseLong(studyId));
-
+        log.info("업데이트 들어왔다아아악, 참가 이력은 {}",list.get(0));
         //스터디 참가 상태 변경 (예정 >> 완료)
         for (Progress progress : list) {
             progress.changeStatusToTrue();
+            progressRepository.save(progress);
         }
     }
 
@@ -114,6 +121,65 @@ public class MeetingServiceImpl implements MeetingService {
         Progress progress = progressRepository.findById(progressId).get();
         progress.changeStatusToTrue();
         progressRepository.save(progress);
+    }
+
+    @Override
+    public void updateSummary(Long studyId, Long userId) {
+        Study study = studyRepository.findById(studyId).get();
+        Summary summary = summaryRepository.findById(userId);
+        Scorecard scorecard = scorecardRepository.findFeedback(userId, studyId);
+
+        // count update
+        int ability = 0;
+        int attitude = 0;
+        int solving = 0;
+        int teamwork = 0;
+        int loyalty = 0;
+
+        if(study.isAbility())
+            ability = 1;
+        if(study.isSolving())
+            solving = 1;
+        if(study.isLoyalty())
+            loyalty = 1;
+        if(study.isTeamwork())
+            teamwork = 1;
+        if(study.isAttitude())
+            attitude = 1;
+
+        summary.updateCount(ability*scorecard.getInterviewer(), attitude*scorecard.getInterviewer(),
+                teamwork*scorecard.getInterviewer(), solving*scorecard.getInterviewer(), loyalty*scorecard.getInterviewer());
+
+        //total update
+        summary.updateTotal(scorecard.getAbility(), scorecard.getAttitude(),
+                scorecard.getTeamwork(), scorecard.getSolving(), scorecard.getLoyalty());
+
+        //average update
+        float attitude_average = 0;
+        float ability_average = 0;
+        float teamwork_average = 0;
+        float solving_average = 0;
+        float loyalty_average = 0;
+
+        if(summary.getAttitude_total() != 0 && summary.getAttitude_count() != 0){
+            attitude_average = (float) (Math.round((float)summary.getAttitude_total() / (float)summary.getAttitude_count()*100)/100.0);
+        }
+        if(summary.getAbility_total() != 0 && summary.getAbility_count() != 0){
+            ability_average = (float) (Math.round((float)summary.getAbility_total() / (float)summary.getAbility_count()*100)/100.0);
+        }
+        if(summary.getTeamwork_total() != 0 && summary.getTeamwork_count() != 0){
+            teamwork_average = (float) (Math.round((float)summary.getTeamwork_total() / (float)summary.getTeamwork_count()*100)/100.0);
+        }
+        if(summary.getSolving_total() != 0 && summary.getSolving_count() != 0){
+            solving_average = (float) (Math.round((float)summary.getSolving_total() / (float)summary.getSolving_count()*100)/100.0);
+        }
+        if(summary.getLoyalty_total() != 0 && summary.getLoyalty_count() != 0){
+            loyalty_average = (float) (Math.round((float)summary.getLoyalty_total() / (float)summary.getLoyalty_count()*100)/100.0);
+        }
+        summary.updateAverage(ability_average, attitude_average, teamwork_average, solving_average,loyalty_average);
+
+        //save
+        summaryRepository.save(summary);
     }
 
     /**

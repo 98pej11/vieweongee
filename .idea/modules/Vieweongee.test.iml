@@ -21,7 +21,7 @@
       <configuration />
     </facet>
   </component>
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output-test url="file://$MODULE_DIR$/../../backend/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../backend/src/test">
@@ -45,6 +45,8 @@
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-test:2.7.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-mail:2.7.8" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.31" level="project" />
+    <orderEntry type="library" name="Gradle: org.projectlombok:lombok:1.18.22" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.13.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-jpa:2.7.7" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.7.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:2.7.8" level="project" />
@@ -88,6 +90,7 @@
     <orderEntry type="library" name="Gradle: org.xmlunit:xmlunit-core:2.9.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-context-support:5.3.25" level="project" />
     <orderEntry type="library" name="Gradle: com.sun.mail:jakarta.mail:1.6.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:2.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-commons:2.7.7" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-context:5.3.25" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-orm:5.3.25" level="project" />

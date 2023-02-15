@@ -31,7 +31,7 @@ public class StudyResponse {
     private boolean loyalty;
     private boolean confirm;
     private LocalDateTime study_datetime;
-    private Date regist_datetime;
+    private LocalDateTime regist_datetime;
 
     public StudyResponse(Study study) {
         this.id = study.getId();

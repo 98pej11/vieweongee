@@ -1,7 +1,9 @@
 package com.ssafy.vieweongee.service;
 
 
+import com.ssafy.vieweongee.dto.user.request.UserCreateRequest;
 import com.ssafy.vieweongee.entity.User;
+import com.ssafy.vieweongee.repository.SummaryRepository;
 import com.ssafy.vieweongee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +26,10 @@ import static com.ssafy.vieweongee.controller.SocialUserController.NickName;
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-//    private final StudyRepository studyRepository;
-    private final TokenService tokenService;
     private final UserRepository userRepository;
+    private final SummaryService summaryService;
+
+//    private final UserCreateRequest userCreateRequest;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -67,6 +70,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 //                    user = new User(socialInfo);
 
                     userRepository.save(user);
+                    log.info("나야아아으으아아악?);");
+                    // 역량별 점수 초기화 테이블 생성
+                    UserCreateRequest userCreateRequest = new UserCreateRequest();
+                    userCreateRequest.setEmail(email);
+                    userCreateRequest.setProvider("kakao");
+                    summaryService.createSummary(userCreateRequest);
                 }
                 else {
                     user=userRepository.getUserByEmailandSocial(email, social);
@@ -76,6 +85,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         log.info("{}", oAuth2Attribute.getAttributeKey());
                         user = new User(email, NickName(), oAuth2Attribute.getProvider());
                         userRepository.save(user);
+
+                        // 역량별 점수 초기화 테이블 생성
+                        UserCreateRequest userCreateRequest = new UserCreateRequest();
+                        userCreateRequest.setEmail(email);
+                        userCreateRequest.setName(oAuth2User.getName());
+                        userCreateRequest.setProvider("kakao");
+                        summaryService.createSummary(userCreateRequest);
                     }
                         log.info("카카오 로그인 기록이 있습니당");
 //                user=userRepository.findUserByEmail(email);
@@ -98,7 +114,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     log.info("로그인이 처음! 회원으로 등록");
                     log.info("{}", oAuth2Attribute.getAttributeKey());
                     user = new User(email, NickName(), oAuth2Attribute.getProvider());
+
                     userRepository.save(user);
+
+                    // 역량별 점수 초기화 테이블 생성
+                    UserCreateRequest userCreateRequest = new UserCreateRequest();
+                    userCreateRequest.setEmail(email);
+                    userCreateRequest.setProvider("naver");
+                    log.info("######{}######",userCreateRequest.getEmail());
+                    log.info("######{}######",userCreateRequest.getProvider());
+                    summaryService.createSummary(userCreateRequest);
+
                 }
                 else{
                     user=userRepository.getUserByEmailandSocial(email,social);
@@ -108,6 +134,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         log.info("{}", oAuth2Attribute.getAttributeKey());
                         user = new User(email,  NickName(),oAuth2Attribute.getProvider());
                         userRepository.save(user);
+
+                        // 역량별 점수 초기화 테이블 생성
+                        UserCreateRequest userCreateRequest = new UserCreateRequest();
+                        userCreateRequest.setEmail(email);
+                        userCreateRequest.setProvider("naver");
+                        summaryService.createSummary(userCreateRequest);
 
                     }
                     log.info("로그인 기록이 있습니당");

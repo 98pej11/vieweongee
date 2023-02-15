@@ -64,7 +64,7 @@ public class CreateStudyRequest {
                 .loyalty(loyalty)
                 .confirm(confirm)
                 .study_datetime(study_datetime)
-                .regist_datetime(new Date())
+                .regist_datetime(LocalDateTime.now())
                 .build();
     }
 }

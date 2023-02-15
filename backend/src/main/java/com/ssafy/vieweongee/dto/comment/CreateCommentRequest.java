@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class CreateCommentRequest {
     public Comment toEntity(User user, Study study) {
         return Comment.builder()
                 .content(content)
-                .datetime(new Date())
+                .datetime(LocalDateTime.now())
                 .study(study)
                 .user(user)
                 .build();

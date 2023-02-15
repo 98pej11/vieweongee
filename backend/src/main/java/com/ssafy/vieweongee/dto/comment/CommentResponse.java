@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,9 +19,9 @@ public class CommentResponse {
     private Long reply_id;
     private int depth;
     private String content;
-    private Date datetime;
+    private LocalDateTime datetime;
 
-    public CommentResponse(Long user_id, String user_name, Long comment_id, int depth, String content, Date datetime){
+    public CommentResponse(Long user_id, String user_name, Long comment_id, int depth, String content, LocalDateTime datetime){
         this.user_id = user_id;
         this.user_name = user_name;
         this.comment_id = comment_id;
@@ -29,7 +30,7 @@ public class CommentResponse {
         this.datetime = datetime;
     }
 
-    public CommentResponse(Long user_id, String user_name, Long comment_id, Long reply_id, int depth, String content, Date datetime) {
+    public CommentResponse(Long user_id, String user_name, Long comment_id, Long reply_id, int depth, String content, LocalDateTime datetime) {
         this.user_id = user_id;
         this.user_name = user_name;
         this.comment_id = comment_id;
