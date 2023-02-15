@@ -7,7 +7,12 @@
           <el-row :gutter="20">
             <el-col><p>제목</p></el-col>
             <el-col>
-              <el-input v-model="studyFormInfo.title" ref="title" placeholder="제목을 입력하세요." />
+              <el-input
+                v-model="studyFormInfo.title"
+                ref="title"
+                placeholder="제목을 입력하세요."
+                maxlength="25"
+              />
             </el-col>
           </el-row>
 
@@ -22,12 +27,26 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-input v-model="studyFormInfo.company" ref="company" placeholder="기업을 입력하세요." />
+              <el-input
+                v-model="studyFormInfo.company"
+                ref="company"
+                placeholder="기업을 입력하세요."
+              />
             </el-col>
 
             <el-col :span="12">
-              <el-select v-model="studyFormInfo.job" class="m-2" ref="job" placeholder="직군을 선택하세요.">
-                <el-option v-for="item in jobOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-select
+                v-model="studyFormInfo.job"
+                class="m-2"
+                ref="job"
+                placeholder="직군을 선택하세요."
+              >
+                <el-option
+                  v-for="item in jobOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
           </el-row>
@@ -46,7 +65,9 @@
               />
             </el-col>
           </el-row>
-          <el-row v-show="isError"> <el-alert title="24시간 이후로 선택해주세요" type="error" /></el-row>
+          <el-row v-show="isError">
+            <el-alert title="24시간 이후로 선택해주세요" type="error"
+          /></el-row>
 
           <el-row :gutter="20">
             <el-col :span="12">
@@ -65,12 +86,27 @@
                 class="m-2 select"
                 placeholder="인원 수를 선택하세요."
               >
-                <el-option v-for="item in personnelOptions" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in personnelOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
             <el-col :span="12">
-              <el-select v-model="studyFormInfo.type" ref="type" class="m-2" placeholder="면접 유형을 선택하세요.">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-select
+                v-model="studyFormInfo.type"
+                ref="type"
+                class="m-2"
+                placeholder="면접 유형을 선택하세요."
+              >
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
           </el-row>
@@ -85,7 +121,12 @@
             >
               채점 템플릿 선택
             </el-button>
-            <el-dialog class="el-dialog" v-model="dialogVisible" width="600px" style="border-radius: 5%">
+            <el-dialog
+              class="el-dialog"
+              v-model="dialogVisible"
+              width="600px"
+              style="border-radius: 5%"
+            >
               <el-table
                 class="el-table"
                 :span-method="objectSpanMethod"
@@ -115,10 +156,13 @@
             </el-dialog>
           </el-row>
 
-          <el-row :gutter="20" style="display: flex; justify-content: space-around">
+          <el-row
+            :gutter="20"
+            style="display: flex; justify-content: space-around"
+          >
             <el-col><p>진행시간</p></el-col>
             <el-radio-group v-model="studyFormInfo.running_time">
-              <el-radio :label="1">1시간</el-radio>
+              <el-radio ref="runtime" :label="1">1시간</el-radio>
               <el-radio :label="2">2시간</el-radio>
               <el-radio :label="3">3시간</el-radio>
               <el-radio :label="4">4시간</el-radio>
@@ -159,7 +203,7 @@
 </template>
 
 <script>
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { mapState, mapActions } from "vuex";
 import { ref } from "vue";
 import moment from "moment";
@@ -196,32 +240,47 @@ export default {
     async submitForm() {
       console.log(this.studyFormInfo);
 
-      if (this.checkDate(this.studyFormInfo.study_datetime) && this.isEmpty()) {
-        this.studyFormInfo.study_datetime = this.studyFormInfo.study_datetime.replace(" ", "T");
-        this.confirm();
-      } else {
-        console.log("빈칸이 있단다 ");
-        this.isError = true;
-        await this.sleep(3000).then(() => {
-          this.isError = false;
-        });
-      }
-    },
-    // 유효성 검사
-    isEmpty() {
-      if (
-        this.studyFormInfo.title == "" ||
-        this.studyFormInfo.company == "" ||
-        this.studyFormInfo.job == "" ||
-        this.studyFormInfo.study_datetime == "" ||
-        this.studyFormInfo.type == "" ||
-        this.studyFormInfo.running_time == 0 ||
-        this.studyFormInfo.personnel == 0
-      ) {
-        return false;
+      let msg = "";
+      if (this.studyFormInfo.title == "") {
+        this.$refs.title.focus();
+        msg = "제목을 입력";
+      } else if (this.studyFormInfo.company == "") {
+        this.$refs.company.focus();
+        msg = "기업을 입력";
+      } else if (this.studyFormInfo.job == "") {
+        this.$refs.job.focus();
+        msg = "직군을 선택";
+      } else if (this.studyFormInfo.study_datetime == "") {
+        this.$refs.date.focus();
+        msg = "일시를 선택";
+      } else if (!this.checkDate(this.studyFormInfo.study_datetime)) {
+        this.$refs.date.focus();
+        msg = "24시간 이내로 선택";
+      } else if (this.studyFormInfo.personnel == 0) {
+        this.$refs.personnel.focus();
+        msg = "인원을 선택";
+      } else if (this.studyFormInfo.type == "") {
+        this.$refs.type.focus();
+        msg = "유형을 선택";
+      } else if (this.studyFormInfo.runtime == 0) {
+        this.$refs.runtime.focus();
+        msg = "진행시간을 선택";
       }
 
-      return true;
+      if (msg !== "") {
+        this.showAlert(msg);
+      } else {
+        this.studyFormInfo.study_datetime =
+          this.studyFormInfo.study_datetime.replace(" ", "T");
+        this.confirm();
+      }
+    },
+    // 유효성 alert
+    showAlert(msg) {
+      ElMessage({
+        type: "error",
+        message: msg + "해주세요",
+      });
     },
 
     // 날짜 선택 제한
