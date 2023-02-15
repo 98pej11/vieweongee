@@ -108,6 +108,9 @@ const meetingStore = {
     SET_TOTAL_NOW_LIST(state, obj) {
       state.totalNowList.push(obj);
     },
+    CLEAR_TOTAL_NOW_LIST(state) {
+      state.totalNowList = [];
+    },
   },
   actions: {
     async makeScoreAndGetOrder({ commit, state }, params) {
@@ -266,6 +269,8 @@ const meetingStore = {
       console.log(state.nowScoreList);
       console.log("자소서 이미지도 보여줄게요");
       console.log(state.nowResumeList);
+
+      commit("CLEAR_TOTAL_NOW_LIST");
 
       //지금 면접자의 아이디와 닉네임 리스트에서 일치하는 닉네임을 total에 넣음
       for (let i = 0; i < state.nowScoreList.length; i++) {
