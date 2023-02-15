@@ -169,12 +169,12 @@ export default {
       // const client_id='hCg3zNttO1i50cUABPON'
       // const callbackUrl='http://localhost:3000/'
       // var url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id='+client_id+'&redirect_uri='+callbackUrl+'&state=1234';
-      var url="https://vieweongee.kro.kr:8080/api/oauth2/authorization/naver"
+      var url="http://vieweongee.kro.kr:8080/api/oauth2/authorization/naver"
       window.location.href=url;
       
     },
     async kakaologin() {
-      var url = "https://vieweongee.kro.kr:8080/api/oauth2/authorization/kakao";
+      var url = "http://vieweongee.kro.kr:8080/api/oauth2/authorization/kakao";
       window.location.href = url;
       // await this.socailConfirm(url);
     },
