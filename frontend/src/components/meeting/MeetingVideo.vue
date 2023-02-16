@@ -7,7 +7,9 @@
           <!-- 헤더 -->
           <div id="session-header">
             <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
-            <h5>현재 회차 : {{ nowTurn }}</h5>
+            <div v-if="totalTurn > 0">
+              <h5>현재 회차 : {{ turn }} / {{ totalTurn }}</h5>
+            </div>
             <div id="timer-display" class="time-box">
               <h5>남은 시간&nbsp;</h5>
             </div>
@@ -114,6 +116,7 @@ export default {
       myUserName: "",
 
       setTime: 0, //종료시간
+      turn: 0,
     };
   },
   props: {
@@ -134,12 +137,14 @@ export default {
       "totalTurn",
       "isShowChat",
       "isLeaveSession",
+      "isEnd",
     ]),
     ...mapState(studyStore, ["studyInfo"]),
   },
   created() {
     this.joinSession(); //세션 참여
     this.getStudyInfo(); //스터디장 설정
+    this.turn = parseInt(this.nowTurn) + 1;
   },
   mounted() {
     this.calcRemainTime(); //타이머 설정
@@ -165,10 +170,13 @@ export default {
     //   this.checkMyRole(this.nowTurn);
     // },
     nowTurn() {
+      //지금 채점,자소서,총회차 초기화
+      this.CLEAR_NOW_LIST();
       //회차가 바뀌는 것 감지하면 이 회차에서 면접관, 면접자 확인
       this.checkMyRole(this.nowTurn);
       //내가 볼 면접자의 채점표 확인
       this.setShowScoreList(this.nowTurn);
+      this.turn = parseInt(this.nowTurn) + 1;
     },
     leaderTurn() {
       if (this.isLeader && this.leaderTurn > 0) {
@@ -180,18 +188,26 @@ export default {
       console.log("나가기 버튼 눌렀다!!!");
       if (this.isLeaveSession) {
         //나가기 버튼이 true일때
-        let isLeave = confirm(
-          "면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?"
-        );
-        if (isLeave) {
-          //yes
-          //나가기 버튼이 눌렸으면
-          //채점표 갱신
-          await this.saveScore(this.myStudyId);
+        if (this.isEnd) {
+          //면접 모든 회차가 종료됨. 그냥 나가기
           //confirm, status 변경 요청
           await this.changeConfirmAndStatus(this.myStudyId);
           //세션 연결 종료
           this.leaveSession();
+          this.SET_IS_END(false);
+        } else {
+          //채점표 저장하고 나가기
+          let isLeave = confirm("면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?");
+          if (isLeave) {
+            //yes
+            //나가기 버튼이 눌렸으면
+            //채점표 갱신
+            await this.saveScore(this.myStudyId);
+            //confirm, status 변경 요청
+            await this.changeConfirmAndStatus(this.myStudyId);
+            //세션 연결 종료
+            this.leaveSession();
+          }
         }
         this.SET_IS_LEAVE_SESSION(false); //나가기 버튼 false로 변경
       }
@@ -204,6 +220,8 @@ export default {
       "SET_IS_INTERVIEWER",
       "SET_NOWTURN",
       "SET_IS_LEAVE_SESSION",
+      "CLEAR_NOW_LIST",
+      "SET_IS_END",
     ]),
     ...mapActions(studyStore, ["getInfo"]),
     ...mapActions(meetingStore, [
@@ -280,13 +298,10 @@ export default {
           }
           // this.showOrderAlert(turn + 1);
           else {
-            ElMessageBox.confirm(
-              "면접이 모두 종료됐습니다. 수고하셨습니다.",
-              "🔔알림🔔",
-              {
-                confirmButtonText: "OK",
-              }
-            );
+            ElMessageBox.confirm("면접이 모두 종료됐습니다. 수고하셨습니다.", "🔔알림🔔", {
+              confirmButtonText: "OK",
+            });
+            this.SET_IS_END(true);
             setTimeout(async () => {
               //채점표 PUT
               if (this.isInterviewer) {
@@ -331,11 +346,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
+            console.log("There was an error connecting to the session:", error.code, error.message);
           });
       });
 
@@ -394,8 +405,7 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null)
-        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -453,12 +463,7 @@ export default {
         }
       }
 
-      console.log(
-        "내 역할은 면접자 >> " +
-          this.isInterviewee +
-          " | 면접관 >> " +
-          this.isInterviewer
-      );
+      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -504,9 +509,7 @@ export default {
         const running_time = this.studyInfo.running_time;
         // console.log("진행 시간 >> " + running_time);
 
-        const endtime = new Date(
-          datetime.getTime() + running_time * 60 * 60 * 1000
-        );
+        const endtime = new Date(datetime.getTime() + running_time * 60 * 60 * 1000);
         // console.log("종료 시간 >> " + endtime);
 
         //설정해야할 시간 = 종료 시간 - 실제 시작 시간
@@ -515,16 +518,9 @@ export default {
         this.setTime = endtime.getTime() - now.getTime();
         // console.log("초기 종료시간이에요 >> " + this.setTime);
 
-        const diffHour = String(
-          Math.floor((this.setTime / (1000 * 60 * 60)) % 24)
-        ).padStart(2, "0");
-        const diffMin = String(
-          Math.floor((this.setTime / (1000 * 60)) % 60)
-        ).padStart(2, "0");
-        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(
-          2,
-          "0"
-        );
+        const diffHour = String(Math.floor((this.setTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
+        const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
+        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
 
         remainTime.innerHTML = `<h3>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h3>`;
       };
@@ -542,14 +538,10 @@ export default {
         await this.changeConfirmAndStatus(this.myStudyId);
         //연결 강제 종료
         this.leaveSession();
-        ElMessageBox.confirm(
-          "작성하신 채점표는 자동 갱신 되었습니다.",
-          "🔔 진행 시간 종료 🔔",
-          {
-            confirmButtonText: "OK",
-            draggable: true,
-          }
-        );
+        ElMessageBox.confirm("작성하신 채점표는 자동 갱신 되었습니다.", "🔔 진행 시간 종료 🔔", {
+          confirmButtonText: "OK",
+          draggable: true,
+        });
       }, this.setTime);
     },
     showAlert(val) {
