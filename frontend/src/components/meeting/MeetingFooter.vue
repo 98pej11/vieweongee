@@ -112,7 +112,7 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: white;
+  /* background-color: white; */
   margin: 3%;
   float: left;
 }
