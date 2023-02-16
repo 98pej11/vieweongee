@@ -17,6 +17,7 @@ const meetingStore = {
     isInterviewee: false, //면접자
     isInterviewer: false, //면접관
     isLeaveSession: false, //세션 나갔는지 확인
+    isEnd: false, //면접이 다 끝났는지 확인
 
     leaderOrder: null,
     interviewOrder: null, //면접 순서 시그널
@@ -89,6 +90,11 @@ const meetingStore = {
     SET_SCORE_LIST(state, list) {
       state.scoreList = list;
     },
+    CLEAR_NOW_LIST(state) {
+      state.nowScoreList = [];
+      state.nowResumeList = [];
+      state.totalNowList = [];
+    },
     SET_NOW_SCORE_LIST(state, list) {
       state.nowScoreList = list;
     },
@@ -110,6 +116,9 @@ const meetingStore = {
     },
     CLEAR_TOTAL_NOW_LIST(state) {
       state.totalNowList = [];
+    },
+    SET_IS_END(state, flag) {
+      state.isEnd = flag;
     },
   },
   actions: {
