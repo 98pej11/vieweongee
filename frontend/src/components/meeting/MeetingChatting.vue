@@ -16,11 +16,7 @@
           type="text"
           class="message-input"
         />
-        <span
-          :disabled="!chattings"
-          @click="sendMessage"
-          class="message-submit"
-        >
+        <span :disabled="!chattings" @click="sendMessage" class="message-submit">
           <img src="@/assets/image/send_icon.png" :width="20" />
         </span>
       </div>
@@ -90,7 +86,7 @@ export default {
 }
 .chat-area {
   margin-left: 30%;
-  margin-top: 10%;
+  /* margin-top: 10%; */
   padding: 1%;
   overflow-y: scroll;
   border: 3px solid #d9e0ff;
@@ -98,7 +94,7 @@ export default {
   background-color: white;
   border-radius: 15px;
   align-items: center;
-  height: 85vh;
+  height: 80vh;
   width: 35vh;
   /* margin-right: 2.2vw; */
   color: white;
@@ -150,8 +146,8 @@ export default {
   clear: both;
 }
 .chat-input {
-  margin-top: 230%;
-  border: 3px solid #e4e7f8c0;
+  margin-top: 210%;
+  border: 3px solid #e4e7f89d;
   border-radius: 15px;
   background-color: white;
   padding: 3%;
