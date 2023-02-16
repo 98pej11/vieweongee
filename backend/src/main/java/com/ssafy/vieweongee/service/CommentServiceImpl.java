@@ -1,6 +1,6 @@
 package com.ssafy.vieweongee.service;
 
-import com.ssafy.vieweongee.dto.comment.CommentReplyJoin;
+//import com.ssafy.vieweongee.dto.comment.CommentReplyJoin;
 import com.ssafy.vieweongee.dto.comment.CommentResponse;
 import com.ssafy.vieweongee.dto.comment.CreateCommentRequest;
 import com.ssafy.vieweongee.dto.comment.CreateReplyRequest;
@@ -91,63 +91,59 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponse> getAllComment(Long study_id) {
-        List<CommentReplyJoin> commentList = commentRepository.findAllComment(study_id);
-        if (commentList.isEmpty()) {
-            return null;
+        List<CommentResponse> result = new ArrayList<>();
+        List<Comment> commentList = commentRepository.findByStudy_id(study_id);
+        for (int i = 0; i < commentList.size(); i++) {
+            Comment c = commentList.get(i);
+            CommentResponse comment = new CommentResponse(c.getUser().getId(), c.getUser().getName(), c.getId(), 1, c.getContent(), c.getDatetime());
+            result.add(comment);
+
+            List<Reply> replyList = replyRepository.findByComment_id(c.getId());
+            for (int j = 0; j < replyList.size(); j++) {
+                Reply r = replyList.get(j);
+                CommentResponse reply = new CommentResponse(r.getUser().getId(), r.getUser().getName(), r.getComment().getId(), r.getId(), 2, r.getContent(), r.getDatetime());
+                result.add(reply);
+            }
         }
 
-        List<CommentResponse> result = new ArrayList<>();
-        Long comment_id = 0L;
-        Long reply_id = 0L;
-        for (int i = 0; i < commentList.size(); i++){
-            CommentReplyJoin now = commentList.get(i);
-
-            if (comment_id != now.getComment_id()) {
-                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getUser_name(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
-                result.add(comment);
-                comment_id = now.getComment_id();
-                System.out.println(comment);
-
-                if (now.getReply_id() != null) {
-                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
-                    result.add(reply);
-                    reply_id = now.getReply_id();
-                    System.out.println(reply);
-                }
-
-            } else if (comment_id == now.getComment_id() && reply_id != now.getReply_id()) {
-                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
-                result.add(reply);
-                reply_id = now.getReply_id();
-                System.out.println(reply);
-            } else {
-                result.get(result.size() - 1).setUser_id(now.getReply_user_id());
-                result.get(result.size() - 1).setUser_name(now.getUser_name());
-            }
-
-            if (i != commentList.size() - 1 && commentList.get(i + 1).getComment_id() != now.getComment_id()) {
-                reply_id = 0L;
-            }
-
-//            if (comment_id != commentList.get(i).getComment_id()){
-//                CommentReplyJoin now = commentList.get(i);
+//        List<CommentReplyJoin> commentList = commentRepository.findAllComment(study_id);
+//        if (commentList.isEmpty()) {
+//            return null;
+//        }
+//
+//        List<CommentResponse> result = new ArrayList<>();
+//        Long comment_id = 0L;
+//        Long reply_id = 0L;
+//        for (int i = 0; i < commentList.size(); i++){
+//            CommentReplyJoin now = commentList.get(i);
+//
+//            if (comment_id != now.getComment_id()) {
 //                CommentResponse comment = new CommentResponse(now.getComment_user_id(), now.getUser_name(), now.getComment_id(), 1, now.getComment_content(), now.getComment_datetime());
 //                result.add(comment);
+//                comment_id = now.getComment_id();
 //                System.out.println(comment);
 //
 //                if (now.getReply_id() != null) {
 //                    CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
 //                    result.add(reply);
+//                    reply_id = now.getReply_id();
 //                    System.out.println(reply);
 //                }
 //
-//                comment_id = now.getComment_id();
-//            } else {
-//                CommentReplyJoin now = commentList.get(i);
+//            } else if (comment_id == now.getComment_id() && reply_id != now.getReply_id()) {
 //                CommentResponse reply = new CommentResponse(now.getReply_user_id(), now.getUser_name(), now.getComment_id(), now.getReply_id(), 2, now.getReply_content(), now.getReply_datetime());
 //                result.add(reply);
+//                reply_id = now.getReply_id();
+//                System.out.println(reply);
+//            } else {
+//                result.get(result.size() - 1).setUser_id(now.getReply_user_id());
+//                result.get(result.size() - 1).setUser_name(now.getUser_name());
 //            }
-        }
+//
+//            if (i != commentList.size() - 1 && commentList.get(i + 1).getComment_id() != now.getComment_id()) {
+//                reply_id = 0L;
+//            }
+//        }
 
         return result;
     }
