@@ -10,6 +10,7 @@ import com.ssafy.vieweongee.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,7 +69,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public List<Study> getAllStudy() {
-        return studyRepository.findAll();
+        return studyRepository.findAll( Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Override
@@ -85,6 +86,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public List<Study> searchStudy(String search) {
+        System.out.println(search.toString());
         return studyRepository.searchByWords(search);
     }
 

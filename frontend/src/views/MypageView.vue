@@ -29,11 +29,16 @@
 <script>
 import { defineComponent } from "vue";
 import jwtDecode from "jwt-decode";
+import http from "@/api/http";
 import MyMain from "@/components/mypage/MyMain.vue";
 import MyData from "@/components/mypage/MyData.vue";
 import MyModify from "@/components/mypage/MyModify.vue";
 import MyDelete from "@/components/mypage/MyDelete.vue";
-
+const config = {
+  headers: {
+    ACCESS: sessionStorage.getItem("ACCESS"),
+  },
+};
 export default defineComponent({
   components: {
     MyMain,
@@ -45,9 +50,17 @@ export default defineComponent({
     img: require("@/assets/image/profile_img.png"),
     currentTab: "MyMain",
     myName: "",
+    myType: null,
   }),
   created() {
     this.getMyId();
+    http.get(`/users/type`, config).then(({ data }) => {
+      this.myType = data.data;
+
+      this.mystudys.forEach((el) => {
+        el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
+      });
+    });
   },
   methods: {
     changeComp: function (compName) {

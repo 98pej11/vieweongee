@@ -11,7 +11,6 @@
                 v-model="studyFormInfo.title"
                 ref="title"
                 placeholder="제목을 입력하세요."
-                maxlength="25"
               />
             </el-col>
           </el-row>
@@ -119,7 +118,7 @@
               style="margin: 0 auto; margin-top: 3%"
               @click="showDialog"
             >
-              채점 템플릿 선택
+              채점 템플릿 미리보기
             </el-button>
             <el-dialog
               class="el-dialog"
@@ -132,27 +131,26 @@
                 :span-method="objectSpanMethod"
                 :data="tableData"
                 style="width: 100%"
-                @selection-change="handleSelectionChange"
                 :class="tableRowClassName"
               >
-                <el-table-column type="selection" width="35"></el-table-column>
+                <!-- <el-table-column type="selection" width="35"></el-table-column> -->
                 <el-table-column prop="type" label="대분류" width="120" />
                 <el-table-column prop="name1" label="항목" />
               </el-table>
-              <div v-if="isChecked">
+              <!-- <div v-if="isChecked">
                 <div style="margin-top: 3%; text-align: center; color: red">
                   * 최소 1개 이상의 대분류를 선택해주세요.
                 </div>
-              </div>
-              <el-button
-                block
+              </div> -->
+              <!-- <el-button
+                blockㄹㅇㄹ
                 color="#9DADD8"
                 size="large"
                 style="margin-top: 3%; text-align: center; width: 25%"
                 @click="setScoringList"
               >
                 완료
-              </el-button>
+              </el-button> -->
             </el-dialog>
           </el-row>
 
@@ -239,42 +237,35 @@ export default {
     // 스터디 생성 폼 submit
     async submitForm() {
       console.log(this.studyFormInfo);
-
-      let msg = "";
-      if (this.studyFormInfo.title == "") {
-        this.$refs.title.focus();
-        msg = "제목을 입력";
-      } else if (this.studyFormInfo.company == "") {
-        this.$refs.company.focus();
-        msg = "기업을 입력";
-      } else if (this.studyFormInfo.job == "") {
-        this.$refs.job.focus();
-        msg = "직군을 선택";
-      } else if (this.studyFormInfo.study_datetime == "") {
-        this.$refs.date.focus();
-        msg = "일시를 선택";
+      if (!this.isEmpty()) {
+        alert("모든 항목을 작성해주시길 바랍니다.");
       } else if (!this.checkDate(this.studyFormInfo.study_datetime)) {
-        this.$refs.date.focus();
-        msg = "24시간 이내로 선택";
-      } else if (this.studyFormInfo.personnel == 0) {
-        this.$refs.personnel.focus();
-        msg = "인원을 선택";
-      } else if (this.studyFormInfo.type == "") {
-        this.$refs.type.focus();
-        msg = "유형을 선택";
-      } else if (this.studyFormInfo.runtime == 0) {
-        this.$refs.runtime.focus();
-        msg = "진행시간을 선택";
-      }
-
-      if (msg !== "") {
-        this.showAlert(msg);
+        this.isError = true;
+        await this.sleep(3000).then(() => {
+          this.isError = false;
+        });
       } else {
         this.studyFormInfo.study_datetime =
           this.studyFormInfo.study_datetime.replace(" ", "T");
         this.confirm();
       }
     },
+    // 유효성 검사
+    isEmpty() {
+      if (
+        this.studyFormInfo.title == "" ||
+        this.studyFormInfo.company == "" ||
+        this.studyFormInfo.job == "" ||
+        this.studyFormInfo.study_datetime == "" ||
+        this.studyFormInfo.type == "" ||
+        this.studyFormInfo.personnel == 0
+      ) {
+        return false;
+      }
+
+      return true;
+    },
+
     // 유효성 alert
     showAlert(msg) {
       ElMessage({
@@ -303,24 +294,24 @@ export default {
       multipleSelection.value = []; // checked option 초기화
     },
     // 채점 템플릿 checked option
-    handleSelectionChange(val) {
-      multipleSelection.value = val;
-    },
+    // handleSelectionChange(val) {
+    //   multipleSelection.value = val;
+    // },
     // 채점 템플릿 선택 사항
-    setScoringList() {
-      if (multipleSelection.value.length == 0) this.isChecked = true;
-      else {
-        multipleSelection.value.forEach((el) => {
-          console.log(el.type);
-          if (el.type == "태도") this.studyFormInfo.attitude = 1;
-          if (el.type == "직무역량") this.studyFormInfo.ability = 1;
-          if (el.type == "팀워크") this.studyFormInfo.teamwork = 1;
-          if (el.type == "기업이해도") this.studyFormInfo.solving = 1;
-          if (el.type == "태도") this.studyFormInfo.loyalty = 1;
-        });
-        this.dialogVisible = false;
-      }
-    },
+    // setScoringList() {
+    //   if (multipleSelection.value.length == 0) this.isChecked = true;
+    //   else {
+    //     multipleSelection.value.forEach((el) => {
+    //       console.log(el.type);
+    //       if (el.type == "태도") this.studyFormInfo.attitude = 1;
+    //       if (el.type == "직무역량") this.studyFormInfo.ability = 1;
+    //       if (el.type == "팀워크") this.studyFormInfo.teamwork = 1;
+    //       if (el.type == "기업이해도") this.studyFormInfo.solving = 1;
+    //       if (el.type == "태도") this.studyFormInfo.loyalty = 1;
+    //     });
+    //     this.dialogVisible = false;
+    //   }
+    // },
     // 채점표 템플릿 el-table 행열 병합
     objectSpanMethod({ rowIndex, columnIndex }) {
       if (columnIndex === 0 || columnIndex === 1) {
@@ -367,13 +358,13 @@ export default {
         personnel: 0,
         type: "",
         study_datetime: "",
-        running_time: 0,
+        running_time: 1,
         content: "",
-        attitude: 0,
-        ability: 0,
-        teamwork: 0,
-        solving: 0,
-        loyalty: 0,
+        attitude: 1,
+        ability: 1,
+        teamwork: 1,
+        solving: 1,
+        loyalty: 1,
       },
 
       typeOptions: [

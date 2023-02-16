@@ -192,9 +192,8 @@ export default {
           await this.changeConfirmAndStatus(this.myStudyId);
           //세션 연결 종료
           this.leaveSession();
-        } else {
-          this.SET_IS_LEAVE_SESSION(false); //나가기 버튼 false로 변경
         }
+        this.SET_IS_LEAVE_SESSION(false); //나가기 버튼 false로 변경
       }
     },
   },

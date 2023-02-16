@@ -182,6 +182,8 @@ export default {
         alert(
           "비밀번호는 8자 이상 16자 이하 문자+영대문자+영소문자로 구성하여야 합니다."
         );
+      } else if (name.value.length < 2 || name.value.length > 10) {
+        alert("닉네임은 2자 이상 10자 이하 구성하여야 합니다.");
       } else if (passwordCheck.value.length == 0) {
         alert("비밀번호 재확인을 입력하세요.");
       } else if (name.value.length == 0) {
