@@ -42,9 +42,7 @@
                   {{ scoreData[1].question }}
                 </li>
               </div>
-              <el-rate v-model="li.ability">
-                ability: {{ li.ability }}
-              </el-rate>
+              <el-rate v-model="li.ability"> ability: {{ li.ability }} </el-rate>
               <hr />
               <div class="templete">
                 <h4>{{ scoreData[2].type }}</h4>
@@ -55,9 +53,7 @@
                   {{ scoreData[3].question }}
                 </li>
               </div>
-              <el-rate v-model="li.attitude">
-                attitude: {{ li.attitude }}
-              </el-rate>
+              <el-rate v-model="li.attitude"> attitude: {{ li.attitude }} </el-rate>
               <hr />
               <div class="templete">
                 <h4>{{ scoreData[4].type }}</h4>
@@ -68,9 +64,7 @@
                   {{ scoreData[5].question }}
                 </li>
               </div>
-              <el-rate v-model="li.loyalty">
-                loyalty: {{ li.loyalty }}
-              </el-rate>
+              <el-rate v-model="li.loyalty"> loyalty: {{ li.loyalty }} </el-rate>
               <hr />
               <div class="templete">
                 <h4>{{ scoreData[6].type }}</h4>
@@ -81,9 +75,7 @@
                   {{ scoreData[7].question }}
                 </li>
               </div>
-              <el-rate v-model="li.solving">
-                solving: {{ li.solving }}
-              </el-rate>
+              <el-rate v-model="li.solving"> solving: {{ li.solving }} </el-rate>
               <hr />
               <div class="templete">
                 <h4>{{ scoreData[8].type }}</h4>
@@ -94,24 +86,15 @@
                   {{ scoreData[9].question }}
                 </li>
               </div>
-              <el-rate v-model="li.teamwork">
-                teamwork: {{ li.teamwork }}
-              </el-rate>
+              <el-rate v-model="li.teamwork"> teamwork: {{ li.teamwork }} </el-rate>
               <hr />
               <div style="margin-top: 10%; text-align: left">
                 <h4>피드백:</h4>
-                <el-input
-                  type="textarea"
-                  :rows="7"
-                  placeholder="피드백을 입력해주세요..."
-                  v-model="li.feedback"
-                >
+                <el-input type="textarea" :rows="7" placeholder="피드백을 입력해주세요..." v-model="li.feedback">
                 </el-input>
               </div>
             </div>
-            <el-button @click="saveToLocal(li)" class="subbutton" round
-              >저장</el-button
-            >
+            <el-button @click="saveToLocal(li)" class="subbutton" round>저장</el-button>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
@@ -133,12 +116,7 @@ export default {
     MeetingResume,
   },
   computed: {
-    ...mapState(meetingStore, [
-      "nowScoreList",
-      "nowResumeList",
-      "nicknameList",
-      "totalNowList",
-    ]),
+    ...mapState(meetingStore, ["nowScoreList", "nowResumeList", "nicknameList", "totalNowList"]),
   },
   data() {
     return {
@@ -242,7 +220,7 @@ export default {
 .score-box {
   min-height: 800px;
   max-height: 800px;
-  width: 20%;
+  width: 400px;
   background-color: #eeecf8;
   overflow-y: scroll;
   border-radius: 5%;

@@ -1,19 +1,52 @@
 <template>
   <div>
+    <!-- 헤더 -->
+    <div id="session-header">
+      <div class="inner-area">
+        <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
+        <div>
+          <el-dialog
+            id="dialog"
+            style="
+              background-color: #e5e1f8;
+              border-radius: 5%;
+              width: 30%;
+              margin: 20 auto;
+              text-align: center;
+              font-weight: bold;
+            "
+            v-model="dialogVisible"
+            title="' 면접자 : 면접관 ' 비율"
+            :before-close="handleClose"
+          >
+            <!-- 스터디 유형 선택 컴포넌트 -->
+            <div class="rate">
+              <meeting-rate v-if="isLeader && leaderOrder == null"></meeting-rate>
+            </div>
+            <span>
+              <el-button @click="dialogVisible = false" size="large" round>완료</el-button>
+            </span></el-dialog
+          >
+          <div id="rate-btn">
+            <el-button text @click="dialogVisible = true" v-if="isLeader && leaderOrder == null">
+              면접 유형 선택
+            </el-button>
+          </div>
+        </div>
+        <div v-if="totalTurn > 0">
+          <h5>현재 회차 : {{ turn }} / {{ totalTurn }}</h5>
+        </div>
+        <!-- <div id="timer-display" class="time-box">
+              <h5>남은 시간&nbsp;</h5>
+            </div> -->
+        <div id="timer-display" class="time-box"></div>
+      </div>
+    </div>
+
     <!-- 화상 화면 ( 채팅 X )-->
     <div class="notchat main-meeting">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
-          <!-- 헤더 -->
-          <div id="session-header">
-            <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
-            <div v-if="totalTurn > 0">
-              <h5>현재 회차 : {{ turn }} / {{ totalTurn }}</h5>
-            </div>
-            <div id="timer-display" class="time-box">
-              <h5>남은 시간&nbsp;</h5>
-            </div>
-          </div>
           <div id="video-container" style="width: 100%">
             <el-row class="row-bg">
               <el-col>
@@ -41,14 +74,6 @@
       <!-- <transition name="moveInUp"> -->
       <!-- <Transition name="slide-fade"> -->
       <div class="session" v-if="isShowChat">
-        <!-- 헤더 -->
-        <div id="session-header">
-          <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
-          <h5>현재 회차 : {{ nowTurn }}</h5>
-          <div id="timer-display" class="time-box">
-            <h5>남은 시간&nbsp;</h5>
-          </div>
-        </div>
         <div id="video-container">
           <el-row class="row-bg" justify="space-evenly">
             <el-col>
@@ -91,7 +116,9 @@ import http from "@/api/http.js";
 import UserVideo from "../meeting/UserVideo.vue";
 import jwtDecode from "jwt-decode";
 import MeetingChatting from "./MeetingChatting.vue";
+import MeetingRate from "../meeting/MeetingRate.vue";
 
+import { ref } from "vue";
 const meetingStore = "meetingStore";
 const studyStore = "studyStore";
 const api = http;
@@ -100,6 +127,7 @@ export default {
   name: "MeetingVideo",
   components: {
     UserVideo,
+    MeetingRate,
     MeetingChatting,
   },
   data() {
@@ -117,6 +145,7 @@ export default {
 
       setTime: 0, //종료시간
       turn: 0,
+      dialogVisible: ref(),
     };
   },
   props: {
@@ -522,7 +551,7 @@ export default {
         const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
         const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
 
-        remainTime.innerHTML = `<h3>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h3>`;
+        remainTime.innerHTML = `<h5>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h5>`;
       };
 
       setInterval(diffDay, 1000);
@@ -569,7 +598,7 @@ export default {
 .session {
   min-height: 800px;
   max-height: 800px;
-  min-width: 1000px;
+  min-width: 800px;
   text-align: center;
   padding: 1%;
   overflow-y: scroll;
@@ -600,7 +629,6 @@ export default {
 .session::-webkit-scrollbar-button {
   border-radius: 15px;
 }
-
 .invideo {
   margin-right: 3%;
 }
@@ -618,6 +646,7 @@ export default {
 
 .chat-container {
   margin-right: 3%;
+  z-index: 1;
 }
 .box {
   margin: 2%;
@@ -640,5 +669,16 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(10px);
   opacity: 0;
+}
+.rate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inner-area {
+  display: block;
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-left: 10%;
 }
 </style>
