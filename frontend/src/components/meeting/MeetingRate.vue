@@ -2,23 +2,17 @@
   <div class="meetingrate">
     <div style="text-align: center">
       <div v-if="studyInfo.personnel == 6">
-        <input type="radio" v-model="rate" value="1" />1 : 5
-        <input type="radio" v-model="rate" value="2" />2 : 4
-        <input type="radio" v-model="rate" value="3" />3 : 3
-        <input type="radio" v-model="rate" value="4" />4 : 2
+        <input type="radio" v-model="rate" value="1" />1 : 5 <input type="radio" v-model="rate" value="2" />2 : 4
+        <input type="radio" v-model="rate" value="3" />3 : 3 <input type="radio" v-model="rate" value="4" />4 : 2
       </div>
       <div v-else-if="studyInfo.personnel == 5">
-        <input type="radio" v-model="rate" value="1" />1 : 4
-        <input type="radio" v-model="rate" value="2" />2 : 3
+        <input type="radio" v-model="rate" value="1" />1 : 4 <input type="radio" v-model="rate" value="2" />2 : 3
         <input type="radio" v-model="rate" value="3" />3 : 2
       </div>
       <div v-else-if="studyInfo.personnel == 4">
-        <input type="radio" v-model="rate" value="1" />1 : 3
-        <input type="radio" v-model="rate" value="2" />2 : 2
+        <input type="radio" v-model="rate" value="1" />1 : 3 <input type="radio" v-model="rate" value="2" />2 : 2
       </div>
-      <div v-else-if="studyInfo.personnel == 3">
-        <input type="radio" v-model="rate" value="1" />1 : 2
-      </div>
+      <div v-else-if="studyInfo.personnel == 3"><input type="radio" v-model="rate" value="1" />1 : 2</div>
       <div v-else><input type="radio" v-model="rate" value="1" />1 : 1</div>
     </div>
   </div>
@@ -59,7 +53,7 @@ export default {
 <style scoped>
 .meetingrate {
   margin: 2%;
-  width: 30%;
+  width: 20%;
   height: 50px;
   border-radius: 5%;
   align-items: center;
