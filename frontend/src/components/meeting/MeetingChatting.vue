@@ -12,11 +12,17 @@
         <input
           v-model="chattings"
           @keyup.enter="sendMessage"
-          placeholder=" 메세지 입력"
+          placeholder=" 메세지 입력..."
           type="text"
           class="message-input"
         />
-        <button :disabled="!chattings" @click="sendMessage" type="submit" class="message-submit">보내기</button>
+        <span
+          :disabled="!chattings"
+          @click="sendMessage"
+          class="message-submit"
+        >
+          <img src="@/assets/image/send_icon.png" :width="20" />
+        </span>
       </div>
     </div>
   </div>
@@ -83,15 +89,20 @@ export default {
   width: 30%;
 }
 .chat-area {
+  margin-left: 30%;
+  margin-top: 10%;
   padding: 1%;
   overflow-y: scroll;
-  border: 1px solid #acaeff;
+  border: 3px solid #d9e0ff;
+  /* background-color: hsl(252, 45%, 98%); */
+  background-color: white;
   border-radius: 15px;
   align-items: center;
-  height: 75vh;
-  width: 55vh;
+  height: 85vh;
+  width: 35vh;
   /* margin-right: 2.2vw; */
   color: white;
+  box-shadow: 0px 4px 40px rgba(128, 128, 128, 0.25);
 }
 .chat-area::-webkit-scrollbar {
   width: 8px;
@@ -106,7 +117,7 @@ export default {
   border-radius: 15px;
 }
 .chat-area::-webkit-scrollbar-thumb {
-  background: #acaeff;
+  background: #c6c7e0ce;
   border-radius: 15px;
 }
 .chat-area::-webkit-scrollbar-button {
@@ -118,11 +129,9 @@ export default {
   display: block;
   color: #ffffff;
   text-align: right;
-  background-color: #797bf8;
+  background-color: #b6b7e7;
   border-radius: 15px 15px 0 15px;
-  margin-bottom: 2%;
-  margin-left: 4%;
-  margin-right: 4%;
+  margin: 5% 4% 4% 4%;
   padding: 2%;
   /* 한 줄씩 */
   clear: both;
@@ -133,27 +142,25 @@ export default {
   display: block;
   color: #ffffff;
   text-align: left;
-  background-color: #797bf8;
+  background-color: rgb(148, 154, 207);
   border-radius: 15px 15px 0 15px;
-  margin-bottom: 2%;
-  margin-left: 4%;
-  margin-right: 4%;
+  margin: 5% 4% 4% 4%;
   padding: 2%;
   /* 한 줄씩 */
   clear: both;
 }
 .chat-input {
-  margin-top: 125%;
-  border: 1px solid #acaeff;
+  margin-top: 230%;
+  border: 3px solid #e4e7f8c0;
   border-radius: 15px;
-  background-color: #f8f9fa;
+  background-color: white;
   padding: 3%;
   position: relative;
   height: 30px;
 }
 .message-input {
   background: none;
-  border: 1px solid #bcbcc0;
+  border: 1px solid white;
   border-radius: 15px;
   outline: none !important;
   resize: none;
@@ -168,16 +175,14 @@ export default {
   position: absolute;
   z-index: 1;
   right: 3%;
-  color: #fff;
-  border: none;
-  background-color: #acaeff;
-  font-size: 1em;
-  line-height: 1;
-  padding: 1.5%;
+  padding: 5px 10px 3px 12px;
   border-radius: 15px;
-  outline: none !important;
+  /* background-color: #c2c3ff; */
+  outline: 0 !important;
+  border: 0 !important;
+  /* line-height: 1; */
 }
 .message-submit:hover {
-  background: #797bf8;
+  background: #ebecff;
 }
 </style>

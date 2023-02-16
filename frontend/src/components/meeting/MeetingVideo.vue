@@ -1,30 +1,19 @@
 <template>
   <div>
-    <!-- 화상 화면 -->
-    <div id="timer-display" class="time-box">
-      <h3>남은 시간</h3>
-    </div>
-    <div class="notchat">
+    <!-- 화상 화면 ( 채팅 X )-->
+    <div class="notchat main-meeting">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
+          <!-- 헤더 -->
           <div id="session-header">
-            <h2 id="session-title">[{{ studyInfo.title }}]</h2>
-            <h3>현재 회차 : {{ nowTurn }}</h3>
-            <!-- <input
-              class="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              @click="leaveSession"
-              value="Leave session"
-            /> -->
+            <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
+            <h5>현재 회차 : {{ nowTurn }}</h5>
+            <div id="timer-display" class="time-box">
+              <h5>남은 시간&nbsp;</h5>
+            </div>
           </div>
-          <!-- <div id="main-video">
-        <h3>스트림매니저</h3>
-        <user-video :stream-manager="mainStreamManager" />
-      </div> -->
-          <h3>--- 참가자 목록 ---</h3>
           <div id="video-container" style="width: 100%">
-            <el-row class="row-bg" justify="space-evenly">
+            <el-row class="row-bg">
               <el-col>
                 <user-video
                   class="invideo"
@@ -45,61 +34,59 @@
       </transition>
     </div>
 
-    <div class="gochat">
-      <!-- 화상 화면 -->
-      <transition name="moveInUp">
-        <div class="session" v-if="isShowChat" style="float: left; width: 50%; margin-left: 3%">
-          <div id="session-header">
-            <h2 id="session-title">[{{ studyInfo.title }}] {{ myStudyId }}</h2>
-            <h3>현재 회차 : {{ nowTurn }}</h3>
-            <input
-              class="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              @click="leaveSession"
-              value="Leave session"
-            />
-          </div>
-          <!-- <div id="main-video">
-        <h3>스트림매니저</h3>
-        <user-video :stream-manager="mainStreamManager" />
-      </div> -->
-          <h2>--- 참가자 목록 ---</h2>
-          <div id="video-container">
-            <el-row class="row-bg" justify="space-evenly">
-              <el-col>
-                <user-video
-                  class="invideo"
-                  :stream-manager="publisher"
-                  @click="updateMainVideoStreamManager(publisher)"
-                />
-                <user-video
-                  class="invideo"
-                  v-for="sub in subscribers"
-                  :key="sub.stream.connection.connectionId"
-                  :stream-manager="sub"
-                  @click="updateMainVideoStreamManager(sub)"
-                />
-              </el-col>
-            </el-row>
+    <!-- 화상 화면 ( 채팅 O )-->
+    <div class="gochat main-meeting">
+      <!-- <transition name="moveInUp"> -->
+      <!-- <Transition name="slide-fade"> -->
+      <div class="session" v-if="isShowChat">
+        <!-- 헤더 -->
+        <div id="session-header">
+          <h3 id="session-title">{{ studyInfo.company }} 면접 스터디</h3>
+          <h5>현재 회차 : {{ nowTurn }}</h5>
+          <div id="timer-display" class="time-box">
+            <h5>남은 시간&nbsp;</h5>
           </div>
         </div>
-      </transition>
+        <div id="video-container">
+          <el-row class="row-bg" justify="space-evenly">
+            <el-col>
+              <user-video
+                class="invideo"
+                :stream-manager="publisher"
+                @click="updateMainVideoStreamManager(publisher)"
+              />
+              <user-video
+                class="invideo"
+                v-for="sub in subscribers"
+                :key="sub.stream.connection.connectionId"
+                :stream-manager="sub"
+                @click="updateMainVideoStreamManager(sub)"
+              />
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <!-- </Transition> -->
+      <!-- </Transition> -->
 
-      <transition name="moveInUp">
-        <div class="chat-container" v-if="isShowChat" style="float: left; margin-left: 3%">
+      <!-- <transition name="moveInUp"> -->
+
+      <Transition name="slide-fade">
+        <div class="chat-container" v-if="isShowChat">
           <MeetingChatting :session="session" :myUserName="myUserName" />
         </div>
-      </transition>
+      </Transition>
+      <!-- </transition> -->
     </div>
   </div>
 </template>
 
 <script>
-import UserVideo from "../meeting/UserVideo.vue";
+import { ElMessageBox } from "element-plus";
 import { OpenVidu } from "openvidu-browser";
 import { mapState, mapMutations, mapActions } from "vuex";
 import http from "@/api/http.js";
+import UserVideo from "../meeting/UserVideo.vue";
 import jwtDecode from "jwt-decode";
 import MeetingChatting from "./MeetingChatting.vue";
 
@@ -193,7 +180,9 @@ export default {
       console.log("나가기 버튼 눌렀다!!!");
       if (this.isLeaveSession) {
         //나가기 버튼이 true일때
-        let isLeave = confirm("면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?");
+        let isLeave = confirm(
+          "면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?"
+        );
         if (isLeave) {
           //yes
           //나가기 버튼이 눌렸으면
@@ -279,7 +268,7 @@ export default {
           //면접 종료 버튼을 누르면 +1 회차가 전송됨
 
           if (this.nowTurn < this.totalTurn - 1) {
-            alert("3초 뒤 다음 회차 진행. 채점표는 자동 갱신 됩니다");
+            this.showAlert("3초 뒤 다음 회차 진행. 채점표는 자동 갱신 됩니다.");
             setTimeout(async () => {
               //채점표 PUT
               if (this.isInterviewer) {
@@ -291,7 +280,13 @@ export default {
           }
           // this.showOrderAlert(turn + 1);
           else {
-            alert("면접이 모두 종료됐습니다. 수고하셨습니다.");
+            ElMessageBox.confirm(
+              "면접이 모두 종료됐습니다. 수고하셨습니다.",
+              "🔔알림🔔",
+              {
+                confirmButtonText: "OK",
+              }
+            );
             setTimeout(async () => {
               //채점표 PUT
               if (this.isInterviewer) {
@@ -336,7 +331,11 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
           });
       });
 
@@ -395,7 +394,8 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -447,13 +447,18 @@ export default {
 
       if (turn != 0) {
         if (flag) {
-          alert("당신은 면접자 입니다.");
+          this.showAlert("당신은 면접자 입니다.");
         } else {
-          alert("당신은 면접관 입니다.");
+          this.showAlert("당신은 면접관 입니다.");
         }
       }
 
-      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
+      console.log(
+        "내 역할은 면접자 >> " +
+          this.isInterviewee +
+          " | 면접관 >> " +
+          this.isInterviewer
+      );
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -473,7 +478,7 @@ export default {
     showOrderAlert(turn) {
       //미팅 시작시 알림 ㅇㅇㅇ,ㅇㅇㅇ님이 면접자 입니다. 30초 뒤 면접이 시작됩니다.
       //회차 진행시 1/4회 면접 완료. 3분 후에 채점이 종료됩니다. 채점 내용 기입 후 저장을 눌러주세요.
-      let str = "🔔알림🔔\n\n";
+      let str = "";
       //현재 회차의 면접자, 면접관을 알려줌
       if (turn == 0) {
         if (this.isInterviewee) {
@@ -483,7 +488,8 @@ export default {
         }
       }
 
-      alert(str);
+      // alert(str);
+      this.showAlert(str);
     },
     calcRemainTime() {
       const remainTime = document.getElementById("timer-display");
@@ -498,7 +504,9 @@ export default {
         const running_time = this.studyInfo.running_time;
         // console.log("진행 시간 >> " + running_time);
 
-        const endtime = new Date(datetime.getTime() + running_time * 60 * 60 * 1000);
+        const endtime = new Date(
+          datetime.getTime() + running_time * 60 * 60 * 1000
+        );
         // console.log("종료 시간 >> " + endtime);
 
         //설정해야할 시간 = 종료 시간 - 실제 시작 시간
@@ -507,9 +515,16 @@ export default {
         this.setTime = endtime.getTime() - now.getTime();
         // console.log("초기 종료시간이에요 >> " + this.setTime);
 
-        const diffHour = String(Math.floor((this.setTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
-        const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
-        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
+        const diffHour = String(
+          Math.floor((this.setTime / (1000 * 60 * 60)) % 24)
+        ).padStart(2, "0");
+        const diffMin = String(
+          Math.floor((this.setTime / (1000 * 60)) % 60)
+        ).padStart(2, "0");
+        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(
+          2,
+          "0"
+        );
 
         remainTime.innerHTML = `<h3>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h3>`;
       };
@@ -527,8 +542,21 @@ export default {
         await this.changeConfirmAndStatus(this.myStudyId);
         //연결 강제 종료
         this.leaveSession();
-        alert("진행 시간이 종료되었습니다.\n작성하신 채점표는 자동 갱신 되었습니다.");
+        ElMessageBox.confirm(
+          "작성하신 채점표는 자동 갱신 되었습니다.",
+          "🔔 진행 시간 종료 🔔",
+          {
+            confirmButtonText: "OK",
+            draggable: true,
+          }
+        );
       }, this.setTime);
+    },
+    showAlert(val) {
+      ElMessageBox.confirm(val, "🔔 알림 🔔", {
+        confirmButtonText: "OK",
+        draggable: true,
+      });
     },
   },
 };
@@ -545,30 +573,53 @@ export default {
   border-radius: 5%;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); */
 /* } */
+
 .session {
+  min-height: 800px;
+  max-height: 800px;
+  min-width: 1000px;
   text-align: center;
   padding: 1%;
-  /* overflow-y: scroll; */
-  border: 1px solid #acaeff;
-  border-radius: 15px;
+  overflow-y: scroll;
+  /* border-radius: 15px; */
   display: block;
   justify-content: space-between;
   align-items: center;
   height: 75vh;
-  width: 100%;
-  height: auto;
   margin: 0 auto;
   color: black;
 }
+.session::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.session::-webkit-scrollbar-track {
+  /* background: #f8f9fa; */
+  border-radius: 15px;
+}
+.session::-webkit-scrollbar-corner {
+  /* background: #f8f9fa; */
+  border-radius: 15px;
+}
+.session::-webkit-scrollbar-thumb {
+  background: #c6c7e0ce;
+  border-radius: 15px;
+}
+.session::-webkit-scrollbar-button {
+  border-radius: 15px;
+}
+
 .invideo {
   margin-right: 3%;
 }
 .notchat {
+  /* background-color: #f5f7fe; */
   display: flex;
   align-content: center;
   justify-content: center;
 }
 .gochat {
+  /* background-color: #f5f7fe; */
   display: flex;
   justify-content: space-between;
 }
@@ -586,5 +637,16 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: center;
+} /* 채팅창 애니메이션 */
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+/* .slide-fade-leave-active {
+  transition: all 0.5s;
+} */
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

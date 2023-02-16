@@ -26,9 +26,9 @@ const routes = [
         component: () => import("@/components/study/StudyListCard.vue"),
       },
       {
-        path: "search/:type",
+        path: "search",
         name: "search",
-        component: () => import("@/components/study/StudyListCard.vue"),
+        component: () => import("@/components/study/StudySearch.vue"),
       },
       {
         path: "create",
@@ -48,8 +48,8 @@ const routes = [
     ],
   },
   {
-    path: '/redirect', 
-    component: LoginRedirect
+    path: "/redirect",
+    component: LoginRedirect,
   },
 
   {

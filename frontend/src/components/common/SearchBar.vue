@@ -32,7 +32,7 @@ export default {
     Search,
   },
   computed: {
-    ...mapState(studyStore, ["noResult"]),
+    ...mapState(studyStore, ["noResult", "studyList"]),
   },
   data() {
     return {
@@ -41,24 +41,30 @@ export default {
     };
   },
   methods: {
-    ...mapActions(studyStore, ["searchConfirm"]),
-    ...mapMutations(studyStore, ["SET_SEARCH_RESULT"]),
+    ...mapActions(studyStore, ["searchConfirm", "getPersonnel"]),
+    ...mapMutations(studyStore, ["SET_SEARCH_RESULT", "SET_STUDY_LIST"]),
 
     async goToSearchResult() {
       if (this.words == "") {
         this.showAlert = true;
-        console.log(this.showAlert);
         await this.sleep(3000).then(() => {
           this.showAlert = false;
           console.log(this.showAlert);
         });
       } else {
         await this.searchConfirm(this.words);
+
+        // 현재 참가자 수 받아오기
+        for (let idx = 0; idx < this.studyList.length; idx++) {
+          await this.getPersonnel(this.studyList[idx].id);
+        }
         if (this.noResult) {
           console.log("검색 결과 없음");
         } else {
+          console.log("겟퍼스널 검색바");
+          console.log(this.studyList);
           this.SET_SEARCH_RESULT(false);
-          this.$router.push({ name: "search", params: { type: "search" } });
+          this.$router.replace({ name: "search" });
         }
       }
     },
