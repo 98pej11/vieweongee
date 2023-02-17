@@ -81,7 +81,7 @@ export default {
   },
   watch: {
     isUpdate() {
-      console.log("바껐떠`");
+      // console.log("바껐떠`");
       this.$emit("getAll");
       this.isUpdate = false;
     },

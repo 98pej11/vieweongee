@@ -82,7 +82,7 @@ export default {
     ...mapActions(studyStore, ["getMyDataConfrim"]),
     changeComp: function (compName) {
       this.currentTab = compName;
-      console.log(this.currentTab);
+      // console.log(this.currentTab);
     },
     getMyId() {
       if (sessionStorage.getItem("ACCESS") != null)

@@ -345,11 +345,11 @@ export default {
         this.isOpened = false; // 입장 불가
       }
 
-      console.log(" 글작성자 ? >> " + this.isAuthor);
-      console.log(" 스터디 시작 하루 이전인가 >> " + this.isPossible);
-      console.log(" 현재 신청자 6명 미만인가 >> " + this.isRemain);
-      console.log(" 세션 생성됨 >> " + this.isOpened);
-      console.log(" 미팅 종료 >> " + this.isDone);
+      // console.log(" 글작성자 ? >> " + this.isAuthor);
+      // console.log(" 스터디 시작 하루 이전인가 >> " + this.isPossible);
+      // console.log(" 현재 신청자 6명 미만인가 >> " + this.isRemain);
+      // console.log(" 세션 생성됨 >> " + this.isOpened);
+      // console.log(" 미팅 종료 >> " + this.isDone);
     },
 
     // 화상회의 참여

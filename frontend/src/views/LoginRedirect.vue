@@ -25,21 +25,21 @@ export default {
   //   }
   // ,
   created() {
-    console.log("로그인뷰다");
-    console.log(this.$route.query.ACCESS);
+    // console.log("로그인뷰다");
+    // console.log(this.$route.query.ACCESS);
 
     const token = this.$route.query.ACCESS;
-    console.log("ACCESS", token);
+    // console.log("ACCESS", token);
     if (token) {
       let ACCESS = this.$route.query.ACCESS;
       let REFRESH = this.$route.query.REFRESH;
       const tokens = [ACCESS, REFRESH];
-      console.log("드러와쓰");
+      // console.log("드러와쓰");
       this.confirm(tokens);
       // this.socailConfirm(tokens);
       // this.socailConfirm(tokens);
-      console.log(ACCESS + " 그리고 " + REFRESH);
-      console.log(JSON.stringify(ACCESS));
+      // console.log(ACCESS + " 그리고 " + REFRESH);
+      // console.log(JSON.stringify(ACCESS));
       // commit("SET_IS_LOGIN", true);
       // commit("SET_IS_LOGIN_ERROR", false);
       // commit("SET_IS_VALID_TOKEN", true);
