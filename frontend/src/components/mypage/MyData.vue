@@ -5,7 +5,7 @@
       <h2 class="text-h6 mb-3">스터디 내역 조회</h2>
       <el-table
         class="el-table"
-        :data="mystudys"
+        :data="JSON.parse(JSON.stringify(myStudyData))"
         style="width: 100%; font-size: medium"
         :class="tableRowClasscompany"
       >
@@ -112,58 +112,8 @@ export default {
       mystudy: null,
 
       dialogVisible: false,
-      tableData: [
-        {
-          study_datetime: "2016-05-03",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-02",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-04",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-01",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-04",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-01",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-04",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-01",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-04",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          study_datetime: "2016-05-01",
-          company: "Tom",
-          title: "No. 189, Grove St, Los Angeles",
-        },
-      ],
+
+      // 채점표 테이블 내용
       scoreData: [
         {
           type: "태도",
@@ -230,22 +180,25 @@ export default {
   },
   // 마이페이지 전체 글 받아오기
   mounted() {
-    http.get(`/users/mystudy`, config).then(({ data }) => {
-      console.log("전체 글 받아옵니다");
-      console.log(data.data);
-      this.mystudys = data.data;
+    // 기존 : mounted에서 axios
+    // http.get(`/users/mystudy`, config).then(({ data }) => {
+    //   console.log("전체 글 받아옵니다");
+    //   console.log(data.data);
+    //   this.mystudys = data.data;
 
-      this.mystudys.forEach((el) => {
-        el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
-      });
-    });
+    //   this.mystudys.forEach((el) => {
+    //     el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
+    //   });
+    // });
+    //  => 02/17 리팩토링 : 부모 component (MypageView.vue)에서 State 관리하는 방식으로 수정
+
     if (this.global_isShow) {
       this.CLEAN_GLOBAL_ISSHOW();
       this.viewArticle(this.global_article);
     }
   },
   computed: {
-    ...mapState(["global_article", "global_isShow"]),
+    ...mapState(studyStore, ["global_article", "global_isShow", "myStudyData"]),
   },
   methods: {
     ...mapMutations(studyStore, ["SET_STUDY_ID"]),
@@ -306,14 +259,6 @@ export default {
           };
         }
       }
-    },
-    // 채점표 템플릿 Style 적용 ( 구현 미완료 )
-    tableRowClasscompany({ rowIndex, columnIndex }) {
-      if (columnIndex === 1 || columnIndex === 2 || rowIndex === 1) {
-        console.log(rowIndex);
-        return "warning-row";
-      }
-      return "";
     },
   },
 };

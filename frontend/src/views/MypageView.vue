@@ -18,7 +18,7 @@
           >
         </div>
       </el-aside>
-      <!-- <el-main><MyMain></MyMain></el-main> -->
+      <!-- 마이페이지 SideBar 메뉴 선택에 따른 컴포넌트 교체 -->
       <el-main class="main"
         ><component v-bind:is="currentTab"></component
       ></el-main>
@@ -27,19 +27,22 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { mapActions } from "vuex";
 import jwtDecode from "jwt-decode";
 import http from "@/api/http";
 import MyMain from "@/components/mypage/MyMain.vue";
 import MyData from "@/components/mypage/MyData.vue";
 import MyModify from "@/components/mypage/MyModify.vue";
 import MyDelete from "@/components/mypage/MyDelete.vue";
+
+const studyStore = "studyStore";
+
 const config = {
   headers: {
     ACCESS: sessionStorage.getItem("ACCESS"),
   },
 };
-export default defineComponent({
+export default {
   components: {
     MyMain,
     MyData,
@@ -61,8 +64,22 @@ export default defineComponent({
         el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
       });
     });
+
+    this.getMyDataConfrim();
+
+    // // 마이페이지 데이터 탭 axios
+    // http.get(`/users/mystudy`, config).then(({ data }) => {
+    //   console.log("전체 글 받아옵니다");
+    //   console.log(data.data);
+    //   this.mystudys = data.data;
+
+    //   this.mystudys.forEach((el) => {
+    //     el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
+    //   });
+    // });
   },
   methods: {
+    ...mapActions(studyStore, ["getMyDataConfrim"]),
     changeComp: function (compName) {
       this.currentTab = compName;
       console.log(this.currentTab);
@@ -72,7 +89,7 @@ export default defineComponent({
         this.myName = jwtDecode(sessionStorage.getItem("ACCESS")).Name;
     },
   },
-});
+};
 </script>
 
 <style scoped>
