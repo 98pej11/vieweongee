@@ -18,7 +18,7 @@ export default createStore({
   },
   plugins: [
     createPersistedState({
-      paths: ["studyStore"],
+      paths: ["studyStore", "memberStore"],
     }),
   ],
 });
