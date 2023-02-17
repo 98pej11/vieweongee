@@ -72,12 +72,12 @@ export default {
 }
 .footer-div {
   z-index: 2;
-  position: fixed;
+  /* position: fixed; */
   height: 75px;
   width: 100%;
   bottom: 0;
   border-radius: 20px;
-  background-color: white;
+  /* background-color: white; */
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -88,7 +88,10 @@ export default {
 }
 .inner-area {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-evenly;
+
+  /* justify-content: center; */
+  /* width: 100%; */
 }
 </style>
