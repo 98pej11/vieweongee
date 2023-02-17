@@ -101,6 +101,7 @@
 <script>
 import { mapMutations } from "vuex";
 import { defineComponent } from "vue";
+import { ElMessage } from "element-plus";
 import http from "@/api/http";
 const api = http;
 const studyStore = "studyStore";
@@ -115,6 +116,7 @@ export default defineComponent({
       turnScore: null,
       abilScore: null,
       myStudyCards: [],
+      isNone: false,
       first: "yellow",
       second: "#409eff",
       third: "#9cf85f",
@@ -132,6 +134,7 @@ export default defineComponent({
         this.myStudyCards = data.data;
       } else {
         console.log("아직 열린 스터디 없음");
+        this.isNone = true;
         this.myStudyCards = [{ title: "시작된 스터디가 아직 없습니다" }];
       }
     });
@@ -166,9 +169,19 @@ export default defineComponent({
       });
     },
     itemClick(id) {
-      console.log(id + " 눌렀떠");
-      this.SET_STUDY_ID(id);
-      this.$router.push({ name: "studyview" });
+      // 참여 예정 스터디 목록이 있을 때
+      if (!this.isNone) {
+        console.log(id + " 눌렀떠");
+        this.SET_STUDY_ID(id);
+        this.$router.push({ name: "studyview" });
+      }
+      // 없을 때
+      else {
+        ElMessage({
+          message: "시작된 스터디가 아직 없습니다",
+          type: "warning",
+        });
+      }
     },
   },
 });
