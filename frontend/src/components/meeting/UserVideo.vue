@@ -58,7 +58,7 @@ export default {
 }
 #video-container {
   height: 100%;
-  max-width: 300px;
+  /* max-width: 300px; */
   background-color: white;
   border-radius: 10%;
   padding: 10px;

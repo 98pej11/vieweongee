@@ -2,7 +2,9 @@
   <div class="footer">
     <el-button round @click="showChat" size="large">채팅</el-button>
 
-    <el-button v-if="!isLeader" type="info" round disabled>미팅시작</el-button>
+    <el-button v-if="!isLeader" type="info" size="large" round disabled
+      >미팅시작</el-button
+    >
     <el-button
       v-if="isLeader && nowTurn == null"
       type="success"

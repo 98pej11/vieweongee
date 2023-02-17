@@ -55,8 +55,8 @@
     <div class="notchat main-meeting">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
-          <div id="video-container" style="width: 100%">
-            <el-row class="row-bg" style="margin-left: 10%; margin-right: 10%">
+          <div class="video-container" style="max-width: 1200px">
+            <el-row class="row-bg">
               <el-col>
                 <user-video
                   class="invideo"
@@ -82,8 +82,8 @@
       <!-- <transition name="moveInUp"> -->
       <!-- <Transition name="slide-fade"> -->
       <div class="session" v-if="isShowChat">
-        <div id="video-container">
-          <el-row class="row-bg" justify="space-evenly">
+        <div class="video-container">
+          <el-row class="row-bg" justify="space-evenly" style="max-width: 1200px">
             <el-col>
               <user-video
                 class="invideo"
@@ -663,7 +663,7 @@ export default {
   border-radius: 15px;
 }
 .invideo {
-  margin-right: 3%;
+  margin: 10px;
 }
 .notchat {
   /* background-color: #f5f7fe; */
@@ -678,7 +678,7 @@ export default {
 }
 
 .chat-container {
-  margin-right: 3%;
+  /* margin-right: 2%; */
   z-index: 1;
 }
 .box {
@@ -710,11 +710,11 @@ export default {
 }
 .inner-area {
   display: block;
-  margin-left: 15%;
+  margin-left: 3%;
   /* justify-content: center; */
   /* align-items: center; */
 }
 .main-meeting {
-  height: 10%;
+  /* height: 10%; */
 }
 </style>
