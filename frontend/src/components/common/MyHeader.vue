@@ -6,7 +6,8 @@
       </div>
     </router-link>
 
-    <nav v-if="!isLogin">
+    <!-- <nav v-if="!isLogin"> -->
+    <nav v-if="!isLogined">
       <ul>
         <li @click="gologin">
           <el-icon color="#5f5a83" :size="25"><Avatar /></el-icon>
@@ -44,9 +45,10 @@
 
 <script>
 import { Avatar, Histogram, List } from "@element-plus/icons-vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { mapState, mapGetters, mapActions } from "vuex";
 import { ElMessageBox } from "element-plus";
+import { useStore } from "vuex";
 
 const memberStore = "memberStore";
 export default defineComponent({
@@ -62,13 +64,32 @@ export default defineComponent({
   setup() {
     const dialogVisible = ref(false);
     const count = 5;
+    const store = useStore();
+    // const isLogined = ref(false);
     // const start = true;
+
+    const isLogined = computed(() => {
+      if (
+        sessionStorage.getItem("ACCESS") != null ||
+        store.state.memberStore.isLogin
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+
+      // state 불러오기
+      // console.log("헤더다 이자식아");
+      // console.log(store.state.memberStore.isLogin);
+      // return store.state.memberStore.isLogin;
+    });
 
     function load() {
       this.count += 1;
       // console.log(this.count);
     }
     return {
+      isLogined,
       load,
       Histogram,
       Avatar,
