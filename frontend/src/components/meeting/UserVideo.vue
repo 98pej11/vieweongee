@@ -57,7 +57,8 @@ export default {
   display: inline-flex;
 }
 #video-container {
-  max-width: 300px;
+  height: 100%;
+  /* max-width: 300px; */
   background-color: white;
   border-radius: 10%;
   padding: 10px;

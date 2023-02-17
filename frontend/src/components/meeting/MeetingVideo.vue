@@ -21,14 +21,22 @@
           >
             <!-- 스터디 유형 선택 컴포넌트 -->
             <div class="rate">
-              <meeting-rate v-if="isLeader && leaderOrder == null"></meeting-rate>
+              <meeting-rate
+                v-if="isLeader && leaderOrder == null"
+              ></meeting-rate>
             </div>
             <span>
-              <el-button @click="dialogVisible = false" size="large" round>완료</el-button>
+              <el-button @click="dialogVisible = false" size="large" round
+                >완료</el-button
+              >
             </span></el-dialog
           >
           <div id="rate-btn">
-            <el-button text @click="dialogVisible = true" v-if="isLeader && leaderOrder == null">
+            <el-button
+              text
+              @click="dialogVisible = true"
+              v-if="isLeader && leaderOrder == null"
+            >
               면접 유형 선택
             </el-button>
           </div>
@@ -47,7 +55,7 @@
     <div class="notchat main-meeting">
       <transition name="moveInUp">
         <div class="session" v-if="!isShowChat">
-          <div id="video-container" style="width: 100%">
+          <div class="video-container" style="max-width: 1200px">
             <el-row class="row-bg">
               <el-col>
                 <user-video
@@ -74,8 +82,8 @@
       <!-- <transition name="moveInUp"> -->
       <!-- <Transition name="slide-fade"> -->
       <div class="session" v-if="isShowChat">
-        <div id="video-container">
-          <el-row class="row-bg" justify="space-evenly">
+        <div class="video-container">
+          <el-row class="row-bg" justify="space-evenly" style="max-width: 1200px">
             <el-col>
               <user-video
                 class="invideo"
@@ -226,7 +234,9 @@ export default {
           this.SET_IS_END(false);
         } else {
           //채점표 저장하고 나가기
-          let isLeave = confirm("면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?");
+          let isLeave = confirm(
+            "면접을 나가시면 기록중인 채점표는 자동 갱신 됩니다.\n면접을 나가시겠습니까?"
+          );
           if (isLeave) {
             //yes
             //나가기 버튼이 눌렸으면
@@ -327,9 +337,13 @@ export default {
           }
           // this.showOrderAlert(turn + 1);
           else {
-            ElMessageBox.confirm("면접이 모두 종료됐습니다. 수고하셨습니다.", "🔔알림🔔", {
-              confirmButtonText: "OK",
-            });
+            ElMessageBox.confirm(
+              "면접이 모두 종료됐습니다. 수고하셨습니다.",
+              "🔔알림🔔",
+              {
+                confirmButtonText: "OK",
+              }
+            );
             this.SET_IS_END(true);
             setTimeout(async () => {
               //채점표 PUT
@@ -375,7 +389,11 @@ export default {
             this.session.publish(this.publisher);
           })
           .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
           });
       });
 
@@ -434,7 +452,8 @@ export default {
       //나의 아이디 설정
       this.setMyIdState();
 
-      if (sessionStorage.getItem("ACCESS") != null) this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
+      if (sessionStorage.getItem("ACCESS") != null)
+        this.myId = jwtDecode(sessionStorage.getItem("ACCESS")).Id;
 
       const params = {
         study_ID: this.myStudyId,
@@ -492,7 +511,12 @@ export default {
         }
       }
 
-      console.log("내 역할은 면접자 >> " + this.isInterviewee + " | 면접관 >> " + this.isInterviewer);
+      console.log(
+        "내 역할은 면접자 >> " +
+          this.isInterviewee +
+          " | 면접관 >> " +
+          this.isInterviewer
+      );
     },
     shareNowTurn(turn) {
       //시그널로 현재 회차 보내기
@@ -538,7 +562,9 @@ export default {
         const running_time = this.studyInfo.running_time;
         // console.log("진행 시간 >> " + running_time);
 
-        const endtime = new Date(datetime.getTime() + running_time * 60 * 60 * 1000);
+        const endtime = new Date(
+          datetime.getTime() + running_time * 60 * 60 * 1000
+        );
         // console.log("종료 시간 >> " + endtime);
 
         //설정해야할 시간 = 종료 시간 - 실제 시작 시간
@@ -547,9 +573,16 @@ export default {
         this.setTime = endtime.getTime() - now.getTime();
         // console.log("초기 종료시간이에요 >> " + this.setTime);
 
-        const diffHour = String(Math.floor((this.setTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
-        const diffMin = String(Math.floor((this.setTime / (1000 * 60)) % 60)).padStart(2, "0");
-        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(2, "0");
+        const diffHour = String(
+          Math.floor((this.setTime / (1000 * 60 * 60)) % 24)
+        ).padStart(2, "0");
+        const diffMin = String(
+          Math.floor((this.setTime / (1000 * 60)) % 60)
+        ).padStart(2, "0");
+        const diffSec = String(Math.floor((this.setTime / 1000) % 60)).padStart(
+          2,
+          "0"
+        );
 
         remainTime.innerHTML = `<h5>남은 시간: ${diffHour}:${diffMin}:${diffSec}</h5>`;
       };
@@ -567,10 +600,14 @@ export default {
         await this.changeConfirmAndStatus(this.myStudyId);
         //연결 강제 종료
         this.leaveSession();
-        ElMessageBox.confirm("작성하신 채점표는 자동 갱신 되었습니다.", "🔔 진행 시간 종료 🔔", {
-          confirmButtonText: "OK",
-          draggable: true,
-        });
+        ElMessageBox.confirm(
+          "작성하신 채점표는 자동 갱신 되었습니다.",
+          "🔔 진행 시간 종료 🔔",
+          {
+            confirmButtonText: "OK",
+            draggable: true,
+          }
+        );
       }, this.setTime);
     },
     showAlert(val) {
@@ -596,17 +633,13 @@ export default {
 /* } */
 
 .session {
-  min-height: 800px;
-  max-height: 800px;
-  min-width: 800px;
+  height: 80%;
   text-align: center;
-  padding: 1%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   /* border-radius: 15px; */
   display: block;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
-  height: 75vh;
   margin: 0 auto;
   color: black;
 }
@@ -630,7 +663,7 @@ export default {
   border-radius: 15px;
 }
 .invideo {
-  margin-right: 3%;
+  margin: 10px;
 }
 .notchat {
   /* background-color: #f5f7fe; */
@@ -645,7 +678,7 @@ export default {
 }
 
 .chat-container {
-  margin-right: 3%;
+  /* margin-right: 2%; */
   z-index: 1;
 }
 .box {
@@ -677,8 +710,11 @@ export default {
 }
 .inner-area {
   display: block;
+  margin-left: 3%;
   /* justify-content: center; */
   /* align-items: center; */
-  margin-left: 10%;
+}
+.main-meeting {
+  /* height: 10%; */
 }
 </style>

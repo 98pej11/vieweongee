@@ -32,7 +32,7 @@
       >
       <el-col
         v-if="!this.modifying"
-        :span="16"
+        :span="20"
         justify="end"
         style="color: black"
       >
