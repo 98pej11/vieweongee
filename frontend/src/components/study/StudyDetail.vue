@@ -9,7 +9,7 @@
             목록
           </el-button>
           <h1 class="text-h6 mb-3">{{ studyInfo.title }}</h1>
-          <!-- 스터디 정보 -->
+          <!-- 스터디 정보 시작-->
           <el-row>
             <el-col :span="20" :xs="24">
               <div>
@@ -56,7 +56,8 @@
               ><p>{{ studyInfo.running_time }} 시간</p>
             </el-col>
           </el-row>
-          <!-- 자기소개서 업로드 모달창 -->
+          <!-- 스터디 정보 끝 -->
+          <!-- 자기소개서 업로드 모달창 시작 -->
           <el-dialog
             class="el-dialog"
             v-model="dialogVisible"
@@ -85,13 +86,14 @@
               </template>
             </el-upload>
           </el-dialog>
+          <!-- 모달창 끝 -->
 
           <!-- 스터디 신청, 취소, 입장-->
           <el-row justify="end">
-            <el-col :span="5">
+            <el-col :span="4">
+              <!-- 미팅 종료 전 && ( 신청자 || 글 작성자 ) -->
               <el-button
-                style="width: 200px"
-                v-if="!isDone && (isApplied || isAuthor)"
+                v-if="!isDone && !isOpened && (isApplied || isAuthor)"
                 @click="showDialog"
                 round
                 color="#E1E6FF"
@@ -103,9 +105,13 @@
           </el-row>
           <!-- 신청 / 신청취소 -->
           <el-row justify="end">
-            <e-col :span="5" v-if="!isAuthor">
+            <!-- <e-col :span="2" v-if="!isApplied && isPossible && !isAuthor"> -->
+            <!-- 신청 가능 시간 && 남은 자리 있음 && 미신청자 && 글 작성자가 아닌 유저 -->
+            <e-col
+              :span="2"
+              v-if="isPossible && isRemain && !isApplied && !isAuthor"
+            >
               <el-button
-                v-if="!isApplied && isPossible"
                 @click="applyStudy"
                 round
                 color="#9DADD8"
@@ -114,8 +120,13 @@
               >
                 신청
               </el-button>
+            </e-col>
+            <!--  신청자&& !글작성자 && 신청 가능 시간  && 세션 생성 전 -->
+            <e-col
+              :span="6"
+              v-if="!isAuthor && isApplied && isPossible && !isOpend"
+            >
               <el-button
-                v-if="isApplied && (!isOpened || isPossible)"
                 @click="cancleStudy"
                 round
                 color="#FFCD9F"
@@ -124,28 +135,22 @@
                 신청취소
               </el-button>
             </e-col>
-          </el-row>
+            <!-- </el-row> -->
 
-          <!-- 마감 -->
-          <el-row justify="end">
-            <el-col :span="2">
-              <el-button
-                v-if="!isPossible"
-                round
-                disabled
-                color="#555454"
-                class="me-2 done"
-              >
+            <!-- 마감 -->
+            <!-- <el-row justify="end"> -->
+            <!-- 인원마감 && 신청 가능 시간 && 미팅 종료 이전 -->
+            <el-col :span="2" v-if="!isRemain && !isPossible && !isDone">
+              <!-- 신청 마감 전 -->
+              <el-button round disabled color="#555454" class="me-2 done">
                 마감
               </el-button>
             </el-col>
-          </el-row>
-          <!-- 입장 / 종료 -->
-          <el-row justify="end">
-            <el-col
-              :span="2"
-              v-if="(isApplied || isAuthor) && isOpened && !isDone"
-            >
+            <!-- </el-row> -->
+            <!-- 입장 / 종료 -->
+            <!-- <el-row justify="end"> -->
+            <!-- ( 신청자 || 작성자 ) && 세션 생성 이후 && 미팅 종료 이전-->
+            <el-col :span="2" v-if="(isApplied || isAuthor) && isOpened">
               <el-button
                 @click="enterMeeting(this.studyID)"
                 round
@@ -162,8 +167,14 @@
             </el-col>
           </el-row>
           <!-- 스터디 수정 및 삭제 -->
-          <el-row justify="end" style="margin-right: 10px">
-            <div v-if="isAuthor && isPossible">
+          <el-row
+            justify="end"
+            :gutter="40"
+            style="margin-right: 10px"
+            v-if="isAuthor && !isOpened && !isDone"
+          >
+            <!-- 작성자 && 신청 가능 시간 -->
+            <el-col :span="2">
               <el-button
                 @click="modifyStudy"
                 round
@@ -172,10 +183,12 @@
               >
                 수정
               </el-button>
+            </el-col>
+            <el-col :span="2">
               <el-button @click="deleteOpen" round color="#FF5151" class="me-3"
                 >삭제
               </el-button>
-            </div>
+            </el-col>
           </el-row>
 
           <hr />
@@ -237,8 +250,9 @@ export default {
     return {
       fileList: [],
       myImage: "",
+      isRemain: true, // 현재 신청자 6명 미만
       isOpened: false, // 화상 세션 입장 가능
-      isPossible: false, // 스터디 신청 마감 여부
+      isPossible: false, // 스터디 신청 가능 시간 여부
       isDone: false,
       isAuthor: false,
       dialogVisible: false,
@@ -274,10 +288,9 @@ export default {
       await this.getInfo(params);
 
       await this.getPersonnel(this.studyID);
-      await this.checkPossible();
-      await this.checkOpened();
       await this.getAppliy(this.studyID);
       await this.getCommentList(this.studyID);
+      // await this.checkPossible();
       await this.setButton();
     },
 
@@ -291,62 +304,52 @@ export default {
       else if (this.myId == this.studyInfo.user_id) {
         this.isAuthor = true;
       }
-      // console.log(this.myId + " : 토큰아이디");
-      // console.log(this.studyInfo.user_id + " : 글작성자");
-      console.log(this.isPossible + " 수정 삭제/ 신청 가능 ? isPossbile");
-      console.log(this.isAuthor + " 글작성자인가 ? ? isAuthor");
-      console.log(this.isApplied + " 신청? ? isApolied");
-    },
 
-    // 신청 가능 여부
-    checkPossible() {
       let now = moment(); // 현재 시간
       let startTime = moment(this.studyInfo.study_datetime); // 스터디 시작 시간
-      let diff = moment.duration(startTime.diff(now)).asHours(); // 시간 차이
-
-      // 신청자 수 마감 시 신청 불가
-      if (this.current == this.studyInfo.personnel) {
-        this.isPossible = false;
-      }
-      // 24시간 이후이면 신청 불가
-      else if (diff >= 0 && diff < 24) {
-        this.isPossible = false;
-      }
-      // 미팅 시작시간 24시간 전이면 신청 가능
-      else if (diff > 24) {
-        this.isPossible = true;
-      }
-    },
-
-    // 화상회의 입장 가능 여부
-    checkOpened() {
-      let now = moment(); // 현재 시간
-      let startTime = moment(this.studyInfo.study_datetime); // 화상회의 시작 시간
       let endTime = moment(this.studyInfo.study_datetime).add(
         this.studyInfo.running_time,
         "h"
       ); // 화상회의 종료 시간
-      let runtime = this.studyInfo.running_time; // 진행 시간
 
-      let diff = moment.duration(startTime.diff(now)).asHours();
-      let closed = moment.duration(endTime.diff(now)).asHours();
+      let diff = moment.duration(startTime.diff(now)).asHours(); // 시간 차이
+      let closed = moment.duration(endTime.diff(now)).asHours(); // 미팅 종료 판단 변수
 
-      // 시작시간 24시간 전부터 화상회의 입장 가능
-      if (diff >= 0 && diff < 24) {
-        this.isOpened = true;
+      // 신청자 수 마감 시 신청 불가
+      if (this.current == this.studyInfo.personnel) {
+        // this.isPossible = false;
+        this.isRemain = false;
       }
-      // 24시간 이내일 때부터 입장 불가
+
+      // 미팅 종료 이후 시각
+      console.log(closed + " / " + this.studyInfo.running_time);
+      if (closed + this.studyInfo.running_time <= 0) {
+        this.isDone = true; // 미팅 종료
+        this.isOpened = false; // 입장 불가
+        this.isPossible = false; // 신청 불가
+      }
+
+      // 미팅 시작 하루 전까지
+      if (diff > 24) {
+        this.isPossible = true; // 신청 가능
+        this.isOpened = false; // 세션 생성 이전
+      }
+      // 스터디 시작 24시간 이전부터
+      else if (diff >= 0 && diff < 24) {
+        this.isPossible = false; // 신청 불가
+        this.isOpened = true; // 세션 입장 가능
+      }
+      // 스터디 시작 시간 이후
       else if (diff < 0) {
-        this.isOpened = false;
+        this.isPossible = false; // 신청 불가
+        this.isOpened = false; // 입장 불가
       }
-      // 화상미팅 종료 이후
-      if (closed + runtime <= 0) {
-        console.log(closed + " / " + runtime);
-        this.isDone = true;
-        this.isPossible = false;
-        this.isOpened = false;
-      }
-      console.log("끝낫냐 ? " + this.isDone);
+
+      // console.log(" 글작성자 ? >> " + this.isAuthor);
+      // console.log(" 스터디 시작 하루 이전인가 >> " + this.isPossible);
+      // console.log(" 현재 신청자 6명 미만인가 >> " + this.isRemain);
+      // console.log(" 세션 생성됨 >> " + this.isOpened);
+      // console.log(" 미팅 종료 >> " + this.isDone);
     },
 
     // 화상회의 참여
@@ -414,15 +417,14 @@ export default {
             });
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
           ElMessage({
             type: "warning",
             message: "이미지 용량 초과",
           });
         });
-
-      console.log(this.studyID + " 번에 자기소개서 첨부하기");
+      // console.log(this.studyID + " 번에 자기소개서 첨부");
     },
 
     // 스터디 삭제

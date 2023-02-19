@@ -12,6 +12,7 @@ import {
   cancleStudy,
   getCurrent,
   getAppliyID,
+  getMyData,
 } from "@/api/study";
 
 const studyStore = {
@@ -53,6 +54,7 @@ const studyStore = {
       running_time: 1,
       content: "",
     },
+    myStudyData: [],
   },
   getters: {},
   mutations: {
@@ -91,9 +93,11 @@ const studyStore = {
     PUSH_CURRENT_LIST: (state, person) => {
       state.currentList.push(person);
     },
+    // 스터디 ID
     SET_STUDY_ID: (state, studyID) => {
       state.studyID = studyID;
     },
+    // 스터디 전체 목록
     SET_STUDY_LIST: (state, list) => {
       var moment = require("moment");
       require("moment-timezone");
@@ -123,6 +127,7 @@ const studyStore = {
         });
       });
     },
+    // 스터디 상세 정보
     SET_STUDY_INFO: (state, studyInfo) => {
       state.studyInfo = studyInfo;
       var moment = require("moment");
@@ -137,6 +142,13 @@ const studyStore = {
 
       state.studyInfo.regist_datetime = newRegistDate;
       state.studyInfo.study_datetime = newStudyDate;
+    },
+    // 마이페이지 참여스터디 목록
+    SET_MY_STUDYDATA: (state, studyData) => {
+      studyData.forEach((el) => {
+        el.study_datetime = el.study_datetime.substr(0, 16).replace("T", " ");
+      });
+      state.myStudyData = studyData;
     },
   },
   actions: {
@@ -278,6 +290,16 @@ const studyStore = {
       await cancleStudy(studyId, ({ data }) => {
         if (data.message == "SUCCESS") {
           commit("SET_APPLY_SUCCESS", false);
+        }
+      });
+    },
+
+    // 마이페이지 Study Data 받아오기
+    async getMyDataConfrim({ commit }) {
+      console.log("마이페이지 data 받아와요");
+      await getMyData(({ data }) => {
+        if (data.message == "SUCCESS") {
+          commit("SET_MY_STUDYDATA", data.data);
         }
       });
     },

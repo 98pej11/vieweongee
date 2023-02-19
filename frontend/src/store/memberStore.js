@@ -11,7 +11,6 @@ import {
   signup,
   deleteUser,
 } from "@/api/users";
-// import http from "@/api/http";
 
 const memberStore = {
   namespaced: true,
@@ -70,7 +69,7 @@ const memberStore = {
       await signin(
         user,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
           if (data.massage === "SUCCESS") {
             let ACCESS = data.access;
             let REFRESH = data.refresh;
@@ -88,20 +87,20 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", false);
           }
         },
-        (error) => {
-          console.log(error);
+        () => {
+          // console.log(error);
         }
       );
     },
 
     async socialConfirm({ commit }, tokens) {
-      console.log("socialconfirm이야");
-      console.log("토큰들은??!!", tokens);
+      // console.log("socialconfirm이야");
+      // console.log("토큰들은??!!", tokens);
 
       let ACCESS = tokens[0];
       let REFRESH = tokens[1];
 
-      console.log("액세스는????", tokens[0]);
+      // console.log("액세스는????", tokens[0]);
       commit("SET_IS_LOGIN", true);
       commit("SET_IS_LOGIN_ERROR", false);
       commit("SET_IS_VALID_TOKEN", true);
@@ -110,12 +109,12 @@ const memberStore = {
     },
 
     async checkEmail({ dispatch }, user) {
-      console.log(user.email);
+      // console.log(user.email);
       await findByEmail(
         user.email,
         ({ data }) => {
           if (data.message === "SUCCESS") {
-            console.log("회원가입 가능함! :  ");
+            // console.log("회원가입 가능함! :  ");
             alert(
               "사용 가능한 이메일 입니다.\n작성하신 이메일로 인증번호를 전송했습니다."
             );
@@ -131,10 +130,10 @@ const memberStore = {
     },
 
     async getEmailCode({ commit }, email) {
-      console.log("실행되니..?!!!!");
+      // console.log("실행되니..?!!!!");
       await getCode(email, ({ data }) => {
         if (data.message === "SUCCESS") {
-          console.log("코드 보내따!!!!");
+          // console.log("코드 보내따!!!!");
           commit("SET_EMAIL_CODE", data.data);
           // sessionStorage.setItem("code", code);
         } else {
@@ -180,7 +179,7 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "SUCCESS") {
             let accessToken = data["ACCESS"];
-            console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
+            // console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
             sessionStorage.setItem("ACCESS", accessToken);
             commit("SET_IS_VALID_TOKEN", true);
           }
@@ -188,7 +187,7 @@ const memberStore = {
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
           if (error.response.status === 401) {
-            console.log("갱신 실패");
+            // console.log("갱신 실패");
             // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
             await signout(
               state.data.email,
@@ -204,8 +203,8 @@ const memberStore = {
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "login" });
               },
-              (error) => {
-                console.log(error);
+              () => {
+                // console.log(error);
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
               }
@@ -224,24 +223,24 @@ const memberStore = {
       obj.id = decodeToken.Id;
       obj.accessToken = token;
 
-      console.log("토큰해독 : " + decodeToken);
-      console.log("생성한 오브젝트" + obj);
+      // console.log("토큰해독 : " + decodeToken);
+      // console.log("생성한 오브젝트" + obj);
       await signout(
         obj,
         // email,
         // token,
         ({ data }) => {
-          console.log("로그아웃 백엔드에서 날라오는" + data);
+          // console.log("로그아웃 백엔드에서 날라오는" + data);
           if (data.message === "SUCCESS") {
             commit("SET_IS_LOGIN", false);
             commit("SET_USER_INFO", null);
             commit("SET_IS_VALID_TOKEN", false);
           } else {
-            console.log("유저 정보 없음!!!!");
+            // console.log("유저 정보 없음!!!!");
           }
         },
-        (error) => {
-          console.log(error);
+        () => {
+          // console.log(error);
         }
       );
     },
@@ -251,7 +250,7 @@ const memberStore = {
       await signup(
         user,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
           dispatch("getEmailCode", user.email);
           if (data.message === "SUCCESS") {
             console.log("회원가입 성공");
@@ -259,19 +258,19 @@ const memberStore = {
             console.log("유저 정보 없음!!!!");
           }
         },
-        (error) => {
-          console.log(error);
+        () => {
+          // console.log(error);
         }
       );
     },
     async userUpdate({ commit }, user) {
       let token = sessionStorage.getItem("ACCESS");
       console.log(token);
-      console.log("스토어임");
+      // console.log("스토어임");
       await update(user, token, ({ data }) => {
         console.log(data);
         commit("SET_IS_LOGIN", this.isLogin);
-        console.log("업데이트 성공");
+        // console.log("업데이트 성공");
       }),
         (error) => {
           console.log(error);
@@ -283,12 +282,12 @@ const memberStore = {
         console.log(data);
         // console.log(data);
         if (data.message === "SUCCESS") {
-          console.log("유저삭제완료");
+          // console.log("유저삭제완료");
           commit("CLEAR_USER_INFO");
         }
       }),
-        (error) => {
-          console.log(error);
+        () => {
+          // console.log(error);
         };
     },
   },

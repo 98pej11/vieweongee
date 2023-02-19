@@ -163,7 +163,7 @@ export default {
 
     setInfo() {
       this.modifyInfo = this.studyInfo;
-      console.log(this.modifyInfo);
+      // console.log(this.modifyInfo);
 
       let runtime = this.studyInfo.running_time;
       if (runtime == 1) this.radio = ref("1");
@@ -216,7 +216,6 @@ export default {
 
     async submitForm() {
       if (this.isEmpty()) {
-        console.log("빈칸");
         this.isError = true;
         await this.sleep(3000).then(() => {
           this.isError = false;

@@ -60,8 +60,7 @@ export default {
     ]),
   },
   created() {
-    // if (this.$route.params.type !== "search") {
-    console.log(this.compType);
+    // console.log(this.compType);
     if (this.compType == "main") {
       this.CLEAR_LIST();
       this.maininit();
@@ -84,14 +83,14 @@ export default {
     async maininit() {
       await this.getTopList();
       // 현재 참가자 수 받아오기
-      console.log(this.studyList);
+      // console.log(this.studyList);
       for (let idx = 0; idx < this.studyList.length; idx++) {
         await this.getPersonnel(this.studyList[idx].id);
       }
     },
     async studyinit() {
       // 현재 참가자 수 받아오기
-      console.log(this.studyList);
+      // console.log(this.studyList);
       for (let idx = 0; idx < this.studyList.length; idx++) {
         // console.log(this.studyList[idx].id);
         await this.getPersonnel(this.studyList[idx].id);

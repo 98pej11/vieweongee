@@ -38,13 +38,11 @@ const commentStore = {
         study_ID,
         ({ data }) => {
           if (data.message == "SUCCESS") {
-            console.log("전체 댓글조회");
-            console.log(data.data);
             commit("SET_ALL_COMMENT", data.data);
             commit("SET_IS_SUCCESS", true);
           }
           // 댓글이 없을 때
-          else {
+          else if (data.data == null) {
             commit("SET_IS_SUCCESS", false);
           }
         },
@@ -119,9 +117,9 @@ const commentStore = {
 
     // 대댓글 작성
     async createReplyConfrim({ commit }, params) {
-      console.log(params);
-      await createReply(params, ({ data }) => {
-        console.log(data.data);
+      // console.log(params);
+      await createReply(params, () => {
+        // console.log(data.data);
         commit("SET_IS_SUCCESS", true);
       });
     },
@@ -145,7 +143,7 @@ const commentStore = {
     },
     // 대댓글 삭제
     async deleteReplyConfirm({ commit }, params) {
-      console.log(params.comment_ID);
+      // console.log(params.comment_ID);
       await deleteReply(
         params,
         ({ data }) => {
