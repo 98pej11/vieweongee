@@ -1,16 +1,16 @@
 <template>
   <div class="comment-item">
     <el-row class="comment-content" justify="end">
-      <el-col :span="4" style="color: black; float: right">
+      <el-col :span="3" style="color: black; margin: 0 auto">
         <img src="@/assets/image/reply_icon.png"
       /></el-col>
-      <el-col :span="20" align-self="start" style="color: gray"
+      <el-col :span="21" align-self="start" style="color: gray"
         ><p>{{ commentItem.user_name }} 님 | {{ commentItem.datetime }}</p>
       </el-col>
     </el-row>
-    <!-- 대댓글 수정 -->
+    <!-- 대댓글 수정 input -->
     <el-row justify="end">
-      <el-col v-if="this.modifying" :span="16" style="color: black">
+      <el-col v-if="this.modifying" :span="18" style="color: black">
         <el-input
           type="text"
           size="large"
@@ -18,7 +18,7 @@
           maxlength="200"
         ></el-input>
       </el-col>
-      <el-col v-if="this.modifying" :span="4">
+      <el-col v-if="this.modifying" :span="3">
         <el-button
           round
           color="#9DADD8"
@@ -32,16 +32,18 @@
       >
       <el-col
         v-if="!this.modifying"
-        :span="20"
+        :span="21"
         justify="end"
         style="color: black"
       >
         {{ commentItem.content }}
       </el-col>
+    </el-row>
+    <el-row justify="end" style="height: 10px">
       <el-col
         :span="4"
         style="color: gray"
-        v-if="!this.modifying && commentItem.user_id == this.myId"
+        v-show="!this.modifying && commentItem.user_id == this.myId"
         ><p @click="modifyShow(commentItem.content)" style="cursor: pointer">
           수정&nbsp;&nbsp;
         </p>
@@ -79,7 +81,7 @@ export default {
   },
   watch: {
     isUpdate() {
-      console.log("바껐떠`");
+      // console.log("바껐떠`");
       this.$emit("getAll");
       this.isUpdate = false;
     },

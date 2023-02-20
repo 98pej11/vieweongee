@@ -49,7 +49,6 @@ export default {
         this.showAlert = true;
         await this.sleep(3000).then(() => {
           this.showAlert = false;
-          console.log(this.showAlert);
         });
       } else {
         await this.searchConfirm(this.words);
@@ -61,8 +60,7 @@ export default {
         if (this.noResult) {
           console.log("검색 결과 없음");
         } else {
-          console.log("겟퍼스널 검색바");
-          console.log(this.studyList);
+          // console.log(this.studyList);
           this.SET_SEARCH_RESULT(false);
           this.$router.replace({ name: "search" });
         }

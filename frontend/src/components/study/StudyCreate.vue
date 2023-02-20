@@ -64,10 +64,6 @@
               />
             </el-col>
           </el-row>
-          <el-row v-show="isError">
-            <el-alert title="24시간 이후로 선택해주세요" type="error"
-          /></el-row>
-
           <el-row :gutter="20">
             <el-col :span="12">
               <p>인원</p>
@@ -223,10 +219,8 @@ export default {
     async confirm() {
       await this.createConfirm(this.studyFormInfo);
       if (this.isCreated) {
-        console.log(this.studyID + " 로 이동할꾸야");
         this.$router.push({ name: "studyview" });
       } else {
-        console.log("생성 실패");
         ElMessageBox.confirm("스터디 생성 중 오류 발생", {
           confirmButtonText: "OK",
           type: "warning",
@@ -238,11 +232,14 @@ export default {
     async submitForm() {
       console.log(this.studyFormInfo);
       if (!this.isEmpty()) {
-        alert("모든 항목을 작성해주시길 바랍니다.");
+        ElMessage({
+          type: "error",
+          message: "모든 항목을 작성해주시길 바랍니다.",
+        });
       } else if (!this.checkDate(this.studyFormInfo.study_datetime)) {
-        this.isError = true;
-        await this.sleep(3000).then(() => {
-          this.isError = false;
+        ElMessage({
+          type: "error",
+          message: "24시간 이후 날짜를 선택해주세요.",
         });
       } else {
         this.studyFormInfo.study_datetime =
@@ -258,20 +255,12 @@ export default {
         this.studyFormInfo.job == "" ||
         this.studyFormInfo.study_datetime == "" ||
         this.studyFormInfo.type == "" ||
-        this.studyFormInfo.personnel == 0
+        this.studyFormInfo.personnel == 0 ||
+        this.studyFormInfo.running_time == 0
       ) {
         return false;
       }
-
       return true;
-    },
-
-    // 유효성 alert
-    showAlert(msg) {
-      ElMessage({
-        type: "error",
-        message: msg + "해주세요",
-      });
     },
 
     // 날짜 선택 제한
@@ -327,18 +316,6 @@ export default {
           };
         }
       }
-    },
-    // 채점표 템플릿 Style 적용 ( 구현 미완료 )
-    tableRowClassName({ rowIndex, columnIndex }) {
-      if (columnIndex === 1 || columnIndex === 2 || rowIndex === 1) {
-        console.log(rowIndex);
-        return "warning-row";
-      }
-      return "";
-    },
-    // 시간 지연
-    sleep(ms) {
-      return new Promise((r) => setTimeout(r, ms));
     },
   },
 

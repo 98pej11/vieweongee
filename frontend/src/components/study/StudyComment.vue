@@ -19,22 +19,26 @@
           </div>
         </el-col>
       </el-row>
-      <div v-for="(data, index) in comments" :key="index">
+      <div v-for="(data, index) in comments" :key="index" class="comp">
         <!-- 댓글 -->
         <div v-if="data.depth == 1" class="comment-div">
-          <StudyCommentItem
-            :commentItem="data"
-            :key="isUpdate"
-            @getAll="getAll"
-          ></StudyCommentItem>
+          <Transition>
+            <StudyCommentItem
+              :commentItem="data"
+              :key="isUpdate"
+              @getAll="getAll"
+            ></StudyCommentItem>
+          </Transition>
         </div>
         <!-- 대댓글 -->
         <div v-if="data.depth == 2" class="comment-div">
-          <StudyReplyItem
-            :commentItem="data"
-            :key="isUpdate"
-            @getAll="getAll"
-          ></StudyReplyItem>
+          <Transition>
+            <StudyReplyItem
+              :commentItem="data"
+              :key="isUpdate"
+              @getAll="getAll"
+            ></StudyReplyItem>
+          </Transition>
         </div>
       </div>
     </div>
@@ -185,5 +189,17 @@ export default {
 button {
   color: white;
   z-index: 6;
+}
+.comp > * {
+  margin-bottom: 40px;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

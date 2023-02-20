@@ -8,7 +8,7 @@
         ><p @click="replyBtn()" style="cursor: pointer">답글 달기</p>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row style="margin-bottom: 30px">
       <!-- 댓글 수정 -->
       <el-col v-if="this.modifying" :span="20" style="color: black">
         <el-input
@@ -220,7 +220,7 @@ export default {
   font-size: large;
 }
 .comment-content {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 p {

@@ -83,6 +83,12 @@ async function applyImage(params, success, fail) {
     .catch(fail);
 }
 
+// 마이페이지 Study Data 조회
+async function getMyData(success, fail) {
+  api.defaults.headers["ACCESS"] = sessionStorage.getItem("ACCESS");
+  await api.get(`/users/mystudy`).then(success).catch(fail);
+}
+
 export {
   createStudy,
   getTopStudy,
@@ -96,4 +102,5 @@ export {
   getCurrent,
   applyImage,
   getAppliyID,
+  getMyData,
 };
